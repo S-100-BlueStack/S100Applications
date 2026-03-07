@@ -1,5 +1,6 @@
 <Solution>
   <Configurations>
+    <BuildType Name="Debug" />
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
