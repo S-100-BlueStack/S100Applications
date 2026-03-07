@@ -55,7 +55,7 @@
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Include="S100Framework.ArcGIS.Core" Version="2.1.12" />
-    <PackageReference Include="S100Framework.Catalogues" Version="2.1.16" />
+    <PackageReference Include="S100Framework.Catalogues" Version="2.1.25" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
     <PackageReference Include="System.IO.Hashing" Version="9.0.10" />
