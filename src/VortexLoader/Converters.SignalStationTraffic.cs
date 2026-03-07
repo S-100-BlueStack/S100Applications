@@ -1,0 +1,63 @@
+﻿using ArcGIS.Core.Data;
+using S100FC.S101.FeatureTypes;
+using S100Framework.Applications.S57.esri;
+using S100Framework.Applications.Singletons;
+
+namespace S100Framework.Applications
+{
+    internal static partial class Converters
+    {
+        internal static SignalStationTraffic CreateSignalStationTraffic(PortsAndServicesP current, int? scaleMinimum, Geodatabase source) {
+
+            var instance = new SignalStationTraffic();
+
+            if (ConversionAnalytics.Instance.IsConverted(current.GlobalId)) {
+                ;
+            }
+
+            if (current.CATSIT != default) {
+                var categoryOfSignalStationTraffic = EnumHelper.GetEnumValues(current.CATSIT);
+                if (categoryOfSignalStationTraffic != null)
+                    instance.categoryOfSignalStationTraffic = categoryOfSignalStationTraffic;
+            }
+
+            if (current.COMCHA != default) {
+                instance.communicationChannel = current.COMCHA.Split(',').ToArray<string>();
+            }
+
+            instance.featureName = ImporterNIS.GetFeatureName(current.OBJNAM, current.NOBJNM);
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            // TODO: interoperabilityIdentifier
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.STATUS != default) {
+                instance.status = ImporterNIS.GetStatus(current.STATUS);
+            }
+
+            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                string subtype = "";
+                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (scamin.HasValue)
+                    instance.scaleMinimum = scamin.Value;
+            }
+
+            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            instance.information = result.information.ToArray();
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            return instance;
+        }
+    }
+}
+

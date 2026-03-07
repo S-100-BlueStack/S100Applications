@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VortexLoader": {
+      "commandName": "Project",
+      "commandLineArgs": "--v --cmd NIS --target \"e:\\ArcGIS\\Projects\\s100edx\\s100edx.gdb\" --source \"C:\\Users\\Jens Søe\\OneDrive\\Geodatastyrelsen\\vortex\\S57_replica.gdb\" --query \"PLTS_COMP_SCALE > 0\" --notespath \"e:\\ArcGIS\\Projects\\NOAA\\Notes\" --scaminfiles \"e:\\ArcGIS\\Projects\\NOAA\\SCAMIN\" --s128"
+    }
+  }
+}

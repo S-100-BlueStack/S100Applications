@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VortexExporter": {
+      "commandName": "Project",
+      "commandLineArgs": "--geodatabase \"C:\\temp\\loader\\s100edx.gdb\" --d \"%4%\" --e --n \"c:\\temp\\loader\\NotesAndPictures\""
+    }
+  }
+}
