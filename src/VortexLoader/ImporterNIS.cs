@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
 using S100FC.S101;
@@ -15,6 +16,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexLoader;
 using static S100Framework.Applications.VortexLoader;
+
 using IO = System.IO;
 
 [assembly: InternalsVisibleTo("TestNisImporter")]
@@ -236,9 +238,11 @@ namespace S100Framework.Applications
             foreach (var scale in scalesCompilation) {
                 if (Array.IndexOf(scalesCompilation, scale) == 0) {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                    Logger.Current.Verbose(QueryFilter.WhereClause);
                 }
                 else {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
+                    Logger.Current.Verbose(QueryFilter.WhereClause);
 
                     Polygon[] clipping = [];
 
@@ -307,14 +311,22 @@ namespace S100Framework.Applications
 
                                     var feature = (Feature)cursor.Current;
 
-                                    var clipped = GeometryEngine.Instance.Intersection(feature.GetShape(), queryPolygon);
-                                    if (clipped is Polyline polyline) {
-                                        if (!polyline.IsKnownSimple) System.Diagnostics.Debugger.Break();
-                                        feature.SetShape(polyline);
-                                        feature.Store();
+                                    var shape = (Polyline)feature.GetShape();
+
+                                    // polygonA = the polygon you want to cut
+                                    // polygonB = the polygon you want to subtract from A
+
+                                    var result = GeometryEngine.Instance.Difference(shape, queryPolygon);
+
+                                    if (result != null && !result.IsEmpty) {
+                                        if (result is Polyline polyline) {
+                                            if (!polyline.IsKnownSimple) System.Diagnostics.Debugger.Break();
+                                            feature.SetShape(polyline);
+                                            feature.Store();
+                                        }
+                                        else
+                                            System.Diagnostics.Debugger.Break();
                                     }
-                                    else
-                                        System.Diagnostics.Debugger.Break();
                                 }
                                 Logger.Current.Verbose("countCurve: #{countCurve}", countCurve);
                             }
@@ -332,6 +344,7 @@ namespace S100Framework.Applications
                             //  --- Surface -------------------------------------------------------------
                             int countSurface = 0;
                             spatialFilter.SpatialRelationship = SpatialRelationship.IndexIntersects;
+
                             using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
                                 while (cursor.MoveNext()) {
                                     countSurface += 1;
@@ -339,15 +352,27 @@ namespace S100Framework.Applications
 
                                     var feature = (Feature)cursor.Current;
 
-                                    var clipped = GeometryEngine.Instance.Intersection(feature.GetShape(), queryPolygon);
+                                    if (feature.GetObjectID() == 1433) continue;
 
-                                    if (clipped is Polygon polygon) {
-                                        if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
-                                        feature.SetShape(polygon);
-                                        feature.Store();
+                                    var shape = (Polygon)feature.GetShape();
+
+                                    // polygonA = the polygon you want to cut
+                                    // polygonB = the polygon you want to subtract from A
+
+                                    var result = GeometryEngine.Instance.Difference(shape, queryPolygon);
+
+                                    if (result != null && !result.IsEmpty) {
+                                        if(result is Multipart multiPolygon) {
+                                            System.Diagnostics.Debugger.Break();
+                                        }
+                                        if (result is Polygon polygon) {
+                                            if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
+                                            feature.SetShape(polygon);
+                                            feature.Store();
+                                        }
+                                        else
+                                            System.Diagnostics.Debugger.Break();
                                     }
-                                    else
-                                        System.Diagnostics.Debugger.Break();
                                 }
                                 Logger.Current.Verbose("countSurface: #{countSurface}", countSurface);
                             }
@@ -365,11 +390,12 @@ namespace S100Framework.Applications
                         var select = dictionaryQueryFilter.ToDictionary(e => e.Key, e => string.Join(',', e.Value));
 
                         foreach (var e in select) {
-                            Logger.Current.Verbose("{layer}: {query}", e.Key, e.Value);
+                            //Logger.Current.Verbose("{layer}: {query}", e.Key, e.Value);
                         }
                     }
 
-                    System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debugger.Break();
+                    continue;
                 }
 
                 using (var destination = createTargetGeodatabase()) {

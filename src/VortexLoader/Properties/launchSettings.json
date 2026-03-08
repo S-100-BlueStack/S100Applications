@@ -2,7 +2,7 @@
   "profiles": {
     "VortexLoader": {
       "commandName": "Project",
-      "commandLineArgs": "--v --cmd NIS --target \"C:\\Users\\Jens Søe\\OneDrive\\Geodatastyrelsen\\S-100 Horizon\\s100edx_imperial\\s100edx_imperial_l1.gdb\" --source \"C:\\Users\\Jens Søe\\OneDrive\\Geodatastyrelsen\\S-100 Horizon\\s100edx_imperial\\s57_stack.gdb\" --notespath \"c:\\Users\\Jens Søe\\OneDrive\\Geodatastyrelsen\\S-100-BlueStack\\NotesAndPictures\" --scaminfiles \"c:\\Users\\Jens Søe\\OneDrive\\Geodatastyrelsen\\S-100-BlueStack\\MaritimeCharting\" --minimumDisplayScale 45000"
+      "commandLineArgs": "--v --cmd NIS --target \"e:\\ArcGIS\\Projects\\s100edx_imperial\\s100edx_imperial_l1.gdb\" --source \"e:\\ArcGIS\\Projects\\s100edx_imperial\\s57_stack.gdb\" --notespath \"e:\\ArcGIS\\Projects\\s100edx_imperial\\Notes\" --scaminfiles \"e:\\ArcGIS\\Projects\\s100edx_imperial\\SCAMIN\" --minimumDisplayScale 45000"
     }
   }
 }
