@@ -13,7 +13,9 @@ namespace S100FC.Applications
 {
     internal static class ImporterYAML
     {
-        public static bool Load(Geodatabase geodatabase, ParserResult<Options> arguments) {
+        public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
+            using var geodatabase = createTargetGeodatabase();
+
             S100FC.YAML.Dataset? dataset = null;
 
             bool append = false;

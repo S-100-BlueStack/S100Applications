@@ -64,7 +64,7 @@ namespace S100Framework.Applications
         public static IDictionary<int, int> VerticalDatumConverter = new Dictionary<int, int>();
 
 
-        public static bool Load(Geodatabase destination, ParserResult<Options> arguments) {
+        public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
 
             Logger.Current.Information("Starting");
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
@@ -76,10 +76,19 @@ namespace S100Framework.Applications
             var skinOfEarthOnly = false;
             var append = false;
             string status = null!;
+
+            long maximumDisplayScale = 0;
+            long minimumDisplayScale = long.MaxValue;
+
             arguments.WithParsed<Options>(o => {
                 if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
                     VerticalDatumConverter = o.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
                 }
+
+                if (o.maximumDisplayScale.HasValue)
+                    maximumDisplayScale = o.maximumDisplayScale.Value;
+                if (o.minimumDisplayScale.HasValue)
+                    minimumDisplayScale = o.minimumDisplayScale.Value;
 
                 var source = o.Source!;
 
@@ -99,7 +108,7 @@ namespace S100Framework.Applications
                     QueryFilter.WhereClause = o.Query!.Trim();
                 }
                 else {
-                    throw new NotSupportedException("whereclause must be supplied.");
+                    //TODO: throw new NotSupportedException("whereclause must be supplied.");
                 }
 
                 if (!string.IsNullOrEmpty(o.NotesPath)) {
@@ -122,13 +131,15 @@ namespace S100Framework.Applications
                 return true;
             };
 
-            if (destination.IsTraditionallyVersioned()) {
-                Store = (a) => {
-                    destination.ApplyEdits(() => {
-                        a.Invoke();
-                    }, true);
-                    return true;
-                };
+            using (var destination = createTargetGeodatabase()) {
+                if (destination.IsTraditionallyVersioned()) {
+                    Store = (a) => {
+                        destination.ApplyEdits(() => {
+                            a.Invoke();
+                        }, true);
+                        return true;
+                    };
+                }
             }
 
             _converterRegistry.Register<AidsToNavigationP, CardinalBeacon>(Converters.CreateCardinalBeacon);
@@ -154,233 +165,394 @@ namespace S100Framework.Applications
             _converterRegistry.Register<AidsToNavigationP, RadioStation>(Converters.CreateRadioStation);
             _converterRegistry.Register<AidsToNavigationP, Retroreflector>(Converters.CreateRetroreflector);
 
+            long[] scalesCompilation = [];
+
+            //  Clipping
             using (Geodatabase source = createGeodatabase()) {
-                //#if null
-                {
-                    var query = new QueryFilter {
-                        WhereClause = $"1=1",
-                    };
-                    using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
-                    using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
-                    using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
-                    using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
-                    using var attachment = destination.OpenDataset<Table>(destination.GetName("attachment"));
+                using var productDefinitions = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
+                using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
 
-                    //using var associationBinding = destination.OpenDataset<Table>(destination.GetName("associationbinding"));
-                    //using var attributeBinding = destination.OpenDataset<Table>(destination.GetName("attributebinding"));                                               
-                    using var informationtype = destination.OpenDataset<Table>(destination.GetName("InformationType"));
-                    using var featureType = destination.OpenDataset<Table>(destination.GetName("featureType"));
-                    //using var messages = destination.OpenDataset<Table>(destination.GetName("messages"));
 
-                    if (!append) {
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {featureType.GetName()}");
-                            DeleteAll(featureType);//featureType.DeleteRows(query);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {point.GetName()}");
-                            DeleteAll(point); // point.DeleteRows(query);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {pointset.GetName()}");
-                            DeleteAll(pointset); // pointset.DeleteRows(query);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {curve.GetName()}");
-                            DeleteAll(curve); // curve.DeleteRows(query);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {surface.GetName()}");
-                            DeleteAll(surface); // surface.DeleteRows(query);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {attachment.GetName()}");
-                            DeleteAll(attachment);
-                        });
-                        Store(() => {
-                            Logger.Current.Information($"Deleting data from destination: {informationtype.GetName()}");
-                            DeleteAll(informationtype);
-                        });
-                    }
+                using var search = productDefinitions.Search(new QueryFilter {
+                    SubFields = "CSCL",
+                    PrefixClause = "DISTINCT",
+                    PostfixClause = "ORDER BY CSCL DESC",
+                    WhereClause = $"CSCL >= {maximumDisplayScale} AND CSCL < {minimumDisplayScale}"
+                }, true);
+
+                while (search.MoveNext()) {
+                    var cscl = Convert.ToInt64(search.Current["CSCL"]);
+                    scalesCompilation = [.. scalesCompilation, cscl];
                 }
+            }
 
-                Logger.Current.Information($"Loading subtypes codes to subtype name");
-                Subtypes.Initialize(source);
+            //  Truncate geodatabase
+            using (Geodatabase destination = createTargetGeodatabase()) {
+                var query = new QueryFilter {
+                    WhereClause = $"1=1",
+                };
+                using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
+                using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
+                using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
+                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+                using var attachment = destination.OpenDataset<Table>(destination.GetName("attachment"));
 
-                Logger.Current.Information($"Loading featurerelations");
-                FeatureRelations.Initialize(source, destination);
+                //using var associationBinding = destination.OpenDataset<Table>(destination.GetName("associationbinding"));
+                //using var attributeBinding = destination.OpenDataset<Table>(destination.GetName("attributebinding"));                                               
+                using var informationtype = destination.OpenDataset<Table>(destination.GetName("InformationType"));
+                using var featureType = destination.OpenDataset<Table>(destination.GetName("featureType"));
+                //using var messages = destination.OpenDataset<Table>(destination.GetName("messages"));
 
-                Logger.Current.Information($"Initializing SpatialRelationResolver");
-                SpatialRelationResolver.Initialize(source);
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {featureType.GetName()}");
+                    DeleteAll(featureType);//featureType.DeleteRows(query);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {point.GetName()}");
+                    DeleteAll(point); // point.DeleteRows(query);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {pointset.GetName()}");
+                    DeleteAll(pointset); // pointset.DeleteRows(query);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {curve.GetName()}");
+                    DeleteAll(curve); // curve.DeleteRows(query);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {surface.GetName()}");
+                    DeleteAll(surface); // surface.DeleteRows(query);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {attachment.GetName()}");
+                    DeleteAll(attachment);
+                });
+                Store(() => {
+                    Logger.Current.Information($"Deleting data from destination: {informationtype.GetName()}");
+                    DeleteAll(informationtype);
+                });
+            }
 
-                Logger.Current.Information($"Initializing SpatialAssociations");
-                SpatialAssociations.Initialize(source, QueryFilter);
-
-                Logger.Current.Information($"Initializing NauticalInformations");
-                NauticalInformations.Initialize(destination);
-
-                relatedEquipment = new RelatedEquipment(source, destination);
-
-                if (skinOfEarthOnly) {
-                    Logger.Current.Information($"Converting skin of earth only Filter: {QueryFilter.WhereClause}");
-                    // All "SKIN OF EARTH" cases / subtypes are marked with a "skin of earth" comment
-                    var whereClause = QueryFilter.WhereClause.Clone();
-                    QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1,5,15)";
-                    Store(() => S57_DepthsA(source, destination, QueryFilter));
-                    QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (5)";
-                    Store(() => S57_NaturalFeaturesA(source, destination, QueryFilter));
-                    QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40,60,80)";
-                    Store(() => S57_PortsAndServicesA(source, destination, QueryFilter));
-                    QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40)";
-                    Store(() => S57_MetadataA(source, destination, QueryFilter));
-                    QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1)";
-                    Store(() => S57_ProductCoverage(source, destination, QueryFilter, s128));
-                    //Store(() => FeatureRelations.Instance.CreateRelations(destination));
-
+            foreach (var scale in scalesCompilation) {
+                if (Array.IndexOf(scalesCompilation, scale) == 0) {
+                    QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
                 }
                 else {
-                    /*var whereClause = QueryFilter.WhereClause.Clone();
-                    QueryFilter.WhereClause = $"{whereClause} and globalid = '{{EEC8A630-411C-43E0-8EF3-97B7A5FD5E4F}}'";
-                    QueryFilter.WhereClause = $"{whereClause}";
-                    */
+                    QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
 
-                    Logger.Current.Information($"Converting all tables: {QueryFilter.WhereClause}");
+                    Polygon[] clipping = [];
 
-                    Logger.Current.Information($"Converting Product Coverages");
-                    Store(() => S57_ProductCoverage(source, destination, QueryFilter, s128));
+                    using (Geodatabase source = createGeodatabase()) {
+                        using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
 
+                        using var search = productCoverage.Search(new QueryFilter {
+                            WhereClause = $"CATCOV = 1 AND (PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]})"
+                        }, true);
 
-                    Logger.Current.Information($"Converting Sounding Datums");
-                    Store(() => S101_SoundingDatum(source, destination, QueryFilter));
+                        while (search.MoveNext()) {
+                            var shape = (Polygon)((Feature)search.Current).GetShape();
 
-                    Logger.Current.Information($"Converting Metadata");
-                    Store(() => S57_MetadataA(source, destination, QueryFilter));
-                    Store(() => S57_MetadataP(source, destination, QueryFilter));
+                            clipping = [.. clipping, shape];
+                        }
+                    }
 
-                    Logger.Current.Information($"Converting Areas And Limits");
-                    Store(() => S57_RegulatedAreasAndLimitsA(source, destination, QueryFilter));
-                    Store(() => S57_RegulatedAreasAndLimitsL(source, destination, QueryFilter));
-                    Store(() => S57_RegulatedAreasAndLimitsP(source, destination, QueryFilter));
+                    using (var destination = createTargetGeodatabase()) {
+                        using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
+                        using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
+                        using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
+                        using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 
+                        var dictionaryQueryFilter = new Dictionary<string, long[]> {
+                            {"point",[] },
+                            {"pointset",[] },
+                            {"curve",[] },
+                            {"surface",[] },
+                        };                   
 
+                        foreach (var queryPolygon in clipping) {
+                            var spatialFilter = new SpatialQueryFilter {
+                                FilterGeometry = queryPolygon,                                
+                            };
 
-                    //filter.WhereClause = "globalid = '{D7DE9631-CF20-4143-B3F4-47BB4A2AE541}'";
-                    //filter.WhereClause = "globalid = '{855B900E-760C-4D68-AE02-8F3CA6FE60DD}'";
-                    //filter.WhereClause = "globalid = '{BAFFC1F3-A89C-4E13-982F-B577E50A06DC}'";
-                    //filter.WhereClause = "globalid = '{1F1D8B58-4959-4202-80F5-6CA4DD47D209}'";
+                            int countPoint = 0;
+                            spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                            using (var cursor = point.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countPoint += 1;
+                                    dictionaryQueryFilter["point"] = [.. dictionaryQueryFilter["point"], cursor.Current.GetObjectID()];
+                                }
+                                Logger.Current.Verbose("countPoint: #{countPoint}", countPoint);
+                            }
+                            point.DeleteRows(spatialFilter);
 
-                    Logger.Current.Information($"Converting Dangers");
-                    Store(() => S57_DangersA(source, destination, QueryFilter));
-                    Store(() => S57_DangersL(source, destination, QueryFilter));
-                    Store(() => S57_DangersP(source, destination, QueryFilter));
+                            int countPointSet = 0;
+                            spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                            //spatialFilter.SpatialRelationship = SpatialRelationship.IndexIntersects;
+                            using (var cursor = pointset.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countPointSet += 1;
+                                    dictionaryQueryFilter["pointset"] = [.. dictionaryQueryFilter["pointset"], cursor.Current.GetObjectID()];
+                                }
+                                Logger.Current.Verbose("countPointSet: #{countPointSet}", countPointSet);
+                            }
+                            pointset.DeleteRows(spatialFilter);
 
+                            //  --- Curve ---------------------------------------------------------------
+                            int countCurve = 0;
+                            spatialFilter.SpatialRelationship = SpatialRelationship.IndexIntersects;
+                            using (var cursor = curve.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countCurve += 1;
+                                    //dictionaryQueryFilter["curve"] = [.. dictionaryQueryFilter["curve"], cursor.Current.GetObjectID()];
 
+                                    var feature = (Feature)cursor.Current;
 
-                    Logger.Current.Information($"Converting Natural Features");
-                    Store(() => S57_NaturalFeaturesA(source, destination, QueryFilter));
-                    Store(() => S57_NaturalFeaturesL(source, destination, QueryFilter));
-                    Store(() => S57_NaturalFeaturesP(source, destination, QueryFilter));
+                                    var clipped = GeometryEngine.Instance.Intersection(feature.GetShape(), queryPolygon);
+                                    if (clipped is Polyline polyline) {
+                                        if (!polyline.IsKnownSimple) System.Diagnostics.Debugger.Break();
+                                        feature.SetShape(polyline);
+                                        feature.Store();
+                                    }
+                                    else
+                                        System.Diagnostics.Debugger.Break();
+                                }
+                                Logger.Current.Verbose("countCurve: #{countCurve}", countCurve);
+                            }
 
-
-                    Logger.Current.Information($"Converting Cultural Features");
-                    Store(() => S57_CulturalFeaturesA(source, destination, QueryFilter));
-                    Store(() => S57_CulturalFeaturesL(source, destination, QueryFilter));
-                    Store(() => S57_CulturalFeaturesP(source, destination, QueryFilter));
-
-
-                    Logger.Current.Information($"Converting Contours");
-                    Store(() => S57_DepthsL(source, destination, QueryFilter));
-
-
-                    //Logger.Current.Information($"Converting S101_RecommendedTracksAndRoutes");
-                    //Store(() => S101_RecommendedTracksAndRoutes(source, destination, QueryFilter));
-
-
-
-                    Logger.Current.Information($"Converting PortsAndServices");
-                    Store(() => S57_PortsAndServicesA(source, destination, QueryFilter));
-                    Store(() => S57_PortsAndServicesL(source, destination, QueryFilter));
-                    Store(() => S57_PortsAndServicesP(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting Soundings");
-                    Store(() => S57_SoundingsP(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting Tides And Variations");
-                    Store(() => S57_TidesAndVariationsA(source, destination, QueryFilter));
-                    Store(() => S57_TidesAndVariationsL(source, destination, QueryFilter));
-                    Store(() => S57_TidesAndVariationsP(source, destination, QueryFilter));
-
-
-                    Logger.Current.Information($"Converting Seabeds");
-                    Store(() => S57_SeabedA(source, destination, QueryFilter));
-                    Store(() => S57_SeabedL(source, destination, QueryFilter));
-                    Store(() => S57_SeabedP(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting CoastLines");
-                    Store(() => S57_CoastlineA(source, destination, QueryFilter));
-                    Store(() => S57_CoastlineL(source, destination, QueryFilter));
-                    Store(() => S57_CoastlineP(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting Depth Areas");
-                    Store(() => S57_DepthsA(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting Ice features");
-                    Store(() => S57_IcefeaturesA(source, destination, QueryFilter));
-
-                    Logger.Current.Information($"Converting Military Features");
-                    Store(() => S57_MilitaryFeatureA(source, destination, QueryFilter));
-                    Store(() => S57_MilitaryFeaturesP(source, destination, QueryFilter));
+                            spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                            using (var cursor = curve.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countCurve += 1;
+                                    dictionaryQueryFilter["curve"] = [.. dictionaryQueryFilter["curve"], cursor.Current.GetObjectID()];
+                                }                                
+                            }
+                            curve.DeleteRows(spatialFilter);
 
 
-                    Logger.Current.Information($"Converting Offshore Installations");
-                    Store(() => S57_OffshoreInstallationsA(source, destination, QueryFilter));
-                    Store(() => S57_OffshoreInstallationsL(source, destination, QueryFilter));
-                    Store(() => S57_OffshoreInstallationsP(source, destination, QueryFilter));
+                            //  --- Surface -------------------------------------------------------------
+                            int countSurface = 0;
+                            spatialFilter.SpatialRelationship = SpatialRelationship.IndexIntersects;
+                            using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countSurface += 1;
+                                    //dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
 
-                    Logger.Current.Information($"Converting Tracks And Routes");
-                    Store(() => S57_TracksAndRoutesA(source, destination, QueryFilter));
-                    Store(() => S57_TracksAndRoutesL(source, destination, QueryFilter));
-                    Store(() => S57_TracksAndRoutesP(source, destination, QueryFilter));
+                                    var feature = (Feature)cursor.Current;
 
-                    Logger.Current.Information($"Converting Aids to Navigation");
-                    Store(() => S57_AidsToNavigationP(source, destination, QueryFilter));
+                                    var clipped = GeometryEngine.Instance.Intersection(feature.GetShape(), queryPolygon);
 
-                    Logger.Current.Information($"Converting Note files");
-                    Store(() => NauticalInformations.Instance.Flush(destination));
+                                    if (clipped is Polygon polygon) {
+                                        if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
+                                        feature.SetShape(polygon);
+                                        feature.Store();
+                                    }
+                                    else
+                                        System.Diagnostics.Debugger.Break();
+                                }
+                                Logger.Current.Verbose("countSurface: #{countSurface}", countSurface);
+                            }
 
+                            spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                            using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
+                                while (cursor.MoveNext()) {
+                                    countSurface += 1;
+                                    dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
+                                }
+                            }
+                            surface.DeleteRows(spatialFilter);
+                        }
 
-                    //Store(() => FeatureRelations.Instance.CreateRelations(destination));
+                        var select = dictionaryQueryFilter.ToDictionary(e => e.Key, e => string.Join(',', e.Value));
+
+                        foreach (var e in select) {
+                            Logger.Current.Verbose("{layer}: {query}", e.Key, e.Value);
+                        }
+                    }
+
+                    System.Diagnostics.Debugger.Break();
                 }
-                //#endif
-                //Logger.Current.Information($"Igniting afterburner");
-                //Afterburner.Initialize(destination);
-                //Afterburner.Instance.CutClosedRoadLines();
 
-                Logger.Current.Information($"Loading sanity checker");
-                SanityChecker.Initialize(destination);
+                using (var destination = createTargetGeodatabase()) {
+                    using (Geodatabase source = createGeodatabase()) {
+                        Logger.Current.Information($"Loading subtypes codes to subtype name");
+                        Subtypes.Initialize(source);
 
-                Logger.Current.Information($"Validating drawing index");
-                status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No Empty drawing index in S-101: {status}");
+                        Logger.Current.Information($"Loading featurerelations");
+                        FeatureRelations.Initialize(source, destination);
 
-                Logger.Current.Information($"Validating ESRI Uknown values");
-                status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
+                        Logger.Current.Information($"Initializing SpatialRelationResolver");
+                        SpatialRelationResolver.Initialize(source);
 
-                Logger.Current.Information($"Validating edition-info");
-                status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No missing edition-info in S-101: {status}");
+                        Logger.Current.Information($"Initializing SpatialAssociations");
+                        SpatialAssociations.Initialize(source, QueryFilter);
 
-                Logger.Current.Information($"Validating default clearance");
-                status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
+                        Logger.Current.Information($"Initializing NauticalInformations");
+                        NauticalInformations.Initialize(destination);
 
-                Logger.Current.Information("Done");
+                        relatedEquipment = new RelatedEquipment(source, destination);
 
-                Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
+                        if (skinOfEarthOnly) {
+                            Logger.Current.Information($"Converting skin of earth only Filter: {QueryFilter.WhereClause}");
+                            // All "SKIN OF EARTH" cases / subtypes are marked with a "skin of earth" comment
+                            var whereClause = QueryFilter.WhereClause.Clone();
+                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1,5,15)";
+                            Store(() => S57_DepthsA(source, destination, QueryFilter));
+                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (5)";
+                            Store(() => S57_NaturalFeaturesA(source, destination, QueryFilter));
+                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40,60,80)";
+                            Store(() => S57_PortsAndServicesA(source, destination, QueryFilter));
+                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40)";
+                            Store(() => S57_MetadataA(source, destination, QueryFilter));
+                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1)";
+                            Store(() => S57_ProductCoverage(source, destination, QueryFilter, s128));
+                            //Store(() => FeatureRelations.Instance.CreateRelations(destination));
 
-                return true;
+                        }
+                        else {
+                            /*var whereClause = QueryFilter.WhereClause.Clone();
+                            QueryFilter.WhereClause = $"{whereClause} and globalid = '{{EEC8A630-411C-43E0-8EF3-97B7A5FD5E4F}}'";
+                            QueryFilter.WhereClause = $"{whereClause}";
+                            */
+
+                            Logger.Current.Information($"Converting all tables: {QueryFilter.WhereClause}");
+
+                            Logger.Current.Information($"Converting Product Coverages");
+                            Store(() => S57_ProductCoverage(source, destination, QueryFilter, s128));
+
+
+                            Logger.Current.Information($"Converting Sounding Datums");
+                            Store(() => S101_SoundingDatum(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Metadata");
+                            Store(() => S57_MetadataA(source, destination, QueryFilter));
+                            Store(() => S57_MetadataP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Areas And Limits");
+                            Store(() => S57_RegulatedAreasAndLimitsA(source, destination, QueryFilter));
+                            Store(() => S57_RegulatedAreasAndLimitsL(source, destination, QueryFilter));
+                            Store(() => S57_RegulatedAreasAndLimitsP(source, destination, QueryFilter));
+
+
+
+                            //filter.WhereClause = "globalid = '{D7DE9631-CF20-4143-B3F4-47BB4A2AE541}'";
+                            //filter.WhereClause = "globalid = '{855B900E-760C-4D68-AE02-8F3CA6FE60DD}'";
+                            //filter.WhereClause = "globalid = '{BAFFC1F3-A89C-4E13-982F-B577E50A06DC}'";
+                            //filter.WhereClause = "globalid = '{1F1D8B58-4959-4202-80F5-6CA4DD47D209}'";
+
+                            Logger.Current.Information($"Converting Dangers");
+                            Store(() => S57_DangersA(source, destination, QueryFilter));
+                            Store(() => S57_DangersL(source, destination, QueryFilter));
+                            Store(() => S57_DangersP(source, destination, QueryFilter));
+
+
+
+                            Logger.Current.Information($"Converting Natural Features");
+                            Store(() => S57_NaturalFeaturesA(source, destination, QueryFilter));
+                            Store(() => S57_NaturalFeaturesL(source, destination, QueryFilter));
+                            Store(() => S57_NaturalFeaturesP(source, destination, QueryFilter));
+
+
+                            Logger.Current.Information($"Converting Cultural Features");
+                            Store(() => S57_CulturalFeaturesA(source, destination, QueryFilter));
+                            Store(() => S57_CulturalFeaturesL(source, destination, QueryFilter));
+                            Store(() => S57_CulturalFeaturesP(source, destination, QueryFilter));
+
+
+                            Logger.Current.Information($"Converting Contours");
+                            Store(() => S57_DepthsL(source, destination, QueryFilter));
+
+
+                            //Logger.Current.Information($"Converting S101_RecommendedTracksAndRoutes");
+                            //Store(() => S101_RecommendedTracksAndRoutes(source, destination, QueryFilter));
+
+
+
+                            Logger.Current.Information($"Converting PortsAndServices");
+                            Store(() => S57_PortsAndServicesA(source, destination, QueryFilter));
+                            Store(() => S57_PortsAndServicesL(source, destination, QueryFilter));
+                            Store(() => S57_PortsAndServicesP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Soundings");
+                            Store(() => S57_SoundingsP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Tides And Variations");
+                            Store(() => S57_TidesAndVariationsA(source, destination, QueryFilter));
+                            Store(() => S57_TidesAndVariationsL(source, destination, QueryFilter));
+                            Store(() => S57_TidesAndVariationsP(source, destination, QueryFilter));
+
+
+                            Logger.Current.Information($"Converting Seabeds");
+                            Store(() => S57_SeabedA(source, destination, QueryFilter));
+                            Store(() => S57_SeabedL(source, destination, QueryFilter));
+                            Store(() => S57_SeabedP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting CoastLines");
+                            Store(() => S57_CoastlineA(source, destination, QueryFilter));
+                            Store(() => S57_CoastlineL(source, destination, QueryFilter));
+                            Store(() => S57_CoastlineP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Depth Areas");
+                            Store(() => S57_DepthsA(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Ice features");
+                            Store(() => S57_IcefeaturesA(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Military Features");
+                            Store(() => S57_MilitaryFeatureA(source, destination, QueryFilter));
+                            Store(() => S57_MilitaryFeaturesP(source, destination, QueryFilter));
+
+
+                            Logger.Current.Information($"Converting Offshore Installations");
+                            Store(() => S57_OffshoreInstallationsA(source, destination, QueryFilter));
+                            Store(() => S57_OffshoreInstallationsL(source, destination, QueryFilter));
+                            Store(() => S57_OffshoreInstallationsP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Tracks And Routes");
+                            Store(() => S57_TracksAndRoutesA(source, destination, QueryFilter));
+                            Store(() => S57_TracksAndRoutesL(source, destination, QueryFilter));
+                            Store(() => S57_TracksAndRoutesP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Aids to Navigation");
+                            Store(() => S57_AidsToNavigationP(source, destination, QueryFilter));
+
+                            Logger.Current.Information($"Converting Note files");
+                            Store(() => NauticalInformations.Instance.Flush(destination));
+
+
+                            //Store(() => FeatureRelations.Instance.CreateRelations(destination));
+                        }
+                        //#endif
+                        //Logger.Current.Information($"Igniting afterburner");
+                        //Afterburner.Initialize(destination);
+                        //Afterburner.Instance.CutClosedRoadLines();
+
+                        Logger.Current.Information($"Loading sanity checker");
+                        SanityChecker.Initialize(destination);
+
+                        Logger.Current.Information($"Validating drawing index");
+                        status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No Empty drawing index in S-101: {status}");
+
+                        Logger.Current.Information($"Validating ESRI Uknown values");
+                        status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
+
+                        Logger.Current.Information($"Validating edition-info");
+                        status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No missing edition-info in S-101: {status}");
+
+                        Logger.Current.Information($"Validating default clearance");
+                        status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
+
+                        Logger.Current.Information("Done");
+
+                        Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
+                    }
+                }
+                append = true;
             }
+            return true;
         }
 
         private static void DeleteAll(Table table) {
@@ -756,7 +928,7 @@ namespace S100Framework.Applications
         }
 
         internal static verticalDatum? GetVerticalDatum(int? value) {
-            if(!value.HasValue) return default(verticalDatum?);
+            if (!value.HasValue) return default(verticalDatum?);
             /*
             if (current.VERDAT.HasValue) {
                 instance.verticalDatum = EnumHelper.GetEnumValue<verticalDatum>(current.VERDAT.Value);

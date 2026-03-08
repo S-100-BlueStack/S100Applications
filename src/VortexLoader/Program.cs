@@ -6,6 +6,8 @@ using CommandLine;
 using ICSharpCode.SharpZipLib.Zip;
 using NetTopologySuite.Utilities;
 using S100FC.Applications;
+using System.Reflection.Metadata.Ecma335;
+
 
 //using S100Framework.DomainModel
 using System.Text.RegularExpressions;
@@ -67,6 +69,12 @@ namespace S100Framework.Applications
             [Option("vdat", Required = false, Default = "3=44")]
             public string? VerticalDatumConverter { get; set; } //  --vdat 3=44            
 
+
+            [Option("minimumDisplayScale")]
+            public long? minimumDisplayScale { get; set; } = long.MaxValue;
+
+            [Option("maximumDisplayScale")]
+            public long? maximumDisplayScale { get; set; } = 0;
         }
 
         static void Main(string[] args) {
@@ -148,15 +156,12 @@ namespace S100Framework.Applications
 
             initialize(append);
 
-            using Geodatabase target = createGeodatabase();
-
-
-            var result = command switch {
+            bool result = command switch {
                 //"GML" => ImporterGML(target, arguments),
-                "NIS" => ImporterNIS.Load(target, arguments),
-                "YAML" => ImporterYAML.Load(target, arguments),
+                "NIS" => ImporterNIS.Load(createGeodatabase, arguments),             
+                "YAML" => ImporterYAML.Load(createGeodatabase, arguments),
                 _ => throw new System.ArgumentNullException(nameof(command)),
-            };
+            };            
         }
 #if GML
         private static bool ImporterGML(Geodatabase geodatabase, ParserResult<Options> arguments) {
