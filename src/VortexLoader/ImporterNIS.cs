@@ -3,6 +3,7 @@ using ArcGIS.Core.Geometry;
 
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
+using NetTopologySuite.Operation;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
@@ -272,11 +273,11 @@ namespace S100Framework.Applications
                             {"pointset",[] },
                             {"curve",[] },
                             {"surface",[] },
-                        };                   
+                        };
 
                         foreach (var queryPolygon in clipping) {
                             var spatialFilter = new SpatialQueryFilter {
-                                FilterGeometry = queryPolygon,                                
+                                FilterGeometry = queryPolygon,
                             };
 
                             int countPoint = 0;
@@ -337,7 +338,7 @@ namespace S100Framework.Applications
                                 while (cursor.MoveNext()) {
                                     countCurve += 1;
                                     dictionaryQueryFilter["curve"] = [.. dictionaryQueryFilter["curve"], cursor.Current.GetObjectID()];
-                                }                                
+                                }
                             }
                             curve.DeleteRows(spatialFilter);
 
@@ -358,34 +359,59 @@ namespace S100Framework.Applications
                                     var shape = (Polygon)feature.GetShape();
 
                                     // polygonA = the polygon you want to cut
-                                    // polygonB = the polygon you want to subtract from A
+                                    // polygonB = the polygon you want to subtract from A                                    
 
-                                    var result = GeometryEngine.Instance.Difference(shape, queryPolygon);
+                                    var cutterPolyline = GeometryEngine.Instance.Boundary(queryPolygon) as Polyline;
 
-                                    if (result != null && !result.IsEmpty) {
-                                        if(result is Multipart multiPolygon) {
-                                            System.Diagnostics.Debugger.Break();
-                                        }
-                                        if (result is Polygon polygon) {
-                                            if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
-                                            feature.SetShape(polygon);
-                                            feature.Store();
-                                        }
-                                        else
-                                            System.Diagnostics.Debugger.Break();
+                                    if (GeometryEngine.Instance.Cut(shape, cutterPolyline).Count == 0) {
+                                        feature.Delete();
+                                    }
+                                    else if (GeometryEngine.Instance.Intersects(shape, cutterPolyline)) {
+                                        var result = feature.Split(cutterPolyline);
+
+
+                                        //var result = GeometryEngine.Instance.Cut(shape, cutterPolyline);
+
+                                        //if (result.Count == 0) {
+                                        //    feature.Delete();
+                                        //}
+                                        //else if (result.Count == 1) {
+                                        //    if (result[0] is Polygon polygon) {
+                                        //        feature.SetShape(polygon);
+                                        //        feature.Store();
+                                        //    }
+                                        //    else
+                                        //        System.Diagnostics.Debugger.Break();
+                                        //}
+                                        //else {
+                                        //    feature.SetShape(result[0]);
+                                        //    feature.Store();
+
+                                        //    var buffer = surface.CreateRowBuffer(feature);
+
+                                        //    foreach (var p in result) {
+                                        //        if (p is Polygon polygon) {
+                                        //            using var f = surface.CreateRow(buffer);
+                                        //            f.SetShape(polygon);
+                                        //            f.Store();
+                                        //        }
+                                        //        else
+                                        //            System.Diagnostics.Debugger.Break();
+                                        //    }
+                                        //}
                                     }
                                 }
                                 Logger.Current.Verbose("countSurface: #{countSurface}", countSurface);
                             }
 
-                            spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
-                            using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
-                                while (cursor.MoveNext()) {
-                                    countSurface += 1;
-                                    dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
-                                }
-                            }
-                            surface.DeleteRows(spatialFilter);
+                            //spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                            //using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
+                            //    while (cursor.MoveNext()) {
+                            //        countSurface += 1;
+                            //        dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
+                            //    }
+                            //}
+                            //surface.DeleteRows(spatialFilter);
                         }
 
                         var select = dictionaryQueryFilter.ToDictionary(e => e.Key, e => string.Join(',', e.Value));
