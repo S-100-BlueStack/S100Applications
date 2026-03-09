@@ -25,7 +25,7 @@ namespace S100FC.Applications
             var featureCatalogue = S100FC.Catalogues.FeatureCatalogue.Catalogues.Single(e => e.ProductID.Equals(productSpecification));
 
             arguments.WithParsed<Options>(o => {
-                append = o.Append;
+                //append = o.Append;
 
                 if (!IO.File.Exists(o.Dataset))
                     throw new FileNotFoundException(o.Dataset);

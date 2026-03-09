@@ -80,7 +80,7 @@ namespace S100Framework.Applications
             string status = null!;
 
             long maximumDisplayScale = 0;
-            long minimumDisplayScale = long.MaxValue;
+            long minimumDisplayScale = int.MaxValue;
 
             arguments.WithParsed<Options>(o => {
                 if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
@@ -106,12 +106,12 @@ namespace S100Framework.Applications
                 else
                     throw new System.ArgumentOutOfRangeException(nameof(source));
 
-                if (!string.IsNullOrEmpty(o.Query)) {
-                    QueryFilter.WhereClause = o.Query!.Trim();
-                }
-                else {
-                    //TODO: throw new NotSupportedException("whereclause must be supplied.");
-                }
+                //if (!string.IsNullOrEmpty(o.Query)) {
+                //    QueryFilter.WhereClause = o.Query!.Trim();
+                //}
+                //else {
+                //    throw new NotSupportedException("whereclause must be supplied.");
+                //}
 
                 if (!string.IsNullOrEmpty(o.NotesPath)) {
                     _notesPath = o.NotesPath;
@@ -123,7 +123,7 @@ namespace S100Framework.Applications
                     _scaminFilesPath = o.ScaminFilesPath;
                 }
 
-                append = o.Append;
+                //append = o.Append;
 
                 s128 = o.S128;
             });
@@ -187,6 +187,7 @@ namespace S100Framework.Applications
                     scalesCompilation = [.. scalesCompilation, cscl];
                 }
             }
+            ;
 
             //  Truncate geodatabase
             using (Geodatabase destination = createTargetGeodatabase()) {

@@ -45,11 +45,11 @@ namespace S100Framework.Applications
             [Option('s', "source", Required = false, HelpText = "Source Geodatabase.")]
             public string? Source { get; set; }
 
-            [Option('a', "append", Required = false, HelpText = "Append dataset.")]
-            public bool Append { get; set; }
+            //[Option('a', "append", Required = false, HelpText = "Append dataset.")]
+            //public bool Append { get; set; }
 
-            [Option('q', "query", Required = false, HelpText = "Definition query.")]
-            public string? Query { get; set; }
+            //[Option('q', "query", Required = false, HelpText = "Definition query.")]
+            //public string? Query { get; set; }
 
             [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
             public bool Verbose { get; set; }
@@ -70,11 +70,11 @@ namespace S100Framework.Applications
             public string? VerticalDatumConverter { get; set; } //  --vdat 3=44            
 
 
-            [Option("minimumDisplayScale")]
-            public long? minimumDisplayScale { get; set; } = long.MaxValue;
+            [Option('l', "minimumDisplayScale", Default = int.MaxValue, Required = false)]
+            public int? minimumDisplayScale { get; set; }
 
-            [Option("maximumDisplayScale")]
-            public long? maximumDisplayScale { get; set; } = 0;
+            [Option('u', "maximumDisplayScale", Default = 0, Required = false)]
+            public int? maximumDisplayScale { get; set; }
         }
 
         static void Main(string[] args) {
@@ -151,17 +151,17 @@ namespace S100Framework.Applications
                 else
                     throw new System.ArgumentOutOfRangeException(nameof(target));
 
-                append = o.Append;
+                //append = o.Append;
             });
 
             initialize(append);
 
             bool result = command switch {
                 //"GML" => ImporterGML(target, arguments),
-                "NIS" => ImporterNIS.Load(createGeodatabase, arguments),             
+                "NIS" => ImporterNIS.Load(createGeodatabase, arguments),
                 "YAML" => ImporterYAML.Load(createGeodatabase, arguments),
                 _ => throw new System.ArgumentNullException(nameof(command)),
-            };            
+            };
         }
 #if GML
         private static bool ImporterGML(Geodatabase geodatabase, ParserResult<Options> arguments) {
