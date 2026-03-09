@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "VortexLoader": {
-      "commandName": "Project",
-      "commandLineArgs": "--v --cmd NIS --target \"l:\\B061450\\ArcGIS\\s100edx_imperial\\s100edx_imperial.gdb\" --source \"l:\\B061450\\ArcGIS\\s100edx_imperial\\s57_stack.gdb\" --minimumDisplayScale 89999 --maximumDisplayScale 0 --notespath \"\\\\nas.gst.dk\\ncps\\production\\migrationsdata\\NotesAndPictures\" --scaminfiles \"\\\\nas.gst.dk\\ncps\\production\\indigo\\Configuration\""
-    }
-  }
-}
