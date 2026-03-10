@@ -3,6 +3,8 @@ using ArcGIS.Core.Geometry;
 
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
+using Microsoft.VisualBasic;
+using NetTopologySuite.IO;
 using NetTopologySuite.Operation;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
@@ -347,6 +349,12 @@ namespace S100Framework.Applications
                             int countSurface = 0;
                             spatialFilter.SpatialRelationship = SpatialRelationship.IndexIntersects;
 
+                            var reader = new WKTReader();
+                            var writer = new WKTWriter();
+
+                            var queryPolygonNetTopology = reader.Read(GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, queryPolygon));
+
+
                             using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
                                 while (cursor.MoveNext()) {
                                     countSurface += 1;
@@ -354,13 +362,64 @@ namespace S100Framework.Applications
 
                                     var feature = (Feature)cursor.Current;
 
-                                    if (feature.GetObjectID() == 1433) continue;
+                                    //if (feature.GetObjectID() == 1433) continue;
+                                    //if (feature.GetObjectID() == 1367) System.Diagnostics.Debugger.Break();
+                                    //if (feature.GetObjectID() == 91) System.Diagnostics.Debugger.Break();
 
-                                    var shape = (Polygon)feature.GetShape();
+                                    var shape = (Polygon)(feature.GetShape().Clone());
+
+                                    string wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, shape);
+
+                                    var geometry = reader.Read(wkt);
+
+                                    if(!geometry.IsValid) System.Diagnostics.Debugger.Break();
+
+                                    if (!geometry.Intersects(queryPolygonNetTopology)) continue;
+
+                                    var difference = geometry.SymmetricDifference(queryPolygonNetTopology);
+
+                                    if (difference.IsEmpty) {
+                                        feature.Delete();
+                                    }
+                                    else if (difference is NetTopologySuite.Geometries.Polygon polygon) {
+                                        var _wkt = writer.Write(polygon);
+                                        var _shape = (Polygon)GeometryEngine.Instance.ImportFromWKT(WktImportFlags.WktImportDefaults, _wkt, shape.SpatialReference);
+                                        feature.SetShape(_shape);
+                                        feature.Store();
+                                    }
+                                    else if (difference is NetTopologySuite.Geometries.MultiPolygon multiPolygon) {
+                                        var first = true;
+
+                                        foreach (var p in multiPolygon) {
+                                            var _wkt = writer.Write(p);
+                                            var _shape = (Polygon)GeometryEngine.Instance.ImportFromWKT(WktImportFlags.WktImportDefaults, _wkt, shape.SpatialReference);
+
+                                            if (first) {
+                                                feature.SetShape(_shape);
+                                                feature.Store();
+                                            }
+                                            else {
+                                                var buffer = surface.CreateRowBuffer(feature);
+                                                buffer["UID"] = null;
+                                                using var f = surface.CreateRow(buffer);
+
+                                                f.SetShape(_shape);
+                                                f.Store();
+                                            }
+
+                                            first = false;
+                                        }
+                                    }
+                                    else
+                                        System.Diagnostics.Debugger.Break();
+
+
+
+
 
                                     // polygonA = the polygon you want to cut
                                     // polygonB = the polygon you want to subtract from A                                    
-
+                                    /*
                                     var cutterPolyline = GeometryEngine.Instance.Boundary(queryPolygon) as Polyline;
 
                                     if (GeometryEngine.Instance.Cut(shape, cutterPolyline).Count == 0) {
@@ -398,8 +457,9 @@ namespace S100Framework.Applications
                                         //        else
                                         //            System.Diagnostics.Debugger.Break();
                                         //    }
-                                        //}
+                                        //}                                    
                                     }
+                                    */
                                 }
                                 Logger.Current.Verbose("countSurface: #{countSurface}", countSurface);
                             }
@@ -893,7 +953,7 @@ namespace S100Framework.Applications
                 throw new ArgumentException("Null geometry not supported");
             }
 
-            if (shape.GeometryType == GeometryType.Point && shape.HasZ == false) {
+            if (shape.GeometryType == ArcGIS.Core.Geometry.GeometryType.Point && shape.HasZ == false) {
                 buffer["shape"] = MapPointBuilderEx.CreateMapPoint(((MapPoint)shape).X, ((MapPoint)shape).Y, 0.00, shape.SpatialReference);
             }
             else {
