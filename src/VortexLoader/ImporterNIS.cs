@@ -368,9 +368,11 @@ namespace S100Framework.Applications
 
                                     var feature = (Feature)cursor.Current;
                                     var objectid = feature.GetObjectID();
-                                    var shape = feature.GetShape();
+                                    var shape = (Polygon)feature.GetShape();
 
                                     var geometryType = shape.GeometryType;
+
+                                    if (shape.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
 
                                     if (GeometryEngine.Instance.Within(shape, queryPolygon)) {
                                         Logger.Current.Verbose("Delete: #{oid}", feature.GetObjectID());
@@ -379,11 +381,11 @@ namespace S100Framework.Applications
                                         continue;
                                     }
 
-                                    if (GeometryEngine.Instance.Intersects(queryPolygon, shape)) {
+                                    if (GeometryEngine.Instance.Intersects(queryPolygon, shape)) {                                        
                                         var difference = GeometryEngine.Instance.Difference(shape, queryPolygon);
 
                                         if(difference is Polygon polygon) {
-                                            if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
+                                            //if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
                                             Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
 
                                             feature.SetShape(polygon);
@@ -570,7 +572,9 @@ namespace S100Framework.Applications
                             using var search = surface2.Search(null, true);
                             while (search.MoveNext()) {
                                 var objectid = search.Current.GetObjectID();
-                                var shape = ((Feature)search.Current).GetShape();
+                                var shape = (Polygon)((Feature)search.Current).GetShape();
+
+                                if (shape.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
 
                                 string wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, shape);
 
@@ -586,8 +590,7 @@ namespace S100Framework.Applications
 
 
 
-                    //System.Diagnostics.Debugger.Break();
-
+                    //System.Diagnostics.Debugger.Break();                    
                     continue;
                 }
 
@@ -750,7 +753,9 @@ namespace S100Framework.Applications
 
                             using var search = surface.Search(null, true);
                             while (search.MoveNext()) {
-                                var shape = ((Feature)search.Current).GetShape();
+                                var shape = (Polygon)((Feature)search.Current).GetShape();
+
+                                if (shape.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
 
                                 string wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportPolygon, shape);
 
