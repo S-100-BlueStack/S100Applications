@@ -388,6 +388,8 @@ namespace S100Framework.Applications
                                             //if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
                                             Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
 
+                                            if (polygon.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
+
                                             feature.SetShape(polygon);
                                             cursor.Update(feature);
                                         }
