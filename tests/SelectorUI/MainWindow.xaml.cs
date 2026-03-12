@@ -61,7 +61,7 @@ namespace SelectorUI
 
             //};
 
-            var selectedObject = new S100AttributeEditorViewModel(featureTypeWreck, "123456") {
+            var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
                 RequestInformation = async (s, e) => {
                     var random = new Random(DateTime.Now.Millisecond);
                     string[] result = [];
