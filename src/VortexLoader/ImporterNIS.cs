@@ -194,6 +194,8 @@ namespace S100Framework.Applications
             }
             ;
 
+            goto __skip_truncate;
+
             //  Truncate geodatabase
             using (Geodatabase destination = createTargetGeodatabase()) {
                 var query = new QueryFilter {
@@ -241,10 +243,13 @@ namespace S100Framework.Applications
                 });
             }
 
+        __skip_truncate:
             foreach (var scale in scalesCompilation) {
                 if (Array.IndexOf(scalesCompilation, scale) == 0) {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
                     Logger.Current.Verbose(QueryFilter.WhereClause);
+
+                    continue;   //TESTING....
                 }
                 else {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
@@ -270,7 +275,7 @@ namespace S100Framework.Applications
                         using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
                         using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
                         using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
-                        using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+                        //using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 
                         var dictionaryQueryFilter = new Dictionary<string, long[]> {
                             {"point",[] },
@@ -361,203 +366,85 @@ namespace S100Framework.Applications
                             var tasks = new List<Action<FeatureClass>>();
 
                             long[] hits = [];
-                            using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
-                                while (cursor.MoveNext()) {
-                                    countSurface += 1;
-                                    hits = [.. hits, cursor.Current.GetObjectID()];
+                            using (var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"))) {
+                                using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
+                                    while (cursor.MoveNext()) {
+                                        countSurface += 1;
+                                        hits = [.. hits, cursor.Current.GetObjectID()];
 
-                                    var feature = (Feature)cursor.Current;
-                                    var objectid = feature.GetObjectID();
-                                    var shape = (Polygon)feature.GetShape();
+                                        var feature = (Feature)cursor.Current;
+                                        var objectid = feature.GetObjectID();
+                                        var shape = (Polygon)feature.GetShape();
 
-                                    var geometryType = shape.GeometryType;
+                                        var geometryType = shape.GeometryType;
 
-                                    if (shape.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
+                                        if (shape.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
 
-                                    if (GeometryEngine.Instance.Within(shape, queryPolygon)) {
-                                        Logger.Current.Verbose("Delete: #{oid}", feature.GetObjectID());
+                                        if (GeometryEngine.Instance.Within(shape, queryPolygon)) {
+                                            Logger.Current.Verbose("Delete: #{oid}", feature.GetObjectID());
+                                            feature.Delete();
+                                        }
+                                        else if (GeometryEngine.Instance.Intersects(queryPolygon, shape)) {
+                                            var difference = GeometryEngine.Instance.Difference(shape, queryPolygon);
 
-                                        feature.Delete();
-                                        continue;
-                                    }
+                                            if (difference is Polygon polygon) {
+                                                polygon = (Polygon)polygon.Clone();
 
-                                    if (GeometryEngine.Instance.Intersects(queryPolygon, shape)) {                                        
-                                        var difference = GeometryEngine.Instance.Difference(shape, queryPolygon);
+                                                Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
 
-                                        if(difference is Polygon polygon) {
-                                            //if (!polygon.IsKnownSimple) System.Diagnostics.Debugger.Break();
-                                            Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
+                                                if (polygon.ExteriorRingCount > 1) {
+                                                    Polygon[] polygons = [];
+                                                    ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                                    for (int i = 1; i < polygon.PartCount; i++) {
+                                                        var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
+                                                        if (p.Area < 0)
+                                                            segments = [.. segments, polygon.Parts[i]];
+                                                        else {
+                                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                            polygons = [.. polygons, _];
+                                                            segments = [polygon.Parts[i]];
+                                                        }
+                                                    }
+                                                    if (segments.Any()) {
+                                                        var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                        polygons = [.. polygons, _];
+                                                    }
 
-                                            if (polygon.ExteriorRingCount > 1) System.Diagnostics.Debugger.Break();
+                                                    feature.SetShape(GeometryEngine.Instance.SimplifyAsFeature(polygons[0], true));
+                                                    cursor.Update(feature);
 
-                                            feature.SetShape(polygon);
-                                            cursor.Update(feature);
+                                                    using var buffer = surface.CreateRowBuffer();
+                                                    buffer["ps"] = feature["ps"];
+                                                    buffer["code"] = feature["code"];
+                                                    buffer["flatten"] = feature["flatten"];
+
+                                                    for (int i = 1; i < polygons.Length; i++) {
+                                                        var p = GeometryEngine.Instance.SimplifyAsFeature(polygons[i], true);
+
+                                                        buffer["shape"] = p.Clone();
+                                                        using var _ = surface.CreateRow(buffer);
+                                                    }
+                                                    buffer.Dispose();
+                                                }
+                                                else {
+                                                    feature.SetShape(GeometryEngine.Instance.SimplifyAsFeature(polygon, true));
+                                                    cursor.Update(feature);
+                                                }
+                                            }
                                         }
                                     }
-
-                                    // polygonA = the polygon you want to cut
-                                    // polygonB = the polygon you want to subtract from A                                    
-
-                                    //var cutterPolyline = GeometryEngine.Instance.Boundary(queryPolygon) as Polyline;
-
-                                    ////string __wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, shape);
-
-                                    //////if (__wkt.Contains("MULTI")) System.Diagnostics.Debugger.Break();
-
-                                    ////string wkt = string.Empty;
-                                    ////try {
-                                    ////    wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportPolygon, shape);
-                                    ////}
-                                    ////catch (Exception ex) {
-                                    ////    System.Diagnostics.Debugger.Break();
-                                    ////}
-
-                                    ////var geometry = reader.Read(wkt);
-
-                                    ////if (!geometry.IsValid) System.Diagnostics.Debugger.Break();
-
-                                    ////if (!geometry.Intersects(queryPolygonNetTopology)) continue;
-
-                                    ////var difference = queryPolygonNetTopology.Difference(geometry);
-
-                                    ////if (difference is NetTopologySuite.Geometries.Polygon polygon) {
-                                    ////    var _wkt = writer.Write(polygon);
-
-                                    ////    if (_wkt.Contains("MULTI")) System.Diagnostics.Debugger.Break();
-
-                                    ////    var _shape = GeometryEngine.Instance.ImportFromWKT(WktImportFlags.WktImportDefaults, _wkt, SpatialReferences.WGS84);
-
-                                    ////    if (!reader.Read(GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportPolygon, shape)).IsValid) System.Diagnostics.Debugger.Break();
-
-                                    ////    Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
-
-                                    ////    feature.SetShape(_shape);
-                                    ////    cursor.Update(feature);                                        
-                                    ////}
                                 }
-                            }
 
-                            //foreach (var objectid in hits) {
-
-                            //    using var cursor = surface.Search(new QueryFilter {
-                            //        WhereClause = $"OBJECTID = {objectid}",
-                            //    }, false);
-
-                            //    cursor.MoveNext();
-                            //    var feature = (Feature)cursor.Current;
-
-                            //    var shape = feature.GetShape();
-
-                            //    string wkt = GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, shape);
-
-                            //    var geometry = reader.Read(wkt);
-
-                            //    if (!geometry.IsValid) System.Diagnostics.Debugger.Break();
-
-                            //    if (!geometry.Intersects(queryPolygonNetTopology)) continue;
-
-                            //    var difference = geometry.SymmetricDifference(queryPolygonNetTopology);
-
-                            //    if (difference.IsEmpty) {
-                            //        feature.Delete();
-                            //        Logger.Current.Verbose("Delete: #{oid}", feature.GetObjectID());
-                            //    }
-                            //    else if (difference is NetTopologySuite.Geometries.Polygon polygon) {
-                            //        var _wkt = writer.Write(polygon);
-                            //        var _shape = (Polygon)GeometryEngine.Instance.ImportFromWKT(WktImportFlags.WktImportDefaults, _wkt, SpatialReferences.WGS84);
-
-                            //        if (!reader.Read(GeometryEngine.Instance.ExportToWKT(WktExportFlags.WktExportDefaults, shape)).IsValid) System.Diagnostics.Debugger.Break();
-
-                            //        feature.SetShape(_shape);
-                            //        feature.Store();
-
-                            //        Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
-                            //    }
-                            //    else if (difference is NetTopologySuite.Geometries.MultiPolygon multiPolygon) {                                    
-                            //        var first = true;
-
-                            //        foreach (var p in multiPolygon) {
-                            //            var _wkt = writer.Write(p);
-                            //            var _shape = (Polygon)GeometryEngine.Instance.ImportFromWKT(WktImportFlags.WktImportDefaults, _wkt, SpatialReferences.WGS84);
-
-                            //            if (first) {
-                            //                feature.SetShape(_shape);
-                            //                feature.Store();
-
-                            //                Logger.Current.Verbose("Update: #{oid}", feature.GetObjectID());
-                            //            }
-                            //            else {
-                            //                //using var buffer = surface.CreateRowBuffer(feature);
-                            //                //buffer["UID"] = null;
-                            //                //using var f = surface.CreateRow(buffer);
-
-                            //                //f.SetShape(_shape);
-                            //                //f.Store();
-                            //            }
-                            //            first = false;
-                            //        }
-                            //    }
-                            //    //else
-                            //    //    System.Diagnostics.Debugger.Break();
-
-
-                            //    feature.Dispose();
-
-                            //    // polygonA = the polygon you want to cut
-                            //    // polygonB = the polygon you want to subtract from A                                    
-                            //    /*
-                            //    var cutterPolyline = GeometryEngine.Instance.Boundary(queryPolygon) as Polyline;
-
-                            //    if (GeometryEngine.Instance.Cut(shape, cutterPolyline).Count == 0) {
-                            //        feature.Delete();
-                            //    }
-                            //    else if (GeometryEngine.Instance.Intersects(shape, cutterPolyline)) {
-                            //        var result = feature.Split(cutterPolyline);
-
-
-                            //        //var result = GeometryEngine.Instance.Cut(shape, cutterPolyline);
-
-                            //        //if (result.Count == 0) {
-                            //        //    feature.Delete();
-                            //        //}
-                            //        //else if (result.Count == 1) {
-                            //        //    if (result[0] is Polygon polygon) {
-                            //        //        feature.SetShape(polygon);
-                            //        //        feature.Store();
-                            //        //    }
-                            //        //    else
-                            //        //        System.Diagnostics.Debugger.Break();
-                            //        //}
-                            //        //else {
-                            //        //    feature.SetShape(result[0]);
-                            //        //    feature.Store();
-
-                            //        //    var buffer = surface.CreateRowBuffer(feature);
-
-                            //        //    foreach (var p in result) {
-                            //        //        if (p is Polygon polygon) {
-                            //        //            using var f = surface.CreateRow(buffer);
-                            //        //            f.SetShape(polygon);
-                            //        //            f.Store();
-                            //        //        }
-                            //        //        else
-                            //        //            System.Diagnostics.Debugger.Break();
-                            //        //    }
-                            //        //}                                    
-                            //    }
-                            //    */
-                            //}
+                                spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
+                                using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
+                                    while (cursor.MoveNext()) {
+                                        countSurface += 1;
+                                        dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
+                                    }
+                                }
+                                surface.DeleteRows(spatialFilter);
+                            }                            
                             Logger.Current.Verbose("countSurface: #{countSurface}", countSurface);
-
-
-                            //spatialFilter.SpatialRelationship = SpatialRelationship.Contains;
-                            //using (var cursor = surface.CreateUpdateCursor(spatialFilter, true)) {
-                            //    while (cursor.MoveNext()) {
-                            //        countSurface += 1;
-                            //        dictionaryQueryFilter["surface"] = [.. dictionaryQueryFilter["surface"], cursor.Current.GetObjectID()];
-                            //    }
-                            //}
-                            //surface.DeleteRows(spatialFilter);
                         }
 
                         var select = dictionaryQueryFilter.ToDictionary(e => e.Key, e => string.Join(',', e.Value));

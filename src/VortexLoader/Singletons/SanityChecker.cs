@@ -127,7 +127,7 @@ namespace S100Framework.Applications.Singletons
                 "configuration",
                 "featuretype",
                 "informationtype",
-                "messages"
+                //"messages"
             };
             int recordCount = 0;
 
