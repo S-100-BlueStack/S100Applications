@@ -57,24 +57,24 @@ namespace S100Framework.Applications
 
             // Add all M_SCL as datacoverages
             foreach (var m_sclPolygon in allM_CSCL) {
-                var compilation_scale = m_sclPolygon.PLTS_COMP_SCALE;
+                var cscale = m_sclPolygon.CSCALE;
 
                 var touches = ProductCoverages.Instance.Touch((m_sclPolygon.Shape as Polygon)!.Extent.Center);
-                var uniqueCScales = touches
-                    .Select(p => p.CScale)
+                var uniqueCompScales = touches
+                    .Select(p => p.PltsCompScale)
                     .Distinct().ToList();
 
-                var cScalesCount = uniqueCScales.Count();
+                var pltsScalesCount = uniqueCompScales.Count();
 
-                if (cScalesCount > 1) {
-                    Logger.Current.Error($"Center of M_CSCL touches more than one product. Multiple scales encountered. Check {m_sclPolygon.DSNM}. Using {uniqueCScales.First()}");
+                if (pltsScalesCount > 1) {
+                    Logger.Current.Error($"Center of M_CSCL touches more than one product. Multiple scales encountered. Check {m_sclPolygon.DSNM}. Using {uniqueCompScales.First()}");
                 }
 
                 
                 var dataCoverage_m_scl = new DataCoverage {
-                    maximumDisplayScale = Convert.ToInt32(compilation_scale / 2), 
-                    optimumDisplayScale = compilation_scale,  
-                    minimumDisplayScale = uniqueCScales.First()
+                    maximumDisplayScale = Convert.ToInt32(cscale / 2), 
+                    optimumDisplayScale = cscale,  
+                    minimumDisplayScale = uniqueCompScales.First()
                 };
 
                 {

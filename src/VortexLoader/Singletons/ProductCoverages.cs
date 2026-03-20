@@ -61,7 +61,6 @@ namespace S100Framework.Applications.Singletons
                     GlobalId = globalid,
                     LongName = Convert.ToString(feature["LNAM"]) ?? "",
                     PltsCompScale = Convert.ToInt32(feature["PLTS_COMP_SCALE"]),
-                    CScale = Convert.ToInt32(feature["CSCALE"]),
                     Dnsm = Convert.ToString(feature["DSNM"]) ??  ""
                 };
 
@@ -103,7 +102,6 @@ namespace S100Framework.Applications.Singletons
 
         public int PltsCompScale { get; set; }
         public string Dnsm { get; set; }
-        public int CScale { get; set; }
 
     }
 }
