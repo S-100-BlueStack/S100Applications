@@ -61,7 +61,8 @@ namespace S100Framework.Applications
 
                 var touches = ProductCoverages.Instance.Touch((m_sclPolygon.Shape as Polygon)!.Extent.Center);
                 var uniqueCScales = touches
-                    .Select(p => p.CScale)
+                    //.Select(p => p.CScale)
+                    .Select(p => p.PltsCompScale)
                     .Distinct().ToList();
 
                 var cScalesCount = uniqueCScales.Count();
