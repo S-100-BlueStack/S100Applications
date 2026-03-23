@@ -280,7 +280,7 @@ namespace S100Framework.Applications
 
                                 var spatialFilter = new SpatialQueryFilter {
                                     FilterGeometry = queryPolygonProjected,
-                                    SpatialRelationship = SpatialRelationship.Within
+                                    SpatialRelationship = SpatialRelationship.Contains
                                 };
                                 featureClass.DeleteRows(spatialFilter);
                             }
@@ -291,7 +291,7 @@ namespace S100Framework.Applications
 
                                 var spatialFilter = new SpatialQueryFilter {
                                     FilterGeometry = queryPolygonProjected,
-                                    SpatialRelationship = SpatialRelationship.Within
+                                    SpatialRelationship = SpatialRelationship.Contains
                                 };
                                 featureClass.DeleteRows(spatialFilter);
                             }
@@ -332,7 +332,7 @@ namespace S100Framework.Applications
                                         cursor.MoveNext();
 
                                         using var feature = (Feature)cursor.Current;
-                                        var shape = (Polygon)feature.GetShape();
+                                        var shape = (Polyline)feature.GetShape();
 
                                         if (GeometryEngine.Instance.Disjoint(shape, queryPolygonProjected))
                                             continue;
@@ -361,7 +361,7 @@ namespace S100Framework.Applications
 
                                     featureClass.DeleteRows(new SpatialQueryFilter {
                                         FilterGeometry = queryPolygonProjected,
-                                        SpatialRelationship = SpatialRelationship.Within
+                                        SpatialRelationship = SpatialRelationship.Contains
                                     });
                                 }
                             }
@@ -459,12 +459,13 @@ namespace S100Framework.Applications
 
                                     featureClass.DeleteRows(new SpatialQueryFilter {
                                         FilterGeometry = queryPolygonProjected,
-                                        SpatialRelationship = SpatialRelationship.Within
+                                        SpatialRelationship = SpatialRelationship.Contains
                                     });
                                 }
                             }
                         }
                     }
+                    continue;
                 }
 
                 using (var destination = createTargetGeodatabase()) {
