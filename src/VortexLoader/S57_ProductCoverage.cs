@@ -27,7 +27,15 @@ namespace S100Framework.Applications
             using var productCoverageFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
             using var metadataAFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
 
+
+            ProductCoverages.Initialize(source, QueryFilter);
+
+
+
             var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"{filter.WhereClause} AND fcsubtype = 20" });
+
+            ProductRecord m_csclProduct = null;
+
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
 
@@ -49,13 +57,24 @@ namespace S100Framework.Applications
 
             // Add all M_SCL as datacoverages
             foreach (var m_sclPolygon in allM_CSCL) {
-                var serie = m_sclPolygon.DSNM!.ToString();
+                var compilation_scale = m_sclPolygon.PLTS_COMP_SCALE;
 
-                var displayScale = DisplayScale.GetDisplayScale(serie!)!;
+                var touches = ProductCoverages.Instance.Touch((m_sclPolygon.Shape as Polygon)!.Extent.Center);
+                var uniqueCScales = touches
+                    .Select(p => p.CScale)
+                    .Distinct().ToList();
+
+                var cScalesCount = uniqueCScales.Count();
+
+                if (cScalesCount > 1) {
+                    Logger.Current.Error($"Center of M_CSCL touches more than one product. Multiple scales encountered. Check {m_sclPolygon.DSNM}. Using {uniqueCScales.First()}");
+                }
+
+                
                 var dataCoverage_m_scl = new DataCoverage {
-                    maximumDisplayScale = displayScale.MaximumDisplayScale,
-                    optimumDisplayScale = displayScale.OptimumDisplayScale,
-                    minimumDisplayScale = displayScale.MinimumDisplayScale
+                    maximumDisplayScale = Convert.ToInt32(compilation_scale / 2), 
+                    optimumDisplayScale = compilation_scale,  
+                    minimumDisplayScale = uniqueCScales.First()
                 };
 
                 {
@@ -138,11 +157,11 @@ namespace S100Framework.Applications
                     var plts_comp_scale = productCoverage.PLTS_COMP_SCALE ?? default;
 
                     //var displayScale = DisplayScale.GetNearestBelowKey(plts_comp_scale) ?? default;
-                    var displayScale = DisplayScale.GetDisplayScale(serie!)!;
+                    //var displayScale = DisplayScale.GetDisplayScale(serie!)!;
                     var dataCoverage_m_scl = new DataCoverage {
-                        maximumDisplayScale = displayScale.MaximumDisplayScale,
-                        optimumDisplayScale = displayScale.OptimumDisplayScale,
-                        minimumDisplayScale = displayScale.MinimumDisplayScale
+                        maximumDisplayScale = Convert.ToInt32(plts_comp_scale / 2),
+                        optimumDisplayScale = plts_comp_scale, //displayScale.OptimumDisplayScale,
+                        minimumDisplayScale = plts_comp_scale //displayScale.MinimumDisplayScale
                     };
 
                     var coverageShape = productCoverage.SHAPE!;
@@ -180,9 +199,9 @@ namespace S100Framework.Applications
 
                             // DATACOVERAGE
                             var dataCoverage = new DataCoverage {
-                                maximumDisplayScale = displayScale.MaximumDisplayScale,
-                                optimumDisplayScale = displayScale.OptimumDisplayScale,
-                                minimumDisplayScale = displayScale.MinimumDisplayScale
+                                maximumDisplayScale = Convert.ToInt32(plts_comp_scale / 2),
+                                optimumDisplayScale = plts_comp_scale, //displayScale.OptimumDisplayScale,
+                                minimumDisplayScale = plts_comp_scale //displayScale.MinimumDisplayScale
                             }; {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = dataCoverage.GetType().Name;
