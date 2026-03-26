@@ -102,6 +102,7 @@ namespace S100Framework.Applications.Singletons
 
         public int PltsCompScale { get; set; }
         public string Dnsm { get; set; }
+        public int CScale { get; set; }
 
     }
 }
