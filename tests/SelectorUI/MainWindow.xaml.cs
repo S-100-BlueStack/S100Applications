@@ -8,6 +8,7 @@ using S100FC.S101.InformationAssociation;
 using S100Framework.WPF.ViewModel;
 using System.Text.Json;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace SelectorUI
 {
@@ -60,6 +61,13 @@ namespace SelectorUI
             //var featureType = new S100FC.S128.FeatureTypes.ElectronicProduct {
 
             //};
+
+            var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
+
+            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData");
+
+            System.Diagnostics.Debugger.Break();
+
 
             var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
                 RequestInformation = async (s, e) => {

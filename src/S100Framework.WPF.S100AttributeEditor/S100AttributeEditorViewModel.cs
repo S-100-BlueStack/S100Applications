@@ -4,9 +4,59 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace S100Framework.WPF.ViewModel
 {
+    public class S100AttributeEditorViewModelFC : INotifyPropertyChanged, INotifyDataErrorInfo
+    {
+        public bool HasErrors => throw new NotImplementedException();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        public IEnumerable GetErrors(string? propertyName) {
+            throw new NotImplementedException();
+        }
+
+        public S100AttributeEditorViewModelFC(XDocument xDocument, string code) {
+            this._featureCatalogue = xDocument;
+
+            var navigator = this._featureCatalogue.CreateNavigator();
+            navigator.MoveToFollowing(XPathNodeType.Element);
+
+            var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+            var xmlNamespaceManager = new XmlNamespaceManager(new NameTable());
+            foreach (var s in scopes)
+                xmlNamespaceManager.AddNamespace(s.Key, s.Value);
+
+            this._featureType = this._featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+
+            var attributeBindings = this._featureType.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
+            foreach(var attributeBinding in attributeBindings) {
+                var referenceCode = attributeBinding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;
+                var permittedValues = attributeBinding.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager);
+                var lower = int.Parse(attributeBinding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
+                var _ = attributeBinding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
+                int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
+
+
+            }
+
+            ;
+        }
+
+        public attributeBinding[] attributeBindings { get; protected set; } = Array.Empty<attributeBinding>();
+
+        private XDocument _featureCatalogue;
+        private XElement _featureType;
+    }
+
     public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
     {
         public class RequestInformationsEventArgs(string? informationType) : EventArgs
