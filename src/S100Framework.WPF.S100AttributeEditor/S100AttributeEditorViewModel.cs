@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -35,20 +36,111 @@ namespace S100Framework.WPF.ViewModel
             foreach (var s in scopes)
                 xmlNamespaceManager.AddNamespace(s.Key, s.Value);
 
+            var simpleAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_SimpleAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
+
+            var complexAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToArray();
+
             this._featureType = this._featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
 
             var attributeBindings = this._featureType.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
-            foreach(var attributeBinding in attributeBindings) {
-                var referenceCode = attributeBinding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;
-                var permittedValues = attributeBinding.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager);
-                var lower = int.Parse(attributeBinding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
-                var _ = attributeBinding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
+            foreach (var binding in attributeBindings) {
+                var referenceCode = binding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;                
+                var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
+                var _ = binding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
                 int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
 
+                if (simpleAttributes.ContainsKey(referenceCode)) {
+                    var simpleAttribute = simpleAttributes[referenceCode];
 
+                    var valueType = simpleAttribute.Element(XName.Get("valueType", scopes["S100FC"]))!.Value;
+
+                    SimpleAttribute attributeBinding = valueType switch {
+                        "boolean" => new BooleanAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "real" => new RealAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "text" => new TextAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "S100_TruncatedDate" => new S100_TruncatedDateAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "date" => new DateAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "dataonly" => new DateAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "datetime" => new DateTimeAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "time" => new TimeAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "integer" => new IntegerAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "URN" => new UrnTimeAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "URL" => new UrnTimeAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "URI" => new UrnTimeAttribute {
+                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
+                        },
+                        "enumeration" => CreateEnumeration(binding, simpleAttribute, xmlNamespaceManager),
+                        _ => throw new NotImplementedException(),
+                    };
+
+                    this.attributeBindings = [.. this.attributeBindings, attributeBinding];
+
+                }
             }
 
             ;
+        }
+
+        private static EnumerationAttribute CreateEnumeration(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
+            var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
+
+            var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e=>e.Value).ToArray();
+            
+            listedValue[] listedValues = [];
+
+            foreach (var listedValue in simpleAttributeElement.Element(XName.Get("listedValues", scope))!.Elements()) {
+                var label = listedValue.Element(XName.Get("label", scope))!.Value!;
+                var definition = listedValue.Element(XName.Get("definition", scope))!.Value!;
+                var code = listedValue.Element(XName.Get("code", scope))!.Value!;
+
+                if (permittedValues is not null && !permittedValues.Contains(code)) continue;
+
+                definition = definition.Replace("\"", "\\\"");
+
+                listedValues = [.. listedValues, new listedValue(label, definition, int.Parse(code))];
+            }
+
+            var attributeBinding = new EnumerationAttribute {
+                S100FC_code = simpleAttributeElement.Element(XName.Get("code", scope))!.Value,
+                S100FC_name = simpleAttributeElement.Element(XName.Get("name", scope))!.Value,
+                listedValues = listedValues,
+            };
+
+            return attributeBinding;
         }
 
         public attributeBinding[] attributeBindings { get; protected set; } = Array.Empty<attributeBinding>();

@@ -7,8 +7,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <NoWarn>CA1416</NoWarn>
     <RootNamespace>NuvionPro</RootNamespace>
-    <AssemblyVersion>1.0.1356.0</AssemblyVersion>
-    <FileVersion>1.0.1356.0</FileVersion>
+    <AssemblyVersion>1.0.1358.0</AssemblyVersion>
+    <FileVersion>1.0.1358.0</FileVersion>
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -54,8 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.615" />
-    <PackageReference Include="S100Framework.Catalogues" Version="2.4.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
     <PackageReference Include="System.IO.Hashing" Version="10.0.5" />
@@ -141,6 +139,8 @@
     <Folder Include="Artifacts\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.ArcGIS.Core\S100Framework.ArcGIS.Core.csproj" />
+    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues\S100Framework.Catalogues.csproj" />
     <ProjectReference Include="..\S100Framework.WPF.S100AttributeEditor\S100Framework.WPF.S100AttributeEditor.csproj" />
     <ProjectReference Include="..\S100Framework.WPF\S100Framework.WPF.csproj" />
   </ItemGroup>
