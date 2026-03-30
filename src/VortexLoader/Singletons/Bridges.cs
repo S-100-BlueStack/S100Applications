@@ -224,15 +224,17 @@ namespace S100Framework.Applications.Singletons
         }
 
         internal static void Initialize(Geodatabase source, Geodatabase destination) {
-            if (_instance != null) {
-                throw new InvalidOperationException("Bridges has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("Bridges has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
+            //    }
+            //}
+
+            _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
         }
 
         internal void CreateRelations() {

@@ -11,15 +11,17 @@ namespace S100Framework.Applications.Singletons
 
 
         internal static void Initialize() {
-            if (_instance != null) {
-                throw new InvalidOperationException("Subtypes has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("Subtypes has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new VerticalDatums();
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new VerticalDatums();
+            //    }
+            //}
+
+            _instance = new VerticalDatums();
         }
 
         private VerticalDatums() {
