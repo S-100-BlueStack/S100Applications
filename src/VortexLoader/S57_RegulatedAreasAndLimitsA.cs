@@ -212,8 +212,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // ADMARE_AdministrationAreaNamed
-
-                            if (current.INFORM.Contains("Vessel traffic service area")) {
+                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM.Contains("Vessel traffic service area")) {
                                 var instance = new VesselTrafficServiceArea();
                                 
                                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
