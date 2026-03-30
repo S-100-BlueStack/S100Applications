@@ -20,13 +20,15 @@ namespace S100Framework.Applications.Singletons
         private readonly List<ProductRecord> _products = new();
 
         internal static void Initialize(Geodatabase source, QueryFilter whereClause) {
-            if (_instance != null)
-                throw new InvalidOperationException("Products has already been initialized.");
+            //if (_instance != null)
+            //    throw new InvalidOperationException("Products has already been initialized.");
 
-            lock (_lock) {
-                if (_instance == null)
-                    _instance = new ProductCoverages(source, whereClause);
-            }
+            //lock (_lock) {
+            //    if (_instance == null)
+            //        _instance = new ProductCoverages(source, whereClause);
+            //}
+
+            _instance = new ProductCoverages(source, whereClause);
         }
 
         private ProductCoverages(Geodatabase source, QueryFilter whereClause) {
