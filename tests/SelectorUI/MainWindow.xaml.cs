@@ -66,7 +66,8 @@ namespace SelectorUI
 
             var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData");
 
-            System.Diagnostics.Debugger.Break();
+            selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
+
 
 
             var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
@@ -112,7 +113,7 @@ namespace SelectorUI
 
             selectedObject.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
-            this.PropertyGrid.SelectedObject = selectedObject;
+            this.PropertyGrid.SelectedObject = selectedObjectFC;
 
             this.PropertyGrid.PropertyChanged += this.PropertyGrid_PropertyChanged;
         }

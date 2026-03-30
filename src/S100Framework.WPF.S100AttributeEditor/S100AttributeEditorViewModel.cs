@@ -10,19 +10,86 @@ using System.Windows.Data;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using static S100Framework.WPF.ViewModel.S100AttributeEditorViewModel;
 
 namespace S100Framework.WPF.ViewModel
 {
-    public class S100AttributeEditorViewModelFC : INotifyPropertyChanged, INotifyDataErrorInfo
+    public class S100AttributeEditorViewModelFC : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
     {
-        public bool HasErrors => throw new NotImplementedException();
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged = default;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null) {
+            if (Equals(field, value))
+                return false;
+
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+        #endregion
+
+        #region INotifyDataErrorInfo
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged = default;
+
+        public bool HasErrors => this._errors.Any();
 
         public IEnumerable GetErrors(string? propertyName) {
+            if (string.IsNullOrEmpty(propertyName)) return Enumerable.Empty<string>();
+
+            if (!this._errors.ContainsKey(propertyName) || !this._errors[propertyName].Any()) return Enumerable.Empty<string>();
+
+            return this._errors[propertyName];
+        }
+
+        private void Validate() {
+            this._errors.Clear();
+
+            //if (this.Instance is InformationType informationType) {
+            //    this._errors[nameof(this.attributeBindings)] = [];
+
+            //}
+            //else if (this.Instance is FeatureType featureType) {
+            //    this._errors[nameof(this.attributeBindings)] = [];
+
+            //    featureType.Validate(this._errors[nameof(this.attributeBindings)]);
+
+            //    this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(this.HasErrors)));
+            //}
+        }
+
+        private readonly Dictionary<string, List<string>> _errors = [];
+        #endregion
+
+        #region IAttributeBindingContainer
+        public bool HasCapacity(attributeBindingDefinition binding) {
+            var count = this.attributeBindings.Count(e => e.code.Equals(binding.attribute));
+            return binding.upper > count;
+        }
+
+        public bool HasCapacity(IGrouping<string, informationBindingDefinition> binding) {
+            return true;
+        }
+
+        public bool HasCapacity(IGrouping<string, featureBindingDefinition> binding) {
+            return true;
+        }
+
+        public void AddAttribute(AttributeViewModel attributeBinding) {
+            this.attributeBindings.Add(attributeBinding);
+
             throw new NotImplementedException();
         }
+        #endregion
+
+        public RequestInformationsEventHandler RequestInformation = async (s, e) => { return []; };
+
+        public RequestFeaturesEventHandler RequestFeatures = async (s, e) => { return []; };
+
+
 
         public S100AttributeEditorViewModelFC(XDocument xDocument, string code) {
             this._featureCatalogue = xDocument;
@@ -42,6 +109,7 @@ namespace S100Framework.WPF.ViewModel
 
             this._featureType = this._featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
 
+            int index = 0;
             var attributeBindings = this._featureType.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
             foreach (var binding in attributeBindings) {
                 var referenceCode = binding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;                
@@ -107,7 +175,15 @@ namespace S100Framework.WPF.ViewModel
                         _ => throw new NotImplementedException(),
                     };
 
-                    this.attributeBindings = [.. this.attributeBindings, attributeBinding];
+                    var attributeBindingDefinition = new attributeBindingDefinition {
+                        attribute = referenceCode,
+                        lower = lower,
+                        upper = upper,
+                        order = index++,
+                        CreateInstance = ()=> throw new NotImplementedException(),
+                    };
+
+                    this.attributeBindings = [.. this.attributeBindings, new SimpleAttributeViewModel(ref attributeBinding, attributeBindingDefinition)];
 
                 }
             }
@@ -143,7 +219,11 @@ namespace S100Framework.WPF.ViewModel
             return attributeBinding;
         }
 
-        public attributeBinding[] attributeBindings { get; protected set; } = Array.Empty<attributeBinding>();
+        public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
+
+        public ObservableCollection<InformationBindingViewModel> informationBindings { get; set; } = [];
+
+        public ObservableCollection<FeatureBindingViewModel> featureBindings { get; set; } = [];
 
         private XDocument _featureCatalogue;
         private XElement _featureType;
