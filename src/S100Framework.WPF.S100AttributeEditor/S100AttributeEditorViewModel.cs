@@ -114,12 +114,12 @@ namespace S100Framework.WPF.ViewModel
             var complexAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
 
             int index = 0;
-            this._attributeBindingsCatalogue = AttributeBindingsHelper.ParseAttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
-            this._informationBindingDefinitions = AttributeBindingsHelper.ParseInformationBindings(featureCatalogue, code);
-            this._featureBindingDefinitions = AttributeBindingsHelper.ParseFeatureBindings(featureCatalogue, code);
+            this._attributeBindingsCatalogue = Parser.AttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
+            this._informationBindingDefinitions = Parser.InformationBindings(featureCatalogue, code);
+            this._featureBindingDefinitions = Parser.FeatureBindings(featureCatalogue, code);
         }
 
-        public S100AttributeEditorViewModelFC Load(string json) {
+        public S100AttributeEditorViewModelFC LoadAttributeBindings(string json) {
             if (string.IsNullOrEmpty(json)) return this;
 
             var structuredObject = JsonUnflattener.Unflatten(json)!;
@@ -134,7 +134,7 @@ namespace S100Framework.WPF.ViewModel
 
             foreach (var property in properties.GroupBy(e => e.Path.Split('.')[0])) {
                 var attributes = property.ToArray();
-                var instance = AttributeBindingsHelper.CreateInstance(property.Key, attributes, this._attributeBindingsCatalogue);
+                var instance = Parser.CreateInstance(property.Key, attributes, this._attributeBindingsCatalogue);
                 attributeBindings = [.. attributeBindings, instance];
             }
 
@@ -151,6 +151,18 @@ namespace S100Framework.WPF.ViewModel
                 else
                     throw new NotImplementedException();
             }
+
+            return this;
+        }
+
+        public S100AttributeEditorViewModelFC LoadInformationBindings(string json) {
+            if (string.IsNullOrEmpty(json)) return this;
+
+            return this;
+        }
+
+        public S100AttributeEditorViewModelFC LoadFeatureBindings(string json) {
+            if (string.IsNullOrEmpty(json)) return this;
 
             return this;
         }
@@ -191,9 +203,9 @@ namespace S100Framework.WPF.ViewModel
         }
         #endregion        
 
-        private static class AttributeBindingsHelper
+        private static class Parser
         {
-            public static attributeBindingDefinition[] ParseAttributeBindings(XDocument featureCatalogue, string code, ref int index, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
+            public static attributeBindingDefinition[] AttributeBindings(XDocument featureCatalogue, string code, ref int index, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
                 var navigator = featureCatalogue.CreateNavigator();
                 navigator.MoveToFollowing(XPathNodeType.Element);
 
@@ -221,7 +233,7 @@ namespace S100Framework.WPF.ViewModel
 
                 var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
                 if (superType != null) {
-                    var superTypeAttributeBindingDefinitionsSuperType = ParseAttributeBindings(featureCatalogue, superType.Value, ref index, simpleAttributes, complexAttributes);
+                    var superTypeAttributeBindingDefinitionsSuperType = AttributeBindings(featureCatalogue, superType.Value, ref index, simpleAttributes, complexAttributes);
                     if (superTypeAttributeBindingDefinitionsSuperType.Any())
                         attributeBindingDefinitions = [.. attributeBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
                 }
@@ -242,7 +254,7 @@ namespace S100Framework.WPF.ViewModel
                 return attributeBindingDefinitions;
             }
 
-            public static informationBindingDefinition[] ParseInformationBindings(XDocument featureCatalogue, string code) {
+            public static informationBindingDefinition[] InformationBindings(XDocument featureCatalogue, string code) {
                 var navigator = featureCatalogue.CreateNavigator();
                 navigator.MoveToFollowing(XPathNodeType.Element);
 
@@ -266,7 +278,7 @@ namespace S100Framework.WPF.ViewModel
 
                 var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
                 if (superType != null) {
-                    var superTypeAttributeBindingDefinitionsSuperType = ParseInformationBindings(featureCatalogue, superType.Value);
+                    var superTypeAttributeBindingDefinitionsSuperType = InformationBindings(featureCatalogue, superType.Value);
                     if (superTypeAttributeBindingDefinitionsSuperType.Any())
                         informationBindingDefinitions = [.. informationBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
                 }
@@ -301,7 +313,7 @@ namespace S100Framework.WPF.ViewModel
                 return informationBindingDefinitions;
             }
 
-            public static featureBindingDefinition[] ParseFeatureBindings(XDocument featureCatalogue, string code) {
+            public static featureBindingDefinition[] FeatureBindings(XDocument featureCatalogue, string code) {
                 var navigator = featureCatalogue.CreateNavigator();
                 navigator.MoveToFollowing(XPathNodeType.Element);
 
@@ -322,7 +334,7 @@ namespace S100Framework.WPF.ViewModel
 
                 var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
                 if (superType != null) {
-                    var superTypeAttributeBindingDefinitionsSuperType = ParseFeatureBindings(featureCatalogue, superType.Value);
+                    var superTypeAttributeBindingDefinitionsSuperType = FeatureBindings(featureCatalogue, superType.Value);
                     if (superTypeAttributeBindingDefinitionsSuperType.Any())
                         featureBindingDefinitions = [.. featureBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
                 }
@@ -357,7 +369,7 @@ namespace S100Framework.WPF.ViewModel
                 return featureBindingDefinitions;
             }
 
-            public static attributeBinding CreateInstance(string path, (string Path, object Value)[]? attributes, attributeBindingDefinition[] catalogue) {
+            internal static attributeBinding CreateInstance(string path, (string Path, object Value)[]? attributes, attributeBindingDefinition[] catalogue) {
                 path = _regexArray.Replace(path, string.Empty);
 
                 var instance = catalogue.ToDictionary(e => e.attribute, e => e)[path].CreateInstance()!;
@@ -385,6 +397,32 @@ namespace S100Framework.WPF.ViewModel
                 }
                 else
                     throw new NotImplementedException();
+            }
+
+            private static Func<EnumerationAttribute> CreateEnumeration(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
+                var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
+
+                var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e => e.Value).ToArray();
+
+                listedValue[] listedValues = [];
+
+                foreach (var listedValue in simpleAttributeElement.Element(XName.Get("listedValues", scope))!.Elements()) {
+                    var label = listedValue.Element(XName.Get("label", scope))!.Value!;
+                    var definition = listedValue.Element(XName.Get("definition", scope))!.Value!;
+                    var code = listedValue.Element(XName.Get("code", scope))!.Value!;
+
+                    if (permittedValues is not null && !permittedValues.Contains(code)) continue;
+
+                    definition = definition.Replace("\"", "\\\"");
+
+                    listedValues = [.. listedValues, new listedValue(label, definition, int.Parse(code))];
+                }
+
+                return () => new EnumerationAttribute {
+                    S100FC_code = simpleAttributeElement.Element(XName.Get("code", scope))!.Value,
+                    S100FC_name = simpleAttributeElement.Element(XName.Get("name", scope))!.Value,
+                    listedValues = listedValues,
+                };
             }
 
             private static (Func<attributeBinding> creator, attributeBindingDefinition attributeBindingDefinition) CreateAttributeBinding(XElement binding, XmlNamespaceManager xmlNamespaceManager, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
@@ -496,35 +534,8 @@ namespace S100Framework.WPF.ViewModel
                 throw new NotImplementedException();
             }
 
-            private static Func<EnumerationAttribute> CreateEnumeration(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
-                var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
-
-                var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e => e.Value).ToArray();
-
-                listedValue[] listedValues = [];
-
-                foreach (var listedValue in simpleAttributeElement.Element(XName.Get("listedValues", scope))!.Elements()) {
-                    var label = listedValue.Element(XName.Get("label", scope))!.Value!;
-                    var definition = listedValue.Element(XName.Get("definition", scope))!.Value!;
-                    var code = listedValue.Element(XName.Get("code", scope))!.Value!;
-
-                    if (permittedValues is not null && !permittedValues.Contains(code)) continue;
-
-                    definition = definition.Replace("\"", "\\\"");
-
-                    listedValues = [.. listedValues, new listedValue(label, definition, int.Parse(code))];
-                }
-
-                return () => new EnumerationAttribute {
-                    S100FC_code = simpleAttributeElement.Element(XName.Get("code", scope))!.Value,
-                    S100FC_name = simpleAttributeElement.Element(XName.Get("name", scope))!.Value,
-                    listedValues = listedValues,
-                };
-            }
-
             private static Regex _regexArray = new Regex(@"\[\d+\]", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }
-
     }
 
     public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo

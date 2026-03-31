@@ -85,7 +85,7 @@ namespace SelectorUI
 
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
-            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").Load(json);
+            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
