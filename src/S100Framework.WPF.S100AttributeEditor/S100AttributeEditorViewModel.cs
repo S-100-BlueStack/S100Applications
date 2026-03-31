@@ -117,6 +117,33 @@ namespace S100Framework.WPF.ViewModel
             this._attributeBindingsCatalogue = Parser.AttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
             this._informationBindingDefinitions = Parser.InformationBindings(featureCatalogue, code);
             this._featureBindingDefinitions = Parser.FeatureBindings(featureCatalogue, code);
+
+            this.attributeBindings.CollectionChanged += (s, e) => {
+                if (e.OldItems is not null) {
+                    foreach (var item in e.OldItems) {
+                        if (item is SimpleAttributeViewModel simpleAttributeViewModel) {
+                            //this._featureType.RemoveAttribute(simpleAttributeViewModel.attribute);
+                        }
+                        if (item is ComplexAttributeViewModel complexAttributeViewModel) {
+                            //this._featureType.RemoveAttribute(complexAttributeViewModel.attribute);
+                        }
+
+                        if (item is AttributeViewModel attribute) {
+                            attribute.PropertyChanged -= this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+                if (e.NewItems is not null) {
+                    foreach (var item in e.NewItems) {
+                        if (item is SimpleAttributeViewModel simpleAttribute) {
+                            simpleAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
+                        }
+                        else if (item is ComplexAttributeViewModel complexAttribute) {
+                            complexAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+            };
         }
 
         public S100AttributeEditorViewModelFC LoadAttributeBindings(string json) {
@@ -140,7 +167,15 @@ namespace S100Framework.WPF.ViewModel
 
             var attributeBindingsCatalogue = this._attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e);
             foreach (var attributeBinding in attributeBindings) {
-                if (attributeBinding is SimpleAttribute simpleAttribute) {
+                if(attributeBinding is DateAttribute dateAttribute) {
+                    var viewModel = new DateAttributeViewModel(ref dateAttribute, attributeBindingsCatalogue[dateAttribute.S100FC_code]);
+                    this.attributeBindings.Add(viewModel);
+                }
+                else if(attributeBinding is DateTimeAttribute dateTimeAttribute) {
+                    var viewModel = new DateTimeAttributeViewModel(ref dateTimeAttribute, attributeBindingsCatalogue[dateTimeAttribute.S100FC_code]);
+                    this.attributeBindings.Add(viewModel);
+                }
+                else if (attributeBinding is SimpleAttribute simpleAttribute) {
                     var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingsCatalogue[simpleAttribute.S100FC_code]);
                     this.attributeBindings.Add(viewModel);
                 }
@@ -202,6 +237,27 @@ namespace S100Framework.WPF.ViewModel
             return viewModel;
         }
         #endregion        
+
+        private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
+            if (sender is AttributeViewModel attribute) {
+                //if (!attribute.attribute.IsValid(this.attributeBindings.Select(e => e.attribute))) {
+                //    this._errors[attribute.code] = new List<string> { "Dependency" };
+                //    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(attribute.code));
+                //}
+
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
+
+                this.Validate();
+            }
+            else if (sender is InformationBindingViewModel informationBinding) {
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.informationBindings)));
+            }
+            else if (sender is FeatureBindingViewModel featureBinding) {
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.featureBindings)));
+            }
+            else if (System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Break();
+        }
 
         private static class Parser
         {

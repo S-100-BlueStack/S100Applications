@@ -103,7 +103,7 @@ namespace SelectorUI
                 featureId = RandomString(5),
             };
 
-            System.Diagnostics.Debugger.Break();
+            //System.Diagnostics.Debugger.Break();
 
 
             //var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
@@ -155,7 +155,7 @@ namespace SelectorUI
         }
 
         private void PropertyGrid_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
-
+            ;
         }
 
         private static readonly char[] _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
