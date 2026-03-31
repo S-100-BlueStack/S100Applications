@@ -263,7 +263,7 @@ namespace S100Framework.WPF.ViewModel
                     roleType = featureBinding.roleType,
                     role = featureBinding.role,
                     featureType = featureBinding.featureType,
-                    featureUID = new FeatureTypeID(featureBinding.featureType!, featureBinding.featureType),
+                    featureUID = new FeatureTypeID(featureBinding.featureType!, featureBinding.featureId),
                 });
             }
 
