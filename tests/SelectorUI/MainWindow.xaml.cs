@@ -89,29 +89,43 @@ namespace SelectorUI
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
+            selectedObjectFC += new informationBinding<QualityOfBathymetricDataComposition> {
+                roleType = "association",
+                role = "theQualityInformation",
+                informationType = "SpatialQuality",
+                informationId = RandomString(5),
+            };
+
+            selectedObjectFC += new featureBinding<UpdatedInformation> {
+                roleType = "association",
+                role = "theUpdate",
+                featureType = "UpdateInformation",
+                featureId = RandomString(5),
+            };
+
             System.Diagnostics.Debugger.Break();
 
 
-            var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
-                RequestInformation = async (s, e) => {
-                    var random = new Random(DateTime.Now.Millisecond);
-                    string[] result = [];
-                    for (int i = 0; i < random.Next(1, 8); i++) {
-                        var text = RandomString(5).ToUpperInvariant();
-                        result = [.. result, text];
-                    }
-                    return result;
-                },
-                RequestFeatures = async (s, e) => {
-                    var random = new Random(DateTime.Now.Millisecond);
-                    string[] result = [];
-                    for (int i = 0; i < random.Next(1, 8); i++) {
-                        var text = RandomString(5).ToUpperInvariant();
-                        result = [.. result, text];
-                    }
-                    return result;
-                },
-            };
+            //var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
+            //    RequestInformation = async (s, e) => {
+            //        var random = new Random(DateTime.Now.Millisecond);
+            //        string[] result = [];
+            //        for (int i = 0; i < random.Next(1, 8); i++) {
+            //            var text = RandomString(5).ToUpperInvariant();
+            //            result = [.. result, text];
+            //        }
+            //        return result;
+            //    },
+            //    RequestFeatures = async (s, e) => {
+            //        var random = new Random(DateTime.Now.Millisecond);
+            //        string[] result = [];
+            //        for (int i = 0; i < random.Next(1, 8); i++) {
+            //            var text = RandomString(5).ToUpperInvariant();
+            //            result = [.. result, text];
+            //        }
+            //        return result;
+            //    },
+            //};
 
             //selectedObject += new informationBinding<QualityOfBathymetricDataComposition> {
             //    roleType = "association",
@@ -128,12 +142,12 @@ namespace SelectorUI
             //};
 
 
-            var bindings = (featureBinding[])selectedObject;
+            //var bindings = (featureBinding[])selectedObject;
 
-            var json2 = System.Text.Json.JsonSerializer.Serialize(bindings, jsonSerializerOptions);
+            //var json2 = System.Text.Json.JsonSerializer.Serialize(bindings, jsonSerializerOptions);
 
 
-            selectedObject.PropertyChanged += this.PropertyGrid_PropertyChanged;
+            //selectedObject.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
             this.PropertyGrid.SelectedObject = selectedObjectFC;
 
