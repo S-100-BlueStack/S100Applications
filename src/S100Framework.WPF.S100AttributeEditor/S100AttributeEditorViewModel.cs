@@ -198,23 +198,30 @@ namespace S100Framework.WPF.ViewModel
                 foreach (var s in scopes)
                     xmlNamespaceManager.AddNamespace(s.Key, s.Value);
 
-                var featureType = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                XElement? element = null;
+                if (featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Any()) {
+                    element = featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                }
+                else if (featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Any()) {
+                    element = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                }
+                else
+                    throw new InvalidOperationException($"Unsupported object type ({code})!");
 
+                if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) {
+                    throw new InvalidOperationException($"Abstract types are not supported ({code})!");
+                }
 
                 attributeBindingDefinition[] attributeBindingDefinitions = [];
 
-                var superType = featureType.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
+                var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
                 if (superType != null) {
                     var superTypeAttributeBindingDefinitionsSuperType = ParseAttributeBindings(featureCatalogue, superType.Value, ref index, simpleAttributes, complexAttributes);
                     if (superTypeAttributeBindingDefinitionsSuperType.Any())
                         attributeBindingDefinitions = [.. attributeBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
                 }
 
-                if (featureType.Attribute("isAbstract") != default && bool.Parse(featureType.Attribute("isAbstract")!.Value)) {
-
-                }
-
-                var attributeBindings = featureType.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
+                var attributeBindings = element.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
                 foreach (var binding in attributeBindings) {
                     var referenceCode = binding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;
                     var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
