@@ -93,7 +93,11 @@ namespace S100Framework.WPF.ViewModel
 
         public RequestFeaturesEventHandler RequestFeatures = async (s, e) => { return []; };
 
-        public attributeBindingDefinition[] attributeBindingsCatalogue { get; } = [];
+        private attributeBindingDefinition[] _attributeBindingsCatalogue { get; } = [];
+
+        private informationBindingDefinition[] _informationBindingDefinitions { get; } = [];
+
+        private featureBindingDefinition[] _featureBindingDefinitions { get; } = [];
 
         public S100AttributeEditorViewModelFC(XDocument featureCatalogue, string code) {
             var navigator = featureCatalogue.CreateNavigator();
@@ -110,8 +114,9 @@ namespace S100Framework.WPF.ViewModel
             var complexAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
 
             int index = 0;
-            this.attributeBindingsCatalogue = [.. AttributeBindingsHelper.ParseAttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes)];
-            ;
+            this._attributeBindingsCatalogue = AttributeBindingsHelper.ParseAttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
+            this._informationBindingDefinitions = AttributeBindingsHelper.ParseInformationBindings(featureCatalogue, code);
+            this._featureBindingDefinitions = AttributeBindingsHelper.ParseFeatureBindings(featureCatalogue, code);
         }
 
         public S100AttributeEditorViewModelFC Load(string json) {
@@ -129,11 +134,11 @@ namespace S100Framework.WPF.ViewModel
 
             foreach (var property in properties.GroupBy(e => e.Path.Split('.')[0])) {
                 var attributes = property.ToArray();
-                var instance = AttributeBindingsHelper.CreateInstance(property.Key, attributes, this.attributeBindingsCatalogue);
+                var instance = AttributeBindingsHelper.CreateInstance(property.Key, attributes, this._attributeBindingsCatalogue);
                 attributeBindings = [.. attributeBindings, instance];
             }
 
-            var attributeBindingsCatalogue = this.attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e);
+            var attributeBindingsCatalogue = this._attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e);
             foreach (var attributeBinding in attributeBindings) {
                 if (attributeBinding is SimpleAttribute simpleAttribute) {
                     var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingsCatalogue[simpleAttribute.S100FC_code]);
@@ -199,18 +204,18 @@ namespace S100Framework.WPF.ViewModel
                     xmlNamespaceManager.AddNamespace(s.Key, s.Value);
 
                 XElement? element = null;
-                if (featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Any()) {
+                if (featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Any(e=>e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code))) {
                     element = featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
                 }
-                else if (featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Any()) {
+                else if (featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Any(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code))) {
                     element = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
                 }
                 else
                     throw new InvalidOperationException($"Unsupported object type ({code})!");
 
-                if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) {
-                    throw new InvalidOperationException($"Abstract types are not supported ({code})!");
-                }
+                //if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) {
+                //    throw new InvalidOperationException($"Abstract types are not supported ({code})!");
+                //}
 
                 attributeBindingDefinition[] attributeBindingDefinitions = [];
 
@@ -235,6 +240,121 @@ namespace S100Framework.WPF.ViewModel
                 }
 
                 return attributeBindingDefinitions;
+            }
+
+            public static informationBindingDefinition[] ParseInformationBindings(XDocument featureCatalogue, string code) {
+                var navigator = featureCatalogue.CreateNavigator();
+                navigator.MoveToFollowing(XPathNodeType.Element);
+
+                var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                var xmlNamespaceManager = new XmlNamespaceManager(new NameTable());
+                foreach (var s in scopes)
+                    xmlNamespaceManager.AddNamespace(s.Key, s.Value);
+
+                XElement? element = null;
+                if (featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Any(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code))) {
+                    element = featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                }
+                else if (featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Any(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code))) {
+                    element = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                }
+                else
+                    throw new InvalidOperationException($"Unsupported object type ({code})!");
+
+                informationBindingDefinition[] informationBindingDefinitions = [];
+
+                var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
+                if (superType != null) {
+                    var superTypeAttributeBindingDefinitionsSuperType = ParseInformationBindings(featureCatalogue, superType.Value);
+                    if (superTypeAttributeBindingDefinitionsSuperType.Any())
+                        informationBindingDefinitions = [.. informationBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
+                }
+
+                var informationBindings = element.XPathSelectElements("S100FC:informationBinding", xmlNamespaceManager);
+                foreach (var binding in informationBindings) {
+                    var association = binding.Element(XName.Get("association", scopes["S100FC"]))!.Attribute("ref")!.Value!;
+                    var role = binding.Element(XName.Get("role", scopes["S100FC"]))!.Attribute("ref")!.Value!;
+                    var roleType = binding.Attribute("roleType")!.Value!;
+
+                    var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
+                    var _ = binding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
+                    int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
+
+                    var informationTypes = binding.XPathSelectElements("S100FC:informationType", xmlNamespaceManager);
+
+                    var informationBindingDefinition = new informationBindingDefinition {
+                        association = association,
+                        role = role,
+                        roleType = roleType,
+                        lower = lower,
+                        upper = upper,
+                        informationTypes = [.. informationTypes.Select(e => e.Attribute("ref")!.Value!)],
+                        CreateInstance = () => new informationBinding() {
+                            role = role,
+                            roleType = roleType,
+                        },
+                    };
+                    informationBindingDefinitions = [.. informationBindingDefinitions, informationBindingDefinition];
+                }
+
+                return informationBindingDefinitions;
+            }
+
+            public static featureBindingDefinition[] ParseFeatureBindings(XDocument featureCatalogue, string code) {
+                var navigator = featureCatalogue.CreateNavigator();
+                navigator.MoveToFollowing(XPathNodeType.Element);
+
+                var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                var xmlNamespaceManager = new XmlNamespaceManager(new NameTable());
+                foreach (var s in scopes)
+                    xmlNamespaceManager.AddNamespace(s.Key, s.Value);
+
+                XElement? element = null;
+                if (featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Any(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code))) {
+                    element = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+                }
+                else
+                    throw new InvalidOperationException($"Unsupported object type ({code})!");
+
+                featureBindingDefinition[] featureBindingDefinitions = [];
+
+                var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
+                if (superType != null) {
+                    var superTypeAttributeBindingDefinitionsSuperType = ParseFeatureBindings(featureCatalogue, superType.Value);
+                    if (superTypeAttributeBindingDefinitionsSuperType.Any())
+                        featureBindingDefinitions = [.. featureBindingDefinitions, .. superTypeAttributeBindingDefinitionsSuperType];
+                }
+
+                var featureBindings = element.XPathSelectElements("S100FC:featureBinding", xmlNamespaceManager);
+                foreach (var binding in featureBindings) {
+                    var association = binding.Element(XName.Get("association", scopes["S100FC"]))!.Attribute("ref")!.Value!;
+                    var role = binding.Element(XName.Get("role", scopes["S100FC"]))!.Attribute("ref")!.Value!;
+                    var roleType = binding.Attribute("roleType")!.Value!;
+
+                    var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
+                    var _ = binding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
+                    int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
+
+                    var featureTypes = binding.XPathSelectElements("S100FC:featureType", xmlNamespaceManager);
+
+                    var featureBindingDefinition = new featureBindingDefinition {
+                        association = association,
+                        role = role,
+                        roleType = roleType,
+                        lower = lower,
+                        upper = upper,
+                        featureTypes = [.. featureTypes.Select(e => e.Attribute("ref")!.Value!)],
+                        CreateInstance = () => new featureBinding() {
+                            role = role,
+                            roleType = roleType,
+                        },
+                    };
+                    featureBindingDefinitions = [.. featureBindingDefinitions, featureBindingDefinition];
+                }
+
+                return featureBindingDefinitions;
             }
 
             public static attributeBinding CreateInstance(string path, (string Path, object Value)[]? attributes, attributeBindingDefinition[] catalogue) {
