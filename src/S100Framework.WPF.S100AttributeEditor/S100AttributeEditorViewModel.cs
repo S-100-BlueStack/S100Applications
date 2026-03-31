@@ -1,15 +1,19 @@
 ﻿using S100FC;
+using S100FC.S101.SimpleAttributes;
 using System.Collections;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Windows.Devices.Power;
 using static S100Framework.WPF.ViewModel.S100AttributeEditorViewModel;
 
 namespace S100Framework.WPF.ViewModel
@@ -89,12 +93,10 @@ namespace S100Framework.WPF.ViewModel
 
         public RequestFeaturesEventHandler RequestFeatures = async (s, e) => { return []; };
 
+        public attributeBindingDefinition[] attributeBindingsCatalogue { get; } = [];
 
-
-        public S100AttributeEditorViewModelFC(XDocument xDocument, string code) {
-            this._featureCatalogue = xDocument;
-
-            var navigator = this._featureCatalogue.CreateNavigator();
+        public S100AttributeEditorViewModelFC(XDocument featureCatalogue, string code) {
+            var navigator = featureCatalogue.CreateNavigator();
             navigator.MoveToFollowing(XPathNodeType.Element);
 
             var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
@@ -103,99 +105,156 @@ namespace S100Framework.WPF.ViewModel
             foreach (var s in scopes)
                 xmlNamespaceManager.AddNamespace(s.Key, s.Value);
 
-            var simpleAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_SimpleAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
+            var simpleAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_SimpleAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
 
-            var complexAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToArray();
+            var complexAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
 
-            this._featureType = this._featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
+            this._featureType = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).First(ft => ft.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals(code));
 
             int index = 0;
             var attributeBindings = this._featureType.XPathSelectElements("S100FC:attributeBinding", xmlNamespaceManager);
             foreach (var binding in attributeBindings) {
-                var referenceCode = binding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;                
+                var referenceCode = binding.Element(XName.Get("attribute", scopes["S100FC"]))!.Attribute("ref")!.Value!;
                 var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
                 var _ = binding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
                 int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
 
-                if (simpleAttributes.ContainsKey(referenceCode)) {
-                    var simpleAttribute = simpleAttributes[referenceCode];
 
-                    var valueType = simpleAttribute.Element(XName.Get("valueType", scopes["S100FC"]))!.Value;
+                var attributeBinding = CreateAttributeBinding(binding, xmlNamespaceManager, simpleAttributes, complexAttributes);
+                //order = index++,
+                attributeBinding.attributeBindingDefinition.order = index++;                
 
-                    SimpleAttribute attributeBinding = valueType switch {
-                        "boolean" => new BooleanAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "real" => new RealAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "text" => new TextAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "S100_TruncatedDate" => new S100_TruncatedDateAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "date" => new DateAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "dataonly" => new DateAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "datetime" => new DateTimeAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "time" => new TimeAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "integer" => new IntegerAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "URN" => new UrnTimeAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "URL" => new UrnTimeAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "URI" => new UrnTimeAttribute {
-                            S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                            S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
-                        },
-                        "enumeration" => CreateEnumeration(binding, simpleAttribute, xmlNamespaceManager),
-                        _ => throw new NotImplementedException(),
-                    };
+                this.attributeBindingsCatalogue = [..this.attributeBindingsCatalogue, attributeBinding.attributeBindingDefinition];
 
-                    var attributeBindingDefinition = new attributeBindingDefinition {
-                        attribute = referenceCode,
-                        lower = lower,
-                        upper = upper,
-                        order = index++,
-                        CreateInstance = ()=> throw new NotImplementedException(),
-                    };
-
-                    this.attributeBindings = [.. this.attributeBindings, new SimpleAttributeViewModel(ref attributeBinding, attributeBindingDefinition)];
-
-                }
+                //if (attributeBinding.attributeBinding is SimpleAttribute simpleAttribute) {
+                //    var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBinding.attributeBindingDefinition);
+                //    this.attributeBindings = [.. this.attributeBindings, viewModel];
+                //}
+                //else if (attributeBinding.attributeBinding is ComplexAttribute complexAttribute) {
+                //    var viewModel = new ComplexAttributeViewModel(ref complexAttribute);
+                //    this.attributeBindings = [.. this.attributeBindings, viewModel];
+                //}
+                //else
+                //    throw new NotImplementedException();
             }
 
             ;
         }
 
-        private static EnumerationAttribute CreateEnumeration(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
+        private static (Func<attributeBinding> creator, attributeBindingDefinition attributeBindingDefinition) CreateAttributeBinding(XElement binding, XmlNamespaceManager xmlNamespaceManager, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
             var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
 
-            var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e=>e.Value).ToArray();
-            
+            var referenceCode = binding.Element(XName.Get("attribute", scope))!.Attribute("ref")!.Value!;
+            var lower = int.Parse(binding.XPathSelectElement("S100FC:multiplicity/S100Base:lower", xmlNamespaceManager)!.Value);
+            var _ = binding.XPathSelectElement("S100FC:multiplicity/S100Base:upper", xmlNamespaceManager)!;
+            int upper = (_.Attribute(XName.Get("infinite")) != default && _.Attribute(XName.Get("infinite"))!.Value.Equals("true")) ? int.MaxValue : int.Parse(_.Value!);
+
+            if (simpleAttributes.ContainsKey(referenceCode)) {
+                var simpleAttribute = simpleAttributes[referenceCode];
+
+                var valueType = simpleAttribute.Element(XName.Get("valueType", scope))!.Value;
+
+                Func<SimpleAttribute> attributeBinding = valueType switch {
+                    "boolean" => () => new BooleanAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "real" => () => new RealAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "text" => () => new TextAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "S100_TruncatedDate" => () => new S100_TruncatedDateAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "date" => () => new DateAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "dataonly" => () => new DateAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "datetime" => () => new DateTimeAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "time" => () => new TimeAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "integer" => () => new IntegerAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "URN" => () => new UrnAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "URL" => () => new UrnAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "URI" => () => new UrnAttribute {
+                        S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
+                        S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
+                    },
+                    "enumeration" => CreateEnumeration(binding, simpleAttribute, xmlNamespaceManager),
+                    _ => throw new NotImplementedException(),
+                };
+
+                var attributeBindingDefinition = new attributeBindingDefinition {
+                    attribute = referenceCode,
+                    lower = lower,
+                    upper = upper,
+                    //order = index++,
+                    CreateInstance = () => attributeBinding(),
+                };
+
+                return (attributeBinding, attributeBindingDefinition);
+            }
+            else if (complexAttributes.ContainsKey(referenceCode)) {
+                var complexAttribute = complexAttributes[referenceCode];
+
+                attributeBinding[] attributeBindings = [];
+                attributeBindingDefinition[] attributeBindingDefinitions = [];
+
+                var subAttributeBindings = complexAttribute.XPathSelectElements("S100FC:subAttributeBinding", xmlNamespaceManager);
+                foreach (var subBinding in subAttributeBindings) {
+                    var subAttributeBinding = CreateAttributeBinding(subBinding, xmlNamespaceManager, simpleAttributes, complexAttributes);
+                    attributeBindingDefinitions = [.. attributeBindingDefinitions, subAttributeBinding.attributeBindingDefinition];
+                }
+
+                var attributeBinding = () => new ComplexAttribute {
+                    S100FC_code = complexAttribute.Element(XName.Get("code", scope))!.Value,
+                    S100FC_name = complexAttribute.Element(XName.Get("name", scope))!.Value,
+                    attributeBindings = attributeBindings,
+                    attributeBindingsCatalogue = attributeBindingDefinitions,                    
+                };
+
+                var attributeBindingDefinition = new attributeBindingDefinition {
+                    attribute = referenceCode,
+                    lower = lower,
+                    upper = upper,
+                    //order = index++,
+                    CreateInstance = () => attributeBinding(),
+                };
+
+                return (attributeBinding, attributeBindingDefinition);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        private static Func<EnumerationAttribute> CreateEnumeration(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
+            var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
+
+            var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e => e.Value).ToArray();
+
             listedValue[] listedValues = [];
 
             foreach (var listedValue in simpleAttributeElement.Element(XName.Get("listedValues", scope))!.Elements()) {
@@ -210,13 +269,97 @@ namespace S100Framework.WPF.ViewModel
                 listedValues = [.. listedValues, new listedValue(label, definition, int.Parse(code))];
             }
 
-            var attributeBinding = new EnumerationAttribute {
+            return () => new EnumerationAttribute {
                 S100FC_code = simpleAttributeElement.Element(XName.Get("code", scope))!.Value,
                 S100FC_name = simpleAttributeElement.Element(XName.Get("name", scope))!.Value,
                 listedValues = listedValues,
             };
+        }
 
-            return attributeBinding;
+        public S100AttributeEditorViewModelFC Load(string json) {
+            if (string.IsNullOrEmpty(json)) return this;
+
+            var structuredObject = JsonUnflattener.Unflatten(json)!;
+
+            if (structuredObject is null) return this;
+
+            var properties = JsonUnflattener.GetAllProperties(structuredObject).ToArray();
+
+            var g = properties.GroupBy(e => e.Path.Split('.')[0]);
+
+            attributeBinding[] attributeBindings = [];
+
+            foreach (var property in properties.GroupBy(e => e.Path.Split('.')[0])) {
+                var attributes = property.ToArray();
+                var instance = this.CreateInstance(property.Key, attributes, this.attributeBindingsCatalogue);
+                attributeBindings = [.. attributeBindings, instance];
+            }
+
+            var attributeBindingsCatalogue = this.attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e);
+            foreach (var attributeBinding in attributeBindings) {
+                if(attributeBinding is SimpleAttribute simpleAttribute) {
+                    var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingsCatalogue[simpleAttribute.S100FC_code]);
+                    this.attributeBindings.Add(viewModel);
+                }
+                else if (attributeBinding is ComplexAttribute complexAttribute) {
+                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute);
+                    this.attributeBindings.Add(viewModel);
+                }
+                else
+                    throw new NotImplementedException();
+            }
+
+            return this;
+        }        
+
+        private attributeBinding CreateInstance(string path, (string Path, object Value)[]? attributes, attributeBindingDefinition[] catalogue) {
+            path = _regexArray.Replace(path, string.Empty);
+
+            var instance = catalogue.ToDictionary(e => e.attribute, e => e)[path].CreateInstance()!;
+
+            if (instance is SimpleAttribute simpleAttribute) {
+                simpleAttribute.SetValue((string)attributes!.Single(e => e.Path.Equals(path)).Value);
+                return simpleAttribute;
+            }
+            else if (instance is ComplexAttribute complexAttribute) {
+                if (attributes is not null) {
+                    //var g = attributes.Select(e => (_regexArray.Replace(e.Path, string.Empty).Substring(path.Length + 1), e.Value)).GroupBy(e => e.Item1.Substring(path.Length + 1).Split('.')[0]).ToArray();
+
+                    var g = attributes.GroupBy(e=> _regexArray.Replace(e.Path, string.Empty).Substring(path.Length + 1).Split('.')[0]).ToArray();
+
+                    foreach (var property in g) {
+                        var subattributes = property.ToArray();
+                        for(int i = 0; i < subattributes.Length; i++) {
+                            subattributes[i].Path = _regexArray.Replace(subattributes[i].Path, string.Empty).Substring(path.Length + 1);
+                        }
+                        //var subpath = _regexArray.Replace(attribute.Path, string.Empty).Substring(path.Length + 1);
+                        var subinstance = this.CreateInstance(property.Key, subattributes, complexAttribute.attributeBindingsCatalogue);                        
+                        complexAttribute.SetAttribute(subinstance);
+                    }
+                }
+
+                return complexAttribute;
+            }
+            else
+                throw new NotImplementedException();
+
+            //if (!path.Contains('.')) {
+            //    var instance = catalogue[path].CreateInstance();
+            //    return instance!;
+            //}
+            //else {
+            //    var parts = path.Split('.');
+            //    var instance = catalogue[parts[0]].CreateInstance();
+            //    if (instance is SimpleAttribute simpleAttribute) {
+            //        return simpleAttribute;
+            //    }
+            //    else if (instance is ComplexAttribute complexAttribute) {
+            //        complexAttribute.SetAttribute(CreateInstance(string.Join('.', parts.Skip(1)), complexAttribute.attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e)));
+            //        return complexAttribute;
+            //    }
+            //    else
+            //        throw new NotImplementedException();
+            //}
         }
 
         public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
@@ -225,8 +368,9 @@ namespace S100Framework.WPF.ViewModel
 
         public ObservableCollection<FeatureBindingViewModel> featureBindings { get; set; } = [];
 
-        private XDocument _featureCatalogue;
         private XElement _featureType;
+
+        private static Regex _regexArray = new Regex(@"\[\d+\]", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
     }
 
     public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo

@@ -7,6 +7,8 @@ using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationAssociation;
 using S100Framework.WPF.ViewModel;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -62,12 +64,32 @@ namespace SelectorUI
 
             //};
 
+
+            var qualityOfBathymetricData = new QualityOfBathymetricData {
+                depthRangeMaximumValue = 17.5m,
+                depthRangeMinimumValue = 5.2m,
+                fullSeafloorCoverageAchieved = true,
+                featuresDetected = new featuresDetected {
+                    leastDepthOfDetectedFeaturesMeasured = true,
+                    significantFeaturesDetected = false,
+                    sizeOfFeaturesDetected = 3.5m,
+                },
+                zoneOfConfidence = [new zoneOfConfidence {
+                    categoryOfZoneOfConfidenceInData = 1,
+                }, new zoneOfConfidence {
+                    categoryOfZoneOfConfidenceInData = 2,
+                }],
+            };
+
+            var json = qualityOfBathymetricData.Flatten();
+
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
-            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData");
+            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").Load(json);
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
+            System.Diagnostics.Debugger.Break();
 
 
             var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
@@ -126,4 +148,73 @@ namespace SelectorUI
 
         public static string RandomString(int length) { var result = new char[length]; var rng = Random.Shared; for (int i = 0; i < length; i++) result[i] = _chars[rng.Next(_chars.Length)]; return new string(result); }
     }
+
+
+    public class JsonUnflattener
+    {
+        public static JsonNode Unflatten(string jsonString) {
+            // 1. Parse the flat string into a dictionary
+            var flatDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonString);
+            var root = new JsonObject();
+
+            foreach (var kvp in flatDict) {
+                // Split by dot, but ignore dots inside brackets if necessary 
+                // (Simple split works for your example)
+                string[] parts = kvp.Key.Split('.');
+                ProcessPath(root, parts, kvp.Value);
+            }
+
+            return root;
+        }
+
+        private static void ProcessPath(JsonObject currentParent, string[] parts, JsonElement value) {
+            JsonNode currentNode = currentParent;
+
+            for (int i = 0; i < parts.Length; i++) {
+                string part = parts[i];
+                bool isLast = (i == parts.Length - 1);
+
+                // Check if the part indicates an array, e.g., "zoneOfConfidence[0]"
+                var arrayMatch = Regex.Match(part, @"^(.+)\[(\d+)\]$");
+
+                if (arrayMatch.Success) {
+                    string arrayName = arrayMatch.Groups[1].Value;
+                    int index = int.Parse(arrayMatch.Groups[2].Value);
+
+                    // Ensure the array exists
+                    if (!currentParent.ContainsKey(arrayName) || currentParent[arrayName] == null) {
+                        currentParent[arrayName] = new JsonArray();
+                    }
+
+                    JsonArray array = currentParent[arrayName].AsArray();
+
+                    // Expand array with nulls if index is higher than current count
+                    while (array.Count <= index) { array.Add(null); }
+
+                    if (isLast) {
+                        array[index] = JsonValue.Create(value);
+                    }
+                    else {
+                        // If not last, we need an object at this index to continue
+                        if (array[index] == null) { array[index] = new JsonObject(); }
+                        currentParent = array[index].AsObject();
+                    }
+                }
+                else {
+                    // It's a regular property
+                    if (isLast) {
+                        currentParent[part] = JsonValue.Create(value);
+                    }
+                    else {
+                        if (!currentParent.ContainsKey(part) || currentParent[part] == null) {
+                            currentParent[part] = new JsonObject();
+                        }
+                        currentParent = currentParent[part].AsObject();
+                    }
+                }
+            }
+        }
+    }
+
+
 }
