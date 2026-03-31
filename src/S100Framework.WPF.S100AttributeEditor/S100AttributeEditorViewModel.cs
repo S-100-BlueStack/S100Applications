@@ -159,15 +159,15 @@ namespace S100Framework.WPF.ViewModel
                             S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
                         },
-                        "URN" => new UrnTimeAttribute {
+                        "URN" => new UrnAttribute {
                             S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
                         },
-                        "URL" => new UrnTimeAttribute {
+                        "URL" => new UrlAttribute {
                             S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
                         },
-                        "URI" => new UrnTimeAttribute {
+                        "URI" => new UriAttribute {
                             S100FC_code = simpleAttribute.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scopes["S100FC"]))!.Value,
                         },

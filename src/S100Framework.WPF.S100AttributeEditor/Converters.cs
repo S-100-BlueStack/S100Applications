@@ -92,8 +92,7 @@ namespace S100Framework.WPF.Converters
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is SimpleAttributeViewModel simpleAttributeViewModel) {
                 if (simpleAttributeViewModel._attribute is EnumerationAttribute propertyValue) {
-                    var method = propertyValue.GetType().GetMethod("get_listedValues", BindingFlags.Public | BindingFlags.Static);
-                    listedValue[]? listedValues = method!.Invoke(null, new object[] { /* parameters */ }) as listedValue[];
+                    listedValue[]? listedValues = propertyValue.listedValues;
 
                     if (simpleAttributeViewModel.permitedValues != null) {
                         listedValues = listedValues?.Where(e => simpleAttributeViewModel.permitedValues.Contains(e.code)).ToArray();
