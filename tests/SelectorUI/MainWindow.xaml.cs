@@ -81,11 +81,17 @@ namespace SelectorUI
                 }],
             };
 
+            var jsonObstructionAttributeBindings = "{\"waterLevelEffect\": null,\"surroundingDepth\": 4,\"valueOfSounding\": null,\"scaleMinimum\": 89999,\"defaultClearanceDepth\": -15}";
+            var jsonObstructionInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I13\"}]";
+
             var json = qualityOfBathymetricData.Flatten();
 
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
-            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
+            //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
+            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "Obstruction")
+                .LoadAttributeBindings(jsonObstructionAttributeBindings)
+                .LoadInformationBindings(jsonObstructionInformationBindings);
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 

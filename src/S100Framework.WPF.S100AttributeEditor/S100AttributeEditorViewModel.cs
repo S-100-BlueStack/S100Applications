@@ -144,6 +144,46 @@ namespace S100Framework.WPF.ViewModel
                     }
                 }
             };
+
+            this.informationBindings.CollectionChanged += (s, e) => {
+                if (e.OldItems is not null) {
+                    foreach (var item in e.OldItems) {
+                        if (item is InformationBindingViewModel informationBinding) {
+                            informationBinding.PropertyChanged -= this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+                if (e.NewItems is not null) {
+                    foreach (var item in e.NewItems) {
+                        if (item is InformationBindingViewModel informationBinding) {
+                            informationBinding.PropertyChanged += this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+                this.OnPropertyChanged("informationBindings");
+
+                this.Validate();
+            };
+
+            this.featureBindings.CollectionChanged += (s, e) => {
+                if (e.OldItems is not null) {
+                    foreach (var item in e.OldItems) {
+                        if (item is FeatureBindingViewModel featureBinding) {
+                            featureBinding.PropertyChanged -= this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+                if (e.NewItems is not null) {
+                    foreach (var item in e.NewItems) {
+                        if (item is FeatureBindingViewModel featureBinding) {
+                            featureBinding.PropertyChanged += this.Viewmodel_PropertyChanged;
+                        }
+                    }
+                }
+                this.OnPropertyChanged("featureBindings");
+
+                this.Validate();
+            };
         }
 
         public S100AttributeEditorViewModelFC LoadAttributeBindings(string json) {
@@ -192,6 +232,16 @@ namespace S100Framework.WPF.ViewModel
 
         public S100AttributeEditorViewModelFC LoadInformationBindings(string json) {
             if (string.IsNullOrEmpty(json)) return this;
+
+            var structuredObject = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(json);
+
+            if (structuredObject is null) return this;            
+
+            foreach(var informationBinding in structuredObject) {
+                ;
+                var definitions = this._informationBindingDefinitions.Where(e=>e.association.Equals(informationBinding)).GroupBy(e => e.association);
+                //this.informationBindings.Add(new InformationBindingViewModel());
+            }
 
             return this;
         }
