@@ -170,12 +170,12 @@ namespace S100Framework.WPF
         public static readonly DependencyProperty SelectedObjectProperty =
             DependencyProperty.Register(
                 nameof(SelectedObject),
-                typeof(S100AttributeEditorViewModelFC),
+                typeof(S100AttributeEditorViewModel),
                 typeof(S100AttributeEditor),
                 new PropertyMetadata(null, OnSelectedObjectChanged));
 
-        public S100AttributeEditorViewModelFC? SelectedObject {
-            get => this.GetValue(SelectedObjectProperty) as S100AttributeEditorViewModelFC;
+        public S100AttributeEditorViewModel? SelectedObject {
+            get => this.GetValue(SelectedObjectProperty) as S100AttributeEditorViewModel;
             set => this.SetValue(SelectedObjectProperty, value);
         }
 

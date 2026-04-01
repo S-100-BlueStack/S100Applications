@@ -95,7 +95,7 @@ namespace SelectorUI
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "SpanFixed")
+            var selectedObjectFC = new S100AttributeEditorViewModel(ps, "SpanFixed")
                 .LoadAttributeBindings(jsonSpanFixed)
                 .LoadInformationBindings(jsonSpanFixedInformationBindings)
                 .LoadFeatureBindings(jsonSpanFixedFeatureBindings);
