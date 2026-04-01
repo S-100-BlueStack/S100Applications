@@ -238,12 +238,12 @@ namespace S100Framework.WPF.ViewModel
             if (structuredObject is null) return this;            
 
             foreach(var informationBinding in structuredObject) {
-                var definitions = this._informationBindingDefinitions.GroupBy(e => e.association).Single(e=>e.Key.Equals(informationBinding.S100FC_code));
+                var definitions = this._informationBindingDefinitions.GroupBy(e => e.association).Single(e=>e.Key.Equals(informationBinding.association?.S100FC_code));
                 this.informationBindings.Add(new InformationBindingViewModel(definitions) {
                     roleType= informationBinding.roleType,
                     role = informationBinding.role,
                     informationType=informationBinding.informationType,
-                    informationUID = new InformationTypeID(informationBinding.informationType!, informationBinding.informationId),
+                    informationUID = new InformationTypeID(informationBinding.informationType!, informationBinding.informationId),                    
                 });
             }
 
@@ -258,7 +258,7 @@ namespace S100Framework.WPF.ViewModel
             if (structuredObject is null) return this;
 
             foreach (var featureBinding in structuredObject) {
-                var definitions = this._featureBindingDefinitions.GroupBy(e => e.association).Single(e => e.Key.Equals(featureBinding.S100FC_code));
+                var definitions = this._featureBindingDefinitions.GroupBy(e => e.association).Single(e => e.Key.Equals(featureBinding.association?.S100FC_code));
                 this.featureBindings.Add(new FeatureBindingViewModel(definitions) {
                     roleType = featureBinding.roleType,
                     role = featureBinding.role,

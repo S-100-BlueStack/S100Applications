@@ -81,6 +81,12 @@ namespace SelectorUI
                 }],
             };
 
+
+            var jsonSpanFixed = "{  \"verticalClearanceFixed.verticalClearanceValue\": 18,  \"horizontalClearanceFixed.horizontalClearanceValue\": null,  \"horizontalClearanceFixed.horizontalDistanceUncertainty\": null}";
+            var jsonSpanFixedInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I1554167\"}]";
+            var jsonSpanFixedFeatureBindings = "[{\"code\":\"BridgeAggregation\",\"association\":{\"attributes\":[]},\"roleType\":\"aggregation\",\"role\":\"theCollection\",\"featureType\":\"Bridge\",\"featureId\":\"F1550755\"}]";
+
+
             var jsonObstructionAttributeBindings = "{\"waterLevelEffect\": null,\"surroundingDepth\": 4,\"valueOfSounding\": null,\"scaleMinimum\": 89999,\"defaultClearanceDepth\": -15}";
             var jsonObstructionInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I13\"}]";
 
@@ -89,25 +95,26 @@ namespace SelectorUI
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "Obstruction")
-                .LoadAttributeBindings(jsonObstructionAttributeBindings)
-                .LoadInformationBindings(jsonObstructionInformationBindings);
+            var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "SpanFixed")
+                .LoadAttributeBindings(jsonSpanFixed)
+                .LoadInformationBindings(jsonSpanFixedInformationBindings)
+                .LoadFeatureBindings(jsonSpanFixedFeatureBindings);
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
-            selectedObjectFC += new informationBinding<QualityOfBathymetricDataComposition> {
-                roleType = "association",
-                role = "theQualityInformation",
-                informationType = "SpatialQuality",
-                informationId = RandomString(5),
-            };
+            //selectedObjectFC += new informationBinding<QualityOfBathymetricDataComposition> {
+            //    roleType = "association",
+            //    role = "theQualityInformation",
+            //    informationType = "SpatialQuality",
+            //    informationId = RandomString(5),
+            //};
 
-            selectedObjectFC += new featureBinding<UpdatedInformation> {
-                roleType = "association",
-                role = "theUpdate",
-                featureType = "UpdateInformation",
-                featureId = RandomString(5),
-            };
+            //selectedObjectFC += new featureBinding<UpdatedInformation> {
+            //    roleType = "association",
+            //    role = "theUpdate",
+            //    featureType = "UpdateInformation",
+            //    featureId = RandomString(5),
+            //};
 
             //System.Diagnostics.Debugger.Break();
 

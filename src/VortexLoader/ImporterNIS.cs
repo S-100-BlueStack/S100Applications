@@ -9,6 +9,7 @@ using NetTopologySuite.Operation;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
+using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
@@ -72,6 +73,17 @@ namespace S100Framework.Applications
 
 
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
+
+
+            { //    TESTING
+                S100FC.informationBinding[] informationBinding = [new S100FC.informationBinding<AdditionalInformation>() {
+                }];
+
+                var json = System.Text.Json.JsonSerializer.Serialize(informationBinding, jsonSerializerOptions);
+
+                //System.Diagnostics.Debugger.Break();
+            }
+
 
             Logger.Current.Information("Starting");
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
