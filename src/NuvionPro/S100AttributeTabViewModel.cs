@@ -36,12 +36,12 @@ namespace NuvionPro
 
         private static readonly CultureInfo culture = new("en-GB", false);
 
-        public class InspectorHandle
-        {
-            public Func<Inspector, string, Type> TypeSelector { get; set; }
+        //public class InspectorHandle
+        //{
+        //    public Func<Inspector, string, Type> TypeSelector { get; set; }
 
-            public Func<FeatureCatalogue, Primitives?, IEnumerable<string>> Types { get; set; }
-        }
+        //    public Func<FeatureCatalogue, Primitives?, IEnumerable<string>> Types { get; set; }
+        //}
 
         internal record SelectedTemplate(string Schema, string Code)
         {
@@ -52,23 +52,23 @@ namespace NuvionPro
 
         private readonly NuvionPro.Module _module;
 
-        private InspectorHandle _inspectorHandle = default;
+        //private InspectorHandle _inspectorHandle = default;
 
-        private InspectorHandle _inspectorHandleInformationType => new() {
-            TypeSelector = this.InformationTypeSelector,
-            Types = (fc, p) => fc.InformationTypes.Select(e => e.Code),
-            //CreateViewModel = (schema, code, type, pid) => {
-            //    return null;    // S100Framework.WPF.Helper.CreateInformationTypeViewModel(schema, type, pid);
-            //},
-        };
+        //private InspectorHandle _inspectorHandleInformationType => new() {
+        //    TypeSelector = this.InformationTypeSelector,
+        //    Types = (fc, p) => fc.InformationTypes.Select(e => e.Code),
+        //    //CreateViewModel = (schema, code, type, pid) => {
+        //    //    return null;    // S100Framework.WPF.Helper.CreateInformationTypeViewModel(schema, type, pid);
+        //    //},
+        //};
 
-        private InspectorHandle _inspectorHandleFeatureType => new() {
-            TypeSelector = this.FeatureTypeSelector,
-            Types = (fc, p) => fc.FeatureTypesByPrimitive(p.Value).Select(e => e.Code),
-            //CreateViewModel = (schema, code, type, pid) => {
-            //    return null;    // S100Framework.WPF.Helper.CreateFeatureTypeViewModel(schema, type, pid);
-            //},
-        };
+        //private InspectorHandle _inspectorHandleFeatureType => new() {
+        //    TypeSelector = this.FeatureTypeSelector,
+        //    Types = (fc, p) => fc.FeatureTypesByPrimitive(p.Value).Select(e => e.Code),
+        //    //CreateViewModel = (schema, code, type, pid) => {
+        //    //    return null;    // S100Framework.WPF.Helper.CreateFeatureTypeViewModel(schema, type, pid);
+        //    //},
+        //};
 
 
         private SelectedTemplate _selectedTemplate = SelectedTemplate.Empty;
@@ -168,7 +168,7 @@ namespace NuvionPro
                                         ArcGIS.Core.CIM.esriGeometryType.esriGeometryMultipoint => Primitives.pointSet,
                                         _ => throw new InvalidOperationException(),
                                     };
-
+                                    
                                     types = this._inspectorHandle.Types(featureCatalogue, primitive);
                                 }
                                 else {

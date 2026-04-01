@@ -143,6 +143,11 @@ namespace S100Framework.WPF.ViewModel
 
             var complexAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
 
+
+            this.permittedPrimitives = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
+                e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                e => e.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).Select(e => e.Value).ToArray()).ToImmutableDictionary<string,string[]>();
+
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
             this._informationBindingDefinitions = Parser.InformationBindings(featureCatalogue, code);
@@ -344,6 +349,10 @@ namespace S100Framework.WPF.ViewModel
         public bool HasInformationBindings => this._informationBindingDefinitions.Any();
 
         public bool HasFeatureBindings => this._featureBindingDefinitions.Any();
+
+        public ImmutableDictionary<string, string[]> permittedPrimitives { get; init; } = [];
+
+        public string[] GetFeaturesByPrimitive(Primitives primitive) => this.permittedPrimitives.Where(e => e.Value.Contains($"{primitive}")).Select(e => e.Key).ToArray();
         #endregion
 
         #region Operators
