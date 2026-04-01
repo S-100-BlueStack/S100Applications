@@ -224,15 +224,17 @@ namespace S100Framework.Applications.Singletons
         }
 
         internal static void Initialize(Geodatabase source, Geodatabase destination) {
-            if (_instance != null) {
-                throw new InvalidOperationException("Bridges has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("Bridges has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
+            //    }
+            //}
+
+            _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
         }
 
         internal void CreateRelations() {
@@ -260,7 +262,8 @@ namespace S100Framework.Applications.Singletons
 
                     foreach (var binding in bindings) {
                         var relatedBridge = row.UID();
-                        var bridgeElement = bridgeElements.First(e => e.Name == relatedBridge);
+                        var bridgeElement = bridgeElements.FirstOrDefault(e => e.Name == relatedBridge);
+                        if (bridgeElement is null) continue;
 
                         featureBinding featureBinding = new featureBinding<BridgeAggregation> {
                             role = "theComponent",

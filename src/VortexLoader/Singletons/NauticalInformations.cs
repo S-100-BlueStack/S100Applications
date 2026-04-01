@@ -20,21 +20,20 @@ namespace S100Framework.Applications.Singletons
         /// <param name="destination">The S100 destination geodatabase</param>
         /// <exception cref="InvalidOperationException"></exception>
         internal static void Initialize(Geodatabase destination) {
-            if (_instance != null) {
-                throw new InvalidOperationException("Subtypes has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("Subtypes has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _destination = destination;
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _destination = destination;
+            //        _instance = new NauticalInformations();
+            //    }
+            //}
 
+            _destination = destination;
+            _instance = new NauticalInformations();
 
-
-
-
-                    _instance = new NauticalInformations();
-                }
-            }
         }
 
         private NauticalInformations() {

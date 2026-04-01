@@ -332,7 +332,7 @@ namespace S100Framework.Applications.Singletons
 
 
 
-        internal static void Initialize(Geodatabase source, Geodatabase target) {
+        internal static void Initialize(Geodatabase source) {
             _pltsCollections = [];
             _srcObjectToSlaves = [];
             _pltsMasterSlaves = [];

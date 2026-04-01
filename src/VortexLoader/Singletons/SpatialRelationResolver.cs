@@ -28,15 +28,17 @@ namespace S100Framework.Applications.Singletons
         private string GetFullTableName(string name) => _sqlSyntax!.QualifyTableName(_tuple!.Item1, _tuple!.Item2, name);
 
         internal static void Initialize(Geodatabase geodatabase) {
-            if (_instance != null) {
-                throw new InvalidOperationException("SpatialRelationResolver has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("SpatialRelationResolver has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new SpatialRelationResolver(geodatabase);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new SpatialRelationResolver(geodatabase);
+            //    }
+            //}
+
+            _instance = new SpatialRelationResolver(geodatabase);
         }
 
         internal static SpatialRelationResolver Instance {
