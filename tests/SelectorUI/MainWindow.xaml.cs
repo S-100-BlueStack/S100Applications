@@ -83,8 +83,8 @@ namespace SelectorUI
 
 
             var jsonSpanFixed = "{  \"verticalClearanceFixed.verticalClearanceValue\": 18,  \"horizontalClearanceFixed.horizontalClearanceValue\": null,  \"horizontalClearanceFixed.horizontalDistanceUncertainty\": null}";
-            var jsonSpanFixedInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I1554167\"}]";
-            var jsonSpanFixedFeatureBindings = "[{\"code\":\"BridgeAggregation\",\"association\":{\"attributes\":[]},\"roleType\":\"aggregation\",\"role\":\"theCollection\",\"featureType\":\"Bridge\",\"featureId\":\"F1550755\"}]";
+            var jsonSpanFixedInformationBindings = "[{\"association\":{\"S100FC_code\":\"AdditionalInformation\",\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I1\"}]";
+            var jsonSpanFixedFeatureBindings = "[{\"association\":{\"S100FC_code\":\"BridgeAggregation\",\"attributes\":[]},\"roleType\":\"aggregation\",\"role\":\"theCollection\",\"featureType\":\"Bridge\",\"featureId\":\"F1550755\"}]";
 
 
             var jsonObstructionAttributeBindings = "{\"waterLevelEffect\": null,\"surroundingDepth\": 4,\"valueOfSounding\": null,\"scaleMinimum\": 89999,\"defaultClearanceDepth\": -15}";
