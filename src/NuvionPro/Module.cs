@@ -27,8 +27,9 @@ namespace NuvionPro
 
         private SubscriptionToken _tokenActiveMapViewChangedEvent;
 
-        public record FeatureCatalogue(string Name, string FullPath) {
-            public string ID => $"S-{Name.Substring(0,3)}";
+        public record FeatureCatalogue(string Name, string FullPath)
+        {
+            public string ID => $"S-{this.Name.Substring(0, 3)}";
         }
 
         private ImmutableArray<FeatureCatalogue> _featureCatalogues = ImmutableArray<FeatureCatalogue>.Empty;

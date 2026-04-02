@@ -9,7 +9,6 @@ using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using S100FC;
-using S100FC.Catalogues;
 using S100Framework.WPF.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -215,6 +214,8 @@ namespace NuvionPro
                     this.ModelTypes.Clear();
                 });
 
+                //TODO: TJEK KUN FOR OPDATERING!!!!! Eller blinker UI
+
                 var catalogue = await QueuedTask.Run(() => {
                     var fc = inspector.MapMember switch {
                         FeatureLayer l => l.GetFeatureClass(),
@@ -228,7 +229,7 @@ namespace NuvionPro
                     var tableNames = syntax.ParseTableName(fc.GetName());
 
                     var ps = Convert.ToString(inspector["ps"]);
-                    if (!string.IsNullOrEmpty(ps)) {                        
+                    if (!string.IsNullOrEmpty(ps)) {
                         return [ps.ToUpperInvariant()];
                     }
 
@@ -250,7 +251,7 @@ namespace NuvionPro
 
                     return [];
                     //return this._catalogues;
-                }, TaskCreationOptions.None);                
+                }, TaskCreationOptions.None);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() => {
                     if (catalogue.Any()) {
@@ -308,8 +309,8 @@ namespace NuvionPro
 
                     //var type = this._inspectorHandle.TypeSelector(inspector, schema);
 
-                    if (!string.IsNullOrEmpty(code)) {                         
-                        viewModel.Initialize(code);                        
+                    if (!string.IsNullOrEmpty(code)) {
+                        viewModel.Initialize(code);
                     }
 
                     var uid = $"{inspector.UID()}";
