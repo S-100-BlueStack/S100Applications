@@ -82,25 +82,33 @@ namespace SelectorUI
             };
 
 
+            var codeSpanFixed = "SpanFixed";
             var jsonSpanFixed = "{  \"verticalClearanceFixed.verticalClearanceValue\": 18,  \"horizontalClearanceFixed.horizontalClearanceValue\": null,  \"horizontalClearanceFixed.horizontalDistanceUncertainty\": null}";
             var jsonSpanFixedInformationBindings = "[{\"association\":{\"S100FC_code\":\"AdditionalInformation\",\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I1\"}]";
             var jsonSpanFixedFeatureBindings = "[{\"association\":{\"S100FC_code\":\"BridgeAggregation\",\"attributes\":[]},\"roleType\":\"aggregation\",\"role\":\"theCollection\",\"featureType\":\"Bridge\",\"featureId\":\"F1550755\"}]";
 
 
+            var codeLateralBuoy = "LateralBuoy";
+            var jsonLateralBuoy = "{\"buoyShape\":2,\"categoryOfLateralMark\":1,\"colour[0]\":3,\"colour[1]\":4,\"featureName[0].language\":\"eng\",\"featureName[0].name\":\"No 6\",\"featureName[0].nameUsage\":1,\"periodicDateRange[0].dateEnd\":\"----1115\",\"periodicDateRange[0].dateStart\":\"----0401\",\"status[0]\":5,\"scaleMinimum\":179999}";
+
             var jsonObstructionAttributeBindings = "{\"waterLevelEffect\": null,\"surroundingDepth\": 4,\"valueOfSounding\": null,\"scaleMinimum\": 89999,\"defaultClearanceDepth\": -15}";
             var jsonObstructionInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I13\"}]";
 
-            var json = qualityOfBathymetricData.Flatten();
+            var code = codeLateralBuoy;
+            var json = jsonLateralBuoy;
+
+
+            //var json = qualityOfBathymetricData.Flatten();
 
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
             //var typePoints = ps.GetFeatureTypes(Primitives.point);
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModel(ps).Initialize("SpanFixed")
-                .LoadAttributeBindings(jsonSpanFixed)
-                .LoadInformationBindings(jsonSpanFixedInformationBindings)
-                .LoadFeatureBindings(jsonSpanFixedFeatureBindings);
+            var selectedObjectFC = new S100AttributeEditorViewModel(ps).Initialize(code)
+                .LoadAttributeBindings(jsonLateralBuoy);
+                //.LoadInformationBindings(jsonSpanFixedInformationBindings)
+                //.LoadFeatureBindings(jsonSpanFixedFeatureBindings);
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 

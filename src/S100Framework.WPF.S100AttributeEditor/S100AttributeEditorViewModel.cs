@@ -618,9 +618,9 @@ namespace S100Framework.WPF.ViewModel
             }
 
             internal static attributeBinding CreateInstance(string path, (string Path, object Value)[]? attributes, attributeBindingDefinition[] catalogue) {
-                path = _regexArray.Replace(path, string.Empty);
+                var simplepath = _regexArray.Replace(path, string.Empty);
 
-                var instance = catalogue.ToDictionary(e => e.attribute, e => e)[path].CreateInstance()!;
+                var instance = catalogue.ToDictionary(e => e.attribute, e => e)[simplepath].CreateInstance()!;
 
                 if (instance is SimpleAttribute simpleAttribute) {
                     simpleAttribute.SetValue((string)attributes!.Single(e => e.Path.Equals(path)).Value);
@@ -628,12 +628,12 @@ namespace S100Framework.WPF.ViewModel
                 }
                 else if (instance is ComplexAttribute complexAttribute) {
                     if (attributes is not null) {
-                        var g = attributes.GroupBy(e => _regexArray.Replace(e.Path, string.Empty).Substring(path.Length + 1).Split('.')[0]).ToArray();
+                        var g = attributes.GroupBy(e => _regexArray.Replace(e.Path, string.Empty).Substring(simplepath.Length + 1).Split('.')[0]).ToArray();
 
                         foreach (var property in g) {
                             var subattributes = property.ToArray();
                             for (int i = 0; i < subattributes.Length; i++) {
-                                subattributes[i].Path = _regexArray.Replace(subattributes[i].Path, string.Empty).Substring(path.Length + 1);
+                                subattributes[i].Path = _regexArray.Replace(subattributes[i].Path, string.Empty).Substring(simplepath.Length + 1);
                             }
                             //var subpath = _regexArray.Replace(attribute.Path, string.Empty).Substring(path.Length + 1);
                             var subinstance = CreateInstance(property.Key, subattributes, complexAttribute.attributeBindingsCatalogue);
