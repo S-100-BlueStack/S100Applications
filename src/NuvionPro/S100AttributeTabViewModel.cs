@@ -566,28 +566,15 @@ namespace NuvionPro
 
                 if (sender is S100AttributeEditorViewModel viewModel) {
                     if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.attributeBindings))) {
-                        //if (viewModel.Instance is S100FC.InformationType informationType) {
-                        //    var flatten = informationType.Flatten();
-                        //    if (this.Inspector.IsNull("flatten")) {
-                        //        this.Inspector["flatten"] = flatten;
-                        //        updated |= true;
-                        //    }
-                        //    else if (string.Compare(flatten, Convert.ToString(this.Inspector["flatten"]), true) != 0) {
-                        //        this.Inspector["flatten"] = flatten;
-                        //        updated |= true;
-                        //    }
-                        //}
-                        //if (viewModel.Instance is S100FC.FeatureType featureType) {
-                        //    var flatten = featureType.Flatten();
-                        //    if (this.Inspector.IsNull("flatten")) {
-                        //        this.Inspector["flatten"] = flatten;
-                        //        updated |= true;
-                        //    }
-                        //    else if (string.Compare(flatten, Convert.ToString(this.Inspector["flatten"]), true) != 0) {
-                        //        this.Inspector["flatten"] = flatten;
-                        //        updated |= true;
-                        //    }
-                        //}
+                        var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
+                        if (this.Inspector.IsNull("flatten")) {
+                            this.Inspector["flatten"] = flatten;
+                            updated |= true;
+                        }
+                        else if (string.Compare(flatten, Convert.ToString(this.Inspector["flatten"]), true) != 0) {
+                            this.Inspector["flatten"] = flatten;
+                            updated |= true;
+                        }
                     }
                     if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
                         //var informationBindings = (informationBinding[])viewModel;
@@ -834,75 +821,6 @@ namespace NuvionPro
         }
 
         public bool IsCreateButtonEnabled => this.IsSelectedSchemaEnabled && this.IsSelectedModelTypeEnabled && this._selectedTemplate != SelectedTemplate.Empty;
-
-
-        private static JsonNode Unflatten(Dictionary<string, JsonValue> source) {
-            var regex = new System.Text.RegularExpressions.Regex(@"(?!\.)([^. ^\[\]]+)|(?!\[)(\d+)(?=\])");
-            JsonNode node = JsonNode.Parse("{}");
-
-            foreach (var keyValue in source) {
-                var pathSegments = regex.Matches(keyValue.Key).Select(m => m.Value).ToArray();
-
-                for (int i = 0; i < pathSegments.Length; i++) {
-                    var currentSegmentType = GetSegmentKind(pathSegments[i]);
-
-                    if (currentSegmentType == JsonValueKind.Object) {
-                        if (node[pathSegments[i]] == null) {
-                            if (pathSegments[i] == pathSegments[pathSegments.Length - 1]) {
-                                node[pathSegments[i]] = keyValue.Value;
-                                node = node.Root;
-                            }
-                            else {
-                                var nextSegmentType = GetSegmentKind(pathSegments[i + 1]);
-
-                                if (nextSegmentType == JsonValueKind.Object) {
-                                    node[pathSegments[i]] = JsonNode.Parse("{}");
-                                }
-                                else {
-                                    node[pathSegments[i]] = JsonNode.Parse("[]");
-                                }
-                                node = node[pathSegments[i]];
-                            }
-                        }
-                        else {
-                            node = node[pathSegments[i]];
-                        }
-                    }
-                    else {
-                        if (!int.TryParse(pathSegments[i], out int index)) {
-                            throw new Exception("Cannot parse index");
-                        }
-
-                        while (node.AsArray().Count - 1 < index) {
-                            node.AsArray().Add(null);
-                        }
-
-                        if (i == pathSegments.Length - 1) {
-                            node[index] = keyValue.Value;
-                            node = node.Root;
-                        }
-                        else {
-                            if (node[index] == null) {
-                                var nextSegmentType = GetSegmentKind(pathSegments[i + 1]);
-
-                                if (nextSegmentType == JsonValueKind.Object) {
-                                    node[index] = JsonNode.Parse("{}");
-                                }
-                                else {
-                                    node[index] = JsonNode.Parse("[]");
-                                }
-                            }
-
-                            node = node[index];
-                        }
-                    }
-                }
-            }
-
-            return node;
-        }
-
-        private static JsonValueKind GetSegmentKind(string pathSegment) => int.TryParse(pathSegment, out _) ? JsonValueKind.Array : JsonValueKind.Object;
     }
 }
 
