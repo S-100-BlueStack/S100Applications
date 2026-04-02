@@ -1,4 +1,5 @@
 ﻿using S100FC;
+using S100FC.Catalogues;
 using System.Collections;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
@@ -121,37 +122,31 @@ namespace S100Framework.WPF.ViewModel
 
         public attributeBindingDefinition[] attributeBindingsCatalogue { get; private set; } = [];
 
-        private informationBindingDefinition[] _informationBindingDefinitions { get; } = [];
+        private informationBindingDefinition[] _informationBindingDefinitions { get; set; } = [];
 
-        private featureBindingDefinition[] _featureBindingDefinitions { get; } = [];
+        private featureBindingDefinition[] _featureBindingDefinitions { get; set; } = [];
 
-        public S100AttributeEditorViewModel(XDocument featureCatalogue, string code) {
-            if (string.IsNullOrEmpty(code)) throw new System.ArgumentNullException(nameof(code));
+        private XDocument _featureCatalogue { get; init; }
 
-            this.code = code?.Trim()!;
+        private XmlNamespaceManager _namespaceManager { get; init; }
+
+        private bool _isInitialized = false;
+
+        public S100AttributeEditorViewModel(XDocument featureCatalogue) {
+            this._featureCatalogue = featureCatalogue;
 
             var navigator = featureCatalogue.CreateNavigator();
             navigator.MoveToFollowing(XPathNodeType.Element);
 
             var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
 
-            var xmlNamespaceManager = new XmlNamespaceManager(new NameTable());
+            this._namespaceManager = new XmlNamespaceManager(new NameTable());
             foreach (var s in scopes)
-                xmlNamespaceManager.AddNamespace(s.Key, s.Value);
-
-            var simpleAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_SimpleAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
-
-            var complexAttributes = featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scopes["S100FC"])).ToDictionary(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value, e => e);
-
+                this._namespaceManager.AddNamespace(s.Key, s.Value);
 
             this.permittedPrimitives = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
                 e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                 e => e.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).Select(e => e.Value).ToArray()).ToImmutableDictionary<string,string[]>();
-
-            int index = 0;
-            this.attributeBindingsCatalogue = Parser.AttributeBindings(featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
-            this._informationBindingDefinitions = Parser.InformationBindings(featureCatalogue, code);
-            this._featureBindingDefinitions = Parser.FeatureBindings(featureCatalogue, code);
 
             this.attributeBindings.CollectionChanged += (s, e) => {
                 if (e.OldItems is not null) {
@@ -215,8 +210,30 @@ namespace S100Framework.WPF.ViewModel
             };
         }
 
-        public S100AttributeEditorViewModel LoadAttributeBindings(string json) {
+        public S100AttributeEditorViewModel Initialize(string code) {
+            if (string.IsNullOrEmpty(code) || string.IsNullOrWhiteSpace(code)) throw new System.ArgumentNullException(nameof(code));
+
+            this.code = code;
+
+            var scope = this._namespaceManager.LookupNamespace("S100FC")!;
+
+            var simpleAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_SimpleAttribute", scope)).ToDictionary(e => e.Element(XName.Get("code", scope))!.Value, e => e);
+
+            var complexAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scope)).ToDictionary(e => e.Element(XName.Get("code", scope))!.Value, e => e);
+
+            int index = 0;
+            this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
+            this._informationBindingDefinitions = Parser.InformationBindings(this._featureCatalogue, code);
+            this._featureBindingDefinitions = Parser.FeatureBindings(this._featureCatalogue, code);
+
+            this._isInitialized = true;
+
+            return this;
+        }
+
+        public S100AttributeEditorViewModel LoadAttributeBindings(string json) {            
             if (string.IsNullOrEmpty(json)) return this;
+            if (!this._isInitialized) throw new InvalidOperationException();
 
             var structuredObject = JsonUnflattener.Unflatten(json)!;
 
@@ -268,6 +285,7 @@ namespace S100Framework.WPF.ViewModel
 
         public S100AttributeEditorViewModel LoadInformationBindings(string json) {
             if (string.IsNullOrEmpty(json)) return this;
+            if (!this._isInitialized) throw new InvalidOperationException();
 
             var structuredObject = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(json);
 
@@ -299,6 +317,7 @@ namespace S100Framework.WPF.ViewModel
 
         public S100AttributeEditorViewModel LoadFeatureBindings(string json) {
             if (string.IsNullOrEmpty(json)) return this;
+            if (!this._isInitialized) throw new InvalidOperationException();
 
             var structuredObject = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
 

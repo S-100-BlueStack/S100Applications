@@ -27,13 +27,17 @@ namespace NuvionPro
 
         private SubscriptionToken _tokenActiveMapViewChangedEvent;
 
-        public record FeatureCatalogue(string Name, string FullPath);
+        public record FeatureCatalogue(string Name, string FullPath) {
+            public string ID => $"S-{Name.Substring(0,3)}";
+        }
 
         private ImmutableArray<FeatureCatalogue> _featureCatalogues = ImmutableArray<FeatureCatalogue>.Empty;
 
-        public string[] GetFeatureCatalogues() => this._featureCatalogues.Select(e => e.Name).ToArray();
+        public string[] GetFeatureCatalogues() => this._featureCatalogues.Select(e => e.ID).ToArray();
 
-        public FeatureCatalogue GetFeatureCatalogue(string name) => this._featureCatalogues.Single(e => e.Name.Equals(name));
+        public string[] GetFeatureCatalogueNames() => this._featureCatalogues.Select(e => e.Name).ToArray();
+
+        public FeatureCatalogue GetFeatureCatalogue(string name) => this._featureCatalogues.Single(e => e.ID.Equals(name));
 
         /// <summary>
         /// A new MapView is incoming
@@ -101,7 +105,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>NuvionPro</keyword>"))
+                if (!metadata.Contains("<keyword>vortex</keyword>"))
                     return;
 
                 var fcName = fc.GetName();
@@ -138,7 +142,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>NuvionPro</keyword>"))
+                if (!metadata.Contains("<keyword>vortex</keyword>"))
                     return;
 
                 var fcName = table.GetName();

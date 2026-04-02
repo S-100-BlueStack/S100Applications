@@ -97,7 +97,7 @@ namespace SelectorUI
             //var typePoints = ps.GetFeatureTypes(Primitives.point);
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModel(ps, "SpanFixed")
+            var selectedObjectFC = new S100AttributeEditorViewModel(ps).Initialize("SpanFixed")
                 .LoadAttributeBindings(jsonSpanFixed)
                 .LoadInformationBindings(jsonSpanFixedInformationBindings)
                 .LoadFeatureBindings(jsonSpanFixedFeatureBindings);
