@@ -179,6 +179,10 @@ namespace SelectorUI
 
         private void PropertyGrid_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
             ;
+            if (sender is S100AttributeEditorViewModel viewModel) {
+
+                var json = JsonFlattener.Flatten([..viewModel.attributeBindings.Select(e=>e.attribute)], viewModel.attributeBindingsCatalogue);
+            }
         }
 
         private static readonly char[] _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
