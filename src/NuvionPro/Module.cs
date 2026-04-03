@@ -4,11 +4,12 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using ArcGIS.Desktop.Mapping.Events;
-using S100FC.Catalogues;
+//using S100FC.Catalogues;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace NuvionPro
@@ -26,11 +27,18 @@ namespace NuvionPro
 
         private SubscriptionToken _tokenActiveMapViewChangedEvent;
 
+        public record FeatureCatalogue(string Name, string FullPath)
+        {
+            public string ID => $"S-{this.Name.Substring(0, 3)}";
+        }
+
         private ImmutableArray<FeatureCatalogue> _featureCatalogues = ImmutableArray<FeatureCatalogue>.Empty;
 
-        public string[] GetFeatureCatalogues() => this._featureCatalogues.Select(e => e.ProductID).ToArray();
+        public FeatureCatalogue[] GetFeatureCatalogues() => this._featureCatalogues.ToArray();
 
-        public FeatureCatalogue GetFeatureCatalogue(string name) => this._featureCatalogues.Single(e => e.ProductID.Equals(name));
+        public string[] GetFeatureCatalogueNames() => this._featureCatalogues.Select(e => e.Name).ToArray();
+
+        public FeatureCatalogue GetFeatureCatalogue(string name) => this._featureCatalogues.Single(e => e.ID.Equals(name));
 
         /// <summary>
         /// A new MapView is incoming
@@ -57,7 +65,12 @@ namespace NuvionPro
 
         protected override bool Initialize() {
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
-            this._featureCatalogues = FeatureCatalogue.Catalogues;
+            //this._featureCatalogues = FeatureCatalogue.Catalogues;
+
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            foreach (var catalogue in System.IO.Directory.GetFiles(System.IO.Path.Combine(path, "GeospatialInformationRegistry"), "*FC*.xml")) {
+                this._featureCatalogues = [.. this._featureCatalogues, new FeatureCatalogue(System.IO.Path.GetFileNameWithoutExtension(catalogue), System.IO.Path.GetFullPath(catalogue))];
+            }
 
             return base.Initialize();
         }
@@ -93,7 +106,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>NuvionPro</keyword>"))
+                if (!metadata.Contains("<keyword>vortex</keyword>"))
                     return;
 
                 var fcName = fc.GetName();
@@ -130,7 +143,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>NuvionPro</keyword>"))
+                if (!metadata.Contains("<keyword>vortex</keyword>"))
                     return;
 
                 var fcName = table.GetName();

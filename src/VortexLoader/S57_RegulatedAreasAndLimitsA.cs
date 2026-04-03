@@ -212,13 +212,12 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // ADMARE_AdministrationAreaNamed
-                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM.Contains("Vessel traffic service area")) {
+                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.Contains("Vessel traffic service area")) {
                                 var instance = new VesselTrafficServiceArea();
-                                
+
                                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
                                 if (featureName is not null)
                                     instance.featureName = featureName;
-
 
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
@@ -239,7 +238,6 @@ namespace S100Framework.Applications
 
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-
                             else {
                                 var instance = new AdministrationArea {
                                 };

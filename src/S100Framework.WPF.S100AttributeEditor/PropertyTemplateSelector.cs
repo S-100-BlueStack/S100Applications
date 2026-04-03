@@ -43,6 +43,13 @@ namespace S100Framework.WPF
                     return this.TimeEditorTemplate;
                 if (simpleAttribute.valueType.Equals("enumeration"))
                     return this.EnumEditorTemplate;
+                if (simpleAttribute.valueType.Equals("URN"))
+                    return this.TextEditorTemplate;
+                if (simpleAttribute.valueType.Equals("URI"))
+                    return this.TextEditorTemplate;
+                if (simpleAttribute.valueType.Equals("URL"))
+                    return this.TextEditorTemplate;
+
                 if (System.Diagnostics.Debugger.IsAttached)
                     System.Diagnostics.Debugger.Break();
             }

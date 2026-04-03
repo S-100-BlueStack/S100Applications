@@ -112,7 +112,7 @@ namespace S100Framework.Applications.Singletons
                     foreach (var nauticalInformation in NauticalInformations.Instance._nauticalInformations.Values) {
 
                         foreach (var info in nauticalInformation.information) {
-                            var supportFile = new S100Horizon.Settings.SupportFile {
+                            var supportFile = new S100BlueStack.Settings.SupportFile {
                                 FileName = info!.fileReference!
                             };
 

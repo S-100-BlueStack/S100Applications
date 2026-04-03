@@ -14,7 +14,7 @@
 	<RepositoryUrl>https://github.com/S-100-BlueStack/S100Framework</RepositoryUrl>	
 	<AssemblyVersion>2.1.2.0</AssemblyVersion>	
 	<Configurations>Debug</Configurations>	
-	<Version>2.1.35</Version>	 	  
+	<Version>2.1.214</Version>	 	  
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Compile Remove="ItemsControlTemplateSelector.cs.cs" />
+    <Compile Remove="JsonUnflattener.cs" />
     <Compile Remove="PropertyGrid.xaml.cs" />
   </ItemGroup>
 

@@ -25,7 +25,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
@@ -33,25 +33,24 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Column="0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSelectedSchemaEnabled, Mode=OneWay}">
+            <DockPanel Grid.Column="0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsEnabledPS, Mode=OneWay}">
                 <TextBlock Margin="5,0,5,0" Text="PS" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <ComboBox x:Name="_schemaSelector" DockPanel.Dock="Right"
-                        HorizontalAlignment="Stretch" 
-                        IsEnabled="{Binding IsSelectedSchemaEnabled, Mode=OneWay}"
-                        ItemsSource="{Binding Schemas}"                           
-                        SelectedItem="{Binding SelectedSchema, UpdateSourceTrigger=PropertyChanged}" >
+                          HorizontalAlignment="Stretch" 
+                          IsEnabled="{Binding IsEnabledPS, Mode=OneWay}"
+                          ItemsSource="{Binding FeatureCatalogues}"
+                          DisplayMemberPath="ID"
+                          SelectedItem="{Binding PS, UpdateSourceTrigger=PropertyChanged}" >
                 </ComboBox>
             </DockPanel>
 
-            <DockPanel Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSelectedModelTypeEnabled, Mode=OneWay}">
-                <TextBlock Margin="5,0,5,0" Text="Type" VerticalAlignment="Center" DockPanel.Dock="Left"/>
+            <DockPanel Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding IsEnabledCode, Mode=OneWay}">
+                <TextBlock Margin="5,0,5,0" Text="Code" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <ComboBox x:Name="_objectSelector" DockPanel.Dock="Right"
                         HorizontalAlignment="Stretch" 
-                        IsEnabled="{Binding IsSelectedModelTypeEnabled, Mode=OneWay}"
-                        ItemsSource="{Binding ModelTypes}"                           
-                        SelectedItem="{Binding SelectedModelType, UpdateSourceTrigger=PropertyChanged}"
-                        DisplayMemberPath="Code" 
-                        SelectedValuePath="Code">
+                        IsEnabled="{Binding IsEnabledCode, Mode=OneWay}"
+                        ItemsSource="{Binding Codes}"                           
+                        SelectedItem="{Binding Code, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
             </DockPanel>
 
@@ -81,27 +80,5 @@
                                 IsEditingEnabled="{Binding IsEditingEnabled, Mode=OneWay}"
                                 SelectedObject="{Binding SelectedProperty, Mode=OneWay}"
                                 Loaded="S100AttributeEditor_Loaded"/>
-        
-        <!--<pg:PropertyGrid x:Name="S100AttributeEditoe" Grid.Row="1" 
-                         Visibility="{Binding IsVisible, Mode=OneWay}"
-                         SelectedObject="{Binding SelectedProperty, Mode=OneWay}"
-                         Loaded="S100AttributeEditor_Loaded"/>-->
-
-        <!--<s100:S100AttributeEditorControl x:Name="S100AttributeEditor" Grid.Row="1" Host="{Binding Host, Mode=OneTime}"
-                                         Visibility="{Binding IsVisible, Mode=OneWay}"
-                                         IsEditingEnabled="{Binding IsEditingEnabled, Mode=OneWay}"
-                                         SelectedFeatureObject="{Binding SelectedFeatureProperty, Mode=OneWay}"
-                                         SelectedInformationObject="{Binding SelectedInformationProperty, Mode=OneWay}" 
-                                         Loaded="S100AttributeEditor_Loaded"/>-->
-
-
-        <!--<xctk:PropertyGrid Grid.Row="1" x:Name="_propertyGrid" 
-               SelectedObject="{Binding SelectedProperty}" 
-               PropertyValueChanged="_propertyGrid_PropertyValueChanged" 
-                           SelectedPropertyItemChanged="_propertyGrid_SelectedPropertyItemChanged"
-               AutoGenerateProperties="True"                           
-               UpdateTextBoxSourceOnEnterKey="True"
-               PreparePropertyItem="_propertyGrid_PreparePropertyItem" ShowAdvancedOptions="True" ShowSummary="False"/>-->
-
     </Grid>
 </UserControl>
