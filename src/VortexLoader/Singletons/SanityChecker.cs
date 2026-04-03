@@ -17,15 +17,17 @@ namespace S100Framework.Applications.Singletons
         }
 
         internal static void Initialize(Geodatabase geodatabase) {
-            if (_instance != null) {
-                throw new InvalidOperationException("SanityChecker has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("SanityChecker has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new SanityChecker(geodatabase);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new SanityChecker(geodatabase);
+            //    }
+            //}
+
+            _instance = new SanityChecker(geodatabase);
         }
 
         internal static SanityChecker Instance {

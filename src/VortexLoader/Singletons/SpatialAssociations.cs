@@ -103,15 +103,17 @@ namespace S100Framework.Applications.Singletons
         }
 
         internal static void Initialize(Geodatabase geodatabase, QueryFilter filter) {
-            if (_instance != null) {
-                throw new InvalidOperationException("SpatialAssociations has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("SpatialAssociations has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new SpatialAssociations(geodatabase, filter);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new SpatialAssociations(geodatabase, filter);
+            //    }
+            //}
+
+            _instance = new SpatialAssociations(geodatabase, filter);
         }
 
         internal static SpatialAssociations Instance {

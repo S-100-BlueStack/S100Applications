@@ -13,15 +13,17 @@ namespace S100Framework.Applications.Singletons
         private readonly Dictionary<string, Dictionary<int, string>> _subtypes;
 
         internal static void Initialize(Geodatabase geodatabase) {
-            if (_instance != null) {
-                throw new InvalidOperationException("Subtypes has already been initialized.");
-            }
+            //if (_instance != null) {
+            //    throw new InvalidOperationException("Subtypes has already been initialized.");
+            //}
 
-            lock (_lock) {
-                if (_instance == null) {
-                    _instance = new Subtypes(geodatabase);
-                }
-            }
+            //lock (_lock) {
+            //    if (_instance == null) {
+            //        _instance = new Subtypes(geodatabase);
+            //    }
+            //}
+
+            _instance = new Subtypes(geodatabase);
         }
 
         private Subtypes(Geodatabase geodatabase) {
