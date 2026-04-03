@@ -222,6 +222,9 @@ namespace S100Framework.WPF.ViewModel
             if (element is null) throw new KeyNotFoundException($"Code not found ({code})!");
             if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) throw new InvalidOperationException($"Abstract types are not supported ({code})!");
 
+            var sourceIdentifier = element.Element(XName.Get("sourceIdentifier", scope))?.Value;
+            this.sourceIdentifier = sourceIdentifier == null ? default(int) : int.Parse(sourceIdentifier);
+            
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
 
@@ -362,6 +365,17 @@ namespace S100Framework.WPF.ViewModel
             }
             set {
                 this.SetProperty(ref this._code, value);
+            }
+        }
+
+        private int? _sourceIdentifier = default;
+
+        public int? sourceIdentifier {
+            get {
+                return this._sourceIdentifier;
+            }
+            set {
+                this.SetProperty(ref this._sourceIdentifier, value);
             }
         }
 

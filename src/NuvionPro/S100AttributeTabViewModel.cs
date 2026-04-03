@@ -236,7 +236,7 @@ namespace NuvionPro
                     while (cursor.MoveNext()) {
                         var settings = JsonSerializer.Deserialize<S100BlueStack.Settings.Editor>(Convert.ToString(cursor.Current["json"]));
                         if (!settings.ExcludeInEditor && System.IO.File.Exists(settings.FullPath))
-                            featureCatalogues = [.. featureCatalogues, new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First(), settings.FullPath)];
+                            featureCatalogues = [.. featureCatalogues, new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First().Substring(2), settings.FullPath)];
                     }
                     if (!featureCatalogues.Any())
                         featureCatalogues = this._module.GetFeatureCatalogues();  //  DEFAULT
@@ -298,8 +298,8 @@ namespace NuvionPro
 
                     viewModel.Initialize(this.Code, uid);
 
-                    if (!inspector.IsNull("flatten")) {
-                        var json = Convert.ToString(inspector["flatten"]);
+                    if (!inspector.IsNull("attributebindings")) {
+                        var json = Convert.ToString(inspector["attributebindings"]);
 
                         viewModel = viewModel.LoadAttributeBindings(json);
                     }
@@ -423,12 +423,12 @@ namespace NuvionPro
                 if (sender is S100AttributeEditorViewModel viewModel) {
                     if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.attributeBindings))) {
                         var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
-                        if (this.Inspector.IsNull("flatten")) {
-                            this.Inspector["flatten"] = flatten;
+                        if (this.Inspector.IsNull("attributebindings")) {
+                            this.Inspector["attributebindings"] = flatten;
                             updated |= true;
                         }
-                        else if (string.Compare(flatten, Convert.ToString(this.Inspector["flatten"]), true) != 0) {
-                            this.Inspector["flatten"] = flatten;
+                        else if (string.Compare(flatten, Convert.ToString(this.Inspector["attributebindings"]), true) != 0) {
+                            this.Inspector["attributebindings"] = flatten;
                             updated |= true;
                         }
                     }
