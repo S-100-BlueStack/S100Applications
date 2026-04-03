@@ -80,7 +80,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE);
                             ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -133,7 +133,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE);
                             ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -188,7 +188,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE);
                             ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -257,7 +257,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE);
                             ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);

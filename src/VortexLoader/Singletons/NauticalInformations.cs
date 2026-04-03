@@ -76,7 +76,7 @@ namespace S100Framework.Applications.Singletons
 
             bufferInformationType["ps"] = ImporterNIS.ps101;
             bufferInformationType["code"] = nauticalInformation.S100FC_code;
-            bufferInformationType["flatten"] = nauticalInformation.Flatten();
+            bufferInformationType["attributebindings"] = nauticalInformation.Flatten();
 
             var informationTypeRow = informationTypeTable.CreateRow(bufferInformationType);
             var informationName = informationTypeRow.UID();

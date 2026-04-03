@@ -82,7 +82,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ps101;
                     buffer["code"] = dataCoverage_m_scl.GetType().Name;
 
-                    buffer["flatten"] = dataCoverage_m_scl.Flatten();
+                    buffer["attributebindings"] = dataCoverage_m_scl.Flatten();
                     SetShape(buffer, m_sclPolygon.SHAPE);
                     ImporterNIS.SetUsageBand(buffer, Convert.ToInt32(m_sclPolygon.PLTS_COMP_SCALE));
 
@@ -207,7 +207,7 @@ namespace S100Framework.Applications
                                 buffer["ps"] = ps101;
                                 buffer["code"] = dataCoverage.GetType().Name;
 
-                                buffer["flatten"] = dataCoverage.Flatten();
+                                buffer["attributebindings"] = dataCoverage.Flatten();
                                 buffer["informationbindings"] = "[]";
 
                                 SetShape(buffer, cutOutM_SCL[0]); // productCoverage.SHAPE);
@@ -231,7 +231,7 @@ namespace S100Framework.Applications
                                 buffer["ps"] = ps101;
                                 buffer["code"] = vdat.GetType().Name;
 
-                                buffer["flatten"] = vdat.Flatten();
+                                buffer["attributebindings"] = vdat.Flatten();
                                 buffer["informationbindings"] = "[]";
 
                                 SetShape(buffer, productCoverage.SHAPE);
@@ -260,7 +260,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ps128;
                     buffer["code"] = instance.GetType().Name;
 
-                    buffer["flatten"] = instance.Flatten();
+                    buffer["attributebindings"] = instance.Flatten();
                     buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, (ArcGIS.Core.Geometry.Polygon)GeometryEngine.Instance.Union(polygons));

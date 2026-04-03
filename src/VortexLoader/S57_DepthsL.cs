@@ -141,7 +141,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
@@ -228,7 +228,7 @@ namespace S100Framework.Applications
             buffer["ps"] = ps101;
             buffer["code"] = spatialQuality101.S100FC_code;
 
-            buffer["flatten"] = spatialQuality101.Flatten();
+            buffer["attributebindings"] = spatialQuality101.Flatten();
 
             var informationTypeRow = informationTypeTable.CreateRow(buffer);
             var informationName = informationTypeRow.UID();

@@ -143,7 +143,7 @@ namespace S100Framework.Applications
                                     sounding.information = result.information.ToArray();
                                     sounding.SetInformationBindings(result.InformationBindings.ToArray());
 
-                                    buffer["flatten"] = sounding.Flatten();
+                                    buffer["attributebindings"] = sounding.Flatten();
                                     buffer["ps"] = ps101;
                                     buffer["code"] = sounding.GetType().Name;
 
@@ -209,7 +209,7 @@ namespace S100Framework.Applications
                                     instance.SetInformationBindings(result.InformationBindings.ToArray());
 
 
-                                    buffer["flatten"] = instance.Flatten();
+                                    buffer["attributebindings"] = instance.Flatten();
                                     buffer["ps"] = ps101;
                                     buffer["code"] = instance.GetType().Name;
 

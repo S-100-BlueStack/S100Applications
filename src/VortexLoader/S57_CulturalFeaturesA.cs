@@ -38,7 +38,7 @@ namespace S100Framework.Applications
                     buffer["code"] = instance.GetType().Name;
 
 
-                    buffer["flatten"] = instance.Flatten();
+                    buffer["attributebindings"] = instance.Flatten();
 
                     //SetShape(buffer, bridge.DissolvedGeometry);
                     //SetUsageBand(buffer, ImporterNIS._compilationScale);
@@ -149,7 +149,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -331,7 +331,7 @@ namespace S100Framework.Applications
                                 bufferSurface["code"] = instance.GetType().Name;
 
 
-                                bufferSurface["flatten"] = instance.Flatten();
+                                bufferSurface["attributebindings"] = instance.Flatten();
                                 bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
 
@@ -428,7 +428,7 @@ namespace S100Framework.Applications
                                 bufferSurface["code"] = instance.GetType().Name;
 
 
-                                bufferSurface["flatten"] = instance.Flatten();
+                                bufferSurface["attributebindings"] = instance.Flatten();
                                 bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
 
@@ -542,7 +542,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -661,7 +661,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -799,7 +799,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -902,7 +902,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1002,7 +1002,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1029,7 +1029,7 @@ namespace S100Framework.Applications
                                 bufferSurface["code"] = windturbine.GetType().Name;
 
                                 System.Text.Json.JsonSerializer.Serialize(windturbine, jsonSerializerOptions);
-                                bufferSurface["flatten"] = windturbine.Flatten();
+                                bufferSurface["attributebindings"] = windturbine.Flatten();
                                 bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(windturbine.GetInformationBindings(), jsonSerializerOptions);
 
                                 SetShape(bufferSurface, current.SHAPE);
@@ -1153,7 +1153,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1261,7 +1261,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1391,7 +1391,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1480,7 +1480,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1552,7 +1552,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1674,7 +1674,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);
@@ -1769,7 +1769,7 @@ namespace S100Framework.Applications
                             bufferSurface["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["flatten"] = instance.Flatten();
+                            bufferSurface["attributebindings"] = instance.Flatten();
                             bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferSurface, current.SHAPE);

@@ -159,7 +159,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["flatten"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
                             datasetNames = [.. datasetNames, electricProduct.datasetName!];
                         }
@@ -175,7 +175,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["flatten"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
@@ -235,11 +235,11 @@ namespace S100Framework.Applications
 
                             var name = current.UID();
                             var code = current["code"].ToString()!;
-                            //var json = current["flatten"].ToString()!;
+                            //var json = current["attributebindings"].ToString()!;
 
                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "InformationTypes")}.{code}", true)!;
 
-                            var json = Convert.ToString(current["flatten"]);
+                            var json = Convert.ToString(current["attributebindings"]);
                             var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<InformationType>(json, type);
 
                             //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
@@ -284,7 +284,7 @@ namespace S100Framework.Applications
                             var code = current["code"].ToString()!;
                             //var json = current["json"].ToString()!;
 
-                            var json = Convert.ToString(current["flatten"]);
+                            var json = Convert.ToString(current["attributebindings"]);
 
                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true)!;
 
@@ -372,7 +372,7 @@ namespace S100Framework.Applications
                                     continue;
                                 }
 
-                                var json = Convert.ToString(current["flatten"])!;
+                                var json = Convert.ToString(current["attributebindings"])!;
                                 var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(json, type);
                                 //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
 

@@ -107,7 +107,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
@@ -172,7 +172,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
@@ -222,7 +222,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
@@ -291,7 +291,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             buffer["code"] = instance.GetType().Name;
 
 
-                            buffer["flatten"] = instance.Flatten();
+                            buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);

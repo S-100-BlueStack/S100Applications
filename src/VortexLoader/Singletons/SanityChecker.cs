@@ -107,7 +107,7 @@ namespace S100Framework.Applications.Singletons
                 while (cursor.MoveNext()) {
                     recordCount++;
                     var feature = cursor.Current;
-                    string? jsonValue = feature["flatten"]?.ToString();
+                    string? jsonValue = feature["attributebindings"]?.ToString();
 
                     if (jsonValue != default && jsonValue.Contains("-32767")) {
                         errorCount++;
@@ -171,7 +171,7 @@ namespace S100Framework.Applications.Singletons
                 while (cursor.MoveNext()) {
                     recordCount++;
                     var feature = cursor.Current;
-                    var json = Convert.ToString(feature["flatten"])?.ToLowerInvariant();
+                    var json = Convert.ToString(feature["attributebindings"])?.ToLowerInvariant();
 
                     if (!string.IsNullOrEmpty(json) && json.Contains("\"defaultclearancedepth\":null") && json.Contains("\"valueofsounding\":null")) {
                         errorCount++;

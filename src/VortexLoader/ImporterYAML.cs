@@ -138,7 +138,7 @@ namespace S100FC.Applications
                     buffer["usageband"] = usageBand;
                     buffer["ps"] = productSpecification;
                     buffer["code"] = feature.Name;
-                    buffer["flatten"] = flatten;
+                    buffer["attributebindings"] = flatten;
 
                     if (geometry is MapPoint point) {
                         if (point.HasZ == false)
@@ -181,7 +181,7 @@ namespace S100FC.Applications
                     var buffer = bufferInformationType;
                     buffer["ps"] = productSpecification;
                     buffer["code"] = informationType.Name;
-                    buffer["flatten"] = flatten;
+                    buffer["attributebindings"] = flatten;
                     tableInformationType.CreateRow(bufferInformationType);
                 }
 

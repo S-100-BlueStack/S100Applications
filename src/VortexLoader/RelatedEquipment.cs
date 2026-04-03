@@ -184,7 +184,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ImporterNIS.ps101;
                     buffer["code"] = lightSectored.GetType().Name;
 
-                    buffer["flatten"] = lightSectored.Flatten();
+                    buffer["attributebindings"] = lightSectored.Flatten();
                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);  //System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), jsonSerializerOptions);
 
                     ImporterNIS.SetShape(buffer, shape);
@@ -226,7 +226,7 @@ namespace S100Framework.Applications
                         buffer["ps"] = ImporterNIS.ps101;
                         buffer["code"] = instance.GetType().Name;
 
-                        buffer["flatten"] = ((FeatureType)instance).Flatten();
+                        buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                         if (instance is FeatureType) {
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
                         }
@@ -295,7 +295,7 @@ namespace S100Framework.Applications
                 buffer["ps"] = ImporterNIS.ps101;
                 buffer["code"] = instance.GetType().Name;
 
-                buffer["flatten"] = ((FeatureType)instance).Flatten();
+                buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                 if (instance is FeatureType) {
                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
                 }
@@ -347,7 +347,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ImporterNIS.ps101;
                     buffer["code"] = instance.GetType().Name;
 
-                    buffer["flatten"] = ((FeatureType)instance).Flatten();
+                    buffer["attributebindings"] = ((FeatureType)instance).Flatten();
 
                     if (instance is FeatureType) {
                         buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);

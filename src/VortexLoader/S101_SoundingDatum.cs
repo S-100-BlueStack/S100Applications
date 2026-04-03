@@ -111,7 +111,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ps101;
                     buffer["code"] = instance.GetType().Name;
 
-                    buffer["flatten"] = instance.Flatten();
+                    buffer["attributebindings"] = instance.Flatten();
                     //buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, item);
@@ -134,7 +134,7 @@ namespace S100Framework.Applications
                     buffer["ps"] = ps101;
                     buffer["code"] = instance.GetType().Name;
 
-                    buffer["flatten"] = instance.Flatten();
+                    buffer["attributebindings"] = instance.Flatten();
                     //buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, item.Geometry);
