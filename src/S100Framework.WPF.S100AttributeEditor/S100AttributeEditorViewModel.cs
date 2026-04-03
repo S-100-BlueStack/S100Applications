@@ -132,7 +132,7 @@ namespace S100Framework.WPF.ViewModel
 
             this.permittedPrimitives = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
                 e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                e => e.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).Select(e => e.Value).ToArray()).ToImmutableDictionary<string,string[]>();
+                e => e.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).Select(e => e.Value).ToArray()).ToImmutableDictionary<string, string[]>();
 
             this.attributeBindings.CollectionChanged += (s, e) => {
                 if (e.OldItems is not null) {
@@ -208,17 +208,25 @@ namespace S100Framework.WPF.ViewModel
 
             var complexAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scope)).ToDictionary(e => e.Element(XName.Get("code", scope))!.Value, e => e);
 
+
+            var element = this._featureCatalogue.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+            if (element is null) throw new KeyNotFoundException($"Code not found ({code})!");
+            if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) throw new InvalidOperationException($"Abstract types are not supported ({code})!");
+
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
-            this._informationBindingDefinitions = Parser.InformationBindings(this._featureCatalogue, code);
-            this._featureBindingDefinitions = Parser.FeatureBindings(this._featureCatalogue, code);
+
+            if (element.Name.LocalName.Equals("S100_FC_InformationType") || element.Name.LocalName.Equals("S100_FC_FeatureType"))
+                this._informationBindingDefinitions = Parser.InformationBindings(this._featureCatalogue, code);
+            if (element.Name.LocalName.Equals("S100_FC_FeatureType"))
+                this._featureBindingDefinitions = Parser.FeatureBindings(this._featureCatalogue, code);
 
             this._isInitialized = true;
 
             return this;
         }
 
-        public S100AttributeEditorViewModel LoadAttributeBindings(string json) {            
+        public S100AttributeEditorViewModel LoadAttributeBindings(string json) {
             if (string.IsNullOrEmpty(json)) return this;
             if (!this._isInitialized) throw new InvalidOperationException();
 

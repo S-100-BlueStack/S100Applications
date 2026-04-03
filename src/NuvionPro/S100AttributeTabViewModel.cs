@@ -335,8 +335,8 @@ namespace NuvionPro
                             }, TaskCreationOptions.None);
                         }
                     };
-                    if (!inspector.IsNull("informationbindings")) {
-                        viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationBindings"]));
+                    if (inspector.HasAttribute("informationbindings") && !inspector.IsNull("informationbindings")) {
+                        viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationbindings"]));
                     }
 
                     viewModel.RequestFeatures = async (s, e) => {
@@ -392,7 +392,7 @@ namespace NuvionPro
                             });
                         }
                     };
-                    if (!inspector.IsNull("featurebindings")) {
+                    if (inspector.HasAttribute("featurebindings") && !inspector.IsNull("featurebindings")) {
                         viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
                     }
 
@@ -444,31 +444,31 @@ namespace NuvionPro
                             updated |= true;
                         }
                     }
-                    if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
+                    if (this.Inspector.HasAttribute("informationbindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
                         var informationBindings = (informationBinding[])viewModel;
 
                         var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, this._jsonOptions);
 
-                        if (this.Inspector.IsNull("informationBindings")) {
-                            this.Inspector["informationBindings"] = json;
+                        if (this.Inspector.IsNull("informationbindings")) {
+                            this.Inspector["informationbindings"] = json;
                             updated |= true;
                         }
-                        else if (string.Compare(json, Convert.ToString(this.Inspector["informationBindings"]), true) != 0) {
-                            this.Inspector["informationBindings"] = json;
+                        else if (string.Compare(json, Convert.ToString(this.Inspector["informationbindings"]), true) != 0) {
+                            this.Inspector["informationbindings"] = json;
                             updated |= true;
                         }
                     }
-                    if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.featureBindings))) {
+                    if (this.Inspector.HasAttribute("featurebindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.featureBindings))) {
                         var featureBindings = (featureBinding[])viewModel;
 
                         var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, this._jsonOptions);
 
-                        if (this.Inspector.IsNull("featureBindings")) {
-                            this.Inspector["featureBindings"] = json;
+                        if (this.Inspector.IsNull("featurebindings")) {
+                            this.Inspector["featurebindings"] = json;
                             updated |= true;
                         }
-                        else if (string.Compare(json, Convert.ToString(this.Inspector["featureBindings"]), true) != 0) {
-                            this.Inspector["featureBindings"] = json;
+                        else if (string.Compare(json, Convert.ToString(this.Inspector["featurebindings"]), true) != 0) {
+                            this.Inspector["featurebindings"] = json;
                             updated |= true;
                         }
                     }

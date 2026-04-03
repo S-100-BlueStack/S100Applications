@@ -1,5 +1,6 @@
 ﻿using PropertyGridApplication;
 using S100FC;
+using S100FC.Catalogues;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureAssociation;
@@ -10,7 +11,9 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace SelectorUI
 {
@@ -102,6 +105,19 @@ namespace SelectorUI
 
             var ps = XDocument.Load(System.IO.Path.Combine(Environment.GetEnvironmentVariable("GITHUB-IHO")!, @"S-101-Documentation-and-FC\S-101FC\FeatureCatalogue.xml"));
 
+            var navigator = ps.CreateNavigator();
+            navigator.MoveToFollowing(XPathNodeType.Element);
+
+            var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            foreach (var s in scopes)
+                namespaceManager.AddNamespace(s.Key, s.Value);
+
+
+            var lateralBuoy = ps.XPathSelectElement("//S100FC:*[S100FC:code='LateralBuoy']", namespaceManager);
+
+            ;
             //var typePoints = ps.GetFeatureTypes(Primitives.point);
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
