@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
+using static NuvionPro.Module;
 
 namespace NuvionPro
 {
@@ -33,24 +34,25 @@ namespace NuvionPro
 
         private static readonly CultureInfo culture = new("en-GB", false);
 
-        internal record SelectedTemplate(string Schema, string Code)
-        {
-            public static SelectedTemplate Empty => new(string.Empty, string.Empty);
-        }
-
-        internal record SelectedType(string Code);
+        //internal record SelectedTemplate(string Schema, string Code)
+        //{
+        //    public static SelectedTemplate Empty => new(string.Empty, string.Empty);
+        //}
 
         private readonly NuvionPro.Module _module;
 
-        private SelectedTemplate _selectedTemplate = SelectedTemplate.Empty;
+        //private Module.FeatureCatalogue[] _featureCatalogues = [];
 
-        private SelectedType _selectedModelType = default;
+        //private SelectedTemplate _selectedTemplate = SelectedTemplate.Empty;
 
-        private ObservableCollection<string> _schemas = [];
+        //private ObservableCollection<Module.FeatureCatalogue> _schemas = [];
 
-        private string _selectedSchema = default;
+        private Module.FeatureCatalogue _ps = default;
 
-        private XDocument? _featureCatalogue = null;
+        private string? _code = default;
+
+
+        //private XDocument _featureCatalogue = null;
 
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
             WriteIndented = false,
@@ -64,11 +66,9 @@ namespace NuvionPro
 
         private Boolean _isVisible = false;
 
-        private ObservableCollection<SelectedType> _modelTypes = [];
+        private bool _isEnabledPS = true;
 
-        private bool _isSelectedSchemaEnabled = true;
-
-        private bool _isSelectedModelTypeEnabled = false;
+        private bool _isEnabledCode = false;
 
         //private readonly string[] _catalogues;
 
@@ -82,27 +82,28 @@ namespace NuvionPro
             Project.Current.PropertyChanged += this.Current_PropertyChanged;
             this.IsEditingEnabled = Project.Current.IsEditingEnabled;
 
-            this.Schemas.AddRange(this._module.GetFeatureCatalogues());
+            //this.FeatureCatalogues.AddRange(this._module.GetFeatureCatalogues());
+            this.FeatureCatalogues = this._module.GetFeatureCatalogues();
 
-            this.CreateInstance = new ArcGIS.Desktop.Framework.RelayCommand(async () => {
-                var inspector = base.Inspector;
+            //this.CreateInstance = new ArcGIS.Desktop.Framework.RelayCommand(async () => {
+            //    var inspector = base.Inspector;
 
-                if (inspector != default) {
-                    //if (!Project.Current.IsEditingEnabled) {
-                    //    await Project.Current.SetIsEditingEnabledAsync(true);
-                    //}
+            //    if (inspector != default) {
+            //        //if (!Project.Current.IsEditingEnabled) {
+            //        //    await Project.Current.SetIsEditingEnabledAsync(true);
+            //        //}
 
-                    inspector["ps"] = this.SelectedSchema;
-                    inspector["code"] = this.SelectedModelType.Code;
+            //        inspector["ps"] = this.SelectedPS;
+            //        inspector["code"] = this.SelectedCode;
 
-                    this.IsSelectedSchemaEnabled = false;
-                    this.IsSelectedModelTypeEnabled = false;
+            //        this.IsSelectedFCEnabled = false;
+            //        this.IsCodeEnabled = false;
 
-                    await QueuedTask.Run(() => {
-                        inspector.Apply();
-                    }, TaskCreationOptions.None);
-                }
-            });
+            //        await QueuedTask.Run(() => {
+            //            inspector.Apply();
+            //        }, TaskCreationOptions.None);
+            //    }
+            //});
         }
 
         private void Current_PropertyChanged(object sender, PropertyChangedEventArgs e) {
@@ -117,69 +118,75 @@ namespace NuvionPro
             base.NotifyPropertyChanged(name);
 
             switch (name) {
-                case "SelectedSchema": {
-                        this.SelectedModelType = default;
-                        this.IsSelectedModelTypeEnabled = false;
+                case nameof(PS): {
+                        this.Code = default;
+                        this.IsEnabledCode = false;
 
-                        if (this.SelectedSchema != default) {
-                            var schema = this.SelectedSchema;
+                        this.IsEnabledPS = this.PS != default;
 
-                            this.SelectedProperty = default;
-
-                            if (this._featureCatalogue is not null) {
-                                this.SelectedProperty = new S100AttributeEditorViewModel(this._featureCatalogue);
-                                //var featureCatalogue = this._module.GetFeatureCatalogue(schema);
-
-                                IEnumerable<string> types;
-                                if (inspector.HasGeometry) {
-                                    var geometryType = inspector.MapMember switch {
-                                        FeatureLayer l => l.ShapeType,
-                                        _ => throw new InvalidOperationException(),
-                                    };
-
-                                    var primitive = geometryType switch {
-                                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPolygon => Primitives.surface,
-                                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPolyline => Primitives.curve,
-                                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPoint => Primitives.point,
-                                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryMultipoint => Primitives.pointSet,
-                                        _ => throw new InvalidOperationException(),
-                                    };
-
-                                    types = this.SelectedProperty.GetFeaturesByPrimitive(primitive);
-                                }
-                                else {
-                                    types = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry);
-                                }
-
-                                System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                                    this.ModelTypes.Clear();
-                                    this.ModelTypes.AddRange(types.OrderBy(e => e).Select(e => new SelectedType(e)));
-                                });
-
-                                this.IsSelectedModelTypeEnabled = true;
-                            }
-                        }
-                        this._selectedTemplate = SelectedTemplate.Empty;
+                        this.PS_NotifyPropertyChanged(inspector);
 
                         this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
                     }
                     break;
 
-                case "SelectedModelType": {
-                        if (this.SelectedModelType != default) {
-                            var featuretype = this.SelectedModelType.Code;
+                case nameof(Code): {
+                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code);
 
-                            if (featuretype != default) {
-                                var featureCatalogue = this._module.GetFeatureCatalogue(this.SelectedSchema);
-
-                                this._selectedTemplate = new SelectedTemplate(this.SelectedSchema, featuretype);
-
-                                this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
-                            }
+                        if (this.Code != default) {
+                            this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
                         }
                     }
                     break;
             }
+        }
+
+        private void PS_NotifyPropertyChanged(Inspector inspector) {
+            if (this.PS != default) {
+                var schema = this.PS;
+
+                if (this.SelectedProperty is null) {
+                    var ps = XDocument.Load(this.PS.FullPath);
+                    this.SelectedProperty = new S100AttributeEditorViewModel(ps);
+                }
+                else if (this.SelectedProperty is not null && string.IsNullOrEmpty(this.SelectedProperty.ProductID)) {
+                    if (!this.PS.Equals(this.SelectedProperty.ProductID)) {
+                        var ps = XDocument.Load(this.PS.FullPath);
+                        this.SelectedProperty = new S100AttributeEditorViewModel(ps);
+                    }
+                }
+
+                if (inspector.HasGeometry) {
+                    var geometryType = inspector.MapMember switch {
+                        FeatureLayer l => l.ShapeType,
+                        _ => throw new InvalidOperationException(),
+                    };
+
+                    var primitive = geometryType switch {
+                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPolygon => Primitives.surface,
+                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPolyline => Primitives.curve,
+                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryPoint => Primitives.point,
+                        ArcGIS.Core.CIM.esriGeometryType.esriGeometryMultipoint => Primitives.pointSet,
+                        _ => throw new InvalidOperationException(),
+                    };
+
+                    this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).ToArray();
+                }
+                else {
+                    if (inspector.HasAttribute("featurebindings"))
+                        this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e=>e).ToArray();
+                    else
+                        this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e=>e).ToArray();
+                }
+
+                //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                //    this.Codes = codes;
+                //    this.Codes.AddRange(codes.OrderBy(e => e));
+                //});
+
+                this.IsEnabledCode = true;
+            }
+
         }
 
         public override bool Applies(MapMember mapMember) {
@@ -205,16 +212,16 @@ namespace NuvionPro
             };
 
             try {
-                System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                    this.SelectedSchema = default;
-                    this.SelectedModelType = default;
-                    this.Schemas.Clear();
-                    this.ModelTypes.Clear();
-                });
+                //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                //    this.SelectedPS = default;
+                //    this.SelectedCode = default;
+                //    this.Schemas.Clear();
+                //    this.Codes.Clear();
+                //});
 
                 //TODO: TJEK KUN FOR OPDATERING!!!!! Eller blinker UI
 
-                var catalogue = await QueuedTask.Run(() => {
+                var catalogues = await QueuedTask.Run(() => {
                     var fc = inspector.MapMember switch {
                         FeatureLayer l => l.GetFeatureClass(),
                         StandaloneTable t => t.GetTable(),
@@ -226,65 +233,77 @@ namespace NuvionPro
                     var syntax = geodatabase.GetSQLSyntax();
                     var tableNames = syntax.ParseTableName(fc.GetName());
 
-                    var ps = Convert.ToString(inspector["ps"]);
-                    if (!string.IsNullOrEmpty(ps)) {
-                        return [ps.ToUpperInvariant()];
-                    }
+                    Module.FeatureCatalogue[] featureCatalogues = [];
 
-                    return this._module.GetFeatureCatalogues();
+                    using var configuration = geodatabase.OpenDataset<Table>(syntax.QualifyTableName(tableNames.Item1, tableNames.Item2, "configuration"));
+
+                    using var cursor = configuration.Search(null, true);
+                    while (cursor.MoveNext()) {
+                        var settings = JsonSerializer.Deserialize<S100BlueStack.Settings.Editor>(Convert.ToString(cursor.Current["json"]));
+                        if (!settings.ExcludeInEditor && System.IO.File.Exists(settings.FullPath))
+                            featureCatalogues = [.. featureCatalogues, new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First(), settings.FullPath)];
+                    }
+                    if (!featureCatalogues.Any())
+                        featureCatalogues = this._module.GetFeatureCatalogues();  //  DEFAULT
+
+                    return featureCatalogues;
+
                 }, TaskCreationOptions.None);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                    if (catalogue.Any()) {
-                        this.Schemas.AddRange(catalogue);
-                    }
-                    //if (!string.IsNullOrEmpty(catalogue)) {
-                    //    Schemas.Clear();
-                    //    Schemas.Add(catalogue);
-                    //}
-                    //else {
+                    this.FeatureCatalogues = catalogues;
 
-                    //}
                 });
 
-                var schema = Convert.ToString(inspector["ps"]);
-                if (!string.IsNullOrEmpty(schema))
-                    this.SelectedSchema = schema;
+                var ps = Convert.ToString(inspector["ps"]);
+                if (!string.IsNullOrEmpty(ps)) {
+                    var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
+                    if (_ is not null) {
+                        this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
+                    }
+                }
+                PS_NotifyPropertyChanged(inspector);
+                this.IsEnabledPS = this.PS is null;
 
                 var code = Convert.ToString(inspector["code"]);
-                if (!string.IsNullOrEmpty(code))
-                    this.SelectedModelType = new SelectedType(code);
+                if (!string.IsNullOrEmpty(code)) {
+                    this.Code = code;
+                    this.IsEnabledCode = false;
+                }
 
+
+
+                return;
                 this.SelectedProperty = await QueuedTask.Run(() => {
-                    if (string.IsNullOrEmpty(schema)) {
-                        this.SelectedSchema = default;
-                        this.SelectedModelType = default;
+                    if (string.IsNullOrEmpty(Convert.ToString(inspector["ps"]))) {
+                        this.PS = default;
+                        this.Code = default;
 
-                        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                            this.ModelTypes.Clear();
-                        });
+                        //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                        //    this.Codes.Clear();
+                        //});
 
-                        this._selectedTemplate = SelectedTemplate.Empty;
+                        //this._selectedTemplate = SelectedTemplate.Empty;
                         return default(S100AttributeEditorViewModel);
                     }
 
-                    var featureCatalogue = this._module.GetFeatureCatalogue(schema);
+                    var featureCatalogue = this._module.GetFeatureCatalogue(Convert.ToString(inspector["ps"]));
 
                     var ps = XDocument.Load(featureCatalogue.FullPath);
 
                     var viewModel = new S100AttributeEditorViewModel(ps);
 
                     if (string.IsNullOrEmpty(code)) {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                            this.ModelTypes.Clear();
-                            this.ModelTypes.AddRange(viewModel.GetFeaturesByPrimitive(primitime).Select(e => new SelectedType(e)));
-                        });
+                        //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                        //    this.Codes.Clear();
+                        //    this.Codes.AddRange(viewModel.GetFeaturesByPrimitive(primitime));
+                        //});
                         return viewModel;
                     }
-                    System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                        this.ModelTypes.Clear();
-                        this.ModelTypes.Add(new SelectedType(code));
-                    });
+                    //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                    //    this.Codes.Clear();
+                    //    this.Codes.Add(code);
+                    //});
 
 
                     var uid = $"{inspector.UID()}";
@@ -310,7 +329,7 @@ namespace NuvionPro
                                 if (selection.GetCount() == 0) continue;
 
                                 using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
+                                    WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
                                 }, true);
 
                                 while (cursor.MoveNext()) {
@@ -351,7 +370,7 @@ namespace NuvionPro
                                     if (selection.GetCount() == 0) continue;
 
                                     using var cursor = selection.Search(new QueryFilter {
-                                        WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                        WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
                                     }, true);
 
                                     while (cursor.MoveNext()) {
@@ -364,7 +383,7 @@ namespace NuvionPro
                                 if (selection.GetCount() == 0) continue;
 
                                 using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                    WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
                                 }, true);
 
                                 while (cursor.MoveNext()) {
@@ -400,11 +419,11 @@ namespace NuvionPro
                 }, TaskCreationOptions.None);
 
                 if (this.SelectedProperty == default) {
-                    this.SelectedSchema = default;
-                    this.SelectedModelType = default;
+                    this.PS = default;
+                    this.Code = default;
 
-                    this.IsSelectedSchemaEnabled = true;
-                    this.IsSelectedModelTypeEnabled = this.SelectedSchema != default;
+                    this.IsEnabledPS = true;
+                    this.IsEnabledCode = this.PS != default;
 
                     this.IsVisible = Visibility.Collapsed;
                 }
@@ -415,8 +434,8 @@ namespace NuvionPro
 
                     //    this.IsVisible = Visibility.Visible;
                     //});
-                    this.IsSelectedSchemaEnabled = false;
-                    this.IsSelectedModelTypeEnabled = false;
+                    this.IsEnabledPS = false;
+                    this.IsEnabledCode = false;
 
                     this.IsVisible = Visibility.Visible;
                 }
@@ -476,25 +495,29 @@ namespace NuvionPro
             }, TaskCreationOptions.None);
         }
 
-        public ICommand CreateInstance { get; set; }
+        //public ICommand CreateInstance { get; set; }
+        private Module.FeatureCatalogue[] _featureCatalogues = [];
 
-        public ObservableCollection<string> Schemas {
-            get => this._schemas;
-            set => this.SetProperty(ref this._schemas, value);
+        public Module.FeatureCatalogue[] FeatureCatalogues {
+            get => this._featureCatalogues;
+            set => this.SetProperty(ref this._featureCatalogues, value);
         }
 
-        public string SelectedSchema {
-            get => this._selectedSchema;
+        public bool IsEnabledPS {
+            get => this._isEnabledPS;
+            set => this.SetProperty(ref this._isEnabledPS, value);
+        }
+
+        public Module.FeatureCatalogue PS {
+            get => this._ps;
             set {
-                this.SetProperty(ref this._selectedSchema, value);
+                this.SetProperty(ref this._ps, value);
 
-                if (string.IsNullOrEmpty(value))
-                    this._featureCatalogue = null;
-                else {
-                    var featureCatalogue = this._module.GetFeatureCatalogue(value);
-
-                    this._featureCatalogue = XDocument.Load(featureCatalogue.FullPath);
-                }
+                //if (value is null)
+                //    this._featureCatalogue = null;
+                //else {
+                //    this._featureCatalogue = XDocument.Load(value.FullPath);
+                //}
 
                 //this._jsonOptions = value switch {
                 //    "S-101" => S100FC.S101.Extensions.AppendTypeInfoResolver(new JsonSerializerOptions {
@@ -542,14 +565,21 @@ namespace NuvionPro
             }
         }
 
-        public ObservableCollection<SelectedType> ModelTypes {
-            get => this._modelTypes;
-            set => this.SetProperty(ref this._modelTypes, value);
+        private string[] _codes = [];
+
+        public string[] Codes {
+            get => this._codes;
+            set => this.SetProperty(ref this._codes, value);
         }
 
-        public SelectedType SelectedModelType {
-            get => this._selectedModelType;
-            set => this.SetProperty(ref this._selectedModelType, value);
+        public bool IsEnabledCode {
+            get => this._isEnabledCode;
+            set => this.SetProperty(ref this._isEnabledCode, value);
+        }
+
+        public string? Code {
+            get => this._code;
+            set => this.SetProperty(ref this._code, value);
         }
 
         public S100AttributeEditorViewModel SelectedProperty {
@@ -575,17 +605,7 @@ namespace NuvionPro
             set => this.SetProperty(ref this._isEditingEnabled, value);
         }
 
-        public bool IsSelectedSchemaEnabled {
-            get => this._isSelectedSchemaEnabled;
-            set => this.SetProperty(ref this._isSelectedSchemaEnabled, value);
-        }
-
-        public bool IsSelectedModelTypeEnabled {
-            get => this._isSelectedModelTypeEnabled;
-            set => this.SetProperty(ref this._isSelectedModelTypeEnabled, value);
-        }
-
-        public bool IsCreateButtonEnabled => this.IsSelectedSchemaEnabled && this.IsSelectedModelTypeEnabled && this._selectedTemplate != SelectedTemplate.Empty;
+        public bool IsCreateButtonEnabled => this.IsEnabledPS && this.IsEnabledCode /*&& this._selectedTemplate != SelectedTemplate.Empty*/;
     }
 }
 

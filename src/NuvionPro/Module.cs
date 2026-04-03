@@ -34,7 +34,7 @@ namespace NuvionPro
 
         private ImmutableArray<FeatureCatalogue> _featureCatalogues = ImmutableArray<FeatureCatalogue>.Empty;
 
-        public string[] GetFeatureCatalogues() => this._featureCatalogues.Select(e => e.ID).ToArray();
+        public FeatureCatalogue[] GetFeatureCatalogues() => this._featureCatalogues.ToArray();
 
         public string[] GetFeatureCatalogueNames() => this._featureCatalogues.Select(e => e.Name).ToArray();
 

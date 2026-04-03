@@ -118,6 +118,12 @@ namespace S100Framework.WPF.ViewModel
 
         public SelectFeatureTypessEventHandler SelectFeatureTypes = async (s, e) => { };
 
+        public string[] InformationTypes = [];
+
+        public string[] FeatureTypes = [];
+
+        public XElement? GetElement(string code)=> this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+
         public S100AttributeEditorViewModel(XDocument featureCatalogue) {
             this._featureCatalogue = featureCatalogue;
 
@@ -129,6 +135,9 @@ namespace S100Framework.WPF.ViewModel
             this._namespaceManager = new XmlNamespaceManager(new NameTable());
             foreach (var s in scopes)
                 this._namespaceManager.AddNamespace(s.Key, s.Value);
+
+            this.InformationTypes = featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Select(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value).ToArray();
+            this.FeatureTypes = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).Select(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value).ToArray();
 
             this.permittedPrimitives = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
                 e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
@@ -343,6 +352,8 @@ namespace S100Framework.WPF.ViewModel
         }
 
         #region Properties        
+        public string? ProductID => this._featureCatalogue.Element(XName.Get("productId", this._namespaceManager.LookupNamespace("S100FC")!))?.Value;
+
         private string _code = "UNKNOWN";
 
         public string code {
