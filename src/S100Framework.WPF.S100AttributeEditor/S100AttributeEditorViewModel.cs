@@ -122,7 +122,7 @@ namespace S100Framework.WPF.ViewModel
 
         public string[] FeatureTypes = [];
 
-        public XElement? GetElement(string code)=> this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+        public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
 
         public S100AttributeEditorViewModel(XDocument featureCatalogue) {
             this._featureCatalogue = featureCatalogue;
@@ -847,7 +847,7 @@ namespace S100Framework.WPF.ViewModel
                 throw new NotImplementedException();
             }
 
-            private static Regex _regexArray = new Regex(@"\[\d+\]", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
+            private static readonly Regex _regexArray = new Regex(@"\[\d+\]", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }
     }
 

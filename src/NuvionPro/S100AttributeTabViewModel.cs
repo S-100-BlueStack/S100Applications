@@ -1,5 +1,4 @@
-﻿using ActiproSoftware.Windows.Extensions;
-using ArcGIS.Core;
+﻿using ArcGIS.Core;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Events;
 
@@ -11,8 +10,6 @@ using ArcGIS.Desktop.Mapping;
 using S100FC;
 using S100Framework.WPF.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -20,9 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Xml.Linq;
-using static NuvionPro.Module;
 
 namespace NuvionPro
 {
@@ -118,7 +113,7 @@ namespace NuvionPro
             base.NotifyPropertyChanged(name);
 
             switch (name) {
-                case nameof(PS): {
+                case nameof(this.PS): {
                         this.Code = default;
                         this.IsEnabledCode = false;
 
@@ -130,7 +125,7 @@ namespace NuvionPro
                     }
                     break;
 
-                case nameof(Code): {
+                case nameof(this.Code): {
                         this.IsEnabledCode = string.IsNullOrEmpty(this.Code);
 
                         if (this.Code != default) {
@@ -268,7 +263,7 @@ namespace NuvionPro
                         }
                     }
                 }
-                PS_NotifyPropertyChanged(inspector);
+                this.PS_NotifyPropertyChanged(inspector);
                 this.IsEnabledPS = this.PS is null;
 
                 var code = Convert.ToString(inspector["code"]);

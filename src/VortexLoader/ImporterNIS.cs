@@ -14,7 +14,6 @@ using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
@@ -289,11 +288,9 @@ namespace S100Framework.Applications
                     using (var destination = createTargetGeodatabase()) {
 
                         foreach (var queryPolygon in clipping) {
-                            Store(() => {
-                                Logger.Current.Information($"Clipping data from destination with polygon with envelope {queryPolygon.Extent}");
-                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("point"))) {
-                                    var targetSR = featureClass.GetDefinition().GetSpatialReference();
-                                    var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
+                            using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("point"))) {
+                                var targetSR = featureClass.GetDefinition().GetSpatialReference();
+                                var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                 var spatialFilter = new SpatialQueryFilter {
                                     FilterGeometry = queryPolygonProjected,
@@ -304,10 +301,9 @@ namespace S100Framework.Applications
                                 });
                             }
 
-                            Store(() => {
-                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"))) {
-                                    var targetSR = featureClass.GetDefinition().GetSpatialReference();
-                                    var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
+                            using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"))) {
+                                var targetSR = featureClass.GetDefinition().GetSpatialReference();
+                                var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                 var spatialFilter = new SpatialQueryFilter {
                                     FilterGeometry = queryPolygonProjected,
@@ -319,7 +315,7 @@ namespace S100Framework.Applications
                                 });
                             }
 
-                            Store(() => {   //  curve
+                            {   //  curve
                                 long[] hits = [];
                                 using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("curve"))) {
                                     var targetSR = featureClass.GetDefinition().GetSpatialReference();
@@ -379,9 +375,11 @@ namespace S100Framework.Applications
 
                                         insert.Flush();
 
-                                        featureClass.DeleteRows(new QueryFilter {
-                                            WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
-                                        });
+                                        if (deleted.Any()) {
+                                            featureClass.DeleteRows(new QueryFilter {
+                                                WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
+                                            });
+                                        }
 
                                         featureClass.DeleteRows(new SpatialQueryFilter {
                                             FilterGeometry = queryPolygonProjected,
@@ -391,7 +389,7 @@ namespace S100Framework.Applications
                                 });
                             }
 
-                            Store(() => {   //  surface
+                            {   //  surface
                                 long[] hits = [];
                                 using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("surface"))) {
                                     var targetSR = featureClass.GetDefinition().GetSpatialReference();
@@ -479,9 +477,11 @@ namespace S100Framework.Applications
 
                                         insert.Flush();
 
-                                        featureClass.DeleteRows(new QueryFilter {
-                                            WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
-                                        });
+                                        if (deleted.Any()) {
+                                            featureClass.DeleteRows(new QueryFilter {
+                                                WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
+                                            });
+                                        }
 
                                         featureClass.DeleteRows(new SpatialQueryFilter {
                                             FilterGeometry = queryPolygonProjected,
@@ -500,7 +500,7 @@ namespace S100Framework.Applications
                         Subtypes.Initialize(source);
 
                         Logger.Current.Information($"Loading featurerelations");
-                        FeatureRelations.Initialize(source);
+                        FeatureRelations.Initialize(source, destination);
 
                         Logger.Current.Information($"Initializing SpatialRelationResolver");
                         SpatialRelationResolver.Initialize(source);
@@ -669,57 +669,31 @@ namespace S100Framework.Applications
                         //}
 
 
-                        //Logger.Current.Information($"Loading sanity checker");
-                        //SanityChecker.Initialize(destination);
+                        Logger.Current.Information($"Loading sanity checker");
+                        SanityChecker.Initialize(destination);
 
-                        //Logger.Current.Information($"Validating drawing index");
-                        //status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
-                        //Logger.Current.Information($"No Empty drawing index in S-101: {status}");
+                        Logger.Current.Information($"Validating drawing index");
+                        status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No Empty drawing index in S-101: {status}");
 
-                        //Logger.Current.Information($"Validating ESRI Uknown values");
-                        //status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
-                        //Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
+                        Logger.Current.Information($"Validating ESRI Uknown values");
+                        status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
 
-                        //Logger.Current.Information($"Validating edition-info");
-                        //status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
-                        //Logger.Current.Information($"No missing edition-info in S-101: {status}");
+                        Logger.Current.Information($"Validating edition-info");
+                        status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No missing edition-info in S-101: {status}");
 
-                        //Logger.Current.Information($"Validating default clearance");
-                        //status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
-                        //Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
+                        Logger.Current.Information($"Validating default clearance");
+                        status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
+                        Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
 
-                        //Logger.Current.Information("Done");
+                        Logger.Current.Information("Done");
 
-                        //Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
+                        Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
                     }
                 }
                 append = true;
-            }
-
-            using (var destination = createTargetGeodatabase()) {
-                Logger.Current.Information($"Loading sanity checker");
-                SanityChecker.Initialize(destination);
-
-                Logger.Current.Information($"Validating drawing index");
-                status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No Empty drawing index in S-101: {status}");
-
-                Logger.Current.Information($"Validating ESRI Uknown values");
-                status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
-
-                Logger.Current.Information($"Validating edition-info");
-                status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No missing edition-info in S-101: {status}");
-
-                Logger.Current.Information($"Validating default clearance");
-                status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
-                Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
-
-                Logger.Current.Information("Done");
-
-                Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
-
             }
             return true;
         }
