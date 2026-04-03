@@ -386,7 +386,7 @@ namespace S100Framework.WPF.ViewModel
 
         public bool HasFeatureBindings => this._featureBindingDefinitions.Any();
 
-        public ImmutableDictionary<string, string[]> permittedPrimitives { get; init; } = [];
+        public ImmutableDictionary<string, string[]> permittedPrimitives { get; init; } = ImmutableDictionary<string,string[]>.Empty;
 
         public informationBindingContainer? informationBindingDefinitions { get; private set; } = null;
 
