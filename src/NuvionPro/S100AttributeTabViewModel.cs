@@ -174,9 +174,9 @@ namespace NuvionPro
                 }
                 else {
                     if (inspector.HasAttribute("featurebindings"))
-                        this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e=>e).ToArray();
+                        this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).ToArray();
                     else
-                        this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e=>e).ToArray();
+                        this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e => e).ToArray();
                 }
 
                 //System.Windows.Application.Current.Dispatcher.Invoke(() => {
@@ -256,10 +256,16 @@ namespace NuvionPro
                 });
 
                 var ps = Convert.ToString(inspector["ps"]);
-                if (!string.IsNullOrEmpty(ps)) {
-                    var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
-                    if (_ is not null) {
-                        this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
+
+                var update = (this.PS is null && ps is null) || (this.PS is not null && ps is null) || (!ps.Equals(this.PS?.ID));
+                if (update) {
+                    if (ps is null)
+                        this.PS = default;
+                    else {
+                        var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
+                        if (_ is not null) {
+                            this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
+                        }
                     }
                 }
                 PS_NotifyPropertyChanged(inspector);
@@ -271,14 +277,8 @@ namespace NuvionPro
                     this.IsEnabledCode = false;
                 }
 
-
-
-                return;
                 this.SelectedProperty = await QueuedTask.Run(() => {
-                    if (string.IsNullOrEmpty(Convert.ToString(inspector["ps"]))) {
-                        this.PS = default;
-                        this.Code = default;
-
+                    if (this.PS is null) {
                         //System.Windows.Application.Current.Dispatcher.Invoke(() => {
                         //    this.Codes.Clear();
                         //});
@@ -287,30 +287,21 @@ namespace NuvionPro
                         return default(S100AttributeEditorViewModel);
                     }
 
-                    var featureCatalogue = this._module.GetFeatureCatalogue(Convert.ToString(inspector["ps"]));
+                    var xDocument = XDocument.Load(this.PS.FullPath);
 
-                    var ps = XDocument.Load(featureCatalogue.FullPath);
+                    var viewModel = new S100AttributeEditorViewModel(xDocument);
 
-                    var viewModel = new S100AttributeEditorViewModel(ps);
-
-                    if (string.IsNullOrEmpty(code)) {
-                        //System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                        //    this.Codes.Clear();
-                        //    this.Codes.AddRange(viewModel.GetFeaturesByPrimitive(primitime));
-                        //});
+                    if (string.IsNullOrEmpty(this.Code))
                         return viewModel;
-                    }
+
                     //System.Windows.Application.Current.Dispatcher.Invoke(() => {
                     //    this.Codes.Clear();
                     //    this.Codes.Add(code);
                     //});
 
-
                     var uid = $"{inspector.UID()}";
 
-                    if (!string.IsNullOrEmpty(code)) {
-                        viewModel.Initialize(code, uid);
-                    }
+                    viewModel.Initialize(this.Code, uid);
 
                     if (!inspector.IsNull("flatten")) {
                         var json = Convert.ToString(inspector["flatten"]);
@@ -354,8 +345,9 @@ namespace NuvionPro
                             }, TaskCreationOptions.None);
                         }
                     };
-                    if (inspector.HasAttribute("informationbindings") && !inspector.IsNull("informationbindings")) {
-                        viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationbindings"]));
+                    if (inspector.HasAttribute("informationbindings")) {
+                        if (!inspector.IsNull("informationbindings"))
+                            viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationbindings"]));
                     }
 
                     viewModel.RequestFeatures = async (s, e) => {
@@ -411,34 +403,16 @@ namespace NuvionPro
                             });
                         }
                     };
-                    if (inspector.HasAttribute("featurebindings") && !inspector.IsNull("featurebindings")) {
-                        viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
+                    if (inspector.HasAttribute("featurebindings")) {
+                        if (!inspector.IsNull("featurebindings"))
+                            viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
                     }
 
                     return viewModel;
                 }, TaskCreationOptions.None);
 
-                if (this.SelectedProperty == default) {
-                    this.PS = default;
-                    this.Code = default;
+                this.IsVisible = this.SelectedProperty is null ? Visibility.Collapsed : Visibility.Visible;
 
-                    this.IsEnabledPS = true;
-                    this.IsEnabledCode = this.PS != default;
-
-                    this.IsVisible = Visibility.Collapsed;
-                }
-                else {
-                    //System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                    //    this.IsSelectedSchemaEnabled = false;
-                    //    this.IsSelectedModelTypeEnabled = false;
-
-                    //    this.IsVisible = Visibility.Visible;
-                    //});
-                    this.IsEnabledPS = false;
-                    this.IsEnabledCode = false;
-
-                    this.IsVisible = Visibility.Visible;
-                }
                 this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
             }
             catch (System.Exception ex) {

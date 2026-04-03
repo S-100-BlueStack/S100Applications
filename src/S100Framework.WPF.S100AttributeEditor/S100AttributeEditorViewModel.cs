@@ -352,7 +352,7 @@ namespace S100Framework.WPF.ViewModel
         }
 
         #region Properties        
-        public string? ProductID => this._featureCatalogue.Element(XName.Get("productId", this._namespaceManager.LookupNamespace("S100FC")!))?.Value;
+        public string? ProductID => this._featureCatalogue.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", this._namespaceManager)?.Value;
 
         private string _code = "UNKNOWN";
 

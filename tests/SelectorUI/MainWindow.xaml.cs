@@ -115,6 +115,10 @@ namespace SelectorUI
                 namespaceManager.AddNamespace(s.Key, s.Value);
 
 
+            var id = ps.Element(XName.Get("productId", namespaceManager.LookupNamespace("S100FC")!))?.Value;
+
+            var id2 = ps.XPathSelectElement("/S100_FC_FeatureCatalogue/productId", namespaceManager);
+
             var lateralBuoy = ps.XPathSelectElement("//S100FC:*[S100FC:code='LateralBuoy']", namespaceManager);
 
             ;
