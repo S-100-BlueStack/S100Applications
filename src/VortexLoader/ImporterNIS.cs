@@ -500,7 +500,7 @@ namespace S100Framework.Applications
                         Subtypes.Initialize(source);
 
                         Logger.Current.Information($"Loading featurerelations");
-                        FeatureRelations.Initialize(source, destination);
+                        FeatureRelations.Initialize(source);
 
                         Logger.Current.Information($"Initializing SpatialRelationResolver");
                         SpatialRelationResolver.Initialize(source);
