@@ -13,6 +13,7 @@ namespace S100Framework.WPF.ViewModel
 {
     public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
     {
+        #region Delegates
         public class RequestInformationsEventArgs(string? informationType) : EventArgs
         {
             public string? InformationType { get; } = informationType;
@@ -22,6 +23,7 @@ namespace S100Framework.WPF.ViewModel
         {
             public string? FeatureType { get; } = featureType;
         }
+
         public class SelectInformationTypesEvenArgs(InformationTypeID[] uids) : EventArgs
         {
             public InformationTypeID[] UIDs { get; } = uids;
@@ -39,6 +41,7 @@ namespace S100Framework.WPF.ViewModel
         public delegate Task SelectInformationTypesEventHandler(object? sender, SelectInformationTypesEvenArgs e);
 
         public delegate Task SelectFeatureTypessEventHandler(object? sender, SelectFeatureTypesEvenArgs e);
+        #endregion
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged = default;
@@ -114,22 +117,6 @@ namespace S100Framework.WPF.ViewModel
         public SelectInformationTypesEventHandler SelectInformationTypes = async (s, e) => { };
 
         public SelectFeatureTypessEventHandler SelectFeatureTypes = async (s, e) => { };
-
-        public informationBindingContainer? informationBindingDefinitions { get; private set; } = null;
-
-        public featureBindingContainer? featureBindingDefinitions { get; private set; } = null;
-
-        public attributeBindingDefinition[] attributeBindingsCatalogue { get; private set; } = [];
-
-        private informationBindingDefinition[] _informationBindingDefinitions { get; set; } = [];
-
-        private featureBindingDefinition[] _featureBindingDefinitions { get; set; } = [];
-
-        private XDocument _featureCatalogue { get; init; }
-
-        private XmlNamespaceManager _namespaceManager { get; init; }
-
-        private bool _isInitialized = false;
 
         public S100AttributeEditorViewModel(XDocument featureCatalogue) {
             this._featureCatalogue = featureCatalogue;
@@ -209,10 +196,11 @@ namespace S100Framework.WPF.ViewModel
             };
         }
 
-        public S100AttributeEditorViewModel Initialize(string code) {
+        public S100AttributeEditorViewModel Initialize(string code, string uid) {
             if (string.IsNullOrEmpty(code) || string.IsNullOrWhiteSpace(code)) throw new System.ArgumentNullException(nameof(code));
 
             this.code = code;
+            this.UID = uid;
 
             var scope = this._namespaceManager.LookupNamespace("S100FC")!;
 
@@ -358,6 +346,17 @@ namespace S100Framework.WPF.ViewModel
             }
         }
 
+        private string _uid = "UNKNOWN";
+
+        public string UID {
+            get {
+                return this._uid;
+            }
+            set {
+                this.SetProperty(ref this._uid, value);
+            }
+        }
+
         public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
 
         public ObservableCollection<InformationBindingViewModel> informationBindings { get; set; } = [];
@@ -370,38 +369,86 @@ namespace S100Framework.WPF.ViewModel
 
         public ImmutableDictionary<string, string[]> permittedPrimitives { get; init; } = [];
 
+        public informationBindingContainer? informationBindingDefinitions { get; private set; } = null;
+
+        public featureBindingContainer? featureBindingDefinitions { get; private set; } = null;
+
+        public attributeBindingDefinition[] attributeBindingsCatalogue { get; private set; } = [];
+
         public string[] GetFeaturesByPrimitive(Primitives primitive) => this.permittedPrimitives.Where(e => e.Value.Contains($"{primitive}")).Select(e => e.Key).ToArray();
         #endregion
 
         #region Operators
-        public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, informationBinding informationBinding) {
-            var association = informationBinding.GetType().GetGenericArguments()[0].Name;
+        //public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, informationBinding informationBinding) {
+        //    var association = informationBinding.GetType().GetGenericArguments()[0].Name;
 
-            //var definitions = viewModel.informationBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
+        //    //var definitions = viewModel.informationBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
 
-            //viewModel.informationBindings.Add(new InformationBindingViewModel(definitions) {
-            //    roleType = informationBinding.roleType,
-            //    role = informationBinding.role,
-            //    informationType = informationBinding.informationType,
-            //    informationUID = new InformationTypeID(informationBinding.informationType!, informationBinding.informationId),
-            //});
-            return viewModel;
+        //    //viewModel.informationBindings.Add(new InformationBindingViewModel(definitions) {
+        //    //    roleType = informationBinding.roleType,
+        //    //    role = informationBinding.role,
+        //    //    informationType = informationBinding.informationType,
+        //    //    informationUID = new InformationTypeID(informationBinding.informationType!, informationBinding.informationId),
+        //    //});
+        //    return viewModel;
+        //}
+
+        //public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, featureBinding featureBinding) {
+        //    var association = featureBinding.GetType().GetGenericArguments()[0].Name;
+
+        //    //var definitions = viewModel.featureBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
+
+        //    //viewModel.featureBindings.Add(new FeatureBindingViewModel(definitions) {
+        //    //    roleType = featureBinding.roleType,
+        //    //    role = featureBinding.role,
+        //    //    featureType = featureBinding.featureType,
+        //    //    featureUID = new FeatureTypeID(featureBinding.featureType!, featureBinding.featureId),
+        //    //});
+        //    return viewModel;
+        //}
+
+        public static explicit operator informationBinding[](S100AttributeEditorViewModel viewmodel) {
+            informationBinding[] informationBinding = [];
+            if (viewmodel.informationBindings.Any()) {
+                foreach (var binding in viewmodel.informationBindings.ToImmutableArray()) {
+                    if (binding.roleType is null) continue;
+
+                    var f = binding.informationBindingDefinition!.CreateInstance()!;
+                    f.informationType = binding.informationType;
+                    f.informationId = binding.informationUID?.UID!;
+
+                    informationBinding = [.. informationBinding, f];
+                }
+            }
+            return informationBinding;
         }
 
-        public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, featureBinding featureBinding) {
-            var association = featureBinding.GetType().GetGenericArguments()[0].Name;
+        public static explicit operator featureBinding[](S100AttributeEditorViewModel viewmodel) {
+            featureBinding[] featureBindings = [];
+            if (viewmodel.featureBindings.Any()) {
+                foreach (var binding in viewmodel.featureBindings.ToImmutableArray()) {
+                    if (binding.roleType is null) continue;
 
-            //var definitions = viewModel.featureBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
+                    var f = binding.featureBindingDefinition!.CreateInstance()!;
+                    f.featureType = binding.featureType;
+                    f.featureId = binding.featureUID?.UID!;
 
-            //viewModel.featureBindings.Add(new FeatureBindingViewModel(definitions) {
-            //    roleType = featureBinding.roleType,
-            //    role = featureBinding.role,
-            //    featureType = featureBinding.featureType,
-            //    featureUID = new FeatureTypeID(featureBinding.featureType!, featureBinding.featureId),
-            //});
-            return viewModel;
+                    featureBindings = [.. featureBindings, f];
+                }
+            }
+            return featureBindings;
         }
         #endregion        
+
+        private informationBindingDefinition[] _informationBindingDefinitions { get; set; } = [];
+
+        private featureBindingDefinition[] _featureBindingDefinitions { get; set; } = [];
+
+        private XDocument _featureCatalogue { get; init; }
+
+        private XmlNamespaceManager _namespaceManager { get; init; }
+
+        private bool _isInitialized = false;
 
         private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
             if (sender is AttributeViewModel attribute) {

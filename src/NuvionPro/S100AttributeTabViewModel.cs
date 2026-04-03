@@ -13,13 +13,11 @@ using S100Framework.WPF.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -54,11 +52,11 @@ namespace NuvionPro
 
         private XDocument? _featureCatalogue = null;
 
-        //private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
-        //    WriteIndented = false,
-        //    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        //    PropertyNameCaseInsensitive = true,
-        //};
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
+            WriteIndented = false,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            PropertyNameCaseInsensitive = true,
+        };
 
         private S100AttributeEditorViewModel _selectedProperty = default;
 
@@ -234,23 +232,6 @@ namespace NuvionPro
                     }
 
                     return this._module.GetFeatureCatalogues();
-
-
-                    using var configuration = geodatabase.OpenDataset<Table>(syntax.QualifyTableName(tableNames.Item1, tableNames.Item2, "configuration"));
-
-                    string[] catalogues = new string[0];
-
-                    using var cursor = configuration.Search(null, true);
-                    while (cursor.MoveNext()) {
-                        var settings = JsonSerializer.Deserialize<S100Horizon.Settings.Editor>(Convert.ToString(cursor.Current["json"]));
-                        if (!settings.ExcludeInEditor)
-                            catalogues = [.. catalogues, Convert.ToString(cursor.Current["ps"]).Split('.').First()];
-                    }
-                    if (catalogues.Any())
-                        return catalogues;
-
-                    return [];
-                    //return this._catalogues;
                 }, TaskCreationOptions.None);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() => {
@@ -275,7 +256,6 @@ namespace NuvionPro
                     this.SelectedModelType = new SelectedType(code);
 
                 this.SelectedProperty = await QueuedTask.Run(() => {
-                    ;
                     if (string.IsNullOrEmpty(schema)) {
                         this.SelectedSchema = default;
                         this.SelectedModelType = default;
@@ -307,186 +287,116 @@ namespace NuvionPro
                     });
 
 
-                    //var type = this._inspectorHandle.TypeSelector(inspector, schema);
-
-                    if (!string.IsNullOrEmpty(code)) {
-                        viewModel.Initialize(code);
-                    }
-
                     var uid = $"{inspector.UID()}";
 
-                    object? instance = null;
-                    if (DBNull.Value.Equals(inspector["FLATTEN"]) || string.IsNullOrEmpty(Convert.ToString(inspector["FLATTEN"]))) {
-                        //instance = Activator.CreateInstance(type);
+                    if (!string.IsNullOrEmpty(code)) {
+                        viewModel.Initialize(code, uid);
                     }
-                    else {
-                        var json = Convert.ToString(inspector["FLATTEN"]);
+
+                    if (!inspector.IsNull("flatten")) {
+                        var json = Convert.ToString(inspector["flatten"]);
 
                         viewModel = viewModel.LoadAttributeBindings(json);
+                    }
 
-                        //if (type.BaseType == typeof(S100FC.InformationType))
-                        //    instance = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.InformationType>(json, type);
-                        //else if (type.BaseType == typeof(S100FC.FeatureType))
-                        //    instance = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                        //else if (System.Diagnostics.Debugger.IsAttached)
-                        //    System.Diagnostics.Debugger.Break();
+                    viewModel.RequestInformation = async (s, e) => {
+                        if (MapView.Active is null)
+                            return [];
+                        return await QueuedTask.Run(() => {
+                            string[] result = [];
+
+                            foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
+                                var selection = layer.GetSelection();
+                                if (selection.GetCount() == 0) continue;
+
+                                using var cursor = selection.Search(new QueryFilter {
+                                    WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
+                                }, true);
+
+                                while (cursor.MoveNext()) {
+                                    result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                }
+                            }
+                            return result;
+                        });
+                    };
+                    viewModel.SelectInformationTypes = async (s, e) => {
+                        var mapView = MapView.Active;
+                        if (mapView is null) return;
+
+                        if (e.UIDs.Any()) {
+                            await QueuedTask.Run(() => {
+                                var query = new QueryFilter {
+                                    WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                };
+                                foreach (var layer in mapView.Map.StandaloneTables) {
+                                    layer.Select(query, SelectionCombinationMethod.Add);
+                                }
+                            }, TaskCreationOptions.None);
+                        }
+                    };
+                    if (!inspector.IsNull("informationbindings")) {
+                        viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationBindings"]));
+                    }
+
+                    viewModel.RequestFeatures = async (s, e) => {
+                        if (MapView.Active is null)
+                            return [];
+                        return await QueuedTask.Run(() => {
+                            string[] result = [];
+
+                            foreach (var layer in MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
+                                if (layer is FeatureLayer featureLayer) {
+                                    var selection = layer.GetSelection();
+                                    if (selection.GetCount() == 0) continue;
+
+                                    using var cursor = selection.Search(new QueryFilter {
+                                        WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                    }, true);
+
+                                    while (cursor.MoveNext()) {
+                                        result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                    }
+                                }
+                            }
+                            foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("featuretype"))) {
+                                var selection = layer.GetSelection();
+                                if (selection.GetCount() == 0) continue;
+
+                                using var cursor = selection.Search(new QueryFilter {
+                                    WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                }, true);
+
+                                while (cursor.MoveNext()) {
+                                    result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                }
+                            }
+                            return result;
+                        }, TaskCreationOptions.None);
+                    };
+                    viewModel.SelectFeatureTypes = async (s, e) => {
+                        var mapView = MapView.Active;
+                        if (mapView is null) return;
+
+                        if (e.UIDs.Any()) {
+                            await QueuedTask.Run(() => {
+                                var query = new QueryFilter {
+                                    WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                };
+                                foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
+                                    layer.Select(query, SelectionCombinationMethod.Add);
+                                }
+                                foreach (var layer in mapView.Map.StandaloneTables) {
+                                    layer.Select(query, SelectionCombinationMethod.Add);
+                                }
+                            });
+                        }
+                    };
+                    if (!inspector.IsNull("featurebindings")) {
+                        viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
                     }
 
                     return viewModel;
-#if null
-                    var type = this._inspectorHandle.TypeSelector(inspector, schema);
-
-                    if (type is null) {
-                        return default;
-                    }
-
-                    object? instance = null;
-                    if (DBNull.Value.Equals(inspector["FLATTEN"]) || string.IsNullOrEmpty(Convert.ToString(inspector["FLATTEN"]))) {
-                        instance = Activator.CreateInstance(type);
-                    }
-                    else {
-                        var json = Convert.ToString(inspector["FLATTEN"]);
-
-                        if (type.BaseType == typeof(S100FC.InformationType))
-                            instance = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.InformationType>(json, type);
-                        else if (type.BaseType == typeof(S100FC.FeatureType))
-                            instance = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                        else if (System.Diagnostics.Debugger.IsAttached)
-                            System.Diagnostics.Debugger.Break();
-                    }
-
-                    S100AttributeEditorViewModel viewModel = default;
-
-                    if (instance is S100FC.InformationType informationType) {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                            viewModel = new S100AttributeEditorViewModel(informationType, uid) {
-                                RequestInformation = async (s, e) => {
-                                    if (MapView.Active is null)
-                                        return [];
-                                    return await QueuedTask.Run(() => {
-                                        string[] result = [];
-
-                                        foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
-                                            var selection = layer.GetSelection();
-                                            if (selection.GetCount() == 0) continue;
-
-                                            using var cursor = selection.Search(new QueryFilter {
-                                                WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
-                                            }, true);
-
-                                            while (cursor.MoveNext()) {
-                                                result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                            }
-                                        }
-                                        return result;
-                                    });
-                                },
-                            };
-                        });
-                        return viewModel;
-                    }
-                    if (instance is S100FC.FeatureType featureType) {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                            viewModel = new S100AttributeEditorViewModel(featureType, uid) {
-                                RequestInformation = async (s, e) => {
-                                    if (MapView.Active is null)
-                                        return [];
-                                    return await QueuedTask.Run(() => {
-                                        string[] result = [];
-
-                                        foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
-                                            var selection = layer.GetSelection();
-                                            if (selection.GetCount() == 0) continue;
-
-                                            using var cursor = selection.Search(new QueryFilter {
-                                                WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
-                                            }, true);
-
-                                            while (cursor.MoveNext()) {
-                                                result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                            }
-                                        }
-                                        return result;
-                                    }, TaskCreationOptions.None);
-                                },
-
-                                SelectInformationTypes = async (s, e) => {
-                                    var mapView = MapView.Active;
-                                    if (mapView is null) return;
-
-                                    if (e.UIDs.Any()) {
-                                        await QueuedTask.Run(() => {
-                                            var query = new QueryFilter {
-                                                WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
-                                            };
-                                            foreach (var layer in mapView.Map.StandaloneTables) {
-                                                layer.Select(query, SelectionCombinationMethod.Add);
-                                            }
-                                        }, TaskCreationOptions.None);
-                                    }
-                                },
-
-                                RequestFeatures = async (s, e) => {
-                                    if (MapView.Active is null)
-                                        return [];
-                                    return await QueuedTask.Run(() => {
-                                        string[] result = [];
-
-                                        foreach (var layer in MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
-                                            if (layer is FeatureLayer featureLayer) {
-                                                var selection = layer.GetSelection();
-                                                if (selection.GetCount() == 0) continue;
-
-                                                using var cursor = selection.Search(new QueryFilter {
-                                                    WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
-                                                }, true);
-
-                                                while (cursor.MoveNext()) {
-                                                    result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                                }
-                                            }
-                                        }
-                                        foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("featuretype"))) {
-                                            var selection = layer.GetSelection();
-                                            if (selection.GetCount() == 0) continue;
-
-                                            using var cursor = selection.Search(new QueryFilter {
-                                                WhereClause = $"UPPER(PS) = '{this.SelectedSchema}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
-                                            }, true);
-
-                                            while (cursor.MoveNext()) {
-                                                result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                            }
-                                        }
-                                        return result;
-                                    }, TaskCreationOptions.None);
-                                },
-
-                                SelectFeatureTypes = async (s, e) => {
-                                    var mapView = MapView.Active;
-                                    if (mapView is null) return;
-
-                                    if (e.UIDs.Any()) {
-                                        await QueuedTask.Run(() => {
-                                            var query = new QueryFilter {
-                                                WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
-                                            };
-                                            foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
-                                                layer.Select(query, SelectionCombinationMethod.Add);
-                                            }
-                                            foreach (var layer in mapView.Map.StandaloneTables) {
-                                                layer.Select(query, SelectionCombinationMethod.Add);
-                                            }
-                                        });
-                                    }
-                                },
-                            };
-                        });
-
-                        return viewModel;
-                    }
-                    throw new NotImplementedException();
-#endif
                 }, TaskCreationOptions.None);
 
                 if (this.SelectedProperty == default) {
@@ -499,25 +409,16 @@ namespace NuvionPro
                     this.IsVisible = Visibility.Collapsed;
                 }
                 else {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() => {
-                        //if (!this.Inspector.IsNull("informationBindings")) {
-                        //    var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(this.Inspector["informationBindings"]), this._jsonOptions);
-                        //    foreach (var informationBinding in informationBindings)
-                        //        this.SelectedProperty += informationBinding;
-                        //}
-                        //if (this.SelectedProperty?.Instance is S100FC.FeatureType) {
-                        //    if (!this.Inspector.IsNull("featureBindings")) {
-                        //        var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(Convert.ToString(this.Inspector["featureBindings"]), this._jsonOptions);
-                        //        foreach (var featureBinding in featureBindings)
-                        //            this.SelectedProperty += featureBinding;
-                        //    }
-                        //}
+                    //System.Windows.Application.Current.Dispatcher.Invoke(() => {
+                    //    this.IsSelectedSchemaEnabled = false;
+                    //    this.IsSelectedModelTypeEnabled = false;
 
-                        this.IsSelectedSchemaEnabled = false;
-                        this.IsSelectedModelTypeEnabled = false;
+                    //    this.IsVisible = Visibility.Visible;
+                    //});
+                    this.IsSelectedSchemaEnabled = false;
+                    this.IsSelectedModelTypeEnabled = false;
 
-                        this.IsVisible = Visibility.Visible;
-                    });
+                    this.IsVisible = Visibility.Visible;
                 }
                 this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
             }
@@ -525,39 +426,6 @@ namespace NuvionPro
                 DiagnosticHelper.Error(ex);
                 if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
             }
-        }
-
-        private async void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            await QueuedTask.Run(() => {
-                //if (sender is ICollection<FeatureBindingViewModel> featureBindings) {
-                //    var f = featureBindings.Select(e => new featureBinding {
-                //        association = e.association,
-                //        associationId = e.associationId,
-                //        featureId = e.featureId,
-                //        role = e.role,
-                //        roleType = e.roleType.HasValue ? Enum.GetName<roleType>(e.roleType.Value) : default,
-                //    });
-                //    Inspector["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(f);
-                //}
-            }, TaskCreationOptions.None);
-        }
-
-        private async void OnCollectionItemChanged(object sender, object item, PropertyChangedEventArgs e) {
-            await QueuedTask.Run(() => {
-                var updated = false;
-
-                //if (sender is S100AttributeEditorViewModel viewModel) {
-                //    var json = viewModel.Flatten();
-                //    if (this.Inspector.IsNull("flatten")) {
-                //        this.Inspector["flatten"] = json;
-                //        updated |= true;
-                //    }
-                //    else if (string.Compare(json, Convert.ToString(this.Inspector["flatten"]), true) != 0) {
-                //        this.Inspector["flatten"] = json;
-                //        updated |= true;
-                //    }
-                //}
-            }, TaskCreationOptions.None);
         }
 
         private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e) {
@@ -577,129 +445,36 @@ namespace NuvionPro
                         }
                     }
                     if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
-                        //var informationBindings = (informationBinding[])viewModel;
+                        var informationBindings = (informationBinding[])viewModel;
 
-                        //var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, this._module.GetFeatureCatalogue(this.SelectedSchema).DefaultJsonOptions);
+                        var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, this._jsonOptions);
 
-                        //if (this.Inspector.IsNull("informationBindings")) {
-                        //    this.Inspector["informationBindings"] = json;
-                        //    updated |= true;
-                        //}
-                        //else if (string.Compare(json, Convert.ToString(this.Inspector["informationBindings"]), true) != 0) {
-                        //    this.Inspector["informationBindings"] = json;
-                        //    updated |= true;
-                        //}
+                        if (this.Inspector.IsNull("informationBindings")) {
+                            this.Inspector["informationBindings"] = json;
+                            updated |= true;
+                        }
+                        else if (string.Compare(json, Convert.ToString(this.Inspector["informationBindings"]), true) != 0) {
+                            this.Inspector["informationBindings"] = json;
+                            updated |= true;
+                        }
                     }
                     if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.featureBindings))) {
-                        //var featureBindings = (featureBinding[])viewModel;
+                        var featureBindings = (featureBinding[])viewModel;
 
-                        //var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, this._module.GetFeatureCatalogue(this.SelectedSchema).DefaultJsonOptions);
+                        var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, this._jsonOptions);
 
-                        //if (this.Inspector.IsNull("featureBindings")) {
-                        //    this.Inspector["featureBindings"] = json;
-                        //    updated |= true;
-                        //}
-                        //else if (string.Compare(json, Convert.ToString(this.Inspector["featureBindings"]), true) != 0) {
-                        //    this.Inspector["featureBindings"] = json;
-                        //    updated |= true;
-                        //}
+                        if (this.Inspector.IsNull("featureBindings")) {
+                            this.Inspector["featureBindings"] = json;
+                            updated |= true;
+                        }
+                        else if (string.Compare(json, Convert.ToString(this.Inspector["featureBindings"]), true) != 0) {
+                            this.Inspector["featureBindings"] = json;
+                            updated |= true;
+                        }
                     }
                 }
             }, TaskCreationOptions.None);
         }
-
-        private async void OnInformationBindingCollectionChanged(object sender, PropertyChangedEventArgs e) {
-            await QueuedTask.Run(() => {
-                var updated = false;
-
-                //if (sender is FeatureViewModel viewModel) {
-                //    var informationBindings = viewModel.GetInformationBindings();
-
-                //    var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, _module.GetFeatureCatalogue(SelectedSchema).DefaultJsonOptions);
-                //    if (Inspector.IsNull("informationBindings") && informationBindings.Any()) {
-                //        Inspector["informationBindings"] = json;
-                //        updated |= true;
-                //    }
-                //    else if (string.Compare(json, Convert.ToString(Inspector["informationBindings"]), true) != 0) {
-                //        Inspector["informationBindings"] = json;
-                //        updated |= true;
-                //    }
-                //}
-            }, TaskCreationOptions.None);
-        }
-
-        private async void OnFeatureBindingCollectionChanged(object sender, PropertyChangedEventArgs e) {
-            var propertyName = e.PropertyName;
-
-            await QueuedTask.Run(() => {
-                var updated = false;
-
-                //if (sender is FeatureViewModel viewModel) {                    
-                //    //var featureBindings = (Collection<featureBindingViewModel>)viewModel.GetType().GetProperty(propertyName).GetValue(viewModel);
-                //    var featureBindings = viewModel.GetFeatureBindings();
-
-                //    var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, _module.GetFeatureCatalogue(SelectedSchema).DefaultJsonOptions);
-                //    if (Inspector.IsNull("featurebindings") && featureBindings.Any()) {
-                //        Inspector["featurebindings"] = json;
-                //        updated |= true;
-                //    }
-                //    else if (string.Compare(json, Convert.ToString(Inspector["featurebindings"]), true) != 0) {
-                //        Inspector["featurebindings"] = json;
-                //        updated |= true;
-                //    }
-                //}
-            }, TaskCreationOptions.None);
-        }
-
-        //private Type FeatureTypeSelector(Inspector inspector, string schema) {
-        //    var featureCatalogue = this._module.GetFeatureCatalogue(schema);
-
-        //    var code = Convert.ToString(inspector["code"]);
-        //    if (string.IsNullOrEmpty(code))
-        //        return null;
-
-        //    if (!this._selectedTemplate.Schema.Equals(schema) || !this._selectedTemplate.Code.Equals(code)) {
-        //        this.SelectedSchema = schema;
-
-        //        var types = featureCatalogue.FeatureTypes.Select(e => e.Code);
-
-        //        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-        //            this.ModelTypes.Clear();
-        //            this.ModelTypes.AddRange(types.OrderBy(e => e).Select(e => new SelectedType(e)));
-        //        });
-
-        //        this.SelectedModelType = this.ModelTypes.Single(e => e.Code == code);
-        //    }
-
-        //    var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace(schema, "FeatureTypes")}.{code}", true);
-
-        //    return type;
-        //}
-
-        //private Type InformationTypeSelector(Inspector inspector, string schema) {
-        //    var featureCatalogue = this._module.GetFeatureCatalogue(schema);
-
-        //    var code = Convert.ToString(inspector["code"]);
-        //    if (string.IsNullOrEmpty(code))
-        //        return null;
-
-        //    if (!this._selectedTemplate.Schema.Equals(schema) || !this._selectedTemplate.Code.Equals(code)) {
-        //        this.SelectedSchema = schema;
-
-        //        var types = featureCatalogue.InformationTypes.Select(e => e.Code);
-
-        //        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-        //            this.ModelTypes.Clear();
-        //            this.ModelTypes.AddRange(types.OrderBy(e => e).Select(e => new SelectedType(e)));
-        //        });
-
-        //        this.SelectedModelType = this.ModelTypes.Single(e => e.Code == code);
-        //    }
-
-        //    var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace(schema, "InformationTypes")}.{code}", true);
-
-        //    return type;
-        //}
 
         public ICommand CreateInstance { get; set; }
 
@@ -799,16 +574,6 @@ namespace NuvionPro
             get => this._isEditingEnabled;
             set => this.SetProperty(ref this._isEditingEnabled, value);
         }
-
-        //public SelectedInformationTypeObjectViewModel SelectedInformationProperty {
-        //    get => _selectedInformationProperty;
-        //    set => SetProperty(ref _selectedInformationProperty, value);
-        //}
-
-        //public SelectedFeatureTypeObjectViewModel SelectedFeatureProperty {
-        //    get => _selectedFeatureProperty;
-        //    set => SetProperty(ref _selectedFeatureProperty, value);
-        //}
 
         public bool IsSelectedSchemaEnabled {
             get => this._isSelectedSchemaEnabled;
