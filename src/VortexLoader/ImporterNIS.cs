@@ -143,9 +143,12 @@ namespace S100Framework.Applications
                 if (destination.IsTraditionallyVersioned()) {
                     Store = (a) => {
                         using (var _ = createTargetGeodatabase()) {
-                            _.ApplyEdits(() => {
+                            if (_.IsTraditionallyVersioned()) {
+                                _.ApplyEdits(() => {
+                                    a.Invoke();
+                                }, true);
+                            } else
                                 a.Invoke();
-                            }, true);
                         }
                         return true;
                     };
