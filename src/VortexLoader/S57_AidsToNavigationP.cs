@@ -63,7 +63,7 @@ namespace S100Framework.Applications
                             var instance = _converterRegistry.Convert<CardinalBeacon>(current);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
@@ -189,7 +189,7 @@ namespace S100Framework.Applications
                             instance.pictorialRepresentation = FixFilename(current.PICREP!);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
@@ -326,7 +326,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
@@ -458,7 +458,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -594,7 +594,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -706,7 +706,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -815,7 +815,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -924,7 +924,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1036,7 +1036,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1144,7 +1144,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1247,7 +1247,7 @@ namespace S100Framework.Applications
                                         instance.pictorialRepresentation = FixFilename(current.PICREP!);
 
                                         buffer["ps"] = ps101;
-                                        buffer["code"] = instance.GetType().Name;
+                                        buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                         buffer["attributebindings"] = instance.Flatten();
@@ -1370,7 +1370,7 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP!);
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1402,7 +1402,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1435,7 +1435,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1468,7 +1468,7 @@ namespace S100Framework.Applications
                                 var instance = ImporterNIS._converterRegistry.Convert<LightSectored>(current); // No related sectors - only the one on the feature.
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1491,7 +1491,7 @@ namespace S100Framework.Applications
                                 var instance = ImporterNIS._converterRegistry.Convert<LightAirObstruction>(current); //CreateLightAirObstruction(current);
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1510,7 +1510,7 @@ namespace S100Framework.Applications
                                 var instance = ImporterNIS._converterRegistry.Convert<LightFogDetector>(current); // new List<AidsToNavigationP>() { current }); // var instance = CreateLightFogDetector(current);
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1529,7 +1529,7 @@ namespace S100Framework.Applications
                                 var instance = ImporterNIS._converterRegistry.Convert<LightAllAround>(current);
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1637,7 +1637,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1742,7 +1742,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1806,7 +1806,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1833,7 +1833,7 @@ namespace S100Framework.Applications
                             var instance = _converterRegistry.Convert<RadarStation>(current);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1858,7 +1858,7 @@ namespace S100Framework.Applications
                             var instance = _converterRegistry.Convert<RadioStation>(current);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1884,7 +1884,7 @@ namespace S100Framework.Applications
                             var instance = _converterRegistry.Convert<Retroreflector>(current);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1909,7 +1909,7 @@ namespace S100Framework.Applications
                             var instance = _converterRegistry.Convert<RadarTransponderBeacon>(current);
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();

@@ -109,7 +109,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -206,7 +206,7 @@ namespace S100Framework.Applications
                             }
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
 
                             buffer["attributebindings"] = instance.Flatten();

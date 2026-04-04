@@ -109,7 +109,7 @@ namespace S100Framework.Applications
                     // Clear vdat if covered by a metadata object with same vdat
 
                     buffer["ps"] = ps101;
-                    buffer["code"] = instance.GetType().Name;
+                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                     buffer["attributebindings"] = instance.Flatten();
                     //buffer["informationbindings"] = "[]";
@@ -132,7 +132,7 @@ namespace S100Framework.Applications
                     };
 
                     buffer["ps"] = ps101;
-                    buffer["code"] = instance.GetType().Name;
+                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                     buffer["attributebindings"] = instance.Flatten();
                     //buffer["informationbindings"] = "[]";
