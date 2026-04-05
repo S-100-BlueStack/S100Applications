@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace NuvionPro
@@ -80,25 +81,24 @@ namespace NuvionPro
             //this.FeatureCatalogues.AddRange(this._module.GetFeatureCatalogues());
             this.FeatureCatalogues = this._module.GetFeatureCatalogues();
 
-            //this.CreateInstance = new ArcGIS.Desktop.Framework.RelayCommand(async () => {
-            //    var inspector = base.Inspector;
+            this.CreateInstance = new ArcGIS.Desktop.Framework.RelayCommand(async () => {
+                var inspector = base.Inspector;
 
-            //    if (inspector != default) {
-            //        //if (!Project.Current.IsEditingEnabled) {
-            //        //    await Project.Current.SetIsEditingEnabledAsync(true);
-            //        //}
+                if (inspector != default) {
+                    //if (!Project.Current.IsEditingEnabled) {
+                    //    await Project.Current.SetIsEditingEnabledAsync(true);
+                    //}
 
-            //        inspector["ps"] = this.SelectedPS;
-            //        inspector["code"] = this.SelectedCode;
+                    inspector["ps"] = this.PS;
+                    inspector["code"] = this.Code;                    
 
-            //        this.IsSelectedFCEnabled = false;
-            //        this.IsCodeEnabled = false;
+                    this.IsEnabledPS = this.IsEnabledCode = false;
 
-            //        await QueuedTask.Run(() => {
-            //            inspector.Apply();
-            //        }, TaskCreationOptions.None);
-            //    }
-            //});
+                    await QueuedTask.Run(() => {
+                        inspector.Apply();
+                    }, TaskCreationOptions.None);
+                }
+            });
         }
 
         private void Current_PropertyChanged(object sender, PropertyChangedEventArgs e) {
@@ -126,7 +126,7 @@ namespace NuvionPro
                     break;
 
                 case nameof(this.Code): {
-                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code);
+                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings");
 
                         if (this.Code != default) {
                             this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
@@ -214,8 +214,6 @@ namespace NuvionPro
                 //    this.Codes.Clear();
                 //});
 
-                //TODO: TJEK KUN FOR OPDATERING!!!!! Eller blinker UI
-
                 var catalogues = await QueuedTask.Run(() => {
                     var fc = inspector.MapMember switch {
                         FeatureLayer l => l.GetFeatureClass(),
@@ -269,7 +267,7 @@ namespace NuvionPro
                 var code = Convert.ToString(inspector["code"]);
                 if (!string.IsNullOrEmpty(code)) {
                     this.Code = code;
-                    this.IsEnabledCode = false;
+                    this.IsEnabledCode = inspector.IsNull("attributebindings");
                 }
 
                 this.SelectedProperty = await QueuedTask.Run(() => {
@@ -464,7 +462,8 @@ namespace NuvionPro
             }, TaskCreationOptions.None);
         }
 
-        //public ICommand CreateInstance { get; set; }
+        public ICommand CreateInstance { get; set; }
+
         private Module.FeatureCatalogue[] _featureCatalogues = [];
 
         public Module.FeatureCatalogue[] FeatureCatalogues {
