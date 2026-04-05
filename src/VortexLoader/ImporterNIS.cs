@@ -672,31 +672,56 @@ namespace S100Framework.Applications
                         //}
 
 
-                        Logger.Current.Information($"Loading sanity checker");
-                        SanityChecker.Initialize(destination);
+                        //Logger.Current.Information($"Loading sanity checker");
+                        //SanityChecker.Initialize(destination);
 
-                        Logger.Current.Information($"Validating drawing index");
-                        status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
-                        Logger.Current.Information($"No Empty drawing index in S-101: {status}");
+                        //Logger.Current.Information($"Validating drawing index");
+                        //status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
+                        //Logger.Current.Information($"No Empty drawing index in S-101: {status}");
 
-                        Logger.Current.Information($"Validating ESRI Uknown values");
-                        status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
-                        Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
+                        //Logger.Current.Information($"Validating ESRI Uknown values");
+                        //status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
+                        //Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
 
-                        Logger.Current.Information($"Validating edition-info");
-                        status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
-                        Logger.Current.Information($"No missing edition-info in S-101: {status}");
+                        //Logger.Current.Information($"Validating edition-info");
+                        //status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
+                        //Logger.Current.Information($"No missing edition-info in S-101: {status}");
 
-                        Logger.Current.Information($"Validating default clearance");
-                        status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
-                        Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
+                        //Logger.Current.Information($"Validating default clearance");
+                        //status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
+                        //Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
 
-                        Logger.Current.Information("Done");
+                        //Logger.Current.Information("Done");
 
-                        Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
+                        //Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
                     }
                 }
                 append = true;
+            }
+
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Loading sanity checker");
+                SanityChecker.Initialize(destination);
+
+                Logger.Current.Information($"Validating drawing index");
+                status = SanityChecker.Instance.Check_GetUsageBandErrorCount() == 0 ? "PASSED" : "FAILED";
+                Logger.Current.Information($"No Empty drawing index in S-101: {status}");
+
+                Logger.Current.Information($"Validating ESRI Uknown values");
+                status = SanityChecker.Instance.Check_GetEsriUnknown32767ErrorCount() == 0 ? "PASSED" : "FAILED";
+                Logger.Current.Information($"No ESRI unknown values (-32767) in S-101: {status}");
+
+                Logger.Current.Information($"Validating edition-info");
+                status = SanityChecker.Instance.Check_GetEditionsErrorCount() == 0 ? "PASSED" : "FAILED";
+                Logger.Current.Information($"No missing edition-info in S-101: {status}");
+
+                Logger.Current.Information($"Validating default clearance");
+                status = SanityChecker.Instance.Check_GetDefaultClearanceViolationCount() == 0 ? "PASSED" : "FAILED";
+                Logger.Current.Information($"No defaultClearanceViolation in S-101: {status}");
+
+                Logger.Current.Information("Done");
+
+                Logger.Current.Information($"!: CHECK LOGS AT: {Logger.LogDir}");
             }
             return true;
         }
