@@ -1,11 +1,10 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
-using Microsoft.VisualBasic;
-using NetTopologySuite.IO;
-using NetTopologySuite.Operation;
+using S100FC;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
@@ -15,7 +14,6 @@ using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using System.Globalization;
-using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -158,7 +156,8 @@ namespace S100Framework.Applications
                                 _.ApplyEdits(() => {
                                     a.Invoke();
                                 }, true);
-                            } else
+                            }
+                            else
                                 a.Invoke();
                         }
                         return true;
@@ -697,6 +696,63 @@ namespace S100Framework.Applications
                     }
                 }
                 append = true;
+            }
+
+            using (var destination = createTargetGeodatabase()) {
+                SchemaBuilder schemaBuilder = new SchemaBuilder(destination);
+
+                string[] featureClasses = ["point", "pointset", "curve", "surface"];
+                foreach (var featureClassName in featureClasses) {
+                    var primitive = featureClassName switch {
+                        "point" => S100FC.Primitives.point,
+                        "pointset" => S100FC.Primitives.pointSet,
+                        "curve" => S100FC.Primitives.curve,
+                        "surface" => S100FC.Primitives.surface,
+                        _ => throw new NotImplementedException()
+                    };
+
+                    var features = Summary.PrimitiveFeatures(primitive);
+
+                    FeatureClassDefinition fcDefinition = destination.GetDefinition<FeatureClassDefinition>(featureClassName);
+
+                    FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
+
+                    var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e=> features.Contains(e.code)).OrderBy(e=>e.sourceIdentifier)) {
+                        definitionReferences.Add(e.sourceIdentifier, e.code);
+                    }
+                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
+                    schemaBuilder.Modify(fcDescription);
+                }
+                {
+                    var features = Summary.PrimitiveFeatures(Primitives.noGeometry);
+
+                    var tableDefinition = destination.GetDefinition<TableDefinition>("featuretype");
+
+                    var tableDescription = new TableDescription(tableDefinition);
+
+                    var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.sourceIdentifier)) {
+                        definitionReferences.Add(e.sourceIdentifier, e.code);
+                    }
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    schemaBuilder.Modify(tableDescription);
+                }
+
+                
+                {
+                    var tableDefinition = destination.GetDefinition<TableDefinition>("informationtype");
+
+                    var tableDescription = new TableDescription(tableDefinition);
+
+                    var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    foreach (var e in Summary.definitionReferenceInformationTypes.OrderBy(e => e.sourceIdentifier)) {
+                        definitionReferences.Add(e.sourceIdentifier, e.code);
+                    }
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    schemaBuilder.Modify(tableDescription);
+                }
+                schemaBuilder.Build();
             }
 
             using (var destination = createTargetGeodatabase()) {
