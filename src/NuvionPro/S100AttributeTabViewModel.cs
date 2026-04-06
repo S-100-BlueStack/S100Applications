@@ -49,7 +49,7 @@ namespace NuvionPro
 
         private Module.FeatureCatalogue _ps = default;
 
-        private string? _code = default;
+        private CodeValue? _code = default;
 
 
         //private XDocument _featureCatalogue = null;
@@ -94,8 +94,8 @@ namespace NuvionPro
                     //}
 
                     inspector["ps"] = this.PS.ID;
-                    inspector["code"] = this.Code;
-                    inspector["sourceidentifier"] = 
+                    inspector["code"] = this.Code.Code;
+                    inspector["sourceidentifier"] = this.Code.sourceIdentifier;
 
                     this.IsEnabledPS = this.IsEnabledCode = false;
 
@@ -131,7 +131,7 @@ namespace NuvionPro
                     break;
 
                 case nameof(this.Code): {
-                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
+                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code?.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
 
                         if (this.Code != default) {
                             this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
@@ -284,7 +284,7 @@ namespace NuvionPro
 
                 var code = Convert.ToString(inspector["code"]);
                 if (!string.IsNullOrEmpty(code)) {
-                    this.Code = code;                    
+                    this.Code = new CodeValue(code, Convert.ToString(inspector["sourceidentifier"]));
                     this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
                 }
 
@@ -302,7 +302,7 @@ namespace NuvionPro
 
                     var viewModel = new S100AttributeEditorViewModel(xDocument);
 
-                    if (string.IsNullOrEmpty(this.Code))
+                    if (this.Code is null)
                         return viewModel;
 
                     //System.Windows.Application.Current.Dispatcher.Invoke(() => {
@@ -312,7 +312,7 @@ namespace NuvionPro
 
                     var uid = $"{inspector.UID()}";
 
-                    viewModel.Initialize(this.Code, uid);
+                    viewModel.Initialize(this.Code.Code, uid);
 
                     if (!inspector.IsNull("attributebindings")) {
                         var json = Convert.ToString(inspector["attributebindings"]);
@@ -563,7 +563,7 @@ namespace NuvionPro
             set => this.SetProperty(ref this._isEnabledCode, value);
         }
 
-        public string? Code {
+        public CodeValue? Code {
             get => this._code;
             set => this.SetProperty(ref this._code, value);
         }
