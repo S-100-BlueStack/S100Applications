@@ -1,9 +1,5 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using S100FC;
-using S100FC.S101.FeatureAssociation;
-using S100FC.S101.FeatureTypes;
-using System.Diagnostics;
 
 
 namespace S100Framework.Applications.Singletons
@@ -15,9 +11,9 @@ namespace S100Framework.Applications.Singletons
 
         private static Geodatabase? _source;
 
-        
 
-        private readonly List<ProductRecord> _products = new();
+
+        private readonly List<ProductRecord> _products = [];
 
         internal static void Initialize(Geodatabase source, QueryFilter whereClause) {
             //if (_instance != null)
@@ -38,7 +34,7 @@ namespace S100Framework.Applications.Singletons
 
             using var datacoverage = _source.OpenDataset<FeatureClass>(_source.GetName(datacoverageName));
             {
-                LoadProducts(datacoverage);
+                this.LoadProducts(datacoverage);
             }
         }
 
@@ -55,7 +51,7 @@ namespace S100Framework.Applications.Singletons
 
                 if (geometry.GeometryType != GeometryType.Polygon)
                     continue;
-                
+
                 Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out var globalid);
 
                 var record = new ProductRecord {
@@ -63,10 +59,10 @@ namespace S100Framework.Applications.Singletons
                     GlobalId = globalid,
                     LongName = Convert.ToString(feature["LNAM"]) ?? "",
                     PltsCompScale = Convert.ToInt32(feature["PLTS_COMP_SCALE"]),
-                    Dnsm = Convert.ToString(feature["DSNM"]) ??  ""
+                    Dnsm = Convert.ToString(feature["DSNM"]) ?? ""
                 };
 
-                _products.Add(record);
+                this._products.Add(record);
             }
         }
 
@@ -87,7 +83,7 @@ namespace S100Framework.Applications.Singletons
             if (geometry == null)
                 throw new ArgumentNullException(nameof(geometry));
 
-            return _products.Where(p =>
+            return this._products.Where(p =>
                 GeometryEngine.Instance.Touches(p.Geometry, geometry) ||
                 GeometryEngine.Instance.Intersects(p.Geometry, geometry) ||
                 GeometryEngine.Instance.Contains(p.Geometry, geometry));

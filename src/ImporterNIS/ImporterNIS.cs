@@ -695,7 +695,7 @@ namespace S100Framework.Applications
                     FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e=> features.Contains(e.code)).OrderBy(e=>e.sourceIdentifier)) {
+                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.sourceIdentifier)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
                     fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
@@ -716,7 +716,7 @@ namespace S100Framework.Applications
                     schemaBuilder.Modify(tableDescription);
                 }
 
-                
+
                 {
                     var tableDefinition = destination.GetDefinition<TableDefinition>("informationtype");
 

@@ -71,10 +71,10 @@ namespace S100Framework.Applications
                     Logger.Current.Error($"Center of M_CSCL touches more than one product. Multiple scales encountered. Check {m_sclPolygon.DSNM}. Using {uniqueCompScales.First()}");
                 }
 
-                
+
                 var dataCoverage_m_scl = new DataCoverage {
-                    maximumDisplayScale = Convert.ToInt32(cscale / 2), 
-                    optimumDisplayScale = cscale,  
+                    maximumDisplayScale = Convert.ToInt32(cscale / 2),
+                    optimumDisplayScale = cscale,
                     minimumDisplayScale = uniqueCompScales.First()
                 };
 

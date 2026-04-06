@@ -15,7 +15,7 @@ namespace S100Framework.Applications.Singletons
 
         private Afterburner(Geodatabase target) {
             _target = target ?? throw new ArgumentNullException(nameof(target));
-        }        
+        }
         internal static void Initialize(Geodatabase target) {
             //if (_instance != null) {
             //    throw new InvalidOperationException("Afterburner has already been initialized.");

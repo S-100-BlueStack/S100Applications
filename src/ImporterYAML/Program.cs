@@ -70,7 +70,7 @@ namespace S100Framework.Applications
 
         static void Main(string[] args) {
             var arguments = Parser.Default.ParseArguments<Options>(args)
-                               .WithParsed<Options>(o => {                                   
+                               .WithParsed<Options>(o => {
                                });
 
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
