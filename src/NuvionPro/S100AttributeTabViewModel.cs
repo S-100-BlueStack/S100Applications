@@ -43,6 +43,10 @@ namespace NuvionPro
 
         //private ObservableCollection<Module.FeatureCatalogue> _schemas = [];
 
+        public record CodeValue(string Code, string? value) {
+            public int sourceIdentifier => string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
+        }
+
         private Module.FeatureCatalogue _ps = default;
 
         private string? _code = default;
@@ -89,8 +93,9 @@ namespace NuvionPro
                     //    await Project.Current.SetIsEditingEnabledAsync(true);
                     //}
 
-                    inspector["ps"] = this.PS;
-                    inspector["code"] = this.Code;                    
+                    inspector["ps"] = this.PS.ID;
+                    inspector["code"] = this.Code;
+                    inspector["sourceidentifier"] = 
 
                     this.IsEnabledPS = this.IsEnabledCode = false;
 
@@ -115,7 +120,7 @@ namespace NuvionPro
             switch (name) {
                 case nameof(this.PS): {
                         this.Code = default;
-                        this.IsEnabledCode = false;
+                        this.IsEnabledCode = true;
 
                         this.IsEnabledPS = this.PS != default;
 
@@ -126,7 +131,7 @@ namespace NuvionPro
                     break;
 
                 case nameof(this.Code): {
-                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings");
+                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
 
                         if (this.Code != default) {
                             this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
@@ -151,6 +156,8 @@ namespace NuvionPro
                     }
                 }
 
+                var sourceIdentifiers = this.SelectedProperty.sourceIdentifiers;
+
                 if (inspector.HasGeometry) {
                     var geometryType = inspector.MapMember switch {
                         FeatureLayer l => l.ShapeType,
@@ -163,15 +170,26 @@ namespace NuvionPro
                         ArcGIS.Core.CIM.esriGeometryType.esriGeometryPoint => Primitives.point,
                         ArcGIS.Core.CIM.esriGeometryType.esriGeometryMultipoint => Primitives.pointSet,
                         _ => throw new InvalidOperationException(),
-                    };
+                    };                    
 
-                    this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).ToArray();
+                    var items = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                    this.Codes = items.ToArray();
+
+                    //this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).ToArray();
                 }
                 else {
-                    if (inspector.HasAttribute("featurebindings"))
-                        this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).ToArray();
-                    else
-                        this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e => e).ToArray();
+                    if (inspector.HasAttribute("featurebindings")) {
+                        var items = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                        this.Codes = items.ToArray();
+
+                        //this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).ToArray();
+                    }
+                    else {
+                        var items = this.SelectedProperty.InformationTypes.OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                        this.Codes = items.ToArray();
+
+                        //this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e => e).ToArray();
+                    }
                 }
 
                 //System.Windows.Application.Current.Dispatcher.Invoke(() => {
@@ -266,8 +284,8 @@ namespace NuvionPro
 
                 var code = Convert.ToString(inspector["code"]);
                 if (!string.IsNullOrEmpty(code)) {
-                    this.Code = code;
-                    this.IsEnabledCode = inspector.IsNull("attributebindings");
+                    this.Code = code;                    
+                    this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
                 }
 
                 this.SelectedProperty = await QueuedTask.Run(() => {
@@ -533,9 +551,9 @@ namespace NuvionPro
             }
         }
 
-        private string[] _codes = [];
+        private CodeValue[] _codes = [];
 
-        public string[] Codes {
+        public CodeValue[] Codes {
             get => this._codes;
             set => this.SetProperty(ref this._codes, value);
         }

@@ -47,10 +47,11 @@
             <DockPanel Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding IsEnabledCode, Mode=OneWay}">
                 <TextBlock Margin="5,0,5,0" Text="Code" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <ComboBox x:Name="_objectSelector" DockPanel.Dock="Right"
-                        HorizontalAlignment="Stretch" 
-                        IsEnabled="{Binding IsEnabledCode, Mode=OneWay}"
-                        ItemsSource="{Binding Codes}"                           
-                        SelectedItem="{Binding Code, UpdateSourceTrigger=PropertyChanged}">
+                          HorizontalAlignment="Stretch" 
+                          IsEnabled="{Binding IsEnabledCode, Mode=OneWay}"
+                          ItemsSource="{Binding Codes}" 
+                          DisplayMemberPath="Code"
+                          SelectedItem="{Binding Code, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
             </DockPanel>
 

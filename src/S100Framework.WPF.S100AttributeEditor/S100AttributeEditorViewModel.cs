@@ -143,6 +143,11 @@ namespace S100Framework.WPF.ViewModel
                 e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
                 e => e.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).Select(e => e.Value).ToArray()).ToImmutableDictionary<string, string[]>();
 
+            this.sourceIdentifiers = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
+                e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
+                e => e.Element(XName.Get("definitionReference", scopes["S100FC"]))?.Element(XName.Get("sourceIdentifier", scopes["S100FC"]))?.Value).ToImmutableDictionary<string,string?>();
+
+
             this.attributeBindings.CollectionChanged += (s, e) => {
                 if (e.OldItems is not null) {
                     foreach (var item in e.OldItems) {
@@ -401,6 +406,8 @@ namespace S100Framework.WPF.ViewModel
         public bool HasFeatureBindings => this._featureBindingDefinitions.Any();
 
         public ImmutableDictionary<string, string[]> permittedPrimitives { get; init; } = [];
+
+        public ImmutableDictionary<string, string?> sourceIdentifiers { get; init; } = [];
 
         public informationBindingContainer? informationBindingDefinitions { get; private set; } = null;
 
