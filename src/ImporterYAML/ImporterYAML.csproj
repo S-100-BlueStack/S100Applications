@@ -10,6 +10,12 @@
     <Configurations>Debug</Configurations>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Maps\**" />
+    <EmbeddedResource Remove="Maps\**" />
+    <None Remove="Maps\**" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Compile Remove="ImporterYAML.cs" />
   </ItemGroup>-->
@@ -31,10 +37,6 @@
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Maps\" />
   </ItemGroup>
 
   <ItemGroup>

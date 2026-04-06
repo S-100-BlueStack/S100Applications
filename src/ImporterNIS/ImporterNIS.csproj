@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.20348.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <Compile Remove="ImporterYAML.cs" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <None Remove="s100ed8.gdb.zip" />
+    <None Remove="s100ed9.gdb.zip" />
+    <None Remove="s100edX.gdb.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.688.1" />
+    <PackageReference Include="S100Framework.Catalogues" Version="3.1.2" />
+    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.2" />
+    <PackageReference Include="S100Framework.GML" Version="3.1.2" />
+    <PackageReference Include="S100Framework.Topology" Version="3.1.2" />
+    <PackageReference Include="S100Framework.YAML" Version="3.7.688.4" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Maps\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ArcGIS.Core">
+      <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ArcGIS.CoreHost">
+      <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.CoreHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="s100ed12.gdb.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,12 +1,10 @@
-﻿//using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Core.SystemCore;
 using CommandLine;
 using ICSharpCode.SharpZipLib.Zip;
 using NetTopologySuite.Utilities;
 using S100FC.Applications;
-using System.Reflection.Metadata.Ecma335;
 
 
 //using S100Framework.DomainModel
@@ -23,19 +21,12 @@ namespace S100Framework.Applications
     {
         //GML: --v --cmd GML --dataset "c:\Users\Jens Søe\source\GitHub\Vortex\artifacts\S-131 Marine Harbour Infrastructure\samples\DKAAL\S100_ROOT\S-131\DATASET_FILES\DK00\131DK00_DKAAL.GML" --target "C:\Users\Jens Søe\OneDrive\ArcGIS\Projects\Vortex\S100ed4.gdb"
 
-        //NIS: --v --cmd NIS --target "C:\Users\Jens Søe\OneDrive\ArcGIS\Projects\Vortex\S100ed4.gdb" --source "C:\Users\Jens Søe\OneDrive\ArcGIS\Projects\Vortex\s57.gdb"
-
-        //  --query "PLTS_COMP_SCALE = 22000"
-
         //private static Serilog.Core.Logger? _logger;
 
         private static readonly Regex _substitute = new(@"^S(?<number>\d+)$", RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         public class Options
         {
-            [Option('c', "cmd", Required = true, HelpText = "Command (GML|NIS|YAML)")]
-            public string Command { get; set; } = string.Empty;
-
             [Option('d', "dataset", Required = false, HelpText = "")]
             public string? Dataset { get; set; }
 
@@ -78,11 +69,8 @@ namespace S100Framework.Applications
         }
 
         static void Main(string[] args) {
-            string command = string.Empty;
-
             var arguments = Parser.Default.ParseArguments<Options>(args)
-                               .WithParsed<Options>(o => {
-                                   command = o.Command.ToUpperInvariant();
+                               .WithParsed<Options>(o => {                                   
                                });
 
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
@@ -156,12 +144,7 @@ namespace S100Framework.Applications
 
             initialize(append);
 
-            bool result = command switch {
-                //"GML" => ImporterGML(target, arguments),
-                "NIS" => ImporterNIS.Load(createGeodatabase, arguments),
-                "YAML" => ImporterYAML.Load(createGeodatabase, arguments),
-                _ => throw new System.ArgumentNullException(nameof(command)),
-            };
+            bool result = ImporterYAML.Load(createGeodatabase, arguments);
         }
 #if GML
         private static bool ImporterGML(Geodatabase geodatabase, ParserResult<Options> arguments) {

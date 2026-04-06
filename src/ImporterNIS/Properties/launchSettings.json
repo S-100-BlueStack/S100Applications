@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VortexLoader": {
+      "commandName": "Project",
+      "commandLineArgs": "--v --target \"E:\\ArcGIS\\Projects\\s100ed12\\s100ed12.gdb\" --source \"e:\\ArcGIS\\Projects\\s100edx_imperial\\s57_stack.gdb\" --minimumDisplayScale 45000 --maximumDisplayScale=22000 --notespath \"e:\\ArcGIS\\Projects\\s100edx_imperial\\Notes\" --scaminfiles \"e:\\ArcGIS\\Projects\\s100edx_imperial\\SCAMIN\""
+    }
+  }
+}
