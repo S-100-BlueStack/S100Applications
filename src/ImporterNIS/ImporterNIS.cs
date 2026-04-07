@@ -686,13 +686,13 @@ namespace S100Framework.Applications
             }
 
 
-            using (Geodatabase source = createGeodatabase()) {
-                using (var destination = createTargetGeodatabase()) {
-                    ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
-                    Bridges.Initialize(source, destination);
-                    Bridges.Instance.CreateRelations();
-                }
-            }
+            //using (Geodatabase source = createGeodatabase()) {
+            //    using (var destination = createTargetGeodatabase()) {
+            //        ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+            //        Bridges.Initialize(source, destination);
+            //        Bridges.Instance.CreateRelations();
+            //    }
+            //}
 
             Logger.Current.Verbose("Creating subtypes...");
             using (var destination = createTargetGeodatabase()) {

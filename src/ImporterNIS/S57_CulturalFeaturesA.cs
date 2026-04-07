@@ -1796,8 +1796,7 @@ namespace S100Framework.Applications
             }
 
             if (createBridgesAndRelations) {
-                //TODO: 20260407 - ??? all bridges ?
-                //Bridges.Instance.CreateRelations();
+                Bridges.Instance.CreateRelations();
             }
 
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
