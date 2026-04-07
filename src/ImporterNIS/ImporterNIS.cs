@@ -346,6 +346,8 @@ namespace S100Framework.Applications
 
                                         using var insert = featureClass.CreateInsertCursor();
 
+                                        using var buffer = featureClass.CreateRowBuffer();
+
                                         foreach (var objectid in hits) {
                                             using var cursor = featureClass.Search(new QueryFilter {
                                                 WhereClause = $"OBJECTID = {objectid}",
@@ -367,11 +369,16 @@ namespace S100Framework.Applications
                                                 var difference = GeometryEngine.Instance.Difference(shape, queryPolygonProjected);
 
                                                 if (difference is Polyline polyline) {
-                                                    using var buffer = featureClass.CreateRowBuffer(feature);
+                                                    //if (polyline.PartCount > 1) System.Diagnostics.Debugger.Break();
+
+                                                    //using var buffer = featureClass.CreateRowBuffer(feature);
+                                                    feature.Clone(buffer, ["shape"]);
                                                     buffer["shape"] = polyline;
                                                     var _ = insert.Insert(buffer);
                                                     created = [.. created, _];
                                                 }
+                                                else
+                                                    System.Diagnostics.Debugger.Break();
                                             }
                                         }
 
@@ -420,6 +427,8 @@ namespace S100Framework.Applications
 
                                         using var insert = featureClass.CreateInsertCursor();
 
+                                        using var buffer = featureClass.CreateRowBuffer();
+
                                         foreach (var objectid in hits) {
                                             using var cursor = featureClass.Search(new QueryFilter {
                                                 WhereClause = $"OBJECTID = {objectid}",
@@ -459,16 +468,18 @@ namespace S100Framework.Applications
                                                             polygons = [.. polygons, _];
                                                         }
 
-                                                        using var buffer = featureClass.CreateRowBuffer(feature);
+                                                        //using var buffer = featureClass.CreateRowBuffer(feature);
 
                                                         for (int i = 0; i < polygons.Length; i++) {
+                                                            feature.Clone(buffer, ["shape"]);
                                                             buffer["shape"] = polygons[i];
                                                             var _ = insert.Insert(buffer);
                                                             created = [.. created, _];
                                                         }
                                                     }
                                                     else {
-                                                        using var buffer = featureClass.CreateRowBuffer(feature);
+                                                        //using var buffer = featureClass.CreateRowBuffer(feature);
+                                                        feature.Clone(buffer, ["shape"]);
                                                         buffer["shape"] = polygon;
                                                         var _ = insert.Insert(buffer);
                                                         created = [.. created, _];
@@ -519,15 +530,15 @@ namespace S100Framework.Applications
                             Logger.Current.Information($"Converting skin of earth only Filter: {QueryFilter.WhereClause}");
                             // All "SKIN OF EARTH" cases / subtypes are marked with a "skin of earth" comment
                             var whereClause = QueryFilter.WhereClause.Clone();
-                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1,5,15)";
+                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";
                             Store(() => S57_DepthsA(source, destination, QueryFilter));
-                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (5)";
+                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (5)";
                             Store(() => S57_NaturalFeaturesA(source, destination, QueryFilter));
-                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40,60,80)";
+                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40,60,80)";
                             Store(() => S57_PortsAndServicesA(source, destination, QueryFilter));
-                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (40)";
+                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40)";
                             Store(() => S57_MetadataA(source, destination, QueryFilter));
-                            QueryFilter.WhereClause = $"{whereClause} and fcsubtype in (1)";
+                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1)";
                             Store(() => S57_ProductCoverage(source, destination, QueryFilter, s128));
                             //Store(() => FeatureRelations.Instance.CreateRelations(destination));
 
@@ -672,6 +683,15 @@ namespace S100Framework.Applications
                     }
                 }
                 append = true;
+            }
+
+
+            using (Geodatabase source = createGeodatabase()) {
+                using (var destination = createTargetGeodatabase()) {
+                    ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                    Bridges.Initialize(source, destination);
+                    Bridges.Instance.CreateRelations();
+                }
             }
 
             Logger.Current.Verbose("Creating subtypes...");
@@ -1684,6 +1704,26 @@ namespace S100Framework.Applications
             }
 
             throw new NotSupportedException("Unsupported EsriJSON geometry type.");
+        }
+    }
+}
+
+
+namespace ArcGIS.Core.Geometry
+{
+    public static class Extension
+    {
+        public static void Clone(this Feature feature, RowBuffer buffer, string[] exclude) {
+            var fields = feature.GetFields();
+            for (int i = 0; i < fields.Count; i++) {
+                if (exclude.Contains(fields[i].Name.ToLowerInvariant())) {
+                    buffer[i] = DBNull.Value;
+                }
+                else if (!fields[i].IsEditable)
+                    ;   // buffer[i] = fields[0].GetDefaultValue();
+                else
+                    buffer[i] = feature[i];
+            }
         }
     }
 }
