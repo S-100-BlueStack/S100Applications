@@ -228,6 +228,9 @@ namespace S100Framework.Applications
                                 break;
 
                         }
+
+                        if (recordCount % 1500 == 0)
+                            insertCursor.Flush();
                     }
                     Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
                 }
