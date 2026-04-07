@@ -7,8 +7,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <NoWarn>CA1416</NoWarn>
     <RootNamespace>NuvionPro</RootNamespace>
-    <AssemblyVersion>1.0.1505.0</AssemblyVersion>
-    <FileVersion>1.0.1505.0</FileVersion>
+    <AssemblyVersion>1.0.1507.0</AssemblyVersion>
+    <FileVersion>1.0.1507.0</FileVersion>
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,22 +149,7 @@
     <None Update="GeospatialInformationRegistry\101_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="GeospatialInformationRegistry\122_FC_2.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="GeospatialInformationRegistry\123_FC_2.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="GeospatialInformationRegistry\125_FC_1.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="GeospatialInformationRegistry\127_FC_2.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="GeospatialInformationRegistry\128_FC_2.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="GeospatialInformationRegistry\131_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
