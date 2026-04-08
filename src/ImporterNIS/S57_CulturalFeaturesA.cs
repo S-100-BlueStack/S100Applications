@@ -28,7 +28,7 @@ namespace S100Framework.Applications
 
             // Bridges - Store an aggregation per bridge
             if (createBridgesAndRelations) {
-                Bridges.Initialize(source, target);
+                Bridges.Initialize(source, target, filter);
 
                 foreach (var bridge in Bridges.Instance.BridgeElements()) {
                     var instance = new Bridge();

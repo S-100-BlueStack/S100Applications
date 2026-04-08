@@ -157,7 +157,10 @@ namespace S100Framework.Applications.Singletons
 
         private static List<BridgeElement>? _groups;
 
-        private static readonly Dictionary<string, List<BridgeRelation>> _bindings = [];
+        private Dictionary<string, List<BridgeRelation>> _bindings = [];
+
+        private QueryFilter _whereClause;
+
 
         internal List<BridgeRelation> GetBindings(string bridgeName) {
             if (!_bindings.ContainsKey(bridgeName)) {
@@ -206,8 +209,11 @@ namespace S100Framework.Applications.Singletons
         private static Geodatabase? _destination;
 
         private Bridges(Geodatabase source, Geodatabase destination, QueryFilter whereClause) {
+
             _source = source ?? throw new ArgumentNullException(nameof(source));
             _destination = destination ?? throw new ArgumentNullException(nameof(destination));
+            _whereClause = whereClause;
+            
 
             var culturalFeaturesATableName = "CulturalFeaturesA";
             var portsAndServicesTableName = "PortsAndServicesA";
@@ -217,13 +223,13 @@ namespace S100Framework.Applications.Singletons
 
             var featureGrouper = new FeatureGrouper();
             //_groups = featureGrouper.GroupAndDissolveToBridgeElements(new() { culturalFeaturesA, portsAndServicesA }, ImporterNIS.QueryFilter);
-
+            
             var sqlSyntax = _source.GetSQLSyntax();
 
-            _groups = featureGrouper.GroupAndDissolveToBridgeElements(sqlSyntax, [culturalFeaturesA], ImporterNIS.QueryFilter);
+            _groups = featureGrouper.GroupAndDissolveToBridgeElements(sqlSyntax, [culturalFeaturesA], _whereClause);
         }
 
-        internal static void Initialize(Geodatabase source, Geodatabase destination) {
+        internal static void Initialize(Geodatabase source, Geodatabase destination, QueryFilter whereClause) {
             //if (_instance != null) {
             //    throw new InvalidOperationException("Bridges has already been initialized.");
             //}
@@ -234,7 +240,7 @@ namespace S100Framework.Applications.Singletons
             //    }
             //}
 
-            _instance = new Bridges(source, destination, ImporterNIS.QueryFilter);
+            _instance = new Bridges(source, destination, whereClause);
         }
 
         internal void CreateRelations() {
@@ -245,7 +251,7 @@ namespace S100Framework.Applications.Singletons
 
             var bridgeElements = _instance!.BridgeElements().ToList();
 
-            using (var cursor = featuretypeTable.CreateUpdateCursor(new QueryFilter() { WhereClause = "code = 'Bridge'" }, useRecyclingCursor: true)) {
+            using (var cursor = featuretypeTable.CreateUpdateCursor(new QueryFilter() { WhereClause = "code = 'Bridge'" }, useRecyclingCursor: false)) {
                 while (cursor.MoveNext()) {
                     var row = cursor.Current;
 
@@ -311,9 +317,10 @@ namespace S100Framework.Applications.Singletons
 
                             if (!c.Any()) {
                                 bridge.categoryOfOpeningBridge = null;  //UNKNOWN
-                                Logger.Current.Error($"Bridge (opening) has no opening elements [{displayName}].");
-                                continue;
                                 //Magretheholmsbroen
+                                //Logger.Current.Error($"Bridge (opening) has no opening elements [{displayName}].");
+                                continue;
+                                
                             }
                             if (c.Count() != c.Distinct().Count()) {
                                 Logger.Current.Error($"Bridge (opening) has elements with multiple categoryOfBridge this cannot be converted [{displayName}].");
