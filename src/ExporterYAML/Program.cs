@@ -2,9 +2,9 @@
 using ArcGIS.Core.Geometry;
 using CommandLine;
 using S100FC;
-using S100FC.ProductCatalogue;
 using S100FC.S101;
 using S100FC.YAML;
+using S100FC.Topology;
 using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
@@ -159,7 +159,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
                             datasetNames = [.. datasetNames, electricProduct.datasetName!];
                         }
@@ -175,7 +175,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
@@ -288,7 +288,7 @@ namespace S100Framework.Applications
 
                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true)!;
 
-                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(json, type);
+                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
                             //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
 
                             var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
@@ -373,7 +373,7 @@ namespace S100Framework.Applications
                                 }
 
                                 var json = Convert.ToString(current["attributebindings"])!;
-                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<FeatureType>(json, type);
+                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
                                 //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
 
 
