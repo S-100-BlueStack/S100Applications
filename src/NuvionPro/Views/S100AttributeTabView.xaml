@@ -50,7 +50,6 @@
                           HorizontalAlignment="Stretch" 
                           IsEnabled="{Binding IsEnabledCode, Mode=OneWay}"
                           ItemsSource="{Binding Codes}" 
-                          DisplayMemberPath="Code"
                           SelectedItem="{Binding Code, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
             </DockPanel>

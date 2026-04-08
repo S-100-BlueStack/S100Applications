@@ -44,7 +44,7 @@ namespace S100Framework.Applications.Singletons
             foreach (var featureclass in featureclasses) {
                 var tuple = syntax.ParseTableName(featureclass.GetName());
                 var tableName = tuple.Item3.ToLowerInvariant();
-                using (var cursor = featureclass.Search(new QueryFilter() { WhereClause = $"{filter.WhereClause} and fcsubtype in (5,45)" })) {
+                using (var cursor = featureclass.Search(new QueryFilter() { WhereClause = $"({filter.WhereClause}) and fcsubtype in (5,45)" })) {
                     while (cursor.MoveNext()) {
                         using (var row = (Feature)cursor.Current) {
                             long oid = row.GetObjectID();
@@ -292,7 +292,11 @@ namespace S100Framework.Applications.Singletons
                     if (true == bridge.openingBridge) {
                         foreach (var binding in bindings) {
                             var relatedBridge = row.UID();
-                            var bridgeElement = bridgeElements.First(e => e.Name == relatedBridge);
+                            var bridgeElement = bridgeElements.FirstOrDefault(e => e.Name == relatedBridge);
+                            if (bridgeElement is null) {
+                                Logger.Current.Error($"Can't find bridge ({relatedBridge}) element ({binding.ChildName},{binding .childTypeS101})!");
+                                continue;
+                            }
 
                             var categoriesOfElements = bridgeElement.BridgeCategories;
 

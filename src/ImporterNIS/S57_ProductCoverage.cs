@@ -32,7 +32,7 @@ namespace S100Framework.Applications
 
 
 
-            var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"{filter.WhereClause} AND fcsubtype = 20" });
+            var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20" });
 
             ProductRecord m_csclProduct = null;
 

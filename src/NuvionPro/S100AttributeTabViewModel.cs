@@ -43,13 +43,13 @@ namespace NuvionPro
 
         //private ObservableCollection<Module.FeatureCatalogue> _schemas = [];
 
-        public record CodeValue(string Code, string? value) {
-            public int sourceIdentifier => string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
-        }
+        //public record CodeValue(string Code, string? value) {
+        //    public int sourceIdentifier => string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
+        //}
 
         private Module.FeatureCatalogue _ps = default;
 
-        private CodeValue? _code = default;
+        private string? _code = default;
 
 
         //private XDocument _featureCatalogue = null;
@@ -94,8 +94,8 @@ namespace NuvionPro
                     //}
 
                     inspector["ps"] = this.PS.ID;
-                    inspector["code"] = this.Code.Code;
-                    inspector["sourceidentifier"] = this.Code.sourceIdentifier;
+                    inspector["code"] = this.Code;
+                    inspector["sourceidentifier"] = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                     this.IsEnabledPS = this.IsEnabledCode = false;
 
@@ -131,7 +131,7 @@ namespace NuvionPro
                     break;
 
                 case nameof(this.Code): {
-                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code?.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
+                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
 
                         if (this.Code != default) {
                             this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
@@ -172,20 +172,20 @@ namespace NuvionPro
                         _ => throw new InvalidOperationException(),
                     };                    
 
-                    var items = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                    var items = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e);
                     this.Codes = items.ToArray();
 
                     //this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e).ToArray();
                 }
                 else {
                     if (inspector.HasAttribute("featurebindings")) {
-                        var items = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                        var items = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e);
                         this.Codes = items.ToArray();
 
                         //this.Codes = this.SelectedProperty.GetFeaturesByPrimitive(Primitives.noGeometry).OrderBy(e => e).ToArray();
                     }
                     else {
-                        var items = this.SelectedProperty.InformationTypes.OrderBy(e => e).Select(e => new CodeValue(e, sourceIdentifiers[e]));
+                        var items = this.SelectedProperty.InformationTypes.OrderBy(e => e);
                         this.Codes = items.ToArray();
 
                         //this.Codes = this.SelectedProperty.InformationTypes.OrderBy(e => e).ToArray();
@@ -284,7 +284,7 @@ namespace NuvionPro
 
                 var code = Convert.ToString(inspector["code"]);
                 if (!string.IsNullOrEmpty(code)) {
-                    this.Code = new CodeValue(code, Convert.ToString(inspector["sourceidentifier"]));
+                    this.Code = code;
                     this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
                 }
 
@@ -312,7 +312,7 @@ namespace NuvionPro
 
                     var uid = $"{inspector.UID()}";
 
-                    viewModel.Initialize(this.Code.Code, uid);
+                    viewModel.Initialize(this.Code, uid);
 
                     if (!inspector.IsNull("attributebindings")) {
                         var json = Convert.ToString(inspector["attributebindings"]);
@@ -551,9 +551,9 @@ namespace NuvionPro
             }
         }
 
-        private CodeValue[] _codes = [];
+        private string[] _codes = [];
 
-        public CodeValue[] Codes {
+        public string[] Codes {
             get => this._codes;
             set => this.SetProperty(ref this._codes, value);
         }
@@ -563,7 +563,7 @@ namespace NuvionPro
             set => this.SetProperty(ref this._isEnabledCode, value);
         }
 
-        public CodeValue? Code {
+        public string? Code {
             get => this._code;
             set => this.SetProperty(ref this._code, value);
         }
