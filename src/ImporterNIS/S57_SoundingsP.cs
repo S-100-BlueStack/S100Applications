@@ -65,10 +65,10 @@ namespace S100Framework.Applications
                                 SetShape(buffer, mappoint);
                                 SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                if (quasou == default || !string.Equals(quasou, "5", StringComparison.OrdinalIgnoreCase)) {
+                                if (quasou == default || string.IsNullOrEmpty(quasou) || !string.Equals(quasou, "5", StringComparison.OrdinalIgnoreCase)) {
                                     var sounding = new Sounding {
                                     };
-                                    if (quasou != default) {
+                                    if (quasou != default && !string.IsNullOrEmpty(quasou)) {
                                         sounding.qualityOfVerticalMeasurement = [EnumHelper.GetEnumValue(quasou)];
                                     }
                                     if (tecsou != default && !string.IsNullOrEmpty(tecsou)) {
@@ -103,7 +103,7 @@ namespace S100Framework.Applications
                                     // TODO: interoperabilityIdentifier
 
 
-                                    if (current.QUASOU != default) {
+                                    if (current.QUASOU != default && !string.IsNullOrEmpty(current.QUASOU)) {
                                         if (current.QUASOU != "-32767") {
                                             var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
                                             if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())

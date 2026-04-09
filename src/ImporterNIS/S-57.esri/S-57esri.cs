@@ -166,25 +166,25 @@ namespace S100Framework.Applications.S57.esri
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = Convert.ToString(feature["EDITOR"])?.Trim();
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
                 this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"])?.Trim();
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
                 this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = Convert.ToString(feature["VERIFIER"])?.Trim();
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
                 this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"])?.Trim();
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
                 this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
@@ -206,7 +206,7 @@ namespace S100Framework.Applications.S57.esri
                 this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                this.LNAM = Convert.ToString(feature["LNAM"])?.Trim();
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
                 this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
@@ -216,19 +216,19 @@ namespace S100Framework.Applications.S57.esri
                 this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"])?.Trim();
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
                 this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"])?.Trim();
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
                 this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"])?.Trim();
             }
         }
     }
@@ -3249,7 +3249,7 @@ namespace S100Framework.Applications.S57.esri
                 this.PRODCT = Convert.ToString(feature["PRODCT"]);
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = Convert.ToString(feature["QUASOU"])?.Trim();
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
                 this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
