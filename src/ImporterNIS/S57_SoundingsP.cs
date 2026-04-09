@@ -61,7 +61,8 @@ namespace S100Framework.Applications
 
                                 var mappoint = MapPointBuilderEx.CreateMapPoint(shape.X, shape.Y, Convert.ToDouble(depth), shape.SpatialReference);
 
-                                SetShape(buffer, MultipointBuilderEx.CreateMultipoint(mappoint));
+                                //SetShape(buffer, MultipointBuilderEx.CreateMultipoint(mappoint));
+                                SetShape(buffer, mappoint);
                                 SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 if (quasou == default || !string.Equals(quasou, "5", StringComparison.OrdinalIgnoreCase)) {
