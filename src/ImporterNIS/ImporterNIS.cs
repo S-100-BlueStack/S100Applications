@@ -187,6 +187,7 @@ namespace S100Framework.Applications
             _converterRegistry.Register<PortsAndServicesP, SignalStationTraffic>(Converters.CreateSignalStationTraffic);
             _converterRegistry.Register<AidsToNavigationP, RadioStation>(Converters.CreateRadioStation);
             _converterRegistry.Register<AidsToNavigationP, Retroreflector>(Converters.CreateRetroreflector);
+            _converterRegistry.Register<OffshoreInstallationsP, LightSectored>(Converters.CreateLightSectored);
 
             long[] scalesCompilation = [];
 
