@@ -8,6 +8,11 @@ namespace VortexLoader
         // The extra object is an additional parameter to the converter
         private readonly Dictionary<(Type from, Type to), Func<object, int?, Geodatabase, object>> _converters = [];
 
+        public bool Exist(Type TFrom, Type TTo) => this._converters.ContainsKey((TFrom, TTo));
+
+        public bool Exist<TFrom,TTo>() => this._converters.ContainsKey((typeof(TFrom), typeof(TTo)));
+
+
         public void Register<TFrom, TTo>(Func<TFrom, int?, Geodatabase, TTo> converter) {
             if (converter == null) {
                 throw new ArgumentNullException(nameof(converter));
