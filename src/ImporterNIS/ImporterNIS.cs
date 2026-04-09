@@ -188,6 +188,9 @@ namespace S100Framework.Applications
             _converterRegistry.Register<AidsToNavigationP, RadioStation>(Converters.CreateRadioStation);
             _converterRegistry.Register<AidsToNavigationP, Retroreflector>(Converters.CreateRetroreflector);
             _converterRegistry.Register<OffshoreInstallationsP, LightSectored>(Converters.CreateLightSectored);
+            _converterRegistry.Register<OffshoreInstallationsP, RadarTransponderBeacon>(Converters.CreateRadarTransponderBeacon);
+            _converterRegistry.Register<OffshoreInstallationsP, FogSignal>(Converters.CreateFogSignal);
+
 
             long[] scalesCompilation = [];
 
