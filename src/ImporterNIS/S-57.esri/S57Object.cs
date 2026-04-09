@@ -2,7 +2,7 @@
 
 namespace S100Framework.Applications.S57.esri
 {
-    internal abstract class S57Object : object
+    public abstract class S57Object : object
     {
         public Guid GlobalId { get; set; }
         public Geometry? Shape { get; set; }
