@@ -290,40 +290,41 @@ namespace S100Framework.Applications
             // IF SECTORED LIGHTS
             var related = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(LightSectored), s57master.GlobalId);
             if (related.Count > 0) {
-                var instance = ImporterNIS._converterRegistry.Convert(s57master, typeof(LightSectored), scaleMinimum);
+                if (ImporterNIS._converterRegistry.Exist(s57master.GetType(), typeof(LightSectored))) {
+                    var instance = ImporterNIS._converterRegistry.Convert(s57master, typeof(LightSectored), scaleMinimum);
 
-                buffer["ps"] = ImporterNIS.ps101;
-                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
+                    buffer["ps"] = ImporterNIS.ps101;
+                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
 
-                buffer["attributebindings"] = ((FeatureType)instance).Flatten();
-                if (instance is FeatureType) {
-                    buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                    buffer["attributebindings"] = ((FeatureType)instance).Flatten();
+                    if (instance is FeatureType) {
+                        buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                    }
+                    else {
+                        ;
+                    }
+
+
+                    ImporterNIS.SetShape(buffer, s57master.Shape);
+                    ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
+
+                    var featureN = featureClass.CreateRow(buffer);
+                    var equipmentName = featureN.UID();
+                    if (equipmentName == null) {
+                        throw new NotSupportedException("empty equipment name");
+                    }
+
+                    foreach (var relatedObject in related) {
+                        ConversionAnalytics.Instance.AddConverted(relatedObject.GetType().Name, relatedObject.GLOBALID, equipmentName!);
+                        Logger.Current.DataObject((int)featureN.GetObjectID(), relatedObject.TableName ?? "Uknown table name", equipmentName ?? "Unknown equipment name", System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                    }
+
+                    if (equipmentName == null) {
+                        throw new NotSupportedException("empty equipment name");
+                    }
+
+                    FeatureRelations.Instance.AddRelation(new(s101master.GetType(), s101MasterFeature.UID()), new(instance.GetType(), equipmentName), featureN, s101MasterFeature);
                 }
-                else {
-                    ;
-                }
-
-
-                ImporterNIS.SetShape(buffer, s57master.Shape);
-                ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
-
-                var featureN = featureClass.CreateRow(buffer);
-                var equipmentName = featureN.UID();
-                if (equipmentName == null) {
-                    throw new NotSupportedException("empty equipment name");
-                }
-
-                foreach (var relatedObject in related) {
-                    ConversionAnalytics.Instance.AddConverted(relatedObject.GetType().Name, relatedObject.GLOBALID, equipmentName!);
-                    Logger.Current.DataObject((int)featureN.GetObjectID(), relatedObject.TableName ?? "Uknown table name", equipmentName ?? "Unknown equipment name", System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                }
-
-                if (equipmentName == null) {
-                    throw new NotSupportedException("empty equipment name");
-                }
-
-                FeatureRelations.Instance.AddRelation(new(s101master.GetType(), s101MasterFeature.UID()), new(instance.GetType(), equipmentName), featureN, s101MasterFeature);
-
                 // return;
             }
 

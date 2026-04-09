@@ -87,6 +87,13 @@ namespace S100Framework.Applications
 
             bool append = false;
 
+
+            {
+                FastZip fastZip = new();
+                fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "scamin.gdb.zip"), IO.Path.GetFullPath(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "scamin.gdb")), null);
+
+            }
+
             arguments.WithParsed<Options>(o => {
                 var target = o.Target!;
 

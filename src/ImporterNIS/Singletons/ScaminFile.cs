@@ -1,4 +1,5 @@
-﻿using ArcGIS.Core.Geometry;
+﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using System.Xml.Linq;
 
 namespace S100Framework.Applications.Singletons
@@ -31,20 +32,33 @@ namespace S100Framework.Applications.Singletons
         private Scamin(string pathToScaminFiles) {
             var sr = SpatialReferences.WGS84;
 
+            using (var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(System.IO.Path.GetFullPath(@".\scamin.gdb"))))) {
+                using var fc = geodatabase.OpenDataset<FeatureClass>("polygons");
+
+                using var cursor = fc.Search();
+                while (cursor.MoveNext()) {
+                    var name = Convert.ToString(cursor.Current["name"])!;
+                    var polygon = (Polygon)((Feature)cursor.Current).GetShape();
+
+                    AddPolygon(name, polygon, sr);
+                }
+            }
+
+#if raw
             // TODO: Get Scamin polygons and corresponding filenames from external datasource. Ie. database, geopackage, shapefiles etc.
             AddPolygon("SCAMIN_GST_Danmark.xml",
             [
                 new(14.8303810, 55.8645445),
-                new(16.8899873, 55.8827711),
-                new(16.8596097, 54.4003405),
-                new(11.8350354, 54.2466303),
-                new(7.3817750,  54.4307182),
-                new(3.2261091,  55.6883540),
-                new(3.2807889,  57.0188961),
-                new(10.0732371, 58.4405713),
-                new(12.0217782, 57.3854226),
-                new(12.4852245, 56.3505873),
-                new(14.8303810, 55.8645445)
+                    new(16.8899873, 55.8827711),
+                    new(16.8596097, 54.4003405),
+                    new(11.8350354, 54.2466303),
+                    new(7.3817750,  54.4307182),
+                    new(3.2261091,  55.6883540),
+                    new(3.2807889,  57.0188961),
+                    new(10.0732371, 58.4405713),
+                    new(12.0217782, 57.3854226),
+                    new(12.4852245, 56.3505873),
+                    new(14.8303810, 55.8645445)
             ], sr);
 
             AddPolygon("SCAMIN_GST_Grønland.xml",
@@ -75,10 +89,27 @@ namespace S100Framework.Applications.Singletons
                 new(-112.1914224, 7.1350314),
                 new(-133.7712815, 28.5463887)
             ], sr);
+#endif
 
             foreach (var filePath in Directory.GetFiles(pathToScaminFiles, "*.xml")) {
                 var fileName = Path.GetFileName(filePath);
                 _scaminFiles.Add(Path.GetFileName(fileName), new ScaminFile(Path.Combine(pathToScaminFiles, fileName)));
+            }
+
+
+            {/*                
+                using (var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(System.IO.Path.GetFullPath("scamin.gdb"))))) {
+                    using var fc = geodatabase.OpenDataset<FeatureClass>("polygons");
+
+                    var buffer = fc.CreateRowBuffer();
+                    foreach(var e in _polygons) {
+                        buffer["shape"] = e.Polygon;
+                        var _ = fc.CreateRow(buffer);
+                        _.Store();
+                    }
+                }
+                ;
+            */
             }
         }
 
@@ -157,6 +188,16 @@ namespace S100Framework.Applications.Singletons
             _polygons.Add(new NamedPolygon(xmlFileName, polygon));
         }
 
+        /// <summary>
+        /// Adds the polygon
+        /// </summary>
+        /// <param xmlFileName="xmlFileName"></param>
+        /// <param xmlFileName="points">Coordinate2D points</param>
+        /// <param xmlFileName="spatialReference">The spatial reference</param>
+        private static void AddPolygon(string xmlFileName, Polygon polygon, SpatialReference spatialReference) {
+            _polygons.Add(new NamedPolygon(xmlFileName, polygon));
+        }
+
         private static List<string> GetTouchedPolygonNames(Geometry inputGeometry) {
             var touchedPolygons = new List<string>();
 
@@ -164,6 +205,9 @@ namespace S100Framework.Applications.Singletons
                 // Check if inputGeometry touches the polygon
                 if (GeometryEngine.Instance.Touches(inputGeometry, np.Polygon) ||
                     GeometryEngine.Instance.Intersects(inputGeometry, np.Polygon)) {
+                    touchedPolygons.Add(np.Name);
+                }
+                else if (GeometryEngine.Instance.Within(np.Polygon, inputGeometry)) {
                     touchedPolygons.Add(np.Name);
                 }
             }
@@ -297,6 +341,9 @@ namespace S100Framework.Applications.Singletons
             else {
                 return null;
             }
+
+            if (index.Value >= higherScamins.Length)
+                return higherScamins.Last();
             return higherScamins[index.Value];
         }
     }
