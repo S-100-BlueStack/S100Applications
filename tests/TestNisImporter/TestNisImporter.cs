@@ -612,8 +612,10 @@ namespace TestNisImporter
                             //Console.WriteLine("");
                             continue;
                         }
-
-
+                        else if (field.Name.ToUpper().StartsWith("GST_")) {
+                            //Console.WriteLine("");
+                            continue;
+                        }
 
 
                         fieldInfo = field.FieldType switch {

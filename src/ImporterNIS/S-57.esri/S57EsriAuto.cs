@@ -22998,24 +22998,6 @@ namespace S100Framework.Applications.S57auto.esri
 		/// </summary>
 		[Description("NIS_LAST_MOD")]
 		internal DateTime? NIS_LAST_MOD = default;
-
-		/// <summary>
-		/// IsLocked
-		/// </summary>
-		[Description("IsLocked")]
-		internal int? GST_LOCKED = default;
-
-		/// <summary>
-		/// JSON
-		/// </summary>
-		[Description("JSON")]
-		internal string? GST_JSON = default;
-
-		/// <summary>
-		/// IsTechnicalEdition
-		/// </summary>
-		[Description("IsTechnicalEdition")]
-		internal int? GST_TECHNICAL = default;
 		public ProductDefinitions(Row row) {
 			base.TableName = "ProductDefinitions";
 			if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
@@ -23135,16 +23117,6 @@ namespace S100Framework.Applications.S57auto.esri
 			}
 			if (DBNull.Value != row["NIS_LAST_MOD"] && row["NIS_LAST_MOD"] is not null) {
 				NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
-			}
-			if (DBNull.Value != row["GST_LOCKED"] && row["GST_LOCKED"] is not null) {
-				GST_LOCKED = Convert.ToInt32(row["GST_LOCKED"]);
-			}
-			if (DBNull.Value != row["GST_JSON"] && row["GST_JSON"] is not null) {
-				var text = Convert.ToString(row["GST_JSON"]);
-				this.GST_JSON = string.IsNullOrEmpty(text) ? default : text;
-			}
-			if (DBNull.Value != row["GST_TECHNICAL"] && row["GST_TECHNICAL"] is not null) {
-				GST_TECHNICAL = Convert.ToInt32(row["GST_TECHNICAL"]);
 			}
 		}
 	}
