@@ -1,5 +1,6 @@
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
+using NetTopologySuite.Algorithm;
 using S100Framework.Applications;
 using System.Globalization;
 using System.Text;
@@ -491,65 +492,69 @@ namespace TestNisImporter
 
         [Fact]
         public void GenerateNisModel() {
-            var featureclasses = new List<string> { "PLTS_SpatialAttributeL",
-                                            "TidesAndVariationsA",
-                                            "TidesAndVariationsL",
-                                            "TidesAndVariationsP",
-                                            "SeabedL",
-                                            "SeabedP",
-                                            "SeabedA",
-                                            "DangersL",
-                                            "DangersP",
-                                            "DangersA",
-                                            "DepthsL",
-                                            "OffshoreInstallationsL",
-                                            "OffshoreInstallationsA",
-                                            "MetaDataP",
-                                            "TracksAndRoutesA",
-                                            "TracksAndRoutesL",
-                                            "TracksAndRoutesP",
-                                            "AidsToNavigationP",
-                                            "IceFeaturesA",
-                                            "MilitaryFeaturesA",
-                                            "MilitaryFeaturesP",
-                                            "UserDefinedFeaturesA",
-                                            "UserDefinedFeaturesP",
-                                            "UserDefinedFeaturesL",
-                                            "DepthsA",
-                                            "SoundingsP",
-                                            "PortsAndServicesP",
-                                            "PortsAndServicesL",
-                                            "PortsAndServicesA",
-                                            "CulturalFeaturesA",
-                                            "CulturalFeaturesL",
-                                            "CulturalFeaturesP",
-                                            "NaturalFeaturesP",
-                                            "NaturalFeaturesL",
-                                            "NaturalFeaturesA",
-                                            "CoastlineL",
-                                            "CoastlineP",
-                                            "CoastlineA",
-                                            "RegulatedAreasAndLimitsL",
-                                            "RegulatedAreasAndLimitsP",
-                                            "RegulatedAreasAndLimitsA",
-                                            "MetaDataA",
-                                            "MetaDataL",
-                                            "OffshoreInstallationsP",
-                                            "ClosingLinesL",
-                                            "ProductCoverage",
+            var featureclasses = new List<string> { "nis.PLTS_SpatialAttributeL",
+                                            "nis.TidesAndVariationsA",
+                                            "nis.TidesAndVariationsL",
+                                            "nis.TidesAndVariationsP",
+                                            "nis.SeabedL",
+                                            "nis.SeabedP",
+                                            "nis.SeabedA",
+                                            "nis.DangersL",
+                                            "nis.DangersP",
+                                            "nis.DangersA",
+                                            "nis.DepthsL",
+                                            "nis.OffshoreInstallationsL",
+                                            "nis.OffshoreInstallationsA",
+                                            "nis.MetaDataP",
+                                            "nis.TracksAndRoutesA",
+                                            "nis.TracksAndRoutesL",
+                                            "nis.TracksAndRoutesP",
+                                            "nis.AidsToNavigationP",
+                                            "nis.IceFeaturesA",
+                                            "nis.MilitaryFeaturesA",
+                                            "nis.MilitaryFeaturesP",
+                                            "nis.UserDefinedFeaturesA",
+                                            "nis.UserDefinedFeaturesP",
+                                            "nis.UserDefinedFeaturesL",
+                                            "nis.DepthsA",
+                                            "nis.SoundingsP",
+                                            "nis.PortsAndServicesP",
+                                            "nis.PortsAndServicesL",
+                                            "nis.PortsAndServicesA",
+                                            "nis.CulturalFeaturesA",
+                                            "nis.CulturalFeaturesL",
+                                            "nis.CulturalFeaturesP",
+                                            "nis.NaturalFeaturesP",
+                                            "nis.NaturalFeaturesL",
+                                            "nis.NaturalFeaturesA",
+                                            "nis.CoastlineL",
+                                            "nis.CoastlineP",
+                                            "nis.CoastlineA",
+                                            "nis.RegulatedAreasAndLimitsL",
+                                            "nis.RegulatedAreasAndLimitsP",
+                                            "nis.RegulatedAreasAndLimitsA",
+                                            "nis.MetaDataA",
+                                            "nis.MetaDataL",
+                                            "nis.OffshoreInstallationsP",
+                                            "nis.ClosingLinesL",
+                                            "nis.ProductCoverage",
                                             //"ProductRestrictions"
             };
             var tables = new List<string> { //"ProductExports",
-                                            "ProductDefinitions",
-                                            "PLTS_Collections",
-                                            "PLTS_Frel",
-                                            "PLTS_Master_Slaves"
+                                            "nis.ProductDefinitions",
+                                            "nis.PLTS_Collections",
+                                            "nis.PLTS_Frel",
+                                            "nis.PLTS_Master_Slaves"
                                           };
 
-            var sourcePath = @$"{Environment.GetEnvironmentVariable("OneDrive")}\ArcGIS\Projects\Vortex\replica.gdb";
-            var source = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(sourcePath))));
+            //var sourcePath = @$"{Environment.GetEnvironmentVariable("OneDrive")}\ArcGIS\Projects\Vortex\replica.gdb";
+            //var source = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(sourcePath))));
 
-            string filePath = IO.Path.GetFullPath(IO.Path.Combine(@".\..\..\..\..\..\..\..\src\Application\VortexLoader\S-57.esri\S57EsriAuto.cs"));
+            string filePath = IO.Path.GetFullPath(IO.Path.Combine(@".\..\..\..\..\..\src\ImporterNIS\S-57.esri\S57EsriAuto.cs")); 
+            var sourcePath = IO.Path.GetFullPath(IO.Path.Combine(@"\\nas.gst.dk\ncps\administrators\NIS\SQLServer-ncps-sql100824-nis_OS.sde"));
+            var source = new Geodatabase(new DatabaseConnectionFile(new Uri(IO.Path.GetFullPath(sourcePath))));
+
+            
             StringBuilder csFile = new StringBuilder();
 
             List<Dataset> datasets = [];
@@ -571,23 +576,23 @@ namespace TestNisImporter
                 csFile.AppendLine("{");
 
                 foreach (var dataset in datasets) {
-                    var datasetName = dataset.GetName();
+                    var datasetName = dataset.GetName().Split('.')[1];
                     StringBuilder fields = new StringBuilder();
                     StringBuilder ctor = new StringBuilder();
                     StringBuilder objectClass = new StringBuilder();
 
-                    objectClass.AppendLine($"\tinternal class {dataset.GetName()} : S100Framework.Applications.S57.esri.S57Object {{");
+                    objectClass.AppendLine($"\tinternal class {datasetName} : S100Framework.Applications.S57.esri.S57Object {{");
 
 
                     IReadOnlyList<ArcGIS.Core.Data.Field> datasetfields = [];
 
                     if (dataset is FeatureClass) {
                         datasetfields = ((FeatureClass)dataset).GetDefinition().GetFields();
-                        ctor.AppendLine($"\t\tpublic {dataset.GetName()}(Feature feature) {{");
+                        ctor.AppendLine($"\t\tpublic {datasetName}(Feature feature) {{");
                     }
                     else if (dataset is Table) {
                         datasetfields = ((Table)dataset).GetDefinition().GetFields();
-                        ctor.AppendLine($"\t\tpublic {dataset.GetName()}(Row row) {{");
+                        ctor.AppendLine($"\t\tpublic {datasetName}(Row row) {{");
                     }
 
                     ctor.AppendLine($"\t\t\tbase.TableName = \"{datasetName}\";");
@@ -596,17 +601,28 @@ namespace TestNisImporter
 
                     foreach (var field in datasetfields) {
                         if (field.Name.ToUpper().StartsWith("SHAPE_")) {
-                            Console.WriteLine("");
+                            //Console.WriteLine("");
                             continue;
                         }
+                        else if (field.Name.ToUpper().StartsWith("SHAPE.STLENGTH")) {
+                            //Console.WriteLine("");
+                            continue;
+                        }
+                        else if (field.Name.ToUpper().StartsWith("SHAPE.STAREA")) {
+                            //Console.WriteLine("");
+                            continue;
+                        }
+
+
+
 
                         fieldInfo = field.FieldType switch {
                             (FieldType)esriFieldType.esriFieldTypeBigInteger => (Type: "internal long?", Conversion: "Convert.ToLong", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeInteger => (Type: "internal int?", Conversion: "Convert.ToInt32", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeString => (Type: "internal string?", Conversion: "Convert.ToString", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeSmallInteger => (Type: "internal int?", Conversion: "Convert.ToInt32", Default: "default", Alias: field.AliasName),
-                            //(FieldType)esriFieldType.esriFieldTypeDouble => (Type: "internal decimal?", Conversion: "Convert.ToDecimal", Default: "default", Alias: field.AliasName),
-                            (FieldType)esriFieldType.esriFieldTypeDouble => (Type: "internal double?", Conversion: "Convert.ToDouble", Default: "default", Alias: field.AliasName),
+                            (FieldType)esriFieldType.esriFieldTypeDouble => (Type: "internal decimal?", Conversion: "Convert.ToDecimal", Default: "default", Alias: field.AliasName),
+                            //(FieldType)esriFieldType.esriFieldTypeDouble => (Type: "internal double?", Conversion: "Convert.ToDouble", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeSingle => (Type: "internal int?", Conversion: "Convert.ToInt32", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeDate => (Type: "internal DateTime?", Conversion: "Convert.ToDateTime", Default: "default", Alias: field.AliasName),
                             (FieldType)esriFieldType.esriFieldTypeGUID => (Type: "internal Guid", Conversion: "Guid.Parse", Default: "Guid.Empty", Alias: field.AliasName),
@@ -629,9 +645,7 @@ namespace TestNisImporter
                             }
                             if (fieldInfo.Type.ToLower().Contains("guid")) {
                                 fieldValue = $@"Guid.TryParse(Convert.ToString(feature[""{field.Name.ToUpper()}""]), out {field.Name.ToUpper()})";
-
                             }
-
                         }
                         else if (dataset is Table) {
                             if (string.IsNullOrEmpty(fieldInfo.Conversion)) {
@@ -653,7 +667,6 @@ namespace TestNisImporter
                         fields.AppendLine($"\t\t{fieldInfo.Type} {field.Name.ToUpper()} = {fieldInfo.DefaultValue};");
 
 
-
                         if (dataset is FeatureClass) {
                             if (field.Name.ToUpper() == "VALIDATIONSTATUS") {
                                 ctor.AppendLine($"\t\t\tif (feature.FindField(\"VALIDATIONSTATUS\") > -1) {{ // NOAA Exception");
@@ -673,6 +686,21 @@ namespace TestNisImporter
                                 ctor.AppendLine($"\t\t\t\tbase.GlobalId = this.GLOBALID;");
                             }
                         }
+
+                        else if (fieldInfo.Type.ToLower().Contains("string")) {
+                            if (dataset is FeatureClass) {
+                                var value1 = $@"var text = {fieldInfo.Conversion}(feature[""{field.Name.ToUpper()}""])";
+                                var value2 = $@"this.{field.Name.ToUpper()} = string.IsNullOrEmpty(text) ? default : text";
+                                ctor.AppendLine($"\t\t\t\t{value1};");
+                                ctor.AppendLine($"\t\t\t\t{value2};");
+                            } else if (dataset is Table) {
+                                var value1 = $@"var text = {fieldInfo.Conversion}(row[""{field.Name.ToUpper()}""])";
+                                var value2 = $@"this.{field.Name.ToUpper()} = string.IsNullOrEmpty(text) ? default : text";
+                                ctor.AppendLine($"\t\t\t\t{value1};");
+                                ctor.AppendLine($"\t\t\t\t{value2};");
+                            }
+                        }
+
                         else {
                             ctor.AppendLine($"\t\t\t\t{field.Name.ToUpper()} = {fieldValue};");
                             if (field.Name.ToUpper() == "VALIDATIONSTATUS") {
