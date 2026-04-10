@@ -5,13 +5,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
 
-  <AddInInfo id="{e88a79e5-f75d-4324-b52a-38eca2a1f9a1}" version="3.7.688.2" desktopVersion="3.7">
+  <AddInInfo id="{7e0ef90c-de09-42fd-8095-870ef80cba1c}" version="3.7.1772.1" desktopVersion="3.7">
     <Name>NuvionPro</Name>   
     <Description>The project aimed to implement the S-100 standard within ArcGIS Pro to improve the creation, management, and dissemination of electronic navigational charts (ENCs) in compliance with the International Hydrographic Organization's (IHO) S-100 framework. The implementation of S-100 standards in ArcGIS Pro facilitates the transition from traditional paper charts to modern digital navigational tools, enhancing safety and efficiency in maritime navigation.</Description>
     <Image>Images\Logo.png</Image>
     <Author>Geodatastyrelsen</Author>
     <Company>S-100 BlueStack</Company>
-    <Subject>Editing</Subject>
+    <Subject>S-100</Subject>
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
@@ -38,7 +38,7 @@
   <categories>
     <updateCategory refID="esri_editing_AttributeTabs">
       <insertComponent id="S100AttributeTab" className="S100AttributeTabViewModel">
-        <content guid="{6a5e0ba6-3da6-4c73-b7c0-e5434a4a100e}" className="Views.S100AttributeTabView"  L_name="S-100 Editor"/>
+        <content guid="{981f7707-9c4e-4b1c-9ecd-9d63946e943d}" className="Views.S100AttributeTabView"  L_name="S-100 Editor"/>
       </insertComponent>
     </updateCategory>
   </categories>

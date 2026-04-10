@@ -105,7 +105,7 @@ namespace NuvionPro
                 if (fc is null)
                     return;
 
-                var metadata = layer.GetMetadata();
+                var metadata = layer.GetMetadata();                              
                 if (!metadata.Contains("<keyword>vortex</keyword>"))
                     return;
 
@@ -119,7 +119,7 @@ namespace NuvionPro
 
 
                 // This Guid defines the "Custom Tab" in the config.daml                
-                Guid extension = new("{6a5e0ba6-3da6-4c73-b7c0-e5434a4a100e}");
+                Guid extension = new("{981f7707-9c4e-4b1c-9ecd-9d63946e943d}");
 
                 if (!fc.GetHasActivationExtension(extension)) {
                     CoreDataExtensions.AddActivationExtension(fc, extension);
@@ -151,7 +151,7 @@ namespace NuvionPro
                 var join = table.IsJoinedTable() ? table.GetJoin() : default;
 
                 // This Guid defines the "Custom Tab" in the config.daml                
-                Guid extension = new("{6a5e0ba6-3da6-4c73-b7c0-e5434a4a100e}");
+                Guid extension = new("{981f7707-9c4e-4b1c-9ecd-9d63946e943d}");
 
                 if (!table.GetHasActivationExtension(extension)) {
                     CoreDataExtensions.AddActivationExtension(table, extension);
