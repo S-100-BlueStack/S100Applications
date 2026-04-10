@@ -16,12 +16,6 @@ namespace S100Framework.Applications.S57.esri
         internal int? OBJECTID = default;
 
         /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
-
-        /// <summary>
         /// GlobalID
         /// </summary>
         [Description("GlobalID")]
@@ -152,94 +146,102 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public PLTS_SpatialAttributeL(Feature feature) {
-            base.TableName = "PLTS_SpatialAttributeL";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"])?.Trim();
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"])?.Trim();
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"])?.Trim();
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"])?.Trim();
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"])?.Trim();
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"])?.Trim();
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"])?.Trim();
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"])?.Trim();
-            }
-        }
-    }
-    internal class TidesAndVariationsA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public PLTS_SpatialAttributeL(Feature feature) {
+            base.TableName = "PLTS_SpatialAttributeL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class TidesAndVariationsA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -570,180 +572,219 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public TidesAndVariationsA(Feature feature) {
             base.TableName = "TidesAndVariationsA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RYRMGV"] && feature["RYRMGV"] is not null) {
-                this.RYRMGV = Convert.ToString(feature["RYRMGV"]);
+                var text = Convert.ToString(feature["RYRMGV"]);
+                this.RYRMGV = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VALLMA"] && feature["VALLMA"] is not null) {
-                this.VALLMA = Convert.ToDecimal(feature["VALLMA"]);
+                VALLMA = Convert.ToDecimal(feature["VALLMA"]);
             }
             if (DBNull.Value != feature["VALACM"] && feature["VALACM"] is not null) {
-                this.VALACM = Convert.ToDecimal(feature["VALACM"]);
+                VALACM = Convert.ToDecimal(feature["VALACM"]);
             }
             if (DBNull.Value != feature["VALMAG"] && feature["VALMAG"] is not null) {
-                this.VALMAG = Convert.ToDecimal(feature["VALMAG"]);
+                VALMAG = Convert.ToDecimal(feature["VALMAG"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CAT_TS"] && feature["CAT_TS"] is not null) {
-                this.CAT_TS = Convert.ToInt32(feature["CAT_TS"]);
+                CAT_TS = Convert.ToInt32(feature["CAT_TS"]);
             }
             if (DBNull.Value != feature["CURVEL"] && feature["CURVEL"] is not null) {
-                this.CURVEL = Convert.ToDecimal(feature["CURVEL"]);
+                CURVEL = Convert.ToDecimal(feature["CURVEL"]);
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TIMEND"] && feature["TIMEND"] is not null) {
-                this.TIMEND = Convert.ToString(feature["TIMEND"]);
+                var text = Convert.ToString(feature["TIMEND"]);
+                this.TIMEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TIMSTA"] && feature["TIMSTA"] is not null) {
-                this.TIMSTA = Convert.ToString(feature["TIMSTA"]);
+                var text = Convert.ToString(feature["TIMSTA"]);
+                this.TIMSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_ACWL"] && feature["T_ACWL"] is not null) {
-                this.T_ACWL = Convert.ToInt32(feature["T_ACWL"]);
+                T_ACWL = Convert.ToInt32(feature["T_ACWL"]);
             }
             if (DBNull.Value != feature["T_HWLW"] && feature["T_HWLW"] is not null) {
-                this.T_HWLW = Convert.ToString(feature["T_HWLW"]);
+                var text = Convert.ToString(feature["T_HWLW"]);
+                this.T_HWLW = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_MTOD"] && feature["T_MTOD"] is not null) {
-                this.T_MTOD = Convert.ToInt32(feature["T_MTOD"]);
+                T_MTOD = Convert.ToInt32(feature["T_MTOD"]);
             }
             if (DBNull.Value != feature["T_THDF"] && feature["T_THDF"] is not null) {
-                this.T_THDF = Convert.ToString(feature["T_THDF"]);
+                var text = Convert.ToString(feature["T_THDF"]);
+                this.T_THDF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_TINT"] && feature["T_TINT"] is not null) {
-                this.T_TINT = Convert.ToInt32(feature["T_TINT"]);
+                T_TINT = Convert.ToInt32(feature["T_TINT"]);
             }
             if (DBNull.Value != feature["T_TSVL"] && feature["T_TSVL"] is not null) {
-                this.T_TSVL = Convert.ToString(feature["T_TSVL"]);
+                var text = Convert.ToString(feature["T_TSVL"]);
+                this.T_TSVL = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_VAHC"] && feature["T_VAHC"] is not null) {
-                this.T_VAHC = Convert.ToString(feature["T_VAHC"]);
+                var text = Convert.ToString(feature["T_VAHC"]);
+                this.T_VAHC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TS_TSP"] && feature["TS_TSP"] is not null) {
-                this.TS_TSP = Convert.ToString(feature["TS_TSP"]);
+                var text = Convert.ToString(feature["TS_TSP"]);
+                this.TS_TSP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TS_TSV"] && feature["TS_TSV"] is not null) {
-                this.TS_TSV = Convert.ToString(feature["TS_TSV"]);
+                var text = Convert.ToString(feature["TS_TSV"]);
+                this.TS_TSV = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -757,12 +798,6 @@ namespace S100Framework.Applications.S57.esri
         internal int? OBJECTID = default;
 
         /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
-
-        /// <summary>
         /// GlobalID
         /// </summary>
         [Description("GlobalID")]
@@ -983,129 +1018,157 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public TidesAndVariationsL(Feature feature) {
             base.TableName = "TidesAndVariationsL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RYRMGV"] && feature["RYRMGV"] is not null) {
-                this.RYRMGV = Convert.ToString(feature["RYRMGV"]);
+                var text = Convert.ToString(feature["RYRMGV"]);
+                this.RYRMGV = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VALLMA"] && feature["VALLMA"] is not null) {
-                this.VALLMA = Convert.ToDecimal(feature["VALLMA"]);
+                VALLMA = Convert.ToDecimal(feature["VALLMA"]);
             }
             if (DBNull.Value != feature["VALACM"] && feature["VALACM"] is not null) {
-                this.VALACM = Convert.ToDecimal(feature["VALACM"]);
+                VALACM = Convert.ToDecimal(feature["VALACM"]);
             }
             if (DBNull.Value != feature["VALMAG"] && feature["VALMAG"] is not null) {
-                this.VALMAG = Convert.ToDecimal(feature["VALMAG"]);
+                VALMAG = Convert.ToDecimal(feature["VALMAG"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -1117,12 +1180,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -1465,189 +1522,228 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public TidesAndVariationsP(Feature feature) {
             base.TableName = "TidesAndVariationsP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RYRMGV"] && feature["RYRMGV"] is not null) {
-                this.RYRMGV = Convert.ToString(feature["RYRMGV"]);
+                var text = Convert.ToString(feature["RYRMGV"]);
+                this.RYRMGV = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VALLMA"] && feature["VALLMA"] is not null) {
-                this.VALLMA = Convert.ToDecimal(feature["VALLMA"]);
+                VALLMA = Convert.ToDecimal(feature["VALLMA"]);
             }
             if (DBNull.Value != feature["VALACM"] && feature["VALACM"] is not null) {
-                this.VALACM = Convert.ToDecimal(feature["VALACM"]);
+                VALACM = Convert.ToDecimal(feature["VALACM"]);
             }
             if (DBNull.Value != feature["VALMAG"] && feature["VALMAG"] is not null) {
-                this.VALMAG = Convert.ToDecimal(feature["VALMAG"]);
+                VALMAG = Convert.ToDecimal(feature["VALMAG"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CAT_TS"] && feature["CAT_TS"] is not null) {
-                this.CAT_TS = Convert.ToInt32(feature["CAT_TS"]);
+                CAT_TS = Convert.ToInt32(feature["CAT_TS"]);
             }
             if (DBNull.Value != feature["CURVEL"] && feature["CURVEL"] is not null) {
-                this.CURVEL = Convert.ToDecimal(feature["CURVEL"]);
+                CURVEL = Convert.ToDecimal(feature["CURVEL"]);
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TIMEND"] && feature["TIMEND"] is not null) {
-                this.TIMEND = Convert.ToString(feature["TIMEND"]);
+                var text = Convert.ToString(feature["TIMEND"]);
+                this.TIMEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TIMSTA"] && feature["TIMSTA"] is not null) {
-                this.TIMSTA = Convert.ToString(feature["TIMSTA"]);
+                var text = Convert.ToString(feature["TIMSTA"]);
+                this.TIMSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_ACWL"] && feature["T_ACWL"] is not null) {
-                this.T_ACWL = Convert.ToInt32(feature["T_ACWL"]);
+                T_ACWL = Convert.ToInt32(feature["T_ACWL"]);
             }
             if (DBNull.Value != feature["T_HWLW"] && feature["T_HWLW"] is not null) {
-                this.T_HWLW = Convert.ToString(feature["T_HWLW"]);
+                var text = Convert.ToString(feature["T_HWLW"]);
+                this.T_HWLW = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_MTOD"] && feature["T_MTOD"] is not null) {
-                this.T_MTOD = Convert.ToInt32(feature["T_MTOD"]);
+                T_MTOD = Convert.ToInt32(feature["T_MTOD"]);
             }
             if (DBNull.Value != feature["T_THDF"] && feature["T_THDF"] is not null) {
-                this.T_THDF = Convert.ToString(feature["T_THDF"]);
+                var text = Convert.ToString(feature["T_THDF"]);
+                this.T_THDF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_TINT"] && feature["T_TINT"] is not null) {
-                this.T_TINT = Convert.ToInt32(feature["T_TINT"]);
+                T_TINT = Convert.ToInt32(feature["T_TINT"]);
             }
             if (DBNull.Value != feature["T_TSVL"] && feature["T_TSVL"] is not null) {
-                this.T_TSVL = Convert.ToString(feature["T_TSVL"]);
+                var text = Convert.ToString(feature["T_TSVL"]);
+                this.T_TSVL = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["T_VAHC"] && feature["T_VAHC"] is not null) {
-                this.T_VAHC = Convert.ToString(feature["T_VAHC"]);
+                var text = Convert.ToString(feature["T_VAHC"]);
+                this.T_VAHC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TS_TSP"] && feature["TS_TSP"] is not null) {
-                this.TS_TSP = Convert.ToString(feature["TS_TSP"]);
+                var text = Convert.ToString(feature["TS_TSP"]);
+                this.TS_TSP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TS_TSV"] && feature["TS_TSV"] is not null) {
-                this.TS_TSV = Convert.ToString(feature["TS_TSV"]);
+                var text = Convert.ToString(feature["TS_TSV"]);
+                this.TS_TSV = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -1659,12 +1755,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -1887,129 +1977,157 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public SeabedL(Feature feature) {
             base.TableName = "SeabedL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -2021,12 +2139,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -2273,152 +2385,174 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public SeabedP(Feature feature) {
-            base.TableName = "SeabedP";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
-            }
-            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATWED"] && feature["CATWED"] is not null) {
-                this.CATWED = Convert.ToInt32(feature["CATWED"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class SeabedA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public SeabedP(Feature feature) {
+            base.TableName = "SeabedP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATWED"] && feature["CATWED"] is not null) {
+                CATWED = Convert.ToInt32(feature["CATWED"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class SeabedA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -2653,132 +2787,160 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public SeabedA(Feature feature) {
             base.TableName = "SeabedA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATWED"] && feature["CATWED"] is not null) {
-                this.CATWED = Convert.ToInt32(feature["CATWED"]);
+                CATWED = Convert.ToInt32(feature["CATWED"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -2790,12 +2952,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -3126,183 +3282,219 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public DangersL(Feature feature) {
             base.TableName = "DangersL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATFIF"] && feature["CATFIF"] is not null) {
-                this.CATFIF = Convert.ToInt32(feature["CATFIF"]);
+                CATFIF = Convert.ToInt32(feature["CATFIF"]);
             }
             if (DBNull.Value != feature["CATOBS"] && feature["CATOBS"] is not null) {
-                this.CATOBS = Convert.ToInt32(feature["CATOBS"]);
+                CATOBS = Convert.ToInt32(feature["CATOBS"]);
             }
             if (DBNull.Value != feature["CATWAT"] && feature["CATWAT"] is not null) {
-                this.CATWAT = Convert.ToInt32(feature["CATWAT"]);
+                CATWAT = Convert.ToInt32(feature["CATWAT"]);
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"])?.Trim();
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATOLB"] && feature["CATOLB"] is not null) {
-                this.CATOLB = Convert.ToInt32(feature["CATOLB"]);
+                CATOLB = Convert.ToInt32(feature["CATOLB"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -3314,12 +3506,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -3680,209 +3866,239 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public DangersP(Feature feature) {
-            base.TableName = "DangersP";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATFIF"] && feature["CATFIF"] is not null) {
-                this.CATFIF = Convert.ToInt32(feature["CATFIF"]);
-            }
-            if (DBNull.Value != feature["CATOBS"] && feature["CATOBS"] is not null) {
-                this.CATOBS = Convert.ToInt32(feature["CATOBS"]);
-            }
-            if (DBNull.Value != feature["CATWAT"] && feature["CATWAT"] is not null) {
-                this.CATWAT = Convert.ToInt32(feature["CATWAT"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
-            }
-            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
-            }
-            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATWRK"] && feature["CATWRK"] is not null) {
-                this.CATWRK = Convert.ToInt32(feature["CATWRK"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class DangersA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public DangersP(Feature feature) {
+            base.TableName = "DangersP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATFIF"] && feature["CATFIF"] is not null) {
+                CATFIF = Convert.ToInt32(feature["CATFIF"]);
+            }
+            if (DBNull.Value != feature["CATOBS"] && feature["CATOBS"] is not null) {
+                CATOBS = Convert.ToInt32(feature["CATOBS"]);
+            }
+            if (DBNull.Value != feature["CATWAT"] && feature["CATWAT"] is not null) {
+                CATWAT = Convert.ToInt32(feature["CATWAT"]);
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATWRK"] && feature["CATWRK"] is not null) {
+                CATWRK = Convert.ToInt32(feature["CATWRK"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class DangersA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -4231,200 +4447,230 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public DangersA(Feature feature) {
-            base.TableName = "DangersA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATFIF"] && feature["CATFIF"] is not null) {
-                this.CATFIF = Convert.ToInt32(feature["CATFIF"]);
-            }
-            if (DBNull.Value != feature["CATOBS"] && feature["CATOBS"] is not null) {
-                this.CATOBS = Convert.ToInt32(feature["CATOBS"]);
-            }
-            if (DBNull.Value != feature["CATWAT"] && feature["CATWAT"] is not null) {
-                this.CATWAT = Convert.ToInt32(feature["CATWAT"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
-            }
-            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
-            }
-            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATWRK"] && feature["CATWRK"] is not null) {
-                this.CATWRK = Convert.ToInt32(feature["CATWRK"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class DepthsL : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public DangersA(Feature feature) {
+            base.TableName = "DangersA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATFIF"] && feature["CATFIF"] is not null) {
+                CATFIF = Convert.ToInt32(feature["CATFIF"]);
+            }
+            if (DBNull.Value != feature["CATOBS"] && feature["CATOBS"] is not null) {
+                CATOBS = Convert.ToInt32(feature["CATOBS"]);
+            }
+            if (DBNull.Value != feature["CATWAT"] && feature["CATWAT"] is not null) {
+                CATWAT = Convert.ToInt32(feature["CATWAT"]);
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATWRK"] && feature["CATWRK"] is not null) {
+                CATWRK = Convert.ToInt32(feature["CATWRK"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class DepthsL : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -4653,140 +4899,160 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public DepthsL(Feature feature) {
-            base.TableName = "DepthsL";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["VALDCO"] && feature["VALDCO"] is not null) {
-                this.VALDCO = Convert.ToDecimal(feature["VALDCO"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class OffshoreInstallationsL : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public DepthsL(Feature feature) {
+            base.TableName = "DepthsL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["VALDCO"] && feature["VALDCO"] is not null) {
+                VALDCO = Convert.ToDecimal(feature["VALDCO"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class OffshoreInstallationsL : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -5057,161 +5323,185 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public OffshoreInstallationsL(Feature feature) {
-            base.TableName = "OffshoreInstallationsL";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
-                this.CATPIP = Convert.ToString(feature["CATPIP"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
-                this.BURDEP = Convert.ToDecimal(feature["BURDEP"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATCBL"] && feature["CATCBL"] is not null) {
-                this.CATCBL = Convert.ToInt32(feature["CATCBL"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class OffshoreInstallationsA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public OffshoreInstallationsL(Feature feature) {
+            base.TableName = "OffshoreInstallationsL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
+                var text = Convert.ToString(feature["CATPIP"]);
+                this.CATPIP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
+                BURDEP = Convert.ToDecimal(feature["BURDEP"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATCBL"] && feature["CATCBL"] is not null) {
+                CATCBL = Convert.ToInt32(feature["CATCBL"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class OffshoreInstallationsA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -5518,179 +5808,208 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public OffshoreInstallationsA(Feature feature) {
-            base.TableName = "OffshoreInstallationsA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
-                this.CATPIP = Convert.ToString(feature["CATPIP"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATCBL"] && feature["CATCBL"] is not null) {
-                this.CATCBL = Convert.ToInt32(feature["CATCBL"]);
-            }
-            if (DBNull.Value != feature["CATOFP"] && feature["CATOFP"] is not null) {
-                this.CATOFP = Convert.ToString(feature["CATOFP"]);
-            }
-            if (DBNull.Value != feature["CATPRA"] && feature["CATPRA"] is not null) {
-                this.CATPRA = Convert.ToInt32(feature["CATPRA"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class MetaDataP : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public OffshoreInstallationsA(Feature feature) {
+            base.TableName = "OffshoreInstallationsA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
+                var text = Convert.ToString(feature["CATPIP"]);
+                this.CATPIP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATCBL"] && feature["CATCBL"] is not null) {
+                CATCBL = Convert.ToInt32(feature["CATCBL"]);
+            }
+            if (DBNull.Value != feature["CATOFP"] && feature["CATOFP"] is not null) {
+                var text = Convert.ToString(feature["CATOFP"]);
+                this.CATOFP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATPRA"] && feature["CATPRA"] is not null) {
+                CATPRA = Convert.ToInt32(feature["CATPRA"]);
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class MetaDataP : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -5901,120 +6220,145 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS_LAST_MOD")]
         internal DateTime? NIS_LAST_MOD = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public MetaDataP(Feature feature) {
             base.TableName = "MetaDataP";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["PUBREF"] && feature["PUBREF"] is not null) {
-                this.PUBREF = Convert.ToString(feature["PUBREF"]);
+                var text = Convert.ToString(feature["PUBREF"]);
+                this.PUBREF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -6026,12 +6370,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -6332,179 +6670,207 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public TracksAndRoutesA(Feature feature) {
-            base.TableName = "TracksAndRoutesA";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["TRAFIC"] && feature["TRAFIC"] is not null) {
-                this.TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
-            }
-            if (DBNull.Value != feature["CATFRY"] && feature["CATFRY"] is not null) {
-                this.CATFRY = Convert.ToInt32(feature["CATFRY"]);
-            }
-            if (DBNull.Value != feature["CATNAV"] && feature["CATNAV"] is not null) {
-                this.CATNAV = Convert.ToInt32(feature["CATNAV"]);
-            }
-            if (DBNull.Value != feature["CATTRK"] && feature["CATTRK"] is not null) {
-                this.CATTRK = Convert.ToInt32(feature["CATTRK"]);
-            }
-            if (DBNull.Value != feature["CATTSS"] && feature["CATTSS"] is not null) {
-                this.CATTSS = Convert.ToInt32(feature["CATTSS"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class TracksAndRoutesL : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public TracksAndRoutesA(Feature feature) {
+            base.TableName = "TracksAndRoutesA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TRAFIC"] && feature["TRAFIC"] is not null) {
+                TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
+            }
+            if (DBNull.Value != feature["CATFRY"] && feature["CATFRY"] is not null) {
+                CATFRY = Convert.ToInt32(feature["CATFRY"]);
+            }
+            if (DBNull.Value != feature["CATNAV"] && feature["CATNAV"] is not null) {
+                CATNAV = Convert.ToInt32(feature["CATNAV"]);
+            }
+            if (DBNull.Value != feature["CATTRK"] && feature["CATTRK"] is not null) {
+                CATTRK = Convert.ToInt32(feature["CATTRK"]);
+            }
+            if (DBNull.Value != feature["CATTSS"] && feature["CATTSS"] is not null) {
+                CATTSS = Convert.ToInt32(feature["CATTSS"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class TracksAndRoutesL : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -6805,165 +7171,198 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public TracksAndRoutesL(Feature feature) {
             base.TableName = "TracksAndRoutesL";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TRAFIC"] && feature["TRAFIC"] is not null) {
-                this.TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
+                TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
             }
             if (DBNull.Value != feature["CATFRY"] && feature["CATFRY"] is not null) {
-                this.CATFRY = Convert.ToInt32(feature["CATFRY"]);
+                CATFRY = Convert.ToInt32(feature["CATFRY"]);
             }
             if (DBNull.Value != feature["CATNAV"] && feature["CATNAV"] is not null) {
-                this.CATNAV = Convert.ToInt32(feature["CATNAV"]);
+                CATNAV = Convert.ToInt32(feature["CATNAV"]);
             }
             if (DBNull.Value != feature["CATTRK"] && feature["CATTRK"] is not null) {
-                this.CATTRK = Convert.ToInt32(feature["CATTRK"]);
+                CATTRK = Convert.ToInt32(feature["CATTRK"]);
             }
             if (DBNull.Value != feature["CATTSS"] && feature["CATTSS"] is not null) {
-                this.CATTSS = Convert.ToInt32(feature["CATTSS"]);
+                CATTSS = Convert.ToInt32(feature["CATTSS"]);
             }
             if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
             }
             if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -6975,12 +7374,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -7239,147 +7632,179 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public TracksAndRoutesP(Feature feature) {
             base.TableName = "TracksAndRoutesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TRAFIC"] && feature["TRAFIC"] is not null) {
-                this.TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
+                TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -7391,12 +7816,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -7909,293 +8328,319 @@ namespace S100Framework.Applications.S57.esri
         internal string? NIS_EDITOR_COMMENT = default;
 
         /// <summary>
-        /// Validation status
+        /// Shape
         /// </summary>
-        [Description("Validation status")]
-        internal int? VALIDATIONSTATUS = default;
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public AidsToNavigationP(Feature feature) {
             base.TableName = "AidsToNavigationP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
-                this.BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
+                BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
             }
             if (DBNull.Value != feature["BCNSHP"] && feature["BCNSHP"] is not null) {
-                this.BCNSHP = Convert.ToInt32(feature["BCNSHP"]);
+                BCNSHP = Convert.ToInt32(feature["BCNSHP"]);
             }
             if (DBNull.Value != feature["CALSGN"] && feature["CALSGN"] is not null) {
-                this.CALSGN = Convert.ToString(feature["CALSGN"]);
+                var text = Convert.ToString(feature["CALSGN"]);
+                this.CALSGN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATCAM"] && feature["CATCAM"] is not null) {
-                this.CATCAM = Convert.ToInt32(feature["CATCAM"]);
+                CATCAM = Convert.ToInt32(feature["CATCAM"]);
             }
             if (DBNull.Value != feature["CATFOG"] && feature["CATFOG"] is not null) {
-                this.CATFOG = Convert.ToInt32(feature["CATFOG"]);
+                CATFOG = Convert.ToInt32(feature["CATFOG"]);
             }
             if (DBNull.Value != feature["CATINB"] && feature["CATINB"] is not null) {
-                this.CATINB = Convert.ToInt32(feature["CATINB"]);
+                CATINB = Convert.ToInt32(feature["CATINB"]);
             }
             if (DBNull.Value != feature["CATLAM"] && feature["CATLAM"] is not null) {
-                this.CATLAM = Convert.ToInt32(feature["CATLAM"]);
+                CATLAM = Convert.ToInt32(feature["CATLAM"]);
             }
             if (DBNull.Value != feature["CATLIT"] && feature["CATLIT"] is not null) {
-                this.CATLIT = Convert.ToString(feature["CATLIT"]);
+                var text = Convert.ToString(feature["CATLIT"]);
+                this.CATLIT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATRAS"] && feature["CATRAS"] is not null) {
-                this.CATRAS = Convert.ToInt32(feature["CATRAS"]);
+                CATRAS = Convert.ToInt32(feature["CATRAS"]);
             }
             if (DBNull.Value != feature["CATROS"] && feature["CATROS"] is not null) {
-                this.CATROS = Convert.ToString(feature["CATROS"]);
+                var text = Convert.ToString(feature["CATROS"]);
+                this.CATROS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATRTB"] && feature["CATRTB"] is not null) {
-                this.CATRTB = Convert.ToInt32(feature["CATRTB"]);
+                CATRTB = Convert.ToInt32(feature["CATRTB"]);
             }
             if (DBNull.Value != feature["CATSPM"] && feature["CATSPM"] is not null) {
-                this.CATSPM = Convert.ToString(feature["CATSPM"]);
+                var text = Convert.ToString(feature["CATSPM"]);
+                this.CATSPM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["ESTRNG"] && feature["ESTRNG"] is not null) {
-                this.ESTRNG = Convert.ToDecimal(feature["ESTRNG"]);
+                ESTRNG = Convert.ToDecimal(feature["ESTRNG"]);
             }
             if (DBNull.Value != feature["EXCLIT"] && feature["EXCLIT"] is not null) {
-                this.EXCLIT = Convert.ToInt32(feature["EXCLIT"]);
+                EXCLIT = Convert.ToInt32(feature["EXCLIT"]);
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
             }
             if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
             }
             if (DBNull.Value != feature["LITCHR"] && feature["LITCHR"] is not null) {
-                this.LITCHR = Convert.ToInt32(feature["LITCHR"]);
+                LITCHR = Convert.ToInt32(feature["LITCHR"]);
             }
             if (DBNull.Value != feature["LITVIS"] && feature["LITVIS"] is not null) {
-                this.LITVIS = Convert.ToString(feature["LITVIS"]);
+                var text = Convert.ToString(feature["LITVIS"]);
+                this.LITVIS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["MARSYS"] && feature["MARSYS"] is not null) {
-                this.MARSYS = Convert.ToInt32(feature["MARSYS"]);
+                MARSYS = Convert.ToInt32(feature["MARSYS"]);
             }
             if (DBNull.Value != feature["MLTYLT"] && feature["MLTYLT"] is not null) {
-                this.MLTYLT = Convert.ToInt32(feature["MLTYLT"]);
+                MLTYLT = Convert.ToInt32(feature["MLTYLT"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RADWAL"] && feature["RADWAL"] is not null) {
-                this.RADWAL = Convert.ToString(feature["RADWAL"]);
+                var text = Convert.ToString(feature["RADWAL"]);
+                this.RADWAL = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SECTR1"] && feature["SECTR1"] is not null) {
-                this.SECTR1 = Convert.ToDecimal(feature["SECTR1"]);
+                SECTR1 = Convert.ToDecimal(feature["SECTR1"]);
             }
             if (DBNull.Value != feature["SECTR2"] && feature["SECTR2"] is not null) {
-                this.SECTR2 = Convert.ToDecimal(feature["SECTR2"]);
+                SECTR2 = Convert.ToDecimal(feature["SECTR2"]);
             }
             if (DBNull.Value != feature["SIGFRQ"] && feature["SIGFRQ"] is not null) {
-                this.SIGFRQ = Convert.ToInt32(feature["SIGFRQ"]);
+                SIGFRQ = Convert.ToInt32(feature["SIGFRQ"]);
             }
             if (DBNull.Value != feature["SIGGEN"] && feature["SIGGEN"] is not null) {
-                this.SIGGEN = Convert.ToInt32(feature["SIGGEN"]);
+                SIGGEN = Convert.ToInt32(feature["SIGGEN"]);
             }
             if (DBNull.Value != feature["SIGGRP"] && feature["SIGGRP"] is not null) {
-                this.SIGGRP = Convert.ToString(feature["SIGGRP"]);
+                var text = Convert.ToString(feature["SIGGRP"]);
+                this.SIGGRP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SIGPER"] && feature["SIGPER"] is not null) {
-                this.SIGPER = Convert.ToDecimal(feature["SIGPER"]);
+                SIGPER = Convert.ToDecimal(feature["SIGPER"]);
             }
             if (DBNull.Value != feature["SIGSEQ"] && feature["SIGSEQ"] is not null) {
-                this.SIGSEQ = Convert.ToString(feature["SIGSEQ"]);
+                var text = Convert.ToString(feature["SIGSEQ"]);
+                this.SIGSEQ = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TOPSHP"] && feature["TOPSHP"] is not null) {
-                this.TOPSHP = Convert.ToInt32(feature["TOPSHP"]);
+                TOPSHP = Convert.ToInt32(feature["TOPSHP"]);
             }
             if (DBNull.Value != feature["VALMXR"] && feature["VALMXR"] is not null) {
-                this.VALMXR = Convert.ToDecimal(feature["VALMXR"]);
+                VALMXR = Convert.ToDecimal(feature["VALMXR"]);
             }
             if (DBNull.Value != feature["VALNMR"] && feature["VALNMR"] is not null) {
-                this.VALNMR = Convert.ToDecimal(feature["VALNMR"]);
+                VALNMR = Convert.ToDecimal(feature["VALNMR"]);
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
-            if (feature.FindField("VALIDATIONSTATUS") > -1) { // NOAA Exception
-                if (DBNull.Value != feature["VALIDATIONSTATUS"] && feature["VALIDATIONSTATUS"] is not null) {
-                    this.VALIDATIONSTATUS = Convert.ToInt32(feature["VALIDATIONSTATUS"]);
-                }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
     internal class IceFeaturesA : S100Framework.Applications.S57.esri.S57Object
     {
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// OBJECTID
@@ -8448,152 +8893,174 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public IceFeaturesA(Feature feature) {
-            base.TableName = "IceFeaturesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATICE"] && feature["CATICE"] is not null) {
-                this.CATICE = Convert.ToInt32(feature["CATICE"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class MilitaryFeaturesA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public IceFeaturesA(Feature feature) {
+            base.TableName = "IceFeaturesA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATICE"] && feature["CATICE"] is not null) {
+                CATICE = Convert.ToInt32(feature["CATICE"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class MilitaryFeaturesA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -8828,132 +9295,164 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public MilitaryFeaturesA(Feature feature) {
             base.TableName = "MilitaryFeaturesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATMPA"] && feature["CATMPA"] is not null) {
-                this.CATMPA = Convert.ToString(feature["CATMPA"]);
+                var text = Convert.ToString(feature["CATMPA"]);
+                this.CATMPA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -8967,12 +9466,6 @@ namespace S100Framework.Applications.S57.esri
         internal int? OBJECTID = default;
 
         /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
-
-        /// <summary>
         /// GlobalID
         /// </summary>
         [Description("GlobalID")]
@@ -9217,152 +9710,178 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public MilitaryFeaturesP(Feature feature) {
-            base.TableName = "MilitaryFeaturesP";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATMPA"] && feature["CATMPA"] is not null) {
-                this.CATMPA = Convert.ToString(feature["CATMPA"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class UserDefinedFeaturesA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public MilitaryFeaturesP(Feature feature) {
+            base.TableName = "MilitaryFeaturesP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATMPA"] && feature["CATMPA"] is not null) {
+                var text = Convert.ToString(feature["CATMPA"]);
+                this.CATMPA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class UserDefinedFeaturesA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -9651,159 +10170,196 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public UserDefinedFeaturesA(Feature feature) {
             base.TableName = "UserDefinedFeaturesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CLSDEF"] && feature["CLSDEF"] is not null) {
-                this.CLSDEF = Convert.ToString(feature["CLSDEF"]);
+                var text = Convert.ToString(feature["CLSDEF"]);
+                this.CLSDEF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CLSNAM"] && feature["CLSNAM"] is not null) {
-                this.CLSNAM = Convert.ToString(feature["CLSNAM"]);
+                var text = Convert.ToString(feature["CLSNAM"]);
+                this.CLSNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SYMINS"] && feature["SYMINS"] is not null) {
-                this.SYMINS = Convert.ToString(feature["SYMINS"]);
+                var text = Convert.ToString(feature["SYMINS"]);
+                this.SYMINS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -9815,12 +10371,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -10121,168 +10671,205 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public UserDefinedFeaturesP(Feature feature) {
             base.TableName = "UserDefinedFeaturesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CLSDEF"] && feature["CLSDEF"] is not null) {
-                this.CLSDEF = Convert.ToString(feature["CLSDEF"]);
+                var text = Convert.ToString(feature["CLSDEF"]);
+                this.CLSDEF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CLSNAM"] && feature["CLSNAM"] is not null) {
-                this.CLSNAM = Convert.ToString(feature["CLSNAM"]);
+                var text = Convert.ToString(feature["CLSNAM"]);
+                this.CLSNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SYMINS"] && feature["SYMINS"] is not null) {
-                this.SYMINS = Convert.ToString(feature["SYMINS"]);
+                var text = Convert.ToString(feature["SYMINS"]);
+                this.SYMINS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -10294,12 +10881,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -10582,159 +11163,196 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public UserDefinedFeaturesL(Feature feature) {
             base.TableName = "UserDefinedFeaturesL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CLSDEF"] && feature["CLSDEF"] is not null) {
-                this.CLSDEF = Convert.ToString(feature["CLSDEF"]);
+                var text = Convert.ToString(feature["CLSDEF"]);
+                this.CLSDEF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CLSNAM"] && feature["CLSNAM"] is not null) {
-                this.CLSNAM = Convert.ToString(feature["CLSNAM"]);
+                var text = Convert.ToString(feature["CLSNAM"]);
+                this.CLSNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SYMINS"] && feature["SYMINS"] is not null) {
-                this.SYMINS = Convert.ToString(feature["SYMINS"]);
+                var text = Convert.ToString(feature["SYMINS"]);
+                this.SYMINS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -10746,12 +11364,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -10980,143 +11592,165 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public DepthsA(Feature feature) {
-            base.TableName = "DepthsA";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class SoundingsP : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public DepthsA(Feature feature) {
+            base.TableName = "DepthsA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class SoundingsP : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -11375,144 +12009,172 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("Horizontal Datum")]
         internal int? P_HORDAT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public SoundingsP(Feature feature) {
             base.TableName = "SoundingsP";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["DEPTH"] && feature["DEPTH"] is not null) {
-                this.DEPTH = Convert.ToDecimal(feature["DEPTH"]);
+                DEPTH = Convert.ToDecimal(feature["DEPTH"]);
             }
             if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["ENTRY_DATE"] && feature["ENTRY_DATE"] is not null) {
-                this.ENTRY_DATE = Convert.ToDecimal(feature["ENTRY_DATE"]);
+                ENTRY_DATE = Convert.ToDecimal(feature["ENTRY_DATE"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -11524,12 +12186,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -11998,252 +12654,295 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public PortsAndServicesP(Feature feature) {
             base.TableName = "PortsAndServicesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
-                this.BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
+                BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
             }
             if (DBNull.Value != feature["CATGAT"] && feature["CATGAT"] is not null) {
-                this.CATGAT = Convert.ToInt32(feature["CATGAT"]);
+                CATGAT = Convert.ToInt32(feature["CATGAT"]);
             }
             if (DBNull.Value != feature["CATMOR"] && feature["CATMOR"] is not null) {
-                this.CATMOR = Convert.ToInt32(feature["CATMOR"]);
+                CATMOR = Convert.ToInt32(feature["CATMOR"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
             }
             if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
             }
             if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
-                this.LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
+                LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATCHP"] && feature["CATCHP"] is not null) {
-                this.CATCHP = Convert.ToInt32(feature["CATCHP"]);
+                CATCHP = Convert.ToInt32(feature["CATCHP"]);
             }
             if (DBNull.Value != feature["CATCRN"] && feature["CATCRN"] is not null) {
-                this.CATCRN = Convert.ToInt32(feature["CATCRN"]);
+                CATCRN = Convert.ToInt32(feature["CATCRN"]);
             }
             if (DBNull.Value != feature["CATDIS"] && feature["CATDIS"] is not null) {
-                this.CATDIS = Convert.ToInt32(feature["CATDIS"]);
+                CATDIS = Convert.ToInt32(feature["CATDIS"]);
             }
             if (DBNull.Value != feature["CATHAF"] && feature["CATHAF"] is not null) {
-                this.CATHAF = Convert.ToString(feature["CATHAF"]);
+                var text = Convert.ToString(feature["CATHAF"]);
+                this.CATHAF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATHLK"] && feature["CATHLK"] is not null) {
-                this.CATHLK = Convert.ToString(feature["CATHLK"]);
+                var text = Convert.ToString(feature["CATHLK"]);
+                this.CATHLK = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATPIL"] && feature["CATPIL"] is not null) {
-                this.CATPIL = Convert.ToInt32(feature["CATPIL"]);
+                CATPIL = Convert.ToInt32(feature["CATPIL"]);
             }
             if (DBNull.Value != feature["CATPLE"] && feature["CATPLE"] is not null) {
-                this.CATPLE = Convert.ToInt32(feature["CATPLE"]);
+                CATPLE = Convert.ToInt32(feature["CATPLE"]);
             }
             if (DBNull.Value != feature["CATRSC"] && feature["CATRSC"] is not null) {
-                this.CATRSC = Convert.ToString(feature["CATRSC"]);
+                var text = Convert.ToString(feature["CATRSC"]);
+                this.CATRSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATSCF"] && feature["CATSCF"] is not null) {
-                this.CATSCF = Convert.ToString(feature["CATSCF"]);
+                var text = Convert.ToString(feature["CATSCF"]);
+                this.CATSCF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATSIT"] && feature["CATSIT"] is not null) {
-                this.CATSIT = Convert.ToString(feature["CATSIT"]);
+                var text = Convert.ToString(feature["CATSIT"]);
+                this.CATSIT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATSIW"] && feature["CATSIW"] is not null) {
-                this.CATSIW = Convert.ToString(feature["CATSIW"]);
+                var text = Convert.ToString(feature["CATSIW"]);
+                this.CATSIW = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NPLDST"] && feature["NPLDST"] is not null) {
-                this.NPLDST = Convert.ToString(feature["NPLDST"]);
+                var text = Convert.ToString(feature["NPLDST"]);
+                this.NPLDST = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PILDST"] && feature["PILDST"] is not null) {
-                this.PILDST = Convert.ToString(feature["PILDST"]);
+                var text = Convert.ToString(feature["PILDST"]);
+                this.PILDST = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
-                this.RADIUS = Convert.ToDecimal(feature["RADIUS"]);
+                RADIUS = Convert.ToDecimal(feature["RADIUS"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -12255,12 +12954,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -12621,209 +13314,237 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public PortsAndServicesL(Feature feature) {
-            base.TableName = "PortsAndServicesL";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
-                this.BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
-            }
-            if (DBNull.Value != feature["CATGAT"] && feature["CATGAT"] is not null) {
-                this.CATGAT = Convert.ToInt32(feature["CATGAT"]);
-            }
-            if (DBNull.Value != feature["CATMOR"] && feature["CATMOR"] is not null) {
-                this.CATMOR = Convert.ToInt32(feature["CATMOR"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
-            }
-            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
-            }
-            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
-            }
-            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
-            }
-            if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
-                this.LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATCAN"] && feature["CATCAN"] is not null) {
-                this.CATCAN = Convert.ToInt32(feature["CATCAN"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class PortsAndServicesA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public PortsAndServicesL(Feature feature) {
+            base.TableName = "PortsAndServicesL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
+                BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
+            }
+            if (DBNull.Value != feature["CATGAT"] && feature["CATGAT"] is not null) {
+                CATGAT = Convert.ToInt32(feature["CATGAT"]);
+            }
+            if (DBNull.Value != feature["CATMOR"] && feature["CATMOR"] is not null) {
+                CATMOR = Convert.ToInt32(feature["CATMOR"]);
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
+            }
+            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+            }
+            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+            }
+            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
+            }
+            if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
+                LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATCAN"] && feature["CATCAN"] is not null) {
+                CATCAN = Convert.ToInt32(feature["CATCAN"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class PortsAndServicesA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -13262,245 +13983,279 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public PortsAndServicesA(Feature feature) {
-            base.TableName = "PortsAndServicesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
-                this.BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
-            }
-            if (DBNull.Value != feature["CATGAT"] && feature["CATGAT"] is not null) {
-                this.CATGAT = Convert.ToInt32(feature["CATGAT"]);
-            }
-            if (DBNull.Value != feature["CATMOR"] && feature["CATMOR"] is not null) {
-                this.CATMOR = Convert.ToInt32(feature["CATMOR"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
-            }
-            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
-            }
-            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
-            }
-            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
-            }
-            if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
-                this.LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATCAN"] && feature["CATCAN"] is not null) {
-                this.CATCAN = Convert.ToInt32(feature["CATCAN"]);
-            }
-            if (DBNull.Value != feature["CATCHP"] && feature["CATCHP"] is not null) {
-                this.CATCHP = Convert.ToInt32(feature["CATCHP"]);
-            }
-            if (DBNull.Value != feature["CATCRN"] && feature["CATCRN"] is not null) {
-                this.CATCRN = Convert.ToInt32(feature["CATCRN"]);
-            }
-            if (DBNull.Value != feature["CATDOC"] && feature["CATDOC"] is not null) {
-                this.CATDOC = Convert.ToInt32(feature["CATDOC"]);
-            }
-            if (DBNull.Value != feature["CATHAF"] && feature["CATHAF"] is not null) {
-                this.CATHAF = Convert.ToString(feature["CATHAF"]);
-            }
-            if (DBNull.Value != feature["CATHLK"] && feature["CATHLK"] is not null) {
-                this.CATHLK = Convert.ToString(feature["CATHLK"]);
-            }
-            if (DBNull.Value != feature["CATPIL"] && feature["CATPIL"] is not null) {
-                this.CATPIL = Convert.ToInt32(feature["CATPIL"]);
-            }
-            if (DBNull.Value != feature["CATSCF"] && feature["CATSCF"] is not null) {
-                this.CATSCF = Convert.ToString(feature["CATSCF"]);
-            }
-            if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
-                this.COMCHA = Convert.ToString(feature["COMCHA"]);
-            }
-            if (DBNull.Value != feature["NPLDST"] && feature["NPLDST"] is not null) {
-                this.NPLDST = Convert.ToString(feature["NPLDST"]);
-            }
-            if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
-            }
-            if (DBNull.Value != feature["PILDST"] && feature["PILDST"] is not null) {
-                this.PILDST = Convert.ToString(feature["PILDST"]);
-            }
-            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
-                this.RADIUS = Convert.ToDecimal(feature["RADIUS"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class CulturalFeaturesA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public PortsAndServicesA(Feature feature) {
+            base.TableName = "PortsAndServicesA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["BOYSHP"] && feature["BOYSHP"] is not null) {
+                BOYSHP = Convert.ToInt32(feature["BOYSHP"]);
+            }
+            if (DBNull.Value != feature["CATGAT"] && feature["CATGAT"] is not null) {
+                CATGAT = Convert.ToInt32(feature["CATGAT"]);
+            }
+            if (DBNull.Value != feature["CATMOR"] && feature["CATMOR"] is not null) {
+                CATMOR = Convert.ToInt32(feature["CATMOR"]);
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
+            }
+            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+            }
+            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+            }
+            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
+            }
+            if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
+                LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATCAN"] && feature["CATCAN"] is not null) {
+                CATCAN = Convert.ToInt32(feature["CATCAN"]);
+            }
+            if (DBNull.Value != feature["CATCHP"] && feature["CATCHP"] is not null) {
+                CATCHP = Convert.ToInt32(feature["CATCHP"]);
+            }
+            if (DBNull.Value != feature["CATCRN"] && feature["CATCRN"] is not null) {
+                CATCRN = Convert.ToInt32(feature["CATCRN"]);
+            }
+            if (DBNull.Value != feature["CATDOC"] && feature["CATDOC"] is not null) {
+                CATDOC = Convert.ToInt32(feature["CATDOC"]);
+            }
+            if (DBNull.Value != feature["CATHAF"] && feature["CATHAF"] is not null) {
+                var text = Convert.ToString(feature["CATHAF"]);
+                this.CATHAF = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATHLK"] && feature["CATHLK"] is not null) {
+                var text = Convert.ToString(feature["CATHLK"]);
+                this.CATHLK = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATPIL"] && feature["CATPIL"] is not null) {
+                CATPIL = Convert.ToInt32(feature["CATPIL"]);
+            }
+            if (DBNull.Value != feature["CATSCF"] && feature["CATSCF"] is not null) {
+                var text = Convert.ToString(feature["CATSCF"]);
+                this.CATSCF = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COMCHA"] && feature["COMCHA"] is not null) {
+                var text = Convert.ToString(feature["COMCHA"]);
+                this.COMCHA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NPLDST"] && feature["NPLDST"] is not null) {
+                var text = Convert.ToString(feature["NPLDST"]);
+                this.NPLDST = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+            }
+            if (DBNull.Value != feature["PILDST"] && feature["PILDST"] is not null) {
+                var text = Convert.ToString(feature["PILDST"]);
+                this.PILDST = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
+                RADIUS = Convert.ToDecimal(feature["RADIUS"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class CulturalFeaturesA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -13927,228 +14682,266 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public CulturalFeaturesA(Feature feature) {
             base.TableName = "CulturalFeaturesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
-                this.BURDEP = Convert.ToDecimal(feature["BURDEP"]);
+                BURDEP = Convert.ToDecimal(feature["BURDEP"]);
             }
             if (DBNull.Value != feature["CATBRG"] && feature["CATBRG"] is not null) {
-                this.CATBRG = Convert.ToString(feature["CATBRG"]);
+                var text = Convert.ToString(feature["CATBRG"]);
+                this.CATBRG = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATDAM"] && feature["CATDAM"] is not null) {
-                this.CATDAM = Convert.ToInt32(feature["CATDAM"]);
+                CATDAM = Convert.ToInt32(feature["CATDAM"]);
             }
             if (DBNull.Value != feature["CATFOR"] && feature["CATFOR"] is not null) {
-                this.CATFOR = Convert.ToInt32(feature["CATFOR"]);
+                CATFOR = Convert.ToInt32(feature["CATFOR"]);
             }
             if (DBNull.Value != feature["CATLMK"] && feature["CATLMK"] is not null) {
-                this.CATLMK = Convert.ToString(feature["CATLMK"]);
+                var text = Convert.ToString(feature["CATLMK"]);
+                this.CATLMK = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATROD"] && feature["CATROD"] is not null) {
-                this.CATROD = Convert.ToInt32(feature["CATROD"]);
+                CATROD = Convert.ToInt32(feature["CATROD"]);
             }
             if (DBNull.Value != feature["CATRUN"] && feature["CATRUN"] is not null) {
-                this.CATRUN = Convert.ToInt32(feature["CATRUN"]);
+                CATRUN = Convert.ToInt32(feature["CATRUN"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["FUNCTN"] && feature["FUNCTN"] is not null) {
-                this.FUNCTN = Convert.ToString(feature["FUNCTN"]);
+                var text = Convert.ToString(feature["FUNCTN"]);
+                this.FUNCTN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERCCL"] && feature["VERCCL"] is not null) {
-                this.VERCCL = Convert.ToDecimal(feature["VERCCL"]);
+                VERCCL = Convert.ToDecimal(feature["VERCCL"]);
             }
             if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
             }
             if (DBNull.Value != feature["VERCOP"] && feature["VERCOP"] is not null) {
-                this.VERCOP = Convert.ToDecimal(feature["VERCOP"]);
+                VERCOP = Convert.ToDecimal(feature["VERCOP"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["BUISHP"] && feature["BUISHP"] is not null) {
-                this.BUISHP = Convert.ToInt32(feature["BUISHP"]);
+                BUISHP = Convert.ToInt32(feature["BUISHP"]);
             }
             if (DBNull.Value != feature["CATAIR"] && feature["CATAIR"] is not null) {
-                this.CATAIR = Convert.ToString(feature["CATAIR"]);
+                var text = Convert.ToString(feature["CATAIR"]);
+                this.CATAIR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATBUA"] && feature["CATBUA"] is not null) {
-                this.CATBUA = Convert.ToInt32(feature["CATBUA"]);
+                CATBUA = Convert.ToInt32(feature["CATBUA"]);
             }
             if (DBNull.Value != feature["CATCON"] && feature["CATCON"] is not null) {
-                this.CATCON = Convert.ToInt32(feature["CATCON"]);
+                CATCON = Convert.ToInt32(feature["CATCON"]);
             }
             if (DBNull.Value != feature["CATPRA"] && feature["CATPRA"] is not null) {
-                this.CATPRA = Convert.ToInt32(feature["CATPRA"]);
+                CATPRA = Convert.ToInt32(feature["CATPRA"]);
             }
             if (DBNull.Value != feature["CATPYL"] && feature["CATPYL"] is not null) {
-                this.CATPYL = Convert.ToInt32(feature["CATPYL"]);
+                CATPYL = Convert.ToInt32(feature["CATPYL"]);
             }
             if (DBNull.Value != feature["CATSIL"] && feature["CATSIL"] is not null) {
-                this.CATSIL = Convert.ToInt32(feature["CATSIL"]);
+                CATSIL = Convert.ToInt32(feature["CATSIL"]);
             }
             if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
-                this.LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
+                LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -14160,12 +14953,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -14574,222 +15361,260 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public CulturalFeaturesL(Feature feature) {
             base.TableName = "CulturalFeaturesL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
-                this.BURDEP = Convert.ToDecimal(feature["BURDEP"]);
+                BURDEP = Convert.ToDecimal(feature["BURDEP"]);
             }
             if (DBNull.Value != feature["CATBRG"] && feature["CATBRG"] is not null) {
-                this.CATBRG = Convert.ToString(feature["CATBRG"]);
+                var text = Convert.ToString(feature["CATBRG"]);
+                this.CATBRG = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATDAM"] && feature["CATDAM"] is not null) {
-                this.CATDAM = Convert.ToInt32(feature["CATDAM"]);
+                CATDAM = Convert.ToInt32(feature["CATDAM"]);
             }
             if (DBNull.Value != feature["CATFOR"] && feature["CATFOR"] is not null) {
-                this.CATFOR = Convert.ToInt32(feature["CATFOR"]);
+                CATFOR = Convert.ToInt32(feature["CATFOR"]);
             }
             if (DBNull.Value != feature["CATLMK"] && feature["CATLMK"] is not null) {
-                this.CATLMK = Convert.ToString(feature["CATLMK"]);
+                var text = Convert.ToString(feature["CATLMK"]);
+                this.CATLMK = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATROD"] && feature["CATROD"] is not null) {
-                this.CATROD = Convert.ToInt32(feature["CATROD"]);
+                CATROD = Convert.ToInt32(feature["CATROD"]);
             }
             if (DBNull.Value != feature["CATRUN"] && feature["CATRUN"] is not null) {
-                this.CATRUN = Convert.ToInt32(feature["CATRUN"]);
+                CATRUN = Convert.ToInt32(feature["CATRUN"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["FUNCTN"] && feature["FUNCTN"] is not null) {
-                this.FUNCTN = Convert.ToString(feature["FUNCTN"]);
+                var text = Convert.ToString(feature["FUNCTN"]);
+                this.FUNCTN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERCCL"] && feature["VERCCL"] is not null) {
-                this.VERCCL = Convert.ToDecimal(feature["VERCCL"]);
+                VERCCL = Convert.ToDecimal(feature["VERCCL"]);
             }
             if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
             }
             if (DBNull.Value != feature["VERCOP"] && feature["VERCOP"] is not null) {
-                this.VERCOP = Convert.ToDecimal(feature["VERCOP"]);
+                VERCOP = Convert.ToDecimal(feature["VERCOP"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATCBL"] && feature["CATCBL"] is not null) {
-                this.CATCBL = Convert.ToInt32(feature["CATCBL"]);
+                CATCBL = Convert.ToInt32(feature["CATCBL"]);
             }
             if (DBNull.Value != feature["CATCON"] && feature["CATCON"] is not null) {
-                this.CATCON = Convert.ToInt32(feature["CATCON"]);
+                CATCON = Convert.ToInt32(feature["CATCON"]);
             }
             if (DBNull.Value != feature["CATFNC"] && feature["CATFNC"] is not null) {
-                this.CATFNC = Convert.ToInt32(feature["CATFNC"]);
+                CATFNC = Convert.ToInt32(feature["CATFNC"]);
             }
             if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
-                this.CATPIP = Convert.ToString(feature["CATPIP"]);
+                var text = Convert.ToString(feature["CATPIP"]);
+                this.CATPIP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ICEFAC"] && feature["ICEFAC"] is not null) {
-                this.ICEFAC = Convert.ToDecimal(feature["ICEFAC"]);
+                ICEFAC = Convert.ToDecimal(feature["ICEFAC"]);
             }
             if (DBNull.Value != feature["LIFCAP"] && feature["LIFCAP"] is not null) {
-                this.LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
+                LIFCAP = Convert.ToDecimal(feature["LIFCAP"]);
             }
             if (DBNull.Value != feature["VERCSA"] && feature["VERCSA"] is not null) {
-                this.VERCSA = Convert.ToDecimal(feature["VERCSA"]);
+                VERCSA = Convert.ToDecimal(feature["VERCSA"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -14801,12 +15626,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -15239,234 +16058,272 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public CulturalFeaturesP(Feature feature) {
             base.TableName = "CulturalFeaturesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
-                this.BURDEP = Convert.ToDecimal(feature["BURDEP"]);
+                BURDEP = Convert.ToDecimal(feature["BURDEP"]);
             }
             if (DBNull.Value != feature["CATBRG"] && feature["CATBRG"] is not null) {
-                this.CATBRG = Convert.ToString(feature["CATBRG"]);
+                var text = Convert.ToString(feature["CATBRG"]);
+                this.CATBRG = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATDAM"] && feature["CATDAM"] is not null) {
-                this.CATDAM = Convert.ToInt32(feature["CATDAM"]);
+                CATDAM = Convert.ToInt32(feature["CATDAM"]);
             }
             if (DBNull.Value != feature["CATFOR"] && feature["CATFOR"] is not null) {
-                this.CATFOR = Convert.ToInt32(feature["CATFOR"]);
+                CATFOR = Convert.ToInt32(feature["CATFOR"]);
             }
             if (DBNull.Value != feature["CATLMK"] && feature["CATLMK"] is not null) {
-                this.CATLMK = Convert.ToString(feature["CATLMK"]);
+                var text = Convert.ToString(feature["CATLMK"]);
+                this.CATLMK = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATROD"] && feature["CATROD"] is not null) {
-                this.CATROD = Convert.ToInt32(feature["CATROD"]);
+                CATROD = Convert.ToInt32(feature["CATROD"]);
             }
             if (DBNull.Value != feature["CATRUN"] && feature["CATRUN"] is not null) {
-                this.CATRUN = Convert.ToInt32(feature["CATRUN"]);
+                CATRUN = Convert.ToInt32(feature["CATRUN"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["FUNCTN"] && feature["FUNCTN"] is not null) {
-                this.FUNCTN = Convert.ToString(feature["FUNCTN"]);
+                var text = Convert.ToString(feature["FUNCTN"]);
+                this.FUNCTN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERCCL"] && feature["VERCCL"] is not null) {
-                this.VERCCL = Convert.ToDecimal(feature["VERCCL"]);
+                VERCCL = Convert.ToDecimal(feature["VERCCL"]);
             }
             if (DBNull.Value != feature["VERCLR"] && feature["VERCLR"] is not null) {
-                this.VERCLR = Convert.ToDecimal(feature["VERCLR"]);
+                VERCLR = Convert.ToDecimal(feature["VERCLR"]);
             }
             if (DBNull.Value != feature["VERCOP"] && feature["VERCOP"] is not null) {
-                this.VERCOP = Convert.ToDecimal(feature["VERCOP"]);
+                VERCOP = Convert.ToDecimal(feature["VERCOP"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["BUISHP"] && feature["BUISHP"] is not null) {
-                this.BUISHP = Convert.ToInt32(feature["BUISHP"]);
+                BUISHP = Convert.ToInt32(feature["BUISHP"]);
             }
             if (DBNull.Value != feature["CATAIR"] && feature["CATAIR"] is not null) {
-                this.CATAIR = Convert.ToString(feature["CATAIR"]);
+                var text = Convert.ToString(feature["CATAIR"]);
+                this.CATAIR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATBUA"] && feature["CATBUA"] is not null) {
-                this.CATBUA = Convert.ToInt32(feature["CATBUA"]);
+                CATBUA = Convert.ToInt32(feature["CATBUA"]);
             }
             if (DBNull.Value != feature["CATCTR"] && feature["CATCTR"] is not null) {
-                this.CATCTR = Convert.ToInt32(feature["CATCTR"]);
+                CATCTR = Convert.ToInt32(feature["CATCTR"]);
             }
             if (DBNull.Value != feature["CATPRA"] && feature["CATPRA"] is not null) {
-                this.CATPRA = Convert.ToInt32(feature["CATPRA"]);
+                CATPRA = Convert.ToInt32(feature["CATPRA"]);
             }
             if (DBNull.Value != feature["CATPYL"] && feature["CATPYL"] is not null) {
-                this.CATPYL = Convert.ToInt32(feature["CATPYL"]);
+                CATPYL = Convert.ToInt32(feature["CATPYL"]);
             }
             if (DBNull.Value != feature["CATSIL"] && feature["CATSIL"] is not null) {
-                this.CATSIL = Convert.ToInt32(feature["CATSIL"]);
+                CATSIL = Convert.ToInt32(feature["CATSIL"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -15478,12 +16335,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -15796,174 +16647,206 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public NaturalFeaturesP(Feature feature) {
             base.TableName = "NaturalFeaturesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATSLO"] && feature["CATSLO"] is not null) {
-                this.CATSLO = Convert.ToInt32(feature["CATSLO"]);
+                CATSLO = Convert.ToInt32(feature["CATSLO"]);
             }
             if (DBNull.Value != feature["CATVEG"] && feature["CATVEG"] is not null) {
-                this.CATVEG = Convert.ToString(feature["CATVEG"]);
+                var text = Convert.ToString(feature["CATVEG"]);
+                this.CATVEG = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATLND"] && feature["CATLND"] is not null) {
-                this.CATLND = Convert.ToString(feature["CATLND"]);
+                var text = Convert.ToString(feature["CATLND"]);
+                this.CATLND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATSEA"] && feature["CATSEA"] is not null) {
-                this.CATSEA = Convert.ToInt32(feature["CATSEA"]);
+                CATSEA = Convert.ToInt32(feature["CATSEA"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
             }
             if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
             }
             if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -15975,12 +16858,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -16257,167 +17134,192 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public NaturalFeaturesL(Feature feature) {
-            base.TableName = "NaturalFeaturesL";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATSLO"] && feature["CATSLO"] is not null) {
-                this.CATSLO = Convert.ToInt32(feature["CATSLO"]);
-            }
-            if (DBNull.Value != feature["CATVEG"] && feature["CATVEG"] is not null) {
-                this.CATVEG = Convert.ToString(feature["CATVEG"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
-            }
-            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class NaturalFeaturesA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public NaturalFeaturesL(Feature feature) {
+            base.TableName = "NaturalFeaturesL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATSLO"] && feature["CATSLO"] is not null) {
+                CATSLO = Convert.ToInt32(feature["CATSLO"]);
+            }
+            if (DBNull.Value != feature["CATVEG"] && feature["CATVEG"] is not null) {
+                var text = Convert.ToString(feature["CATVEG"]);
+                this.CATVEG = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class NaturalFeaturesA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -16718,165 +17620,197 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public NaturalFeaturesA(Feature feature) {
             base.TableName = "NaturalFeaturesA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATSLO"] && feature["CATSLO"] is not null) {
-                this.CATSLO = Convert.ToInt32(feature["CATSLO"]);
+                CATSLO = Convert.ToInt32(feature["CATSLO"]);
             }
             if (DBNull.Value != feature["CATVEG"] && feature["CATVEG"] is not null) {
-                this.CATVEG = Convert.ToString(feature["CATVEG"]);
+                var text = Convert.ToString(feature["CATVEG"]);
+                this.CATVEG = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                this.NATQUA = Convert.ToString(feature["NATQUA"]);
+                var text = Convert.ToString(feature["NATQUA"]);
+                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                this.NATSUR = Convert.ToString(feature["NATSUR"]);
+                var text = Convert.ToString(feature["NATSUR"]);
+                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATLND"] && feature["CATLND"] is not null) {
-                this.CATLND = Convert.ToString(feature["CATLND"]);
+                var text = Convert.ToString(feature["CATLND"]);
+                this.CATLND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CATSEA"] && feature["CATSEA"] is not null) {
-                this.CATSEA = Convert.ToInt32(feature["CATSEA"]);
+                CATSEA = Convert.ToInt32(feature["CATSEA"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -16888,12 +17822,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -17206,174 +18134,205 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public CoastlineL(Feature feature) {
             base.TableName = "CoastlineL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATSLC"] && feature["CATSLC"] is not null) {
-                this.CATSLC = Convert.ToInt32(feature["CATSLC"]);
+                CATSLC = Convert.ToInt32(feature["CATSLC"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
             }
             if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATCOA"] && feature["CATCOA"] is not null) {
-                this.CATCOA = Convert.ToInt32(feature["CATCOA"]);
+                CATCOA = Convert.ToInt32(feature["CATCOA"]);
             }
             if (DBNull.Value != feature["ELEVAT"] && feature["ELEVAT"] is not null) {
-                this.ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
+                ELEVAT = Convert.ToDecimal(feature["ELEVAT"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -17385,12 +18344,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -17709,188 +18662,213 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public CoastlineP(Feature feature) {
-            base.TableName = "CoastlineP";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATSLC"] && feature["CATSLC"] is not null) {
-                this.CATSLC = Convert.ToInt32(feature["CATSLC"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
-            }
-            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
-            }
-            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
-            }
-            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class CoastlineA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public CoastlineP(Feature feature) {
+            base.TableName = "CoastlineP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATSLC"] && feature["CATSLC"] is not null) {
+                CATSLC = Convert.ToInt32(feature["CATSLC"]);
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
+            }
+            if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+            }
+            if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+            }
+            if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class CoastlineA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -18197,168 +19175,199 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public CoastlineA(Feature feature) {
             base.TableName = "CoastlineA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATSLC"] && feature["CATSLC"] is not null) {
-                this.CATSLC = Convert.ToInt32(feature["CATSLC"]);
+                CATSLC = Convert.ToInt32(feature["CATSLC"]);
             }
             if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
             }
             if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
             }
             if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORCLR"] && feature["HORCLR"] is not null) {
-                this.HORCLR = Convert.ToDecimal(feature["HORCLR"]);
+                HORCLR = Convert.ToDecimal(feature["HORCLR"]);
             }
             if (DBNull.Value != feature["HORLEN"] && feature["HORLEN"] is not null) {
-                this.HORLEN = Convert.ToDecimal(feature["HORLEN"]);
+                HORLEN = Convert.ToDecimal(feature["HORLEN"]);
             }
             if (DBNull.Value != feature["HORWID"] && feature["HORWID"] is not null) {
-                this.HORWID = Convert.ToDecimal(feature["HORWID"]);
+                HORWID = Convert.ToDecimal(feature["HORWID"]);
             }
             if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -18370,12 +19379,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -18658,159 +19661,192 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public RegulatedAreasAndLimitsL(Feature feature) {
             base.TableName = "RegulatedAreasAndLimitsL";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["CATMFA"] && feature["CATMFA"] is not null) {
-                this.CATMFA = Convert.ToInt32(feature["CATMFA"]);
+                CATMFA = Convert.ToInt32(feature["CATMFA"]);
             }
             if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
             }
             if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
             }
             if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -18822,12 +19858,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -19146,188 +20176,217 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public RegulatedAreasAndLimitsP(Feature feature) {
-            base.TableName = "RegulatedAreasAndLimitsP";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATMFA"] && feature["CATMFA"] is not null) {
-                this.CATMFA = Convert.ToInt32(feature["CATMFA"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
-            }
-            if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATACH"] && feature["CATACH"] is not null) {
-                this.CATACH = Convert.ToString(feature["CATACH"]);
-            }
-            if (DBNull.Value != feature["CATDPG"] && feature["CATDPG"] is not null) {
-                this.CATDPG = Convert.ToString(feature["CATDPG"]);
-            }
-            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
-                this.RADIUS = Convert.ToDecimal(feature["RADIUS"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class RegulatedAreasAndLimitsA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public RegulatedAreasAndLimitsP(Feature feature) {
+            base.TableName = "RegulatedAreasAndLimitsP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATMFA"] && feature["CATMFA"] is not null) {
+                CATMFA = Convert.ToInt32(feature["CATMFA"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+            }
+            if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATACH"] && feature["CATACH"] is not null) {
+                var text = Convert.ToString(feature["CATACH"]);
+                this.CATACH = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATDPG"] && feature["CATDPG"] is not null) {
+                var text = Convert.ToString(feature["CATDPG"]);
+                this.CATDPG = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
+                RADIUS = Convert.ToDecimal(feature["RADIUS"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class RegulatedAreasAndLimitsA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -19646,185 +20705,215 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public RegulatedAreasAndLimitsA(Feature feature) {
-            base.TableName = "RegulatedAreasAndLimitsA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATMFA"] && feature["CATMFA"] is not null) {
-                this.CATMFA = Convert.ToInt32(feature["CATMFA"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
-                this.EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
-            }
-            if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
-                this.NATION = Convert.ToString(feature["NATION"]);
-            }
-            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
-                this.PEREND = Convert.ToString(feature["PEREND"]);
-            }
-            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
-                this.PERSTA = Convert.ToString(feature["PERSTA"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
-                this.VALSOU = Convert.ToDecimal(feature["VALSOU"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                this.WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATACH"] && feature["CATACH"] is not null) {
-                this.CATACH = Convert.ToString(feature["CATACH"]);
-            }
-            if (DBNull.Value != feature["CATDPG"] && feature["CATDPG"] is not null) {
-                this.CATDPG = Convert.ToString(feature["CATDPG"]);
-            }
-            if (DBNull.Value != feature["CATREA"] && feature["CATREA"] is not null) {
-                this.CATREA = Convert.ToString(feature["CATREA"]);
-            }
-            if (DBNull.Value != feature["JRSDTN"] && feature["JRSDTN"] is not null) {
-                this.JRSDTN = Convert.ToInt32(feature["JRSDTN"]);
-            }
-            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
-                this.RADIUS = Convert.ToDecimal(feature["RADIUS"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class MetaDataA : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public RegulatedAreasAndLimitsA(Feature feature) {
+            base.TableName = "RegulatedAreasAndLimitsA";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATMFA"] && feature["CATMFA"] is not null) {
+                CATMFA = Convert.ToInt32(feature["CATMFA"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EXPSOU"] && feature["EXPSOU"] is not null) {
+                EXPSOU = Convert.ToInt32(feature["EXPSOU"]);
+            }
+            if (DBNull.Value != feature["NATION"] && feature["NATION"] is not null) {
+                var text = Convert.ToString(feature["NATION"]);
+                this.NATION = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PEREND"] && feature["PEREND"] is not null) {
+                var text = Convert.ToString(feature["PEREND"]);
+                this.PEREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PERSTA"] && feature["PERSTA"] is not null) {
+                var text = Convert.ToString(feature["PERSTA"]);
+                this.PERSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VALSOU"] && feature["VALSOU"] is not null) {
+                VALSOU = Convert.ToDecimal(feature["VALSOU"]);
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
+                WATLEV = Convert.ToInt32(feature["WATLEV"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATACH"] && feature["CATACH"] is not null) {
+                var text = Convert.ToString(feature["CATACH"]);
+                this.CATACH = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATDPG"] && feature["CATDPG"] is not null) {
+                var text = Convert.ToString(feature["CATDPG"]);
+                this.CATDPG = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CATREA"] && feature["CATREA"] is not null) {
+                var text = Convert.ToString(feature["CATREA"]);
+                this.CATREA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["JRSDTN"] && feature["JRSDTN"] is not null) {
+                JRSDTN = Convert.ToInt32(feature["JRSDTN"]);
+            }
+            if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
+                RADIUS = Convert.ToDecimal(feature["RADIUS"]);
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class MetaDataA : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -20173,189 +21262,222 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public MetaDataA(Feature feature) {
             base.TableName = "MetaDataA";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["QUAPOS"] && feature["QUAPOS"] is not null) {
-                this.QUAPOS = Convert.ToInt32(feature["QUAPOS"]);
+                QUAPOS = Convert.ToInt32(feature["QUAPOS"]);
             }
             if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SCVAL1"] && feature["SCVAL1"] is not null) {
-                this.SCVAL1 = Convert.ToInt32(feature["SCVAL1"]);
+                SCVAL1 = Convert.ToInt32(feature["SCVAL1"]);
             }
             if (DBNull.Value != feature["SCVAL2"] && feature["SCVAL2"] is not null) {
-                this.SCVAL2 = Convert.ToInt32(feature["SCVAL2"]);
+                SCVAL2 = Convert.ToInt32(feature["SCVAL2"]);
             }
             if (DBNull.Value != feature["SDISMN"] && feature["SDISMN"] is not null) {
-                this.SDISMN = Convert.ToDecimal(feature["SDISMN"]);
+                SDISMN = Convert.ToDecimal(feature["SDISMN"]);
             }
             if (DBNull.Value != feature["SDISMX"] && feature["SDISMX"] is not null) {
-                this.SDISMX = Convert.ToDecimal(feature["SDISMX"]);
+                SDISMX = Convert.ToDecimal(feature["SDISMX"]);
             }
             if (DBNull.Value != feature["SURATH"] && feature["SURATH"] is not null) {
-                this.SURATH = Convert.ToString(feature["SURATH"]);
+                var text = Convert.ToString(feature["SURATH"]);
+                this.SURATH = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SUREND"] && feature["SUREND"] is not null) {
-                this.SUREND = Convert.ToString(feature["SUREND"]);
+                var text = Convert.ToString(feature["SUREND"]);
+                this.SUREND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SURSTA"] && feature["SURSTA"] is not null) {
-                this.SURSTA = Convert.ToString(feature["SURSTA"]);
+                var text = Convert.ToString(feature["SURSTA"]);
+                this.SURSTA = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SURTYP"] && feature["SURTYP"] is not null) {
-                this.SURTYP = Convert.ToString(feature["SURTYP"]);
+                var text = Convert.ToString(feature["SURTYP"]);
+                this.SURTYP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != feature["CATQUA"] && feature["CATQUA"] is not null) {
-                this.CATQUA = Convert.ToInt32(feature["CATQUA"]);
+                CATQUA = Convert.ToInt32(feature["CATQUA"]);
             }
             if (DBNull.Value != feature["CATZOC"] && feature["CATZOC"] is not null) {
-                this.CATZOC = Convert.ToInt32(feature["CATZOC"]);
+                CATZOC = Convert.ToInt32(feature["CATZOC"]);
             }
             if (DBNull.Value != feature["CSCALE"] && feature["CSCALE"] is not null) {
-                this.CSCALE = Convert.ToInt32(feature["CSCALE"]);
+                CSCALE = Convert.ToInt32(feature["CSCALE"]);
             }
             if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
             }
             if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
             }
             if (DBNull.Value != feature["HORACC"] && feature["HORACC"] is not null) {
-                this.HORACC = Convert.ToDecimal(feature["HORACC"]);
+                HORACC = Convert.ToDecimal(feature["HORACC"]);
             }
             if (DBNull.Value != feature["HORDAT"] && feature["HORDAT"] is not null) {
-                this.HORDAT = Convert.ToInt32(feature["HORDAT"]);
+                HORDAT = Convert.ToInt32(feature["HORDAT"]);
             }
             if (DBNull.Value != feature["MARSYS"] && feature["MARSYS"] is not null) {
-                this.MARSYS = Convert.ToInt32(feature["MARSYS"]);
+                MARSYS = Convert.ToInt32(feature["MARSYS"]);
             }
             if (DBNull.Value != feature["ORIENT"] && feature["ORIENT"] is not null) {
-                this.ORIENT = Convert.ToDecimal(feature["ORIENT"]);
+                ORIENT = Convert.ToDecimal(feature["ORIENT"]);
             }
             if (DBNull.Value != feature["PUBREF"] && feature["PUBREF"] is not null) {
-                this.PUBREF = Convert.ToString(feature["PUBREF"]);
+                var text = Convert.ToString(feature["PUBREF"]);
+                this.PUBREF = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["POSACC"] && feature["POSACC"] is not null) {
-                this.POSACC = Convert.ToDecimal(feature["POSACC"]);
+                POSACC = Convert.ToDecimal(feature["POSACC"]);
             }
             if (DBNull.Value != feature["SHIPAM"] && feature["SHIPAM"] is not null) {
-                this.SHIPAM = Convert.ToString(feature["SHIPAM"]);
+                var text = Convert.ToString(feature["SHIPAM"]);
+                this.SHIPAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
-                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+                SOUACC = Convert.ToDecimal(feature["SOUACC"]);
             }
             if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
             }
             if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -20367,12 +21489,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -20625,155 +21741,180 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public MetaDataL(Feature feature) {
-            base.TableName = "MetaDataL";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["QUAPOS"] && feature["QUAPOS"] is not null) {
-                this.QUAPOS = Convert.ToInt32(feature["QUAPOS"]);
-            }
-            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
-                this.QUASOU = Convert.ToString(feature["QUASOU"]);
-            }
-            if (DBNull.Value != feature["SCVAL1"] && feature["SCVAL1"] is not null) {
-                this.SCVAL1 = Convert.ToInt32(feature["SCVAL1"]);
-            }
-            if (DBNull.Value != feature["SCVAL2"] && feature["SCVAL2"] is not null) {
-                this.SCVAL2 = Convert.ToInt32(feature["SCVAL2"]);
-            }
-            if (DBNull.Value != feature["SDISMN"] && feature["SDISMN"] is not null) {
-                this.SDISMN = Convert.ToDecimal(feature["SDISMN"]);
-            }
-            if (DBNull.Value != feature["SDISMX"] && feature["SDISMX"] is not null) {
-                this.SDISMX = Convert.ToDecimal(feature["SDISMX"]);
-            }
-            if (DBNull.Value != feature["SURATH"] && feature["SURATH"] is not null) {
-                this.SURATH = Convert.ToString(feature["SURATH"]);
-            }
-            if (DBNull.Value != feature["SUREND"] && feature["SUREND"] is not null) {
-                this.SUREND = Convert.ToString(feature["SUREND"]);
-            }
-            if (DBNull.Value != feature["SURSTA"] && feature["SURSTA"] is not null) {
-                this.SURSTA = Convert.ToString(feature["SURSTA"]);
-            }
-            if (DBNull.Value != feature["SURTYP"] && feature["SURTYP"] is not null) {
-                this.SURTYP = Convert.ToString(feature["SURTYP"]);
-            }
-            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
-                this.TECSOU = Convert.ToString(feature["TECSOU"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class OffshoreInstallationsP : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public MetaDataL(Feature feature) {
+            base.TableName = "MetaDataL";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["QUAPOS"] && feature["QUAPOS"] is not null) {
+                QUAPOS = Convert.ToInt32(feature["QUAPOS"]);
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCVAL1"] && feature["SCVAL1"] is not null) {
+                SCVAL1 = Convert.ToInt32(feature["SCVAL1"]);
+            }
+            if (DBNull.Value != feature["SCVAL2"] && feature["SCVAL2"] is not null) {
+                SCVAL2 = Convert.ToInt32(feature["SCVAL2"]);
+            }
+            if (DBNull.Value != feature["SDISMN"] && feature["SDISMN"] is not null) {
+                SDISMN = Convert.ToDecimal(feature["SDISMN"]);
+            }
+            if (DBNull.Value != feature["SDISMX"] && feature["SDISMX"] is not null) {
+                SDISMX = Convert.ToDecimal(feature["SDISMX"]);
+            }
+            if (DBNull.Value != feature["SURATH"] && feature["SURATH"] is not null) {
+                var text = Convert.ToString(feature["SURATH"]);
+                this.SURATH = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SUREND"] && feature["SUREND"] is not null) {
+                var text = Convert.ToString(feature["SUREND"]);
+                this.SUREND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SURSTA"] && feature["SURSTA"] is not null) {
+                var text = Convert.ToString(feature["SURSTA"]);
+                this.SURSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SURTYP"] && feature["SURTYP"] is not null) {
+                var text = Convert.ToString(feature["SURTYP"]);
+                this.SURTYP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class OffshoreInstallationsP : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -21104,191 +22245,220 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
-        public OffshoreInstallationsP(Feature feature) {
-            base.TableName = "OffshoreInstallationsP";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                this.NOID = Convert.ToString(feature["NOID"]);
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(feature["NTXTDS"]);
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(feature["PICREP"]);
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(feature["TXTDSC"]);
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(feature["OBJNAM"]);
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(feature["NOBJNM"]);
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
-                this.CATPIP = Convert.ToString(feature["CATPIP"]);
-            }
-            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
-                this.CONDTN = Convert.ToInt32(feature["CONDTN"]);
-            }
-            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
-                this.DATEND = Convert.ToString(feature["DATEND"]);
-            }
-            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
-                this.DATSTA = Convert.ToString(feature["DATSTA"]);
-            }
-            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
-                this.PRODCT = Convert.ToString(feature["PRODCT"]);
-            }
-            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
-                this.STATUS = Convert.ToString(feature["STATUS"]);
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                this.VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
-                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                this.VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
-                this.BURDEP = Convert.ToDecimal(feature["BURDEP"]);
-            }
-            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
-                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
-            }
-            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
-                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATOFP"] && feature["CATOFP"] is not null) {
-                this.CATOFP = Convert.ToString(feature["CATOFP"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                this.COLOUR = Convert.ToString(feature["COLOUR"]);
-            }
-            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
-                this.COLPAT = Convert.ToString(feature["COLPAT"]);
-            }
-            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
-                this.CONRAD = Convert.ToInt32(feature["CONRAD"]);
-            }
-            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
-                this.CONVIS = Convert.ToInt32(feature["CONVIS"]);
-            }
-            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
-                this.HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
-            }
-            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
-                this.NATCON = Convert.ToString(feature["NATCON"]);
-            }
-            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
-                this.RESTRN = Convert.ToString(feature["RESTRN"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                this.P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
-            }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                this.P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
-            }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                this.P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-            }
-        }
-    }
-    internal class ClosingLinesL : S100Framework.Applications.S57.esri.S57Object
-    {
 
         /// <summary>
         /// Shape
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
+        public OffshoreInstallationsP(Feature feature) {
+            base.TableName = "OffshoreInstallationsP";
+            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+            }
+            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
+                base.GlobalId = this.GLOBALID;
+            }
+            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
+                var text = Convert.ToString(feature["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
+                var text = Convert.ToString(feature["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
+                var text = Convert.ToString(feature["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
+                var text = Convert.ToString(feature["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
+                var text = Convert.ToString(feature["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
+                var text = Convert.ToString(feature["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+            }
+            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+            }
+            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
+            }
+            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+            }
+            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+            }
+            if (DBNull.Value != feature["CATPIP"] && feature["CATPIP"] is not null) {
+                var text = Convert.ToString(feature["CATPIP"]);
+                this.CATPIP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONDTN"] && feature["CONDTN"] is not null) {
+                CONDTN = Convert.ToInt32(feature["CONDTN"]);
+            }
+            if (DBNull.Value != feature["DATEND"] && feature["DATEND"] is not null) {
+                var text = Convert.ToString(feature["DATEND"]);
+                this.DATEND = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["DATSTA"] && feature["DATSTA"] is not null) {
+                var text = Convert.ToString(feature["DATSTA"]);
+                this.DATSTA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["PRODCT"] && feature["PRODCT"] is not null) {
+                var text = Convert.ToString(feature["PRODCT"]);
+                this.PRODCT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["STATUS"] && feature["STATUS"] is not null) {
+                var text = Convert.ToString(feature["STATUS"]);
+                this.STATUS = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
+                VERACC = Convert.ToDecimal(feature["VERACC"]);
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
+            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
+                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
+            }
+            if (DBNull.Value != feature["BURDEP"] && feature["BURDEP"] is not null) {
+                BURDEP = Convert.ToDecimal(feature["BURDEP"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
+                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
+                base.FcSubtype = this.FCSUBTYPE.Value;
+            }
+            if (DBNull.Value != feature["CATOFP"] && feature["CATOFP"] is not null) {
+                var text = Convert.ToString(feature["CATOFP"]);
+                this.CATOFP = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
+                var text = Convert.ToString(feature["COLOUR"]);
+                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["COLPAT"] && feature["COLPAT"] is not null) {
+                var text = Convert.ToString(feature["COLPAT"]);
+                this.COLPAT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["CONRAD"] && feature["CONRAD"] is not null) {
+                CONRAD = Convert.ToInt32(feature["CONRAD"]);
+            }
+            if (DBNull.Value != feature["CONVIS"] && feature["CONVIS"] is not null) {
+                CONVIS = Convert.ToInt32(feature["CONVIS"]);
+            }
+            if (DBNull.Value != feature["HEIGHT"] && feature["HEIGHT"] is not null) {
+                HEIGHT = Convert.ToDecimal(feature["HEIGHT"]);
+            }
+            if (DBNull.Value != feature["NATCON"] && feature["NATCON"] is not null) {
+                var text = Convert.ToString(feature["NATCON"]);
+                this.NATCON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["RESTRN"] && feature["RESTRN"] is not null) {
+                var text = Convert.ToString(feature["RESTRN"]);
+                this.RESTRN = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
+            }
+            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            }
+            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            }
+            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+            }
+            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
+            }
+        }
+    }
+    internal class ClosingLinesL : S100Framework.Applications.S57.esri.S57Object
+    {
 
         /// <summary>
         /// OBJECTID
@@ -21403,71 +22573,84 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS editor comments")]
         internal string? NIS_EDITOR_COMMENT = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public ClosingLinesL(Feature feature) {
             base.TableName = "ClosingLinesL";
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(feature["EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
             }
             if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(feature["VERIFIER"]);
+                var text = Convert.ToString(feature["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
             }
             if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(feature["DELETE_COMMENT"]);
+                var text = Convert.ToString(feature["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
             }
             if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(feature["NIS_VERIFIER"]);
+                var text = Convert.ToString(feature["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -21479,12 +22662,6 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("OBJECTID")]
         internal int? OBJECTID = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
 
         /// <summary>
         /// GlobalID
@@ -21581,64 +22758,78 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS_LAST_MOD")]
         internal DateTime? NIS_LAST_MOD = default;
+
+        /// <summary>
+        /// Shape
+        /// </summary>
+        [Description("Shape")]
+        internal Geometry? SHAPE = default;
         public ProductCoverage(Feature feature) {
             base.TableName = "ProductCoverage";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                this.SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
+                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
             if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(feature["DSNM"]);
+                var text = Convert.ToString(feature["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(feature["LNAM"]);
+                var text = Convert.ToString(feature["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(feature["EDITOR"]);
+                var text = Convert.ToString(feature["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
             }
             if (DBNull.Value != feature["PRODUCT_GUID"] && feature["PRODUCT_GUID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["PRODUCT_GUID"]), out this.PRODUCT_GUID);
+                Guid.TryParse(Convert.ToString(feature["PRODUCT_GUID"]), out PRODUCT_GUID);
             }
             if (DBNull.Value != feature["CATCOV"] && feature["CATCOV"] is not null) {
-                this.CATCOV = Convert.ToInt32(feature["CATCOV"]);
+                CATCOV = Convert.ToInt32(feature["CATCOV"]);
             }
             if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(feature["INFORM"]);
+                var text = Convert.ToString(feature["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(feature["NINFOM"]);
+                var text = Convert.ToString(feature["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(feature["SORDAT"]);
+                var text = Convert.ToString(feature["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(feature["SORIND"]);
+                var text = Convert.ToString(feature["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
             }
             if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(feature["NIS_EDITOR"]);
+                var text = Convert.ToString(feature["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
+                SHAPE = (Geometry?)(feature["SHAPE"]);
+                base.Shape = this.SHAPE;
             }
         }
     }
@@ -21854,113 +23045,153 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("NIS_LAST_MOD")]
         internal DateTime? NIS_LAST_MOD = default;
+
+        /// <summary>
+        /// IsLocked
+        /// </summary>
+        [Description("IsLocked")]
+        internal int? GST_LOCKED = default;
+
+        /// <summary>
+        /// JSON
+        /// </summary>
+        [Description("JSON")]
+        internal string? GST_JSON = default;
+
+        /// <summary>
+        /// IsTechnicalEdition
+        /// </summary>
+        [Description("IsTechnicalEdition")]
+        internal int? GST_TECHNICAL = default;
         public ProductDefinitions(Row row) {
             base.TableName = "ProductDefinitions";
             if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(row["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(row["OBJECTID"]);
             }
             if (DBNull.Value != row["GLOBALID"] && row["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != row["EDITOR"] && row["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(row["EDITOR"]);
+                var text = Convert.ToString(row["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["LAST_MOD"] && row["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
             }
             if (DBNull.Value != row["CSCL"] && row["CSCL"] is not null) {
-                this.CSCL = Convert.ToInt32(row["CSCL"]);
+                CSCL = Convert.ToInt32(row["CSCL"]);
             }
             if (DBNull.Value != row["DSNM"] && row["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(row["DSNM"]);
+                var text = Convert.ToString(row["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["EXPORTTYPE"] && row["EXPORTTYPE"] is not null) {
-                this.EXPORTTYPE = Convert.ToString(row["EXPORTTYPE"]);
+                var text = Convert.ToString(row["EXPORTTYPE"]);
+                this.EXPORTTYPE = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["EDTN"] && row["EDTN"] is not null) {
-                this.EDTN = Convert.ToInt32(row["EDTN"]);
+                EDTN = Convert.ToInt32(row["EDTN"]);
             }
             if (DBNull.Value != row["UPDN"] && row["UPDN"] is not null) {
-                this.UPDN = Convert.ToInt32(row["UPDN"]);
+                UPDN = Convert.ToInt32(row["UPDN"]);
             }
             if (DBNull.Value != row["PROF"] && row["PROF"] is not null) {
-                this.PROF = Convert.ToInt32(row["PROF"]);
+                PROF = Convert.ToInt32(row["PROF"]);
             }
             if (DBNull.Value != row["INTU"] && row["INTU"] is not null) {
-                this.INTU = Convert.ToInt32(row["INTU"]);
+                INTU = Convert.ToInt32(row["INTU"]);
             }
             if (DBNull.Value != row["UADT"] && row["UADT"] is not null) {
-                this.UADT = Convert.ToDateTime(row["UADT"]);
+                UADT = Convert.ToDateTime(row["UADT"]);
             }
             if (DBNull.Value != row["ISDT"] && row["ISDT"] is not null) {
-                this.ISDT = Convert.ToDateTime(row["ISDT"]);
+                ISDT = Convert.ToDateTime(row["ISDT"]);
             }
             if (DBNull.Value != row["STED"] && row["STED"] is not null) {
-                this.STED = Convert.ToString(row["STED"]);
+                var text = Convert.ToString(row["STED"]);
+                this.STED = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PRSP"] && row["PRSP"] is not null) {
-                this.PRSP = Convert.ToInt32(row["PRSP"]);
+                PRSP = Convert.ToInt32(row["PRSP"]);
             }
             if (DBNull.Value != row["PSDN"] && row["PSDN"] is not null) {
-                this.PSDN = Convert.ToString(row["PSDN"]);
+                var text = Convert.ToString(row["PSDN"]);
+                this.PSDN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PRED"] && row["PRED"] is not null) {
-                this.PRED = Convert.ToString(row["PRED"]);
+                var text = Convert.ToString(row["PRED"]);
+                this.PRED = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["AGEN"] && row["AGEN"] is not null) {
-                this.AGEN = Convert.ToString(row["AGEN"]);
+                var text = Convert.ToString(row["AGEN"]);
+                this.AGEN = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["COMT"] && row["COMT"] is not null) {
-                this.COMT = Convert.ToString(row["COMT"]);
+                var text = Convert.ToString(row["COMT"]);
+                this.COMT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["AALL"] && row["AALL"] is not null) {
-                this.AALL = Convert.ToInt32(row["AALL"]);
+                AALL = Convert.ToInt32(row["AALL"]);
             }
             if (DBNull.Value != row["NALL"] && row["NALL"] is not null) {
-                this.NALL = Convert.ToInt32(row["NALL"]);
+                NALL = Convert.ToInt32(row["NALL"]);
             }
             if (DBNull.Value != row["HDAT"] && row["HDAT"] is not null) {
-                this.HDAT = Convert.ToInt32(row["HDAT"]);
+                HDAT = Convert.ToInt32(row["HDAT"]);
             }
             if (DBNull.Value != row["VDAT"] && row["VDAT"] is not null) {
-                this.VDAT = Convert.ToInt32(row["VDAT"]);
+                VDAT = Convert.ToInt32(row["VDAT"]);
             }
             if (DBNull.Value != row["SDAT"] && row["SDAT"] is not null) {
-                this.SDAT = Convert.ToInt32(row["SDAT"]);
+                SDAT = Convert.ToInt32(row["SDAT"]);
             }
             if (DBNull.Value != row["DUNI"] && row["DUNI"] is not null) {
-                this.DUNI = Convert.ToInt32(row["DUNI"]);
+                DUNI = Convert.ToInt32(row["DUNI"]);
             }
             if (DBNull.Value != row["HUNI"] && row["HUNI"] is not null) {
-                this.HUNI = Convert.ToInt32(row["HUNI"]);
+                HUNI = Convert.ToInt32(row["HUNI"]);
             }
             if (DBNull.Value != row["PUNI"] && row["PUNI"] is not null) {
-                this.PUNI = Convert.ToInt32(row["PUNI"]);
+                PUNI = Convert.ToInt32(row["PUNI"]);
             }
             if (DBNull.Value != row["COUN"] && row["COUN"] is not null) {
-                this.COUN = Convert.ToInt32(row["COUN"]);
+                COUN = Convert.ToInt32(row["COUN"]);
             }
             if (DBNull.Value != row["COMF"] && row["COMF"] is not null) {
-                this.COMF = Convert.ToInt32(row["COMF"]);
+                COMF = Convert.ToInt32(row["COMF"]);
             }
             if (DBNull.Value != row["SOMF"] && row["SOMF"] is not null) {
-                this.SOMF = Convert.ToInt32(row["SOMF"]);
+                SOMF = Convert.ToInt32(row["SOMF"]);
             }
             if (DBNull.Value != row["DSPM_COMT"] && row["DSPM_COMT"] is not null) {
-                this.DSPM_COMT = Convert.ToString(row["DSPM_COMT"]);
+                var text = Convert.ToString(row["DSPM_COMT"]);
+                this.DSPM_COMT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SERIES"] && row["SERIES"] is not null) {
-                this.SERIES = Convert.ToString(row["SERIES"]);
+                var text = Convert.ToString(row["SERIES"]);
+                this.SERIES = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["WHERECLAUSE"] && row["WHERECLAUSE"] is not null) {
-                this.WHERECLAUSE = Convert.ToString(row["WHERECLAUSE"]);
+                var text = Convert.ToString(row["WHERECLAUSE"]);
+                this.WHERECLAUSE = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NIS_EDITOR"] && row["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(row["NIS_EDITOR"]);
+                var text = Convert.ToString(row["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NIS_LAST_MOD"] && row["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
+            }
+            if (DBNull.Value != row["GST_LOCKED"] && row["GST_LOCKED"] is not null) {
+                GST_LOCKED = Convert.ToInt32(row["GST_LOCKED"]);
+            }
+            if (DBNull.Value != row["GST_JSON"] && row["GST_JSON"] is not null) {
+                var text = Convert.ToString(row["GST_JSON"]);
+                this.GST_JSON = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != row["GST_TECHNICAL"] && row["GST_TECHNICAL"] is not null) {
+                GST_TECHNICAL = Convert.ToInt32(row["GST_TECHNICAL"]);
             }
         }
     }
@@ -22173,110 +23404,130 @@ namespace S100Framework.Applications.S57.esri
         public PLTS_Collections(Row row) {
             base.TableName = "PLTS_Collections";
             if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(row["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(row["OBJECTID"]);
             }
             if (DBNull.Value != row["GLOBALID"] && row["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != row["EDITOR"] && row["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(row["EDITOR"]);
+                var text = Convert.ToString(row["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["LAST_MOD"] && row["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
             }
             if (DBNull.Value != row["EDITOR_COMMENT"] && row["EDITOR_COMMENT"] is not null) {
-                this.EDITOR_COMMENT = Convert.ToString(row["EDITOR_COMMENT"]);
+                var text = Convert.ToString(row["EDITOR_COMMENT"]);
+                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["VERIFIED"] && row["VERIFIED"] is not null) {
-                this.VERIFIED = Convert.ToInt32(row["VERIFIED"]);
+                VERIFIED = Convert.ToInt32(row["VERIFIED"]);
             }
             if (DBNull.Value != row["VERIFIER"] && row["VERIFIER"] is not null) {
-                this.VERIFIER = Convert.ToString(row["VERIFIER"]);
+                var text = Convert.ToString(row["VERIFIER"]);
+                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["VERIFIED_DATE"] && row["VERIFIED_DATE"] is not null) {
-                this.VERIFIED_DATE = Convert.ToDateTime(row["VERIFIED_DATE"]);
+                VERIFIED_DATE = Convert.ToDateTime(row["VERIFIED_DATE"]);
             }
             if (DBNull.Value != row["DELETE_COMMENT"] && row["DELETE_COMMENT"] is not null) {
-                this.DELETE_COMMENT = Convert.ToString(row["DELETE_COMMENT"]);
+                var text = Convert.ToString(row["DELETE_COMMENT"]);
+                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PLTS_COMP_SCALE"] && row["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(row["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(row["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != row["NIS_PRODUCTS"] && row["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(row["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(row["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != row["FCSUBTYPE"] && row["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(row["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(row["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != row["INFORM"] && row["INFORM"] is not null) {
-                this.INFORM = Convert.ToString(row["INFORM"]);
+                var text = Convert.ToString(row["INFORM"]);
+                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["LNAM"] && row["LNAM"] is not null) {
-                this.LNAM = Convert.ToString(row["LNAM"]);
+                var text = Convert.ToString(row["LNAM"]);
+                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NAME"] && row["NAME"] is not null) {
-                this.NAME = Convert.ToString(row["NAME"]);
+                var text = Convert.ToString(row["NAME"]);
+                this.NAME = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["DSNM"] && row["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(row["DSNM"]);
+                var text = Convert.ToString(row["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NOID"] && row["NOID"] is not null) {
-                this.NOID = Convert.ToString(row["NOID"]);
+                var text = Convert.ToString(row["NOID"]);
+                this.NOID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NINFOM"] && row["NINFOM"] is not null) {
-                this.NINFOM = Convert.ToString(row["NINFOM"]);
+                var text = Convert.ToString(row["NINFOM"]);
+                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NOBJNM"] && row["NOBJNM"] is not null) {
-                this.NOBJNM = Convert.ToString(row["NOBJNM"]);
+                var text = Convert.ToString(row["NOBJNM"]);
+                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NTXTDS"] && row["NTXTDS"] is not null) {
-                this.NTXTDS = Convert.ToString(row["NTXTDS"]);
+                var text = Convert.ToString(row["NTXTDS"]);
+                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["OBJNAM"] && row["OBJNAM"] is not null) {
-                this.OBJNAM = Convert.ToString(row["OBJNAM"]);
+                var text = Convert.ToString(row["OBJNAM"]);
+                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PICREP"] && row["PICREP"] is not null) {
-                this.PICREP = Convert.ToString(row["PICREP"]);
+                var text = Convert.ToString(row["PICREP"]);
+                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SORDAT"] && row["SORDAT"] is not null) {
-                this.SORDAT = Convert.ToString(row["SORDAT"]);
+                var text = Convert.ToString(row["SORDAT"]);
+                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SORIND"] && row["SORIND"] is not null) {
-                this.SORIND = Convert.ToString(row["SORIND"]);
+                var text = Convert.ToString(row["SORIND"]);
+                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["TXTDSC"] && row["TXTDSC"] is not null) {
-                this.TXTDSC = Convert.ToString(row["TXTDSC"]);
+                var text = Convert.ToString(row["TXTDSC"]);
+                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["COLLECTION_TYPE"] && row["COLLECTION_TYPE"] is not null) {
-                this.COLLECTION_TYPE = Convert.ToInt32(row["COLLECTION_TYPE"]);
+                COLLECTION_TYPE = Convert.ToInt32(row["COLLECTION_TYPE"]);
             }
             if (DBNull.Value != row["IS_CONFLATE"] && row["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(row["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(row["IS_CONFLATE"]);
             }
             if (DBNull.Value != row["SCAMIN_STEP"] && row["SCAMIN_STEP"] is not null) {
-                this.SCAMIN_STEP = Convert.ToInt32(row["SCAMIN_STEP"]);
+                SCAMIN_STEP = Convert.ToInt32(row["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
             if (DBNull.Value != row["NIS_VERIFIED"] && row["NIS_VERIFIED"] is not null) {
-                this.NIS_VERIFIED = Convert.ToInt32(row["NIS_VERIFIED"]);
+                NIS_VERIFIED = Convert.ToInt32(row["NIS_VERIFIED"]);
             }
             if (DBNull.Value != row["NIS_VERIFIER"] && row["NIS_VERIFIER"] is not null) {
-                this.NIS_VERIFIER = Convert.ToString(row["NIS_VERIFIER"]);
+                var text = Convert.ToString(row["NIS_VERIFIER"]);
+                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NIS_VERIFY_DATE"] && row["NIS_VERIFY_DATE"] is not null) {
-                this.NIS_VERIFY_DATE = Convert.ToDateTime(row["NIS_VERIFY_DATE"]);
+                NIS_VERIFY_DATE = Convert.ToDateTime(row["NIS_VERIFY_DATE"]);
             }
             if (DBNull.Value != row["NIS_EDITOR"] && row["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(row["NIS_EDITOR"]);
+                var text = Convert.ToString(row["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NIS_LAST_MOD"] && row["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
             }
             if (DBNull.Value != row["NIS_EDITOR_COMMENT"] && row["NIS_EDITOR_COMMENT"] is not null) {
-                this.NIS_EDITOR_COMMENT = Convert.ToString(row["NIS_EDITOR_COMMENT"]);
+                var text = Convert.ToString(row["NIS_EDITOR_COMMENT"]);
+                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
             }
         }
     }
@@ -22411,69 +23662,81 @@ namespace S100Framework.Applications.S57.esri
         public PLTS_Frel(Row row) {
             base.TableName = "PLTS_Frel";
             if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(row["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(row["OBJECTID"]);
             }
             if (DBNull.Value != row["GLOBALID"] && row["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out this.GLOBALID);
+                Guid.TryParse(Convert.ToString(row["GLOBALID"]), out GLOBALID);
                 base.GlobalId = this.GLOBALID;
             }
             if (DBNull.Value != row["RIND"] && row["RIND"] is not null) {
-                this.RIND = Convert.ToInt32(row["RIND"]);
+                RIND = Convert.ToInt32(row["RIND"]);
             }
             if (DBNull.Value != row["DSNM"] && row["DSNM"] is not null) {
-                this.DSNM = Convert.ToString(row["DSNM"]);
+                var text = Convert.ToString(row["DSNM"]);
+                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["COMT"] && row["COMT"] is not null) {
-                this.COMT = Convert.ToString(row["COMT"]);
+                var text = Convert.ToString(row["COMT"]);
+                this.COMT = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["DEST_UID"] && row["DEST_UID"] is not null) {
-                this.DEST_UID = Convert.ToString(row["DEST_UID"]);
+                var text = Convert.ToString(row["DEST_UID"]);
+                this.DEST_UID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["ENTRY_DATE"] && row["ENTRY_DATE"] is not null) {
-                this.ENTRY_DATE = Convert.ToDecimal(row["ENTRY_DATE"]);
+                ENTRY_DATE = Convert.ToDecimal(row["ENTRY_DATE"]);
             }
             if (DBNull.Value != row["SRC_UID"] && row["SRC_UID"] is not null) {
-                this.SRC_UID = Convert.ToString(row["SRC_UID"]);
+                var text = Convert.ToString(row["SRC_UID"]);
+                this.SRC_UID = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SRC_FC"] && row["SRC_FC"] is not null) {
-                this.SRC_FC = Convert.ToString(row["SRC_FC"]);
+                var text = Convert.ToString(row["SRC_FC"]);
+                this.SRC_FC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SRC_SUB"] && row["SRC_SUB"] is not null) {
-                this.SRC_SUB = Convert.ToString(row["SRC_SUB"]);
+                var text = Convert.ToString(row["SRC_SUB"]);
+                this.SRC_SUB = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["DEST_FC"] && row["DEST_FC"] is not null) {
-                this.DEST_FC = Convert.ToString(row["DEST_FC"]);
+                var text = Convert.ToString(row["DEST_FC"]);
+                this.DEST_FC = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["DEST_SUB"] && row["DEST_SUB"] is not null) {
-                this.DEST_SUB = Convert.ToString(row["DEST_SUB"]);
+                var text = Convert.ToString(row["DEST_SUB"]);
+                this.DEST_SUB = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["SRC_LNAM"] && row["SRC_LNAM"] is not null) {
-                this.SRC_LNAM = Convert.ToString(row["SRC_LNAM"]);
+                var text = Convert.ToString(row["SRC_LNAM"]);
+                this.SRC_LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["DEST_LNAM"] && row["DEST_LNAM"] is not null) {
-                this.DEST_LNAM = Convert.ToString(row["DEST_LNAM"]);
+                var text = Convert.ToString(row["DEST_LNAM"]);
+                this.DEST_LNAM = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PLTS_COMP_SCALE"] && row["PLTS_COMP_SCALE"] is not null) {
-                this.PLTS_COMP_SCALE = Convert.ToInt32(row["PLTS_COMP_SCALE"]);
+                PLTS_COMP_SCALE = Convert.ToInt32(row["PLTS_COMP_SCALE"]);
                 base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
             }
             if (DBNull.Value != row["IS_CONFLATE"] && row["IS_CONFLATE"] is not null) {
-                this.IS_CONFLATE = Convert.ToInt32(row["IS_CONFLATE"]);
+                IS_CONFLATE = Convert.ToInt32(row["IS_CONFLATE"]);
             }
             if (DBNull.Value != row["NIS_PRODUCTS"] && row["NIS_PRODUCTS"] is not null) {
-                this.NIS_PRODUCTS = Convert.ToInt32(row["NIS_PRODUCTS"]);
+                NIS_PRODUCTS = Convert.ToInt32(row["NIS_PRODUCTS"]);
             }
             if (DBNull.Value != row["EDITOR"] && row["EDITOR"] is not null) {
-                this.EDITOR = Convert.ToString(row["EDITOR"]);
+                var text = Convert.ToString(row["EDITOR"]);
+                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["LAST_MOD"] && row["LAST_MOD"] is not null) {
-                this.LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
+                LAST_MOD = Convert.ToDateTime(row["LAST_MOD"]);
             }
             if (DBNull.Value != row["NIS_EDITOR"] && row["NIS_EDITOR"] is not null) {
-                this.NIS_EDITOR = Convert.ToString(row["NIS_EDITOR"]);
+                var text = Convert.ToString(row["NIS_EDITOR"]);
+                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["NIS_LAST_MOD"] && row["NIS_LAST_MOD"] is not null) {
-                this.NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
+                NIS_LAST_MOD = Convert.ToDateTime(row["NIS_LAST_MOD"]);
             }
         }
     }
@@ -22524,26 +23787,28 @@ namespace S100Framework.Applications.S57.esri
         public PLTS_Master_Slaves(Row row) {
             base.TableName = "PLTS_Master_Slaves";
             if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
-                this.OBJECTID = Convert.ToInt32(row["OBJECTID"]);
+                OBJECTID = Convert.ToInt32(row["OBJECTID"]);
             }
             if (DBNull.Value != row["FCSUBTYPE"] && row["FCSUBTYPE"] is not null) {
-                this.FCSUBTYPE = Convert.ToInt32(row["FCSUBTYPE"]);
+                FCSUBTYPE = Convert.ToInt32(row["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
             }
             if (DBNull.Value != row["OBJECTCLASS"] && row["OBJECTCLASS"] is not null) {
-                this.OBJECTCLASS = Convert.ToString(row["OBJECTCLASS"]);
+                var text = Convert.ToString(row["OBJECTCLASS"]);
+                this.OBJECTCLASS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["RIND"] && row["RIND"] is not null) {
-                this.RIND = Convert.ToInt32(row["RIND"]);
+                RIND = Convert.ToInt32(row["RIND"]);
             }
             if (DBNull.Value != row["PRIORITY"] && row["PRIORITY"] is not null) {
-                this.PRIORITY = Convert.ToInt32(row["PRIORITY"]);
+                PRIORITY = Convert.ToInt32(row["PRIORITY"]);
             }
             if (DBNull.Value != row["FEATURECLASS"] && row["FEATURECLASS"] is not null) {
-                this.FEATURECLASS = Convert.ToString(row["FEATURECLASS"]);
+                var text = Convert.ToString(row["FEATURECLASS"]);
+                this.FEATURECLASS = string.IsNullOrEmpty(text) ? default : text;
             }
             if (DBNull.Value != row["PRIM"] && row["PRIM"] is not null) {
-                this.PRIM = Convert.ToInt32(row["PRIM"]);
+                PRIM = Convert.ToInt32(row["PRIM"]);
             }
         }
     }
