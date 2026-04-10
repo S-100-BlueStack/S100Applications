@@ -106,7 +106,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();                              
-                if (!metadata.Contains("<keyword>vortex</keyword>"))
+                if (!metadata.Contains("<keyword>nuvion</keyword>"))
                     return;
 
                 var fcName = fc.GetName();
