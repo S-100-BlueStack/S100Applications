@@ -325,6 +325,8 @@ namespace S100Framework.Applications
 
                     FeatureRelations.Instance.AddRelation(new(s101master.GetType(), s101MasterFeature.UID()), new(instance.GetType(), equipmentName), featureN, s101MasterFeature);
                 }
+                else
+                    Logger.Current.Error($"Missing converter {s57master.GetType().Name}/LightSectored");
                 // return;
             }
 
