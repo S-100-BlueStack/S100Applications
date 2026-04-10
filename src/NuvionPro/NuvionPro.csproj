@@ -149,7 +149,13 @@
     <None Update="GeospatialInformationRegistry\101_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="GeospatialInformationRegistry\122_FC_2.0.0.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="GeospatialInformationRegistry\128_FC_2.0.0.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="GeospatialInformationRegistry\131_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -359,8 +359,8 @@ namespace S100Framework.Applications
                         ;
                     }
 
-                    ImporterNIS.SetShape(buffer, s57master.Shape);
-                    ImporterNIS.SetUsageBand(buffer, s57master.PLTS_COMP_SCALE!.Value);
+                    ImporterNIS.SetShape(buffer, relatedObject.S57Object.Shape);
+                    ImporterNIS.SetUsageBand(buffer, relatedObject.S57Object.PLTS_COMP_SCALE!.Value);
 
                     var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
