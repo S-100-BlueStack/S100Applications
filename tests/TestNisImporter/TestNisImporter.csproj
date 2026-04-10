@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.20348.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="8.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+    <PackageReference Include="S100Framework.GML" Version="3.1.3" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ImporterNIS\ImporterNIS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ArcGIS.Core">
+      <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ArcGIS.CoreHost">
+      <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.CoreHost.dll</HintPath>
+    </Reference>
+    <Reference Include="ArcGIS.Desktop.Framework">
+      <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.Desktop.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -13,4 +13,7 @@
   <Project Path="src/ImporterYAML/ImporterYAML.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
+  <Project Path="tests/TestNisImporter/TestNisImporter.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
 </Solution>
