@@ -9,6 +9,8 @@ namespace S100Framework.Applications
 {
     internal static partial class Converters
     {
+
+#if null
         internal static RadarTransponderBeacon CreateRadarTransponderBeacon(AidsToNavigationP current, int? scaleMinimum, Geodatabase source) {
             var instance = new RadarTransponderBeacon {
                 categoryOfRadarTransponderBeacon = default,
@@ -88,7 +90,99 @@ namespace S100Framework.Applications
             return instance;
         }
 
+    }
 
+#endif
+
+        internal static RadarTransponderBeacon CreateRadarTransponderBeacon(S57Object structure, int? scaleMinimum, Geodatabase source) {
+
+            var instance = new RadarTransponderBeacon {
+                categoryOfRadarTransponderBeacon = default,
+            };
+
+            var beacons = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(RadarTransponderBeacon), structure.GlobalId);
+            AidsToNavigationP current;
+            if (beacons.Count == 0) {
+                Logger.Current.Error("No related RadarTransponderBeacons. Returning empty RadarTransponderBeacon");
+                return instance;
+            }
+            else {
+                current = beacons.First();
+            }
+
+            if (current.CATRTB != null) {
+                instance.categoryOfRadarTransponderBeacon = EnumHelper.GetEnumValue(current.CATRTB);
+            }
+
+            instance.featureName = ImporterNIS.GetFeatureName(current.OBJNAM, current.NOBJNM);
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            // TODO: interoperabilityidentifier
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.RADWAL != default) {
+                if (ImporterNIS.TryGetRadarWaveLengths(current.RADWAL, out var lengths)) {
+                    instance.radarWaveLength = lengths;
+                }
+            }
+
+            if (current.SECTR1.HasValue && current.SECTR2.HasValue) {
+                instance.sectorLimit = new sectorLimit() {
+                    sectorLimitOne = new sectorLimitOne {
+                        sectorBearing = current.SECTR1.Value,
+                    },
+                    sectorLimitTwo = new sectorLimitTwo {
+                        sectorBearing = current.SECTR2.Value
+                    }
+                };
+            }
+
+            var rhythmOfLight = ImporterNIS.GetRythmOfLight<RadarTransponderBeacon>(current);
+
+            if (current.SIGGRP != default) {
+                instance.signalGroup = current.SIGGRP;
+            }
+
+            if (current.SIGSEQ != default) {
+                instance.signalSequence = rhythmOfLight.signalSequence;
+            }
+
+            if (current.STATUS != default) {
+                instance.status = ImporterNIS.GetStatus(current.STATUS);
+            }
+
+            if (current.VALMXR.HasValue) {
+                instance.valueOfMaximumRange = current.VALMXR.Value;
+            }
+
+            if (scaleMinimum.HasValue) {
+                instance.scaleMinimum = scaleMinimum;
+            }
+            else if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                string subtype = "";
+
+                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (scamin.HasValue)
+                    instance.scaleMinimum = scamin.Value;
+            }
+
+            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            instance.information = result.information.ToArray();
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            return instance;
+        }
 
     }
 }

@@ -12,10 +12,14 @@ namespace S100Framework.Applications
             var instance = new FogSignal {
             };
 
-            var current = structure as AidsToNavigationP;
-
-            if (current == null) {
-                throw new NotSupportedException("structure is not an AidsToNavigation");
+            var fogsignals = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(FogSignal), structure.GlobalId);
+            AidsToNavigationP current;
+            if (fogsignals.Count == 0) {
+                Logger.Current.Error("No related fogsignals. Returning empty fogsignal");
+                return instance;
+            }
+            else {
+                current = fogsignals.First();
             }
 
             if (current.CATFOG.HasValue != default) {
