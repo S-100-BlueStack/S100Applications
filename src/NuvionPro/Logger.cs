@@ -26,7 +26,7 @@ namespace NuvionPro
                  .Enrich.WithProperty("MachineName", Environment.MachineName);
 
             configuration = configuration.WriteTo.File(
-                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"NuvionPro", "NuvionPro", "nuvionpro-developer.log"),
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"NuvionPro", "nuvionpro-developer.log"),
                     rollingInterval: RollingInterval.Infinite,
                     retainedFileCountLimit: 1,
                     shared: true,
