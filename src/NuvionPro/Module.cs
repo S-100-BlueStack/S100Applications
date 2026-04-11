@@ -114,7 +114,7 @@ namespace NuvionPro
                 if (fc is null)
                     return;
 
-                var metadata = layer.GetMetadata();                              
+                var metadata = layer.GetMetadata();
                 if (!metadata.Contains("<keyword>nuvion</keyword>"))
                     return;
 

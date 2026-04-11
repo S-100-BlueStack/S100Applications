@@ -170,7 +170,7 @@ namespace NuvionPro
                         ArcGIS.Core.CIM.esriGeometryType.esriGeometryPoint => Primitives.point,
                         ArcGIS.Core.CIM.esriGeometryType.esriGeometryMultipoint => Primitives.pointSet,
                         _ => throw new InvalidOperationException(),
-                    };                    
+                    };
 
                     var items = this.SelectedProperty.GetFeaturesByPrimitive(primitive).OrderBy(e => e);
                     this.Codes = items.ToArray();
