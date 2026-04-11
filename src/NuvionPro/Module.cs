@@ -2,6 +2,7 @@
 using ArcGIS.Core.Events;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Framework.Utilities;
 using ArcGIS.Desktop.Mapping;
 using ArcGIS.Desktop.Mapping.Events;
 
@@ -69,9 +70,9 @@ namespace NuvionPro
                 if (System.Diagnostics.Debugger.IsAttached)
                     System.Diagnostics.Debugger.Break();
 
-                //Log.Fatal((System.Exception)e.ExceptionObject, "caught unhandled exception!");
+                EventLog.Write(EventLog.EventType.Error, "Caught unhandled exception!" + Environment.NewLine + e.ExceptionObject);
             };
-            //Logger.Current.Verbose("Initialize()");
+            EventLog.Write(EventLog.EventType.Information, "NuvionPro");            
 
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
             //this._featureCatalogues = FeatureCatalogue.Catalogues;
@@ -137,6 +138,7 @@ namespace NuvionPro
                 // remember the registration
                 if (!RegisteredFeatureLayers.Contains(fcName)) {
                     RegisteredFeatureLayers.Add(fcName);
+                    EventLog.IncrementCounter(fcName);
                 }
             });
         }
@@ -169,6 +171,7 @@ namespace NuvionPro
                 // remember the registration
                 if (!RegisteredFeatureLayers.Contains(fcName)) {
                     RegisteredFeatureLayers.Add(fcName);
+                    EventLog.IncrementCounter(fcName);
                 }
             });
         }
