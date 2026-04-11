@@ -4,7 +4,6 @@ using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using ArcGIS.Desktop.Mapping.Events;
-using Serilog;
 
 //using S100FC.Catalogues;
 using System;
@@ -70,9 +69,9 @@ namespace NuvionPro
                 if (System.Diagnostics.Debugger.IsAttached)
                     System.Diagnostics.Debugger.Break();
 
-                Log.Fatal((System.Exception)e.ExceptionObject, "caught unhandled exception!");
+                //Log.Fatal((System.Exception)e.ExceptionObject, "caught unhandled exception!");
             };
-            Logger.Current.Verbose("Initialize()");
+            //Logger.Current.Verbose("Initialize()");
 
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
             //this._featureCatalogues = FeatureCatalogue.Catalogues;

@@ -1,5 +1,4 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 
@@ -10,7 +9,7 @@ namespace NuvionPro.Views
     /// </summary>
     public partial class S100AttributeTabView : UserControl /*ArcGIS.Desktop.Framework.Controls.ProWindow*/
     {
-        private readonly ILogger _logger = Logger.Current;
+        //private readonly ILogger _logger = Logger.Current;
 
         public S100AttributeTabView() {
             this.InitializeComponent();
@@ -26,7 +25,7 @@ namespace NuvionPro.Views
         }
 
         private void _propertyGrid_PreparePropertyItem(object sender, Xceed.Wpf.Toolkit.PropertyGrid.PropertyItemEventArgs e) {
-            this._logger.Verbose("PreparePropertyItem: {PropertyName}", e.PropertyItem.DisplayName);
+            //this._logger.Verbose("PreparePropertyItem: {PropertyName}", e.PropertyItem.DisplayName);
 
             var displayName = e.PropertyItem.DisplayName;
 
