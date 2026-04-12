@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using ArcGIS.Desktop.Internal.KnowledgeGraph;
+using NLog;
 
 using System;
 
@@ -8,7 +9,7 @@ namespace NuvionPro
     {
         public static ILogger Current => _logger;
 
-        private static readonly Serilog.Core.Logger _logger;
+        private static readonly NLog.ILogger _logger;
 
         private const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff}| [{Level:u3}] {Message:lj} {NewLine}{Exception}";
 
@@ -19,20 +20,15 @@ namespace NuvionPro
         //}
 
         static Logger() {
-            var configuration = new LoggerConfiguration()
-                 .MinimumLevel.Verbose()
-                 //.Enrich.FromLogContext()
-                 .Enrich.WithExceptionData()
-                 .Enrich.WithProperty("MachineName", Environment.MachineName);
+            NLog.LogManager.Setup().LoadConfiguration(builder => {
+                builder.ForLogger().FilterMinLevel(LogLevel.Trace).WriteToFile(
+                    fileName: System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"NuvionPro", "nuvionpro-developer.log"),
+                    encoding: System.Text.Encoding.UTF8,
+                    maxArchiveDays: 31
+                );
+            });
 
-            configuration = configuration.WriteTo.File(
-                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"NuvionPro", "nuvionpro-developer.log"),
-                    rollingInterval: RollingInterval.Infinite,
-                    retainedFileCountLimit: 1,
-                    shared: true,
-                    outputTemplate: outputTemplate);
-
-            _logger = configuration.CreateLogger();
+            _logger = NLog.LogManager.GetLogger("NuvionPro");
         }
     }
 }

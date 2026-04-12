@@ -49,6 +49,8 @@ namespace NuvionPro
         /// </summary>
         /// <param name="args"></param>
         private static async void OnActiveMapViewChanged(ActiveMapViewChangedEventArgs args) {
+            Logger.Current.Trace(nameof(OnActiveMapViewChanged));
+
             EventLog.Write(EventLog.EventType.Debug, "NuvionPro::OnActiveMapViewChanged()");
 
             Map incomingMap = args?.IncomingView?.Map;
@@ -69,6 +71,8 @@ namespace NuvionPro
         }
 
         private static async void OnLayersAdded(LayerEventsArgs args) {
+            Logger.Current.Trace(nameof(OnLayersAdded));
+
             EventLog.Write(EventLog.EventType.Debug, $"NuvionPro::OnLayersAdded(layers:{args.Layers.Count()})");
 
             foreach (var featLayer in GetLayersAsFlattenedList(args.Layers)) {
@@ -77,6 +81,8 @@ namespace NuvionPro
         }
 
         private static async void OnStandaloneTablesAdded(StandaloneTableEventArgs args) {
+            Logger.Current.Trace(nameof(OnStandaloneTablesAdded));
+
             EventLog.Write(EventLog.EventType.Debug, $"NuvionPro::OnStandaloneTablesAdded(layers:{args.Tables.Count()})");
 
             foreach (var table in args.Tables) {
@@ -99,11 +105,14 @@ namespace NuvionPro
         #region Overrides
 
         protected override bool Initialize() {
+            Logger.Current.Info("--- Welcome -------------------------------------");
+
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
                 if (System.Diagnostics.Debugger.IsAttached)
                     System.Diagnostics.Debugger.Break();
 
                 EventLog.Write(EventLog.EventType.Error, "NuvionPro::Caught unhandled exception!" + Environment.NewLine + e.ExceptionObject);
+                Logger.Current.Fatal((Exception)e.ExceptionObject, "Caught unhandled exception!");
             };
             EventLog.Write(EventLog.EventType.Information, "NuvionPro::Initialize()");            
 
@@ -148,6 +157,8 @@ namespace NuvionPro
         /// </summary>
         /// <param name="layer"></param>
         internal static Task RegisterFeatureClassGuidAsync(FeatureLayer layer) {
+            Logger.Current.Debug("{method}({name})", nameof(RegisterFeatureClassGuidAsync), layer.Name);
+
             return QueuedTask.Run(() => {
                 //note: These methods must be called on the Main CIM Thread. Use QueuedTask.Run.
                 var fc = layer.GetFeatureClass();
@@ -187,6 +198,8 @@ namespace NuvionPro
         /// </summary>
         /// <param name="featureLayer"></param>
         internal static Task RegisterStandaloneTableGuidAsync(StandaloneTable layer) {
+            Logger.Current.Debug("{method}({name})", nameof(RegisterFeatureClassGuidAsync), layer.Name);
+
             return QueuedTask.Run(() => {
                 var table = layer.GetTable();
                 if (table is null)

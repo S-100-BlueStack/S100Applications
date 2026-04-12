@@ -24,7 +24,6 @@
     <AssemblyVersionSettings>None.None.Increment.None</AssemblyVersionSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Logger.cs" />
     <Compile Remove="S100PropertyGridViewModel.cs" />
     <Compile Remove="Views\S100AttributeEditorView.xaml.cs" />
     <Compile Remove="Views\S100PropertyGridView.xaml.cs" />
@@ -55,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="NLog" Version="6.1.2" />
     <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1772.8" />
     <PackageReference Include="S100Framework.Catalogues" Version="3.1.8" />
     <PackageReference Include="System.IO.Hashing" Version="10.0.5" />
