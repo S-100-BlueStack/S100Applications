@@ -28,6 +28,8 @@ namespace NuvionPro
         public static Module Current => _this ??= (Module)FrameworkApplication.FindModule("NuvionPro_Module");
 
         private SubscriptionToken _tokenActiveMapViewChangedEvent;
+        private SubscriptionToken _tokenLayersAddedEvent;
+        private SubscriptionToken _tokenStandaloneTablesAddedEvent;
 
         public record FeatureCatalogue(string Name, string FullPath)
         {
@@ -47,13 +49,13 @@ namespace NuvionPro
         /// </summary>
         /// <param name="args"></param>
         private static async void OnActiveMapViewChanged(ActiveMapViewChangedEventArgs args) {
-            EventLog.Write(EventLog.EventType.Information, "NuvionPro::OnActiveMapViewChanged()");
+            EventLog.Write(EventLog.EventType.Debug, "NuvionPro::OnActiveMapViewChanged()");
 
             Map incomingMap = args?.IncomingView?.Map;
             if (incomingMap == null)
                 return;
 
-            EventLog.Write(EventLog.EventType.Information, $"NuvionPro::OnActiveMapViewChanged({incomingMap.Layers.Count()})");
+            EventLog.Write(EventLog.EventType.Debug, $"NuvionPro::OnActiveMapViewChanged(layers:{incomingMap.Layers.Count()})");
             foreach (var table in incomingMap.GetStandaloneTablesAsFlattenedList()) {
                 if (table.Name.Equals("attributebinding", StringComparison.OrdinalIgnoreCase))
                     continue;
@@ -64,6 +66,34 @@ namespace NuvionPro
             foreach (var featLayer in incomingMap.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
                 await RegisterFeatureClassGuidAsync(featLayer);
             }
+        }
+
+        private static async void OnLayersAdded(LayerEventsArgs args) {
+            EventLog.Write(EventLog.EventType.Debug, $"NuvionPro::OnLayersAdded(layers:{args.Layers.Count()})");
+
+            foreach (var featLayer in GetLayersAsFlattenedList(args.Layers)) {
+                await RegisterFeatureClassGuidAsync(featLayer);
+            }
+        }
+
+        private static async void OnStandaloneTablesAdded(StandaloneTableEventArgs args) {
+            EventLog.Write(EventLog.EventType.Debug, $"NuvionPro::OnStandaloneTablesAdded(layers:{args.Tables.Count()})");
+
+            foreach (var table in args.Tables) {
+                await RegisterStandaloneTableGuidAsync(table);
+            }
+        }
+
+        private static IEnumerable<FeatureLayer> GetLayersAsFlattenedList(ICollection<Layer> layer) {
+            foreach(var l1 in layer) {
+                if (l1 is FeatureLayer featureLayer)
+                    yield return featureLayer;
+                if (l1 is GroupLayer groupLayer) {
+                    foreach (var l2 in GetLayersAsFlattenedList(groupLayer.Layers))
+                        yield return l2;
+                }
+            }
+            yield break;
         }
 
         #region Overrides
@@ -78,6 +108,10 @@ namespace NuvionPro
             EventLog.Write(EventLog.EventType.Information, "NuvionPro::Initialize()");            
 
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
+
+            this._tokenLayersAddedEvent = LayersAddedEvent.Subscribe(OnLayersAdded);
+            this._tokenStandaloneTablesAddedEvent = StandaloneTablesAddedEvent.Subscribe(OnStandaloneTablesAdded);
+
             //this._featureCatalogues = FeatureCatalogue.Catalogues;
 
             string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -89,6 +123,8 @@ namespace NuvionPro
         }
 
         protected override void Uninitialize() {
+            StandaloneTablesAddedEvent.Unsubscribe(this._tokenStandaloneTablesAddedEvent);
+            LayersAddedEvent.Unsubscribe(this._tokenLayersAddedEvent);
             ActiveMapViewChangedEvent.Unsubscribe(this._tokenActiveMapViewChangedEvent);
             base.Uninitialize();
         }
@@ -119,7 +155,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>nuvion</keyword>"))
+                if (!metadata.Contains("<keyword>nuvion</keyword>") && !fc.GetName().EndsWith("pointset"))
                     return;
 
                 var fcName = fc.GetName();
