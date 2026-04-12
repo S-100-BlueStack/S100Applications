@@ -47,10 +47,13 @@ namespace NuvionPro
         /// </summary>
         /// <param name="args"></param>
         private static async void OnActiveMapViewChanged(ActiveMapViewChangedEventArgs args) {
+            EventLog.Write(EventLog.EventType.Information, "NuvionPro::OnActiveMapViewChanged()");
+
             Map incomingMap = args?.IncomingView?.Map;
             if (incomingMap == null)
                 return;
 
+            EventLog.Write(EventLog.EventType.Information, $"NuvionPro::OnActiveMapViewChanged({incomingMap.Layers.Count()})");
             foreach (var table in incomingMap.GetStandaloneTablesAsFlattenedList()) {
                 if (table.Name.Equals("attributebinding", StringComparison.OrdinalIgnoreCase))
                     continue;
@@ -70,9 +73,9 @@ namespace NuvionPro
                 if (System.Diagnostics.Debugger.IsAttached)
                     System.Diagnostics.Debugger.Break();
 
-                EventLog.Write(EventLog.EventType.Error, "Caught unhandled exception!" + Environment.NewLine + e.ExceptionObject);
+                EventLog.Write(EventLog.EventType.Error, "NuvionPro::Caught unhandled exception!" + Environment.NewLine + e.ExceptionObject);
             };
-            EventLog.Write(EventLog.EventType.Information, "NuvionPro");            
+            EventLog.Write(EventLog.EventType.Information, "NuvionPro::Initialize()");            
 
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
             //this._featureCatalogues = FeatureCatalogue.Catalogues;
@@ -138,7 +141,7 @@ namespace NuvionPro
                 // remember the registration
                 if (!RegisteredFeatureLayers.Contains(fcName)) {
                     RegisteredFeatureLayers.Add(fcName);
-                    EventLog.IncrementCounter(fcName);
+                    EventLog.IncrementCounter("NuvionPro::FeatureLayer");
                 }
             });
         }
@@ -171,7 +174,7 @@ namespace NuvionPro
                 // remember the registration
                 if (!RegisteredFeatureLayers.Contains(fcName)) {
                     RegisteredFeatureLayers.Add(fcName);
-                    EventLog.IncrementCounter(fcName);
+                    EventLog.IncrementCounter("NuvionPro::StandaloneTable");
                 }
             });
         }
