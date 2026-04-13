@@ -122,7 +122,10 @@ namespace S100Framework.WPF.ViewModel
 
         public string[] FeatureTypes = [];
 
-        public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+        //public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+
+        public XElement? GetElement(string code) => this._featureCatalogue?.Descendants().FirstOrDefault(e => code.Equals(e.Element(XName.Get("code", this._namespaceManager.LookupNamespace("S100FC")!))?.Value));
+
 
         public S100AttributeEditorViewModel(XDocument featureCatalogue) {
             this._featureCatalogue = featureCatalogue;

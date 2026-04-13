@@ -95,7 +95,8 @@ namespace NuvionPro
 
                     inspector["ps"] = this.PS.ID;
                     inspector["code"] = this.Code;
-                    inspector["sourceidentifier"] = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
+                    var changed = inspector.ChangeSubtype(0, false);
+                    //inspector["sourceidentifier"] = 0;// this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                     this.IsEnabledPS = this.IsEnabledCode = false;
 
