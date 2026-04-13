@@ -66,9 +66,11 @@ namespace NuvionPro
 
         private Boolean _isVisible = false;
 
-        private bool _isEnabledPS = true;
+        private bool _isLocked = false;
 
-        private bool _isEnabledCode = false;
+        //private bool _isEnabledPS = true;
+
+        //private bool _isEnabledCode = false;
 
         //private readonly string[] _catalogues;
 
@@ -96,13 +98,17 @@ namespace NuvionPro
 
                     inspector["ps"] = this.PS.ID;
                     inspector["code"] = this.Code;
-                    if (sourceidentifier.HasValue) {
+                    inspector["attributebindings"] = "{}";
+                    if (inspector.HasAttribute("informationbindings"))
+                        inspector["informationbindings"] = "[]";
+                    if (inspector.HasAttribute("featurebindings"))
+                        inspector["featurebindings"] = "[]";
+
+                    if (sourceidentifier.HasValue && sourceidentifier.Value!=Convert.ToInt32(inspector["sourceidentifier"])) {
                         var changed = inspector.ChangeSubtype(sourceidentifier.Value, false);
                     }
 
-                    //inspector["sourceidentifier"] = 0;// this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
-
-                    this.IsEnabledPS = this.IsEnabledCode = false;
+                    //this.IsEnabledPS = this.IsEnabledCode = false;
 
                     await QueuedTask.Run(() => {
                         inspector.Apply();
@@ -120,30 +126,42 @@ namespace NuvionPro
         protected override void NotifyPropertyChanged([CallerMemberName] string name = "") {
             var inspector = base.Inspector;
 
+            if (string.IsNullOrEmpty(name)) return;
+
+            if (name.StartsWith("_")) return;   //  internal
+
             base.NotifyPropertyChanged(name);
 
             switch (name) {
-                case nameof(this.PS): {
-                        this.Code = default;
-                        this.IsEnabledCode = true;
+                default:
+                    return; // SKIP ALL OTHERS
 
-                        this.IsEnabledPS = this.PS != default;
+                case nameof(this.SelectedProperty):
+                    this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
+                    break;
+
+                case nameof(this.PS): {
+                        //this.IsEnabledPS = this.PS != default;
+
+                        this.Code = default;
+
+                        //this.IsEnabledCode = true;                        
 
                         this.PS_NotifyPropertyChanged(inspector);
-
-                        this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
+                        this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
                     }
                     break;
 
                 case nameof(this.Code): {
-                        this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
-
-                        if (this.Code != default) {
-                            this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
-                        }
+                        ////this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
+                        //this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(Convert.ToString(inspector["attributebindings"]).Trim());                        
+                        this.Code_NotifyPropertyChanged(inspector);
+                        this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
                     }
                     break;
             }
+            this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
         }
 
         private void PS_NotifyPropertyChanged(Inspector inspector) {
@@ -202,8 +220,12 @@ namespace NuvionPro
                 //    this.Codes.AddRange(codes.OrderBy(e => e));
                 //});
 
-                this.IsEnabledCode = true;
+                //this.IsEnabledCode = true;
             }
+
+        }
+
+        private void Code_NotifyPropertyChanged(Inspector inspector) {
 
         }
 
@@ -285,12 +307,12 @@ namespace NuvionPro
                     }
                 }
                 this.PS_NotifyPropertyChanged(inspector);
-                this.IsEnabledPS = this.PS is null;
+                //this.IsEnabledPS = this.PS is null;
 
                 var code = Convert.ToString(inspector["code"]);
                 if (!string.IsNullOrEmpty(code)) {
                     this.Code = code;
-                    this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
+                    //this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(Convert.ToString(inspector["attributebindings"]).Trim());
                 }
 
                 this.SelectedProperty = await QueuedTask.Run(() => {
@@ -429,7 +451,7 @@ namespace NuvionPro
 
                 this.IsVisible = this.SelectedProperty is null ? Visibility.Collapsed : Visibility.Visible;
 
-                this.NotifyPropertyChanged(() => this.IsCreateButtonEnabled);
+                this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
             }
             catch (System.Exception ex) {
                 DiagnosticHelper.Error(ex);
@@ -494,10 +516,16 @@ namespace NuvionPro
             set => this.SetProperty(ref this._featureCatalogues, value);
         }
 
-        public bool IsEnabledPS {
-            get => this._isEnabledPS;
-            set => this.SetProperty(ref this._isEnabledPS, value);
+        public bool IsLocked {
+            get => this._isLocked;
+            set => this.SetProperty(ref this._isLocked, value);
         }
+
+
+        //public bool IsEnabledPS {
+        //    get => this._isEnabledPS;
+        //    set => this.SetProperty(ref this._isEnabledPS, value);
+        //}
 
         public Module.FeatureCatalogue PS {
             get => this._ps;
@@ -563,10 +591,10 @@ namespace NuvionPro
             set => this.SetProperty(ref this._codes, value);
         }
 
-        public bool IsEnabledCode {
-            get => this._isEnabledCode;
-            set => this.SetProperty(ref this._isEnabledCode, value);
-        }
+        //public bool IsEnabledCode {
+        //    get => this._isEnabledCode;
+        //    set => this.SetProperty(ref this._isEnabledCode, value);
+        //}
 
         public string? Code {
             get => this._code;
@@ -596,7 +624,11 @@ namespace NuvionPro
             set => this.SetProperty(ref this._isEditingEnabled, value);
         }
 
-        public bool IsCreateButtonEnabled => this.IsEnabledPS && this.IsEnabledCode /*&& this._selectedTemplate != SelectedTemplate.Empty*/;
+        public bool _psSelectorIsEnabled => (Inspector is null || Inspector.IsNull("attributebindings")) ? true : "{}".Equals(Convert.ToString(Inspector["attributebindings"]).Trim());
+
+        public bool _codeSelectorIsEnabled => (Inspector is null || Inspector.IsNull("ps")) ? true : Inspector.IsNull("attributebindings") ? false : "{}".Equals(Convert.ToString(Inspector["attributebindings"]).Trim());
+
+        public bool _createButtonIsEnabled => (Inspector is null || (this.PS is null || string.IsNullOrEmpty(this.Code))) ? false : Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(Inspector["attributebindings"]).Trim());
     }
 }
 
