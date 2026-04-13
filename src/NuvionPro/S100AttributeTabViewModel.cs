@@ -104,7 +104,7 @@ namespace NuvionPro
                     if (inspector.HasAttribute("featurebindings"))
                         inspector["featurebindings"] = "[]";
 
-                    if (sourceidentifier.HasValue && sourceidentifier.Value!=Convert.ToInt32(inspector["sourceidentifier"])) {
+                    if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
                         var changed = inspector.ChangeSubtype(sourceidentifier.Value, false);
                     }
 
@@ -126,9 +126,7 @@ namespace NuvionPro
         protected override void NotifyPropertyChanged([CallerMemberName] string name = "") {
             var inspector = base.Inspector;
 
-            if (string.IsNullOrEmpty(name)) return;
-
-            if (name.StartsWith("_")) return;   //  internal
+            if (string.IsNullOrEmpty(name)) return;            
 
             base.NotifyPropertyChanged(name);
 
@@ -141,24 +139,16 @@ namespace NuvionPro
                     this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
                     break;
 
-                case nameof(this.PS): {
-                        //this.IsEnabledPS = this.PS != default;
+                case nameof(this.PS):
+                    this.PS_NotifyPropertyChanged(inspector);
+                    this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
 
-                        this.Code = default;
-
-                        //this.IsEnabledCode = true;                        
-
-                        this.PS_NotifyPropertyChanged(inspector);
-                        this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
-                    }
+                    this.Code = default;
                     break;
 
-                case nameof(this.Code): {
-                        ////this.IsEnabledCode = string.IsNullOrEmpty(this.Code) || inspector.IsNull("attributebindings") || "{}".Equals(inspector["attributebindings"]);
-                        //this.IsEnabledCode = inspector.IsNull("attributebindings") || "{}".Equals(Convert.ToString(inspector["attributebindings"]).Trim());                        
-                        this.Code_NotifyPropertyChanged(inspector);
-                        this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
-                    }
+                case nameof(this.Code):
+                    this.Code_NotifyPropertyChanged(inspector);
+                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
                     break;
             }
             this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
@@ -293,7 +283,7 @@ namespace NuvionPro
 
                 });
 
-                var ps = Convert.ToString(inspector["ps"]);
+                var ps = Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);
 
                 var update = (this.PS is null && ps is null) || (this.PS is not null && ps is null) || (!ps.Equals(this.PS?.ID));
                 if (update) {
@@ -306,7 +296,7 @@ namespace NuvionPro
                         }
                     }
                 }
-                this.PS_NotifyPropertyChanged(inspector);
+                //this.PS_NotifyPropertyChanged(inspector);
                 //this.IsEnabledPS = this.PS is null;
 
                 var code = Convert.ToString(inspector["code"]);
