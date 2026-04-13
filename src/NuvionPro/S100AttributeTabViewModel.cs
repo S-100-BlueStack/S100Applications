@@ -92,10 +92,14 @@ namespace NuvionPro
                     //if (!Project.Current.IsEditingEnabled) {
                     //    await Project.Current.SetIsEditingEnabledAsync(true);
                     //}
+                    var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                     inspector["ps"] = this.PS.ID;
                     inspector["code"] = this.Code;
-                    var changed = inspector.ChangeSubtype(0, false);
+                    if (sourceidentifier.HasValue) {
+                        var changed = inspector.ChangeSubtype(sourceidentifier.Value, false);
+                    }
+
                     //inspector["sourceidentifier"] = 0;// this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                     this.IsEnabledPS = this.IsEnabledCode = false;
