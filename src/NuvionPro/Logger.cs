@@ -1,5 +1,4 @@
-﻿using ArcGIS.Desktop.Internal.KnowledgeGraph;
-using NLog;
+﻿using NLog;
 
 using System;
 

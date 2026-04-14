@@ -91,7 +91,7 @@ namespace NuvionPro
         }
 
         private static IEnumerable<FeatureLayer> GetLayersAsFlattenedList(ICollection<Layer> layer) {
-            foreach(var l1 in layer) {
+            foreach (var l1 in layer) {
                 if (l1 is FeatureLayer featureLayer)
                     yield return featureLayer;
                 if (l1 is GroupLayer groupLayer) {
@@ -114,7 +114,7 @@ namespace NuvionPro
                 EventLog.Write(EventLog.EventType.Error, "NuvionPro::Caught unhandled exception!" + Environment.NewLine + e.ExceptionObject);
                 Logger.Current.Fatal((Exception)e.ExceptionObject, "Caught unhandled exception!");
             };
-            EventLog.Write(EventLog.EventType.Information, "NuvionPro::Initialize()");            
+            EventLog.Write(EventLog.EventType.Information, "NuvionPro::Initialize()");
 
             this._tokenActiveMapViewChangedEvent = ActiveMapViewChangedEvent.Subscribe(OnActiveMapViewChanged);
 
