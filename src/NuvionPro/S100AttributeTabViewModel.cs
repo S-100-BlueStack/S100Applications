@@ -91,26 +91,20 @@ namespace NuvionPro
                 var inspector = base.Inspector;
 
                 if (inspector != default) {
-                    //if (!Project.Current.IsEditingEnabled) {
-                    //    await Project.Current.SetIsEditingEnabledAsync(true);
-                    //}
-                    var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
-
-                    inspector["ps"] = this.PS.ID;
-                    inspector["code"] = this.Code;
-                    inspector["attributebindings"] = "{}";
-                    if (inspector.HasAttribute("informationbindings"))
-                        inspector["informationbindings"] = "[]";
-                    if (inspector.HasAttribute("featurebindings"))
-                        inspector["featurebindings"] = "[]";
-
-                    if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
-                        var changed = inspector.ChangeSubtype(sourceidentifier.Value, false);
-                    }
-
-                    //this.IsEnabledPS = this.IsEnabledCode = false;
-
                     await QueuedTask.Run(() => {
+                        var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
+
+                        if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
+                            var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);                            
+                        }
+                        inspector["ps"] = this.PS.ID;
+                        inspector["code"] = this.Code;
+                        inspector["attributebindings"] = "{}";
+                        if (inspector.HasAttribute("informationbindings"))
+                            inspector["informationbindings"] = "[]";
+                        if (inspector.HasAttribute("featurebindings"))
+                            inspector["featurebindings"] = "[]";
+
                         inspector.Apply();
                     }, TaskCreationOptions.None);
                 }
@@ -126,7 +120,7 @@ namespace NuvionPro
         protected override void NotifyPropertyChanged([CallerMemberName] string name = "") {
             var inspector = base.Inspector;
 
-            if (string.IsNullOrEmpty(name)) return;            
+            if (string.IsNullOrEmpty(name)) return;
 
             base.NotifyPropertyChanged(name);
 
