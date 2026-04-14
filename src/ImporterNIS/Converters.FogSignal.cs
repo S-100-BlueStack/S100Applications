@@ -15,7 +15,7 @@ namespace S100Framework.Applications
             var fogsignals = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(FogSignal), structure.GlobalId);
             AidsToNavigationP current;
             if (fogsignals.Count == 0) {
-                Logger.Current.Error("No related fogsignals. Returning empty fogsignal");
+                Logger.Current.Error($"No related fogsignals. Returning empty fogsignal (GlobalId: {structure.GlobalId})");
                 return instance;
             }
             else {

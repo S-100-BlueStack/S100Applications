@@ -103,7 +103,7 @@ namespace S100Framework.Applications
             var beacons = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(RadarTransponderBeacon), structure.GlobalId);
             AidsToNavigationP current;
             if (beacons.Count == 0) {
-                Logger.Current.Error("No related RadarTransponderBeacons. Returning empty RadarTransponderBeacon");
+                Logger.Current.Error($"No related RadarTransponderBeacons. Returning empty RadarTransponderBeacon (GlobalId: {structure.GlobalId})");
                 return instance;
             }
             else {

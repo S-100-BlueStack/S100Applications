@@ -717,14 +717,19 @@ namespace S100Framework.Applications
 
                     FeatureClassDefinition fcDefinition = destination.GetDefinition<FeatureClassDefinition>(featureClassName);
 
-                    FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
+                    FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);                    
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.sourceIdentifier)) {
+                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
+                    schemaBuilder.Modify(fcDescription);
+                    schemaBuilder.Build();
+
+                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
                     fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
                     schemaBuilder.Modify(fcDescription);
+                    schemaBuilder.Build();
                 }
                 {
                     var features = Summary.PrimitiveFeatures(Primitives.noGeometry);
@@ -734,11 +739,16 @@ namespace S100Framework.Applications
                     var tableDescription = new TableDescription(tableDefinition);
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.sourceIdentifier)) {
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    schemaBuilder.Modify(tableDescription);
+                    schemaBuilder.Build();
+
+                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
                     tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
                     schemaBuilder.Modify(tableDescription);
+                    schemaBuilder.Build();
                 }
 
 
@@ -748,13 +758,17 @@ namespace S100Framework.Applications
                     var tableDescription = new TableDescription(tableDefinition);
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    schemaBuilder.Modify(tableDescription);
+                    schemaBuilder.Build();
+
                     foreach (var e in Summary.definitionReferenceInformationTypes.OrderBy(e => e.sourceIdentifier)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
                     tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
                     schemaBuilder.Modify(tableDescription);
+                    schemaBuilder.Build();
                 }
-                schemaBuilder.Build();
+                //schemaBuilder.Build();
             }
 
             Logger.Current.Verbose("Validating...");
