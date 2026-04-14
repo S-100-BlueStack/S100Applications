@@ -35,7 +35,7 @@ namespace S100Framework.WPF
 
             if (this.SelectedObject is null) return;
 
-            if (e?.SelectedItem is attributeBindingDefinition attributeBinding) {
+            if (e?.SelectedItem is attributeBindingDefinitionViewModel attributeBinding) {
                 if (container!.HasCapacity(attributeBinding)) {
                     var instance = attributeBinding.CreateInstance();
                     if (instance is DateAttribute dateAttribute)

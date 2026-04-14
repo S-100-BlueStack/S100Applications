@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using static S100Framework.WPF.ViewModel.S100AttributeEditorViewModel;
 
 namespace S100Framework.WPF.ViewModel
 {
@@ -64,13 +65,14 @@ namespace S100Framework.WPF.ViewModel
 
         public bool HasErrors => this._errors.Any();
 
-        public IEnumerable GetErrors(string? propertyName) {
-            if (string.IsNullOrEmpty(propertyName)) return Enumerable.Empty<string>();
+        public IEnumerable GetErrors(string? propertyName) => string.IsNullOrEmpty(propertyName) ? Enumerable.Empty<string>() : _errors.ContainsKey(propertyName) ? _errors[propertyName] : Enumerable.Empty<string>();
+        //{
+        //    if (string.IsNullOrEmpty(propertyName)) return Enumerable.Empty<string>();
 
-            if (!this._errors.ContainsKey(propertyName) || !this._errors[propertyName].Any()) return Enumerable.Empty<string>();
+        //    if (!this._errors.ContainsKey(propertyName) || !this._errors[propertyName].Any()) return Enumerable.Empty<string>();
 
-            return this._errors[propertyName];
-        }
+        //    return this._errors[propertyName];
+        //}
 
         private void Validate() {
             this._errors.Clear();
@@ -122,9 +124,9 @@ namespace S100Framework.WPF.ViewModel
 
         public string[] FeatureTypes = [];
 
-        //public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
+        public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
 
-        public XElement? GetElement(string code) => this._featureCatalogue?.Descendants().FirstOrDefault(e => code.Equals(e.Element(XName.Get("code", this._namespaceManager.LookupNamespace("S100FC")!))?.Value));
+        //public XElement? GetElement(string code) => this._featureCatalogue?.Descendants().FirstOrDefault(e => code.Equals(e.Element(XName.Get("code", this._namespaceManager.LookupNamespace("S100FC")!))?.Value));
 
 
         public S100AttributeEditorViewModel(XDocument featureCatalogue) {
@@ -148,7 +150,7 @@ namespace S100Framework.WPF.ViewModel
 
             this.sourceIdentifiers = featureCatalogue.Descendants(XName.Get("S100_FC_FeatureType", scopes["S100FC"])).ToDictionary(
                 e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value,
-                e => e.Element(XName.Get("definitionReference", scopes["S100FC"]))?.Element(XName.Get("sourceIdentifier", scopes["S100FC"]))?.Value).ToImmutableDictionary<string,string?>();
+                e => e.Element(XName.Get("definitionReference", scopes["S100FC"]))?.Element(XName.Get("sourceIdentifier", scopes["S100FC"]))?.Value).ToImmutableDictionary<string, string?>();
 
 
             this.attributeBindings.CollectionChanged += (s, e) => {
@@ -232,7 +234,7 @@ namespace S100Framework.WPF.ViewModel
 
             var sourceIdentifier = element.Element(XName.Get("sourceIdentifier", scope))?.Value;
             this.sourceIdentifier = sourceIdentifier == null ? default(int) : int.Parse(sourceIdentifier);
-            
+
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
 
@@ -416,7 +418,7 @@ namespace S100Framework.WPF.ViewModel
 
         public featureBindingContainer? featureBindingDefinitions { get; private set; } = null;
 
-        public attributeBindingDefinition[] attributeBindingsCatalogue { get; private set; } = [];
+        public attributeBindingDefinitionViewModel[] attributeBindingsCatalogue { get; private set; } = [];
 
         public string[] GetFeaturesByPrimitive(Primitives primitive) => this.permittedPrimitives.Where(e => e.Value.Contains($"{primitive}")).Select(e => e.Key).ToArray();
         #endregion
@@ -542,7 +544,7 @@ namespace S100Framework.WPF.ViewModel
 
         private static class Parser
         {
-            public static attributeBindingDefinition[] AttributeBindings(XDocument featureCatalogue, string code, ref int index, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
+            public static attributeBindingDefinitionViewModel[] AttributeBindings(XDocument featureCatalogue, string code, ref int index, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
                 var navigator = featureCatalogue.CreateNavigator();
                 navigator.MoveToFollowing(XPathNodeType.Element);
 
@@ -566,7 +568,7 @@ namespace S100Framework.WPF.ViewModel
                 //    throw new InvalidOperationException($"Abstract types are not supported ({code})!");
                 //}
 
-                attributeBindingDefinition[] attributeBindingDefinitions = [];
+                attributeBindingDefinitionViewModel[] attributeBindingDefinitions = [];
 
                 var superType = element.Elements(XName.Get("superType", scopes["S100FC"])).FirstOrDefault();
                 if (superType != null) {
@@ -762,7 +764,7 @@ namespace S100Framework.WPF.ViewModel
                 };
             }
 
-            private static (Func<attributeBinding> creator, attributeBindingDefinition attributeBindingDefinition) CreateAttributeBinding(XElement binding, XmlNamespaceManager xmlNamespaceManager, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
+            private static (Func<attributeBinding> creator, attributeBindingDefinitionViewModel attributeBindingDefinition) CreateAttributeBinding(XElement binding, XmlNamespaceManager xmlNamespaceManager, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
                 var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
 
                 var referenceCode = binding.Element(XName.Get("attribute", scope))!.Attribute("ref")!.Value!;
@@ -775,7 +777,7 @@ namespace S100Framework.WPF.ViewModel
 
                     var valueType = simpleAttribute.Element(XName.Get("valueType", scope))!.Value;
 
-                    Func<SimpleAttribute> attributeBinding = valueType switch {
+                    Func<attributeBinding> attributeBinding = valueType switch {
                         "boolean" => () => new BooleanAttribute {
                             S100FC_code = simpleAttribute.Element(XName.Get("code", scope))!.Value,
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
@@ -828,13 +830,112 @@ namespace S100Framework.WPF.ViewModel
                         _ => throw new NotImplementedException(),
                     };
 
-                    var attributeBindingDefinition = new attributeBindingDefinition {
+                    var constraints = simpleAttribute.Element(XName.Get("constraints", scope))?.Elements();
+
+                    var attributeBindingDefinition = new attributeBindingDefinitionViewModel {
                         attribute = referenceCode,
                         lower = lower,
                         upper = upper,
                         //order = index++,
                         CreateInstance = () => attributeBinding(),
                     };
+
+                    if (constraints is not null && constraints.Any()) {
+                        foreach (var constraint in constraints) {
+                            if ("stringLength".Equals(constraint.Name.LocalName)) {
+                                var stringLength = int.Parse(constraint.Value);
+
+                                Action<AddError, attributeBinding> validator = (action, instance) => {
+                                    if (instance is TextAttribute textAttribute) {
+                                        if (stringLength < textAttribute.value?.Length) {
+                                            action("", $"StringLengthConstraint: {stringLength}!");
+                                        }
+                                    }
+                                };
+                                attributeBindingDefinition.Validators = [.. attributeBindingDefinition.Validators, validator];
+                            }
+                            if ("precision".Equals(constraint.Name.LocalName)) {
+                                var precision = int.Parse(constraint.Value);
+
+                                Action<AddError, attributeBinding> validator = (action, instance) => {
+                                    if (instance is RealAttribute realAttribute) {
+                                        if (realAttribute.value.HasValue) {
+                                            var rounded = Math.Round(realAttribute.value.Value, precision);
+                                            if (rounded != realAttribute.value.Value)
+                                                action("", $"PrecisionConstraint: {precision}!");
+                                        }
+                                    }
+                                    if (instance is IntegerAttribute integerAttribute) {
+                                        if (integerAttribute.value.HasValue) {
+                                            if (Math.Pow(10, precision) < integerAttribute.value.Value)
+                                                action("", $"PrecisionConstraint: {precision}!");
+                                        }
+                                    }
+                                };
+                                attributeBindingDefinition.Validators = [.. attributeBindingDefinition.Validators, validator];
+                            }
+                            if ("textPattern".Equals(constraint.Name.LocalName)) {
+                                if (System.Diagnostics.Debugger.IsAttached)
+                                    System.Diagnostics.Debugger.Break();
+                            }
+                            if ("range".Equals(constraint.Name.LocalName)) {
+                                var lowerBound = constraint.Element(XName.Get("lowerBound", xmlNamespaceManager.LookupNamespace("S100Base")!));
+                                var upperBound = constraint.Element(XName.Get("upperBound", xmlNamespaceManager.LookupNamespace("S100Base")!));
+                                var closure = constraint.Element(XName.Get("closure", xmlNamespaceManager.LookupNamespace("S100Base")!))!.Value;
+
+                                Action<AddError, attributeBinding> validator = (action, instance) => {
+                                    if (instance is RealAttribute realAttribute) {
+                                        if (realAttribute.value.HasValue) {
+                                            var _lowerBound = lowerBound is null ? decimal.MinValue : decimal.Parse(lowerBound!.Value);
+                                            var _upperBound = upperBound is null ? decimal.MaxValue : decimal.Parse(upperBound!.Value);
+
+                                            var _ = realAttribute.value!.Value;
+                                            var error = closure switch {
+                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),
+                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),
+                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),
+                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),
+                                                //"gtSemiInterval" => 
+                                                //"geSemiInterval" =>
+                                                //"ltSemiInterval" =>
+                                                //"leSemiInterval" =>
+                                                _ => throw new NotImplementedException(),
+                                            };
+                                            if (error)
+                                                action("", $"RangeConstraint: {closure}, {_lowerBound}, {_upperBound}!");
+                                        }
+                                    }
+                                    if (instance is IntegerAttribute integerAttribute) {
+                                        if (integerAttribute.value.HasValue) {
+                                            var _lowerBound = lowerBound is null ? int.MinValue : int.Parse(lowerBound!.Value);
+                                            var _upperBound = upperBound is null ? int.MaxValue : int.Parse(upperBound!.Value);
+
+                                            var _ = integerAttribute.value!.Value;
+                                            var error = closure switch {
+                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),
+                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),
+                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),
+                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),
+                                                //"gtSemiInterval" => 
+                                                //"geSemiInterval" =>
+                                                //"ltSemiInterval" =>
+                                                //"leSemiInterval" =>
+                                                _ => throw new NotImplementedException(),
+                                            };
+                                            if (error)
+                                                action("", $"RangeConstraint: {closure}, {_lowerBound}, {_upperBound}!");
+                                        }
+                                    }
+                                };
+                                attributeBindingDefinition.Validators = [.. attributeBindingDefinition.Validators, validator];
+                            }
+
+                            //if (constraints.Element(XName.Get("textPattern", scopes["S100CD"])) != default) {
+                            //    var textPattern = constraints.Element(XName.Get("textPattern", scopes["S100CD"]))!.Value;
+                            //    roslyn.AppendLine($"\t[TextPatternConstraint(@\"{textPattern}\")]"); //Replace("\\","\\\\")
+                            //}                            
+                        }
+                    }
 
                     return (attributeBinding, attributeBindingDefinition);
                 }
@@ -857,7 +958,7 @@ namespace S100Framework.WPF.ViewModel
                         attributeBindingsCatalogue = attributeBindingDefinitions,
                     };
 
-                    var attributeBindingDefinition = new attributeBindingDefinition {
+                    var attributeBindingDefinition = new attributeBindingDefinitionViewModel {
                         attribute = referenceCode,
                         lower = lower,
                         upper = upper,

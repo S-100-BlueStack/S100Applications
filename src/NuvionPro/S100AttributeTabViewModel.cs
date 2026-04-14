@@ -134,21 +134,21 @@ namespace NuvionPro
                     break;
 
                 case nameof(this.PS):
-                    this.PS_NotifyPropertyChanged(inspector);
+                    this.PS_Inspector(inspector);
                     this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
 
                     this.Code = default;
                     break;
 
                 case nameof(this.Code):
-                    this.Code_NotifyPropertyChanged(inspector);
+                    this.Code_Inspector(inspector);
                     this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
                     break;
             }
             this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
         }
 
-        private void PS_NotifyPropertyChanged(Inspector inspector) {
+        private void PS_Inspector(Inspector inspector) {
             if (this.PS != default) {
                 var schema = this.PS;
 
@@ -209,7 +209,7 @@ namespace NuvionPro
 
         }
 
-        private void Code_NotifyPropertyChanged(Inspector inspector) {
+        private void Code_Inspector(Inspector inspector) {
 
         }
 
@@ -218,6 +218,13 @@ namespace NuvionPro
         }
 
         public override bool IsDefault => true;
+
+        public override async Task CancelAsync() {
+            base.Inspector.Cancel();
+
+            await LoadFromFeaturesAsync();
+            await base.CancelAsync();
+        }
 
         public override async Task LoadFromFeaturesAsync() {
             var inspector = base.Inspector;
