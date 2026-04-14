@@ -24,6 +24,12 @@
     <AssemblyVersionSettings>None.None.Increment.None</AssemblyVersionSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Artifacts\**" />
+    <EmbeddedResource Remove="Artifacts\**" />
+    <None Remove="Artifacts\**" />
+    <Page Remove="Artifacts\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="S100PropertyGridViewModel.cs" />
     <Compile Remove="Views\S100AttributeEditorView.xaml.cs" />
     <Compile Remove="Views\S100PropertyGridView.xaml.cs" />
@@ -55,9 +61,8 @@
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Include="NLog" Version="6.1.2" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1772.8" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1772.9" />
     <PackageReference Include="S100Framework.Catalogues" Version="3.1.8" />
-    <PackageReference Include="System.IO.Hashing" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ArcGIS.Desktop.Framework">
@@ -137,7 +142,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Artifacts\" />
     <Folder Include="GeospatialInformationRegistry\" />
   </ItemGroup>
   <ItemGroup>
