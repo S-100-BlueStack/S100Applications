@@ -61,8 +61,9 @@ namespace ArcGIS.Core.Data
             "pointset" or "s100.pointset" => "M103",
             "curve" or "s100.curve" => "C101",
             "surface" or "s100.surface" => "S104",
-            "featuretype" or "s100.featuretype" => "F104",
+            "featuretype" or "s100.featuretype" => "F105",
             "informationtype" or "s100.informationtype" => "I106",
+            "attachment" or "s100.attachment" => "A107",
             _ => throw new NotImplementedException(),
         };
 
