@@ -58,7 +58,8 @@ namespace S100Framework.Applications
 
                         }
                     case 20: { // M_CSCL_CompilationScaleOfData
-                            throw new NotImplementedException($"No M_CSCL_CompilationScaleOfData in DK or GL. {tableName}");
+                            continue;   //  S57_ProductCoverage
+                            //throw new NotImplementedException($"No M_CSCL_CompilationScaleOfData in DK or GL. {tableName}");
                         }
 
                     case 25: { // M_HOPA_HorizontalDatumShiftParameters

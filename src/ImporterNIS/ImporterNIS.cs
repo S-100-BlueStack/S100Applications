@@ -94,8 +94,8 @@ namespace S100Framework.Applications
             var append = false;
             string status = null!;
 
-            long maximumDisplayScale = 0;
-            long minimumDisplayScale = int.MaxValue;
+            int maximumDisplayScale = 0;
+            int minimumDisplayScale = int.MaxValue;
 
             arguments.WithParsed<Options>(o => {
                 if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
@@ -264,6 +264,15 @@ namespace S100Framework.Applications
         __skip_truncate:
             foreach (var scale in scalesCompilation) {
                 if (Array.IndexOf(scalesCompilation, scale) == 0) {
+                    using (var destination = createTargetGeodatabase()) {
+                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+
+                        using (Geodatabase source = createGeodatabase()) {
+                            Logger.Current.Information($"Converting Product Coverages");
+                            Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128), destination);
+                        }
+                    }
+
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
                     Logger.Current.Verbose(QueryFilter.WhereClause);
 
@@ -750,8 +759,6 @@ namespace S100Framework.Applications
                     schemaBuilder.Modify(tableDescription);
                     schemaBuilder.Build();
                 }
-
-
                 {
                     var tableDefinition = destination.GetDefinition<TableDefinition>("informationtype");
 
@@ -1743,6 +1750,32 @@ namespace ArcGIS.Core.Geometry
                 else
                     buffer[i] = feature[i];
             }
+        }
+
+        public static Polygon[] Split(this Polygon? polygon) {
+            if (polygon is null) return [];
+
+            if (polygon.ExteriorRingCount > 1) {
+                Polygon[] polygons = [];
+                ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                for (int x = 1; x < polygon.PartCount; x++) {
+                    var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
+                    if (p.Area < 0)
+                        segments = [.. segments, polygon.Parts[x]];
+                    else {
+                        var _ = PolygonBuilderEx.CreatePolygon(segments);
+                        polygons = [.. polygons, _];
+                        segments = [polygon.Parts[x]];
+                    }
+                }
+                if (segments.Any()) {
+                    var _ = PolygonBuilderEx.CreatePolygon(segments);
+                    polygons = [.. polygons, _];
+                }
+
+                return polygons;
+            }
+            return [polygon];
         }
     }
 }
