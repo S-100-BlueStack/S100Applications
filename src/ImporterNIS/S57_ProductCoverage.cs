@@ -291,13 +291,16 @@ namespace S100Framework.Applications
 
     internal static partial class ImporterNIS
     {
+        public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage);
 
-        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale, bool s128) {
+        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale, bool s128, ref S101ProductCoverage[] converages) {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 PropertyNameCaseInsensitive = true,
             }.AppendTypeInfoResolver();
+
+            converages = [];
 
             var tableName = "ProductCoverage";
 
@@ -394,8 +397,6 @@ namespace S100Framework.Applications
                 coverages = [.. coverages, (dsnm, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons)];
             }
 
-            (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, verticalDatum? VDAT, verticalDatum? SDAT, Polygon[] Coverage)[] coveragesCSCL = [];
-
             foreach (var m_sclPolygon in allM_CSCL) {
                 var dsnm = $"M_CSCL:{m_sclPolygon.OBJECTID}";
                 var PLTS_COMP_SCALE = m_sclPolygon.CSCALE!.Value;
@@ -420,7 +421,7 @@ namespace S100Framework.Applications
 
             var scales = coverages.Select(e => e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
-            (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage)[] products = [];
+            S101ProductCoverage[] products = [];
 
 
             for (int i = 0; i < scales.Length; i++) {
@@ -467,11 +468,12 @@ namespace S100Framework.Applications
 
                     if (multipart.IsEmpty) continue;
 
-                    products = [.. products, (coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
+                    products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
                     //break;
                 }
             }
 
+            converages = products;
             ;
 
             using (var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(System.IO.Path.GetFullPath("coverage.gdb"))))) {
@@ -529,7 +531,8 @@ namespace S100Framework.Applications
                 }
             }
 
-            System.Diagnostics.Debugger.Break();
+            //System.Diagnostics.Debugger.Break();
+            ;
 
 #if null
             while (cursorCoverage.MoveNext()) {

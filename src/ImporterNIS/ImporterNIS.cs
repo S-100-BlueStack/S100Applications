@@ -262,6 +262,8 @@ namespace S100Framework.Applications
             }
 
         __skip_truncate:
+            S101ProductCoverage[] s101ProductCoverages = [];
+
             foreach (var scale in scalesCompilation) {
                 if (Array.IndexOf(scalesCompilation, scale) == 0) {
                     using (var destination = createTargetGeodatabase()) {
@@ -269,7 +271,7 @@ namespace S100Framework.Applications
 
                         using (Geodatabase source = createGeodatabase()) {
                             Logger.Current.Information($"Converting Product Coverages");
-                            Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128), destination);
+                            Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
                         }
                     }
 
@@ -283,20 +285,25 @@ namespace S100Framework.Applications
                     Logger.Current.Verbose(QueryFilter.WhereClause);
 
                     Polygon[] clipping = [];
-
-                    using (Geodatabase source = createGeodatabase()) {
-                        using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
-
-                        using var search = productCoverage.Search(new QueryFilter {
-                            WhereClause = $"CATCOV = 1 AND (PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]})"
-                        }, true);
-
-                        while (search.MoveNext()) {
-                            var shape = (Polygon)((Feature)search.Current).GetShape();
-                            var ring = shape.GetExteriorRing(0, true);
-                            clipping = [.. clipping, ring];
-                        }
+                    foreach(var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE< scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
+                        var shape = e.Coverage;
+                        var ring = shape.GetExteriorRing(0, true);
+                        clipping = [.. clipping, ring];
                     }
+
+                    //using (Geodatabase source = createGeodatabase()) {
+                    //    using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
+
+                    //    using var search = productCoverage.Search(new QueryFilter {
+                    //        WhereClause = $"CATCOV = 1 AND (PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]})"
+                    //    }, true);
+
+                    //    while (search.MoveNext()) {
+                    //        var shape = (Polygon)((Feature)search.Current).GetShape();
+                    //        var ring = shape.GetExteriorRing(0, true);
+                    //        clipping = [.. clipping, ring];
+                    //    }
+                    //}
 
                     using (var destination = createTargetGeodatabase()) {
 

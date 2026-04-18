@@ -8,6 +8,10 @@ namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
+        public static string UID(long objectid, string tableName) {
+            return $"{ArcGIS.Core.Data.DataExtensions.Prefix(tableName)}{objectid:00000000}";
+        }
+
         private static void S57_NaturalFeaturesL(Geodatabase source, Geodatabase target, QueryFilter filter) {
             var tableName = "NaturalFeaturesL";
 
@@ -17,6 +21,8 @@ namespace S100Framework.Applications
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
 
             using var buffer = featureClass.CreateRowBuffer();
+
+            //using var insert = featureClass.CreateInsertCursor();
 
             using var cursor = naturalFeaturesL.Search(filter, true);
 
@@ -85,6 +91,8 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
+                            //var _ = insert.Insert(buffer);
+                            //var name = UID(_, featureClass.GetName());
                             var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 

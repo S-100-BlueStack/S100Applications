@@ -56,7 +56,7 @@ namespace ArcGIS.Core.Data
 {
     public static class DataExtensions
     {
-        private static string Prefix(string tabneName) => tabneName.ToLower() switch {
+        public static string Prefix(string tableName) => tableName.ToLower() switch {
             "point" or "s100.point" => "P102",
             "pointset" or "s100.pointset" => "M103",
             "curve" or "s100.curve" => "C101",
