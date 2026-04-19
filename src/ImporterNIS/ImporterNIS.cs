@@ -151,13 +151,17 @@ namespace S100Framework.Applications
             using (var destination = createTargetGeodatabase()) {
                 if (destination.IsTraditionallyVersioned()) {
                     Store = (a, _) => {
-                        if (_.IsTraditionallyVersioned()) {
-                            _.ApplyEdits(() => {
-                                a.Invoke(_);
-                            }, true);
-                        }
-                        else
+                        _.ApplyEdits(() => {
                             a.Invoke(_);
+                        }, true);
+
+                        //if (_.IsTraditionallyVersioned()) {
+                        //    _.ApplyEdits(() => {
+                        //        a.Invoke(_);
+                        //    }, true);
+                        //}
+                        //else
+                        //    a.Invoke(_);
                         return true;
                     };
                 }
@@ -576,9 +580,9 @@ namespace S100Framework.Applications
                             Store((destination) => S57_ProductCoverage(source, destination, QueryFilter, s128), destination);
 
 
-                            Logger.Current.Information($"Converting Sounding Datums");
-                            var coverages = s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE == scale);
-                            Store((destination) => S101_SoundingDatum(source, destination, QueryFilter, [.. coverages]), destination);
+                            //Logger.Current.Information($"Converting Sounding Datums");
+                            //var coverages = s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE == scale);
+                            //Store((destination) => S101_SoundingDatum(source, destination, QueryFilter, [.. coverages]), destination);
 
                             Logger.Current.Information($"Converting Metadata");
                             Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
@@ -706,7 +710,15 @@ namespace S100Framework.Applications
                 }
                 append = true;
             }
-
+            using (Geodatabase source = createGeodatabase()) {
+                using (var destination = createTargetGeodatabase()) {
+                    Store((d) => {
+                        Logger.Current.Information($"Converting Sounding Datums");
+                        ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                        S101_SoundingDatum(source, destination, QueryFilter, s101ProductCoverages);
+                    }, destination);
+                }
+            }
 
             using (Geodatabase source = createGeodatabase()) {
                 using (var destination = createTargetGeodatabase()) {

@@ -1,10 +1,14 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using NetTopologySuite.Index.HPRtree;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
+using S100FC.S128.SimpleAttributes;
+using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using VortexLoader.Singletons;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace S100Framework.Applications
@@ -12,25 +16,97 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static void S101_SoundingDatum(Geodatabase source, Geodatabase target, QueryFilter filter, S101ProductCoverage[] coverages) {
+            using var metadataA = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
+
+            //  M_SDAT
+            using var search = metadataA.Search(new QueryFilter {
+                WhereClause = $"({filter.WhereClause} AND fcsubtype = 45)",
+            }, true);
+
+            (S100FC.S101.FeatureTypes.SoundingDatum SDAT, int PLTS_COMP_SCALE, Polygon shape)[] verticalDatums = [];
+
+            while (search.MoveNext()) {
+                var m_sdat = new MetaDataA((Feature)search.Current);
+
+                var instance = new SoundingDatum {
+                    verticalDatum = GetVerticalDatum(m_sdat.VERDAT ?? 3)!.value,
+                };
+
+                if (!string.IsNullOrEmpty(m_sdat.SORDAT)) {
+                    //  TODO SORDAT ???
+                }
+
+                verticalDatums = [.. verticalDatums, (instance!, m_sdat.PLTS_COMP_SCALE!.Value, (Polygon)m_sdat.SHAPE!)];
+            }
+
+            if (verticalDatums.Any() && System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
+
+            //  Clip DataCoverage geometries
+            var combined = PolygonBuilderEx.CreatePolygon(verticalDatums.Select(e => e.shape));
+
+            (SoundingDatum SoundingDatum, Polygon Coverage)[] soundingDatums = verticalDatums.Select(e => (e.SDAT, e.shape)).ToArray();
+
+            foreach (var c in coverages) {
+                if (GeometryEngine.Instance.Disjoint(c.Coverage, combined)) {
+                    soundingDatums = [.. soundingDatums, (new SoundingDatum {
+                        verticalDatum = c.VDAT!.value,
+                    }, c.Coverage)];
+                    continue;
+                }
+
+                var difference = GeometryEngine.Instance.Difference(c.Coverage, combined);
+
+                var multipart = c.Coverage;
+
+                if (difference is Polygon polygon) {
+                    if (polygon.ExteriorRingCount > 1) {
+                        Polygon[] polygons = [];
+                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                        for (int x = 1; x < polygon.PartCount; x++) {
+                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
+                            if (p.Area < 0)
+                                segments = [.. segments, polygon.Parts[x]];
+                            else {
+                                var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                polygons = [.. polygons, _];
+                                segments = [polygon.Parts[x]];
+                            }
+                        }
+                        if (segments.Any()) {
+                            var _ = PolygonBuilderEx.CreatePolygon(segments);
+                            polygons = [.. polygons, _];
+                        }
+
+                        multipart = PolygonBuilderEx.CreatePolygon(polygons);
+                    }
+                    else
+                        multipart = PolygonBuilderEx.CreatePolygon(polygon);
+                }
+                else
+                    System.Diagnostics.Debugger.Break();
+
+                if (multipart.IsEmpty) continue;
+
+                foreach (var p in multipart.Split()) {
+                    soundingDatums = [.. soundingDatums, (new SoundingDatum {
+                        verticalDatum = c.VDAT!.value,
+                    }, p)];
+                }
+            }
+
+
+            //  Create SoundingDatum's
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
 
             using var buffer = featureClass.CreateRowBuffer();
             buffer["ps"] = ps101;
 
-            foreach (var e in coverages) {
-                if (e.VDAT is not null) {
-
-                }
-                if(e.SDAT is not null) {
-                    var instance = new SoundingDatum {
-                        verticalDatum = e.SDAT!.value,
-                    };
-                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                    buffer["attributebindings"] = instance.Flatten();
-                    SetShape(buffer, e.Coverage);
-                    var featureN = featureClass.CreateRow(buffer);
-                    var name = featureN.UID();
-                }
+            foreach (var e in soundingDatums) {
+                buffer["code"] = e.SoundingDatum.GetType().Name; buffer["sourceIdentifier"] = e.SoundingDatum.sourceIdentifier;
+                buffer["attributebindings"] = e.SoundingDatum.Flatten();
+                SetShape(buffer, e.Coverage);
+                var featureN = featureClass.CreateRow(buffer);
+                var name = featureN.UID();
             }
         }
 

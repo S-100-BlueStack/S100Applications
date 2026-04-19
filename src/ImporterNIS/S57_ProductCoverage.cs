@@ -462,7 +462,7 @@ namespace S100Framework.Applications
                                     multipart = PolygonBuilderEx.CreatePolygon(polygon);
                             }
                             else
-                                ;
+                                System.Diagnostics.Debugger.Break();
                         }
                     }
 
@@ -472,6 +472,9 @@ namespace S100Framework.Applications
                     //break;
                 }
             }
+
+            (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, Polygon[] Coverage)[] cscl = [];
+            
 
             converages = products;
             ;
