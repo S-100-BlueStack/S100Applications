@@ -192,24 +192,36 @@ namespace S100Framework.Applications
 
             long[] scalesCompilation = [];
 
-            //  Clipping
-            using (Geodatabase source = createGeodatabase()) {
-                using var productDefinitions = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
-                using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
+            S101ProductCoverage[] s101ProductCoverages = [];
+            using (var destination = createTargetGeodatabase()) {
+                QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
 
-
-                using var search = productDefinitions.Search(new QueryFilter {
-                    SubFields = "CSCL",
-                    PrefixClause = "DISTINCT",
-                    PostfixClause = "ORDER BY CSCL DESC",
-                    WhereClause = $"CSCL >= {maximumDisplayScale} AND CSCL < {minimumDisplayScale}"
-                }, true);
-
-                while (search.MoveNext()) {
-                    var cscl = Convert.ToInt64(search.Current["CSCL"]);
-                    scalesCompilation = [.. scalesCompilation, cscl];
+                using (Geodatabase source = createGeodatabase()) {
+                    Logger.Current.Information($"Converting Product Coverages");
+                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
                 }
             }
+
+            scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
+
+            //  Clipping
+            //using (Geodatabase source = createGeodatabase()) {
+            //    using var productDefinitions = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
+            //    using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
+
+
+            //    using var search = productDefinitions.Search(new QueryFilter {
+            //        SubFields = "CSCL",
+            //        PrefixClause = "DISTINCT",
+            //        PostfixClause = "ORDER BY CSCL DESC",
+            //        WhereClause = $"CSCL >= {maximumDisplayScale} AND CSCL < {minimumDisplayScale}"
+            //    }, true);
+
+            //    while (search.MoveNext()) {
+            //        var cscl = Convert.ToInt64(search.Current["CSCL"]);
+            //        scalesCompilation = [.. scalesCompilation, cscl];
+            //    }
+            //}
             ;
 
             //goto __skip_truncate;
@@ -262,18 +274,8 @@ namespace S100Framework.Applications
             }
 
         __skip_truncate:
-            S101ProductCoverage[] s101ProductCoverages = [];
-
             foreach (var scale in scalesCompilation) {
                 if (Array.IndexOf(scalesCompilation, scale) == 0) {
-                    using (var destination = createTargetGeodatabase()) {
-                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
-
-                        using (Geodatabase source = createGeodatabase()) {
-                            Logger.Current.Information($"Converting Product Coverages");
-                            Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
-                        }
-                    }
 
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
                     Logger.Current.Verbose(QueryFilter.WhereClause);
@@ -285,7 +287,7 @@ namespace S100Framework.Applications
                     Logger.Current.Verbose(QueryFilter.WhereClause);
 
                     Polygon[] clipping = [];
-                    foreach(var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE< scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
+                    foreach (var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE < scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
                         var shape = e.Coverage;
                         var ring = shape.GetExteriorRing(0, true);
                         clipping = [.. clipping, ring];
@@ -575,7 +577,8 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Sounding Datums");
-                            Store((destination) => S101_SoundingDatum(source, destination, QueryFilter), destination);
+                            var coverages = s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE == scale);
+                            Store((destination) => S101_SoundingDatum(source, destination, QueryFilter, [.. coverages]), destination);
 
                             Logger.Current.Information($"Converting Metadata");
                             Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
@@ -733,7 +736,7 @@ namespace S100Framework.Applications
 
                     FeatureClassDefinition fcDefinition = destination.GetDefinition<FeatureClassDefinition>(featureClassName);
 
-                    FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);                    
+                    FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
                     fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);

@@ -96,8 +96,9 @@ namespace S100Framework.Applications
                                     //    }
                                     //}
 
-
-                                    sounding.featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                                    var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                                    if (featureName is not null)
+                                        sounding.featureName = featureName;
 
 
                                     // TODO: interoperabilityIdentifier

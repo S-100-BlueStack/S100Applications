@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using NetTopologySuite.Index.HPRtree;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
@@ -10,8 +11,31 @@ namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
-        private static void S101_SoundingDatum(Geodatabase source, Geodatabase target, QueryFilter filter) {
+        private static void S101_SoundingDatum(Geodatabase source, Geodatabase target, QueryFilter filter, S101ProductCoverage[] coverages) {
+            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
 
+            using var buffer = featureClass.CreateRowBuffer();
+            buffer["ps"] = ps101;
+
+            foreach (var e in coverages) {
+                if (e.VDAT is not null) {
+
+                }
+                if(e.SDAT is not null) {
+                    var instance = new SoundingDatum {
+                        verticalDatum = e.SDAT!.value,
+                    };
+                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                    buffer["attributebindings"] = instance.Flatten();
+                    SetShape(buffer, e.Coverage);
+                    var featureN = featureClass.CreateRow(buffer);
+                    var name = featureN.UID();
+                }
+            }
+        }
+
+#if null
+        private static void S101_SoundingDatum(Geodatabase source, Geodatabase target, QueryFilter filter) {
             var metadataATableName = "MetaDataA";
             var productCoverageTableName = "ProductCoverage";
 
@@ -149,5 +173,6 @@ namespace S100Framework.Applications
             Logger.Current.DataTotalCount("M_SDAT", M_SDAT_Count, M_SDAT_Count);
             Logger.Current.DataTotalCount("M_QUAL", dissolved_M_QUAL_Count, dissolved_M_QUAL_Count);
         }
+#endif
     }
 }
