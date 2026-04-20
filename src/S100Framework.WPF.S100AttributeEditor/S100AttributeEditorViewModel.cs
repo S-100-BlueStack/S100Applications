@@ -764,6 +764,32 @@ namespace S100Framework.WPF.ViewModel
                 };
             }
 
+            private static Func<CodeListAttribute> CreateCodedList(XElement attributeBindingElement, XElement simpleAttributeElement, XmlNamespaceManager xmlNamespaceManager) {
+                var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
+
+                var permittedValues = attributeBindingElement.XPathSelectElement("S100FC:permittedValues", xmlNamespaceManager)?.Elements(XName.Get("value", scope)).Select(e => e.Value).ToArray();
+
+                listedValue[] listedValues = [];
+
+                foreach (var listedValue in simpleAttributeElement.Element(XName.Get("listedValues", scope))!.Elements()) {
+                    var label = listedValue.Element(XName.Get("label", scope))!.Value!;
+                    var definition = listedValue.Element(XName.Get("definition", scope))!.Value!;
+                    var code = listedValue.Element(XName.Get("code", scope))!.Value!;
+
+                    if (permittedValues is not null && !permittedValues.Contains(code)) continue;
+
+                    definition = definition.Replace("\"", "\\\"");
+
+                    listedValues = [.. listedValues, new listedValue(label, definition, int.Parse(code))];
+                }
+
+                return () => new CodeListAttribute {
+                    S100FC_code = simpleAttributeElement.Element(XName.Get("code", scope))!.Value,
+                    S100FC_name = simpleAttributeElement.Element(XName.Get("name", scope))!.Value,                    
+                    listedValues = listedValues,
+                };
+            }
+
             private static (Func<attributeBinding> creator, attributeBindingDefinitionViewModel attributeBindingDefinition) CreateAttributeBinding(XElement binding, XmlNamespaceManager xmlNamespaceManager, IDictionary<string, XElement> simpleAttributes, IDictionary<string, XElement> complexAttributes) {
                 var scope = xmlNamespaceManager.LookupNamespace("S100FC")!;
 
@@ -827,6 +853,7 @@ namespace S100Framework.WPF.ViewModel
                             S100FC_name = simpleAttribute.Element(XName.Get("name", scope))!.Value,
                         },
                         "enumeration" => CreateEnumeration(binding, simpleAttribute, xmlNamespaceManager),
+                        "S100_CodeList" => CreateCodedList(binding, simpleAttribute, xmlNamespaceManager),
                         _ => throw new NotImplementedException(),
                     };
 
@@ -875,9 +902,17 @@ namespace S100Framework.WPF.ViewModel
                                 attributeBindingDefinition.Validators = [.. attributeBindingDefinition.Validators, validator];
                             }
                             if ("textPattern".Equals(constraint.Name.LocalName)) {
-                                if (System.Diagnostics.Debugger.IsAttached)
-                                    System.Diagnostics.Debugger.Break();
-                            }
+                                Action<AddError, attributeBinding> validator = (action, instance) => {
+                                    if (instance is TextAttribute textAttribute) {
+                                        var regex = new Regex(constraint.Value);
+                                        if (string.IsNullOrEmpty(textAttribute.value)) return;
+                                        if (!regex.IsMatch(textAttribute.value)) {
+                                            action("", $"PatternConstraint: {constraint.Value}!");
+                                        }
+                                    }
+                                };
+                                attributeBindingDefinition.Validators = [.. attributeBindingDefinition.Validators, validator];
+                            }                                
                             if ("range".Equals(constraint.Name.LocalName)) {
                                 var lowerBound = constraint.Element(XName.Get("lowerBound", xmlNamespaceManager.LookupNamespace("S100Base")!));
                                 var upperBound = constraint.Element(XName.Get("upperBound", xmlNamespaceManager.LookupNamespace("S100Base")!));
