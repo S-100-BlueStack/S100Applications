@@ -100,15 +100,15 @@ namespace S100Framework.Applications
                 categoryOfRadarTransponderBeacon = default,
             };
 
-            var beacons = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(RadarTransponderBeacon), structure.GlobalId);
-            AidsToNavigationP current;
-            if (beacons.Count == 0) {
-                Logger.Current.Error($"No related RadarTransponderBeacons. Returning empty RadarTransponderBeacon (GlobalId: {structure.GlobalId})");
-                return instance;
-            }
-            else {
-                current = beacons.First();
-            }
+            //var beacons = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(RadarTransponderBeacon), structure.GlobalId);
+            AidsToNavigationP current = structure as AidsToNavigationP;
+            //if (beacons.Count == 0) {
+            //    Logger.Current.Error($"No related RadarTransponderBeacons. Returning empty RadarTransponderBeacon (GlobalId: {structure.GlobalId})");
+            //    return instance;
+            //}
+            //else {
+            //    current = beacons.First();
+            //}
 
             if (current.CATRTB != null) {
                 instance.categoryOfRadarTransponderBeacon = EnumHelper.GetEnumValue(current.CATRTB);

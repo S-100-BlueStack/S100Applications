@@ -12,15 +12,15 @@ namespace S100Framework.Applications
             var instance = new FogSignal {
             };
 
-            var fogsignals = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(FogSignal), structure.GlobalId);
-            AidsToNavigationP current;
-            if (fogsignals.Count == 0) {
-                Logger.Current.Error($"No related fogsignals. Returning empty fogsignal (GlobalId: {structure.GlobalId})");
-                return instance;
-            }
-            else {
-                current = fogsignals.First();
-            }
+            //var fogsignals = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(FogSignal), structure.GlobalId);
+            AidsToNavigationP current = structure as AidsToNavigationP;
+            //if (fogsignals.Count == 0) {
+            //    Logger.Current.Error($"No related fogsignals. Returning empty fogsignal (GlobalId: {structure.GlobalId})");
+            //    return instance;
+            //}
+            //else {
+            //    current = fogsignals.First();
+           // }
 
             if (current.CATFOG.HasValue != default) {
                 instance.categoryOfFogSignal = EnumHelper.GetEnumValue(current.CATFOG.Value);
