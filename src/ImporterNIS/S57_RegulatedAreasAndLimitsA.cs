@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using S100FC;
 using S100FC.S101.FeatureTypes;
+using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 
@@ -256,7 +257,59 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // ADMARE_AdministrationAreaNamed
-                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.Contains("Vessel traffic service area")) {
+                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("pilotage district")) {
+                                var instance = new PilotageDistrict();
+
+                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                                if (featureName is not null)
+                                    instance.featureName = featureName;
+
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                                SetShape(buffer, current.SHAPE);
+                                ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                
+                                var featureN = featureClass.CreateRow(buffer);
+                                var name = featureN.UID();
+
+                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                }
+
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+
+                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                            }
+                            else if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("marine pollution regulations area")) {
+                                var instance = new MarinePollutionRegulationsArea();
+
+                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                                if (featureName is not null)
+                                    instance.featureName = featureName;
+
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                                SetShape(buffer, current.SHAPE);
+                                ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+
+                                var featureN = featureClass.CreateRow(buffer);
+                                var name = featureN.UID();
+
+                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                }
+
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+
+                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                            }
+                            else if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("vessel traffic service area")) {
                                 var instance = new VesselTrafficServiceArea();
 
                                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
