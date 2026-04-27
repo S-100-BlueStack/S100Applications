@@ -869,7 +869,10 @@ namespace S100Framework.Applications
                                         instance.categoryOfRestrictedArea = categoryOfRestrictedArea;
                                 }
                                 else {
-                                    Logger.Current.DataError(current.OBJECTID!.Value, tableName, longname, $"Cannot convert Water Skiing Area to restricted area. CATREA: 26 not ");
+                                    //S-57 Restricted Area – Water Skiing becomes S-101 RestrictedArea – Recreation Area according to S-65 Annex B Attribute tables
+                                    var categoryOfRestrictedArea = EnumHelper.GetEnumValues(32);
+                                    if (categoryOfRestrictedArea is not null && categoryOfRestrictedArea.Any())
+                                        instance.categoryOfRestrictedArea = categoryOfRestrictedArea;
                                 }
                             }
 
