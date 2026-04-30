@@ -102,6 +102,11 @@
                 return _instance;
             }
         }
+
+        public static ConversionAnalytics Initialize() {
+            _instance = new ConversionAnalytics();
+            return _instance;
+        }
     }
 }
 

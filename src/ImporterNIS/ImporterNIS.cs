@@ -534,6 +534,8 @@ namespace S100Framework.Applications
 
                 using (var destination = createTargetGeodatabase()) {
                     using (Geodatabase source = createGeodatabase()) {
+                        ConversionAnalytics.Initialize();
+
                         Logger.Current.Information($"Loading subtypes codes to subtype name");
                         Subtypes.Initialize(source);
 
