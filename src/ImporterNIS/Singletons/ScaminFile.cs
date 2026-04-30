@@ -250,6 +250,7 @@ namespace S100Framework.Applications.Singletons
                 var ptype = Convert.ToString(o.Attribute("PrimitiveType")?.Value);
                 var condition = Convert.ToBoolean(o.Attribute("HasCondition")?.Value);
                 var stepValue = Convert.ToString(o.Attribute("DefaultStepValue")?.Value);
+                var fixedValue = Convert.ToString(o.Attribute("FixedValue")?.Value);
 
                 if (name == null) {
                     throw new ArgumentException("Empty name in scamin file");
@@ -257,7 +258,7 @@ namespace S100Framework.Applications.Singletons
                 if (ptype == null) {
                     throw new ArgumentException("empty PrimitiveType in scamin file");
                 }
-                if (stepValue == null) {
+                if (stepValue == null && fixedValue == null) {
                     throw new ArgumentException("empty stepvalue in scamin file");
                 }
 
@@ -279,6 +280,7 @@ namespace S100Framework.Applications.Singletons
                     PrimitiveType = ptype,
                     HasCondition = condition,
                     DefaultStepValue = stepValue,
+                    FixedValue = fixedValue,
                     Conditions = conditions,
                 });
             }
@@ -320,6 +322,42 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        private int? GetFixedValueByName(string name, PrimitiveType primitiveType, bool isRelatedToStructure) {
+            var obj = this._objects.FirstOrDefault(o => o.Name != null && o.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+            if (obj == null) {
+                return null;
+            }
+
+            // https://pro.arcgis.com/en/pro-app/latest/help/production/maritime/scale-minimum-radar-range-method.htm
+            // if _s101type = R - Related - Object receives same step as related structure else defaultStepValue (if stand alone)
+            // if _s101type = S - Spatially associated - Operator = "Cover" or operator = "Share" - receives StepValue accordingly
+            // if _s101type = A - Attribute value -
+            {
+                if (!isRelatedToStructure) {
+                    if (int.TryParse(obj.FixedValue, out var fixedValue)) {
+                        return fixedValue;
+                    }
+                    else {
+                        return null;
+                    }
+                }
+            }
+            {
+                // TODO: implement scamin conditions. For now returning null if
+                if (obj.HasCondition) {
+                    return null;
+                }
+
+                if (int.TryParse(obj.FixedValue, out var fixedValue)) {
+                    return fixedValue;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+
         internal int GetClosestScaminValue(int inputValue) {
             var closestScamin = this._scaminValues
                                 .OrderBy(v => Math.Abs(v - inputValue))
@@ -331,10 +369,15 @@ namespace S100Framework.Applications.Singletons
             var closestScamin = this.GetClosestScaminValue(compilationScale);
 
             var defaultStepValue = this.GetDefaultStepValueByName(name, primitiveType, isRelatedToStructure);
+            var fixedValue = this.GetFixedValueByName(name, primitiveType, isRelatedToStructure);
 
             var higherScamins = this._scaminValues.Where(v => v >= closestScamin).Order().ToArray();
 
             int? index = null;
+
+            if (fixedValue.HasValue) {
+                return fixedValue.Value;
+            }
 
             if (defaultStepValue.HasValue && defaultStepValue.Value > 0)
                 index = defaultStepValue.Value;
@@ -354,6 +397,7 @@ namespace S100Framework.Applications.Singletons
         public string? PrimitiveType { get; set; }
         public bool HasCondition { get; set; }
         public string? DefaultStepValue { get; set; }
+        public string? FixedValue { get; set; }
         public List<List<string>> Conditions { get; set; } = [];
     }
 }
