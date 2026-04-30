@@ -10,9 +10,9 @@ namespace S100Framework.Applications
             var _layerDefinitions = geodatabase.GetDefinitions<FeatureClassDefinition>();
             var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();
 
-            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetAliasName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             if (tableName == null) {
-                tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+                tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             }
             return tableName;
         }
@@ -20,9 +20,9 @@ namespace S100Framework.Applications
             var _layerDefinitions = geodatabase.GetDefinitions<FeatureClassDefinition>();
             var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();
 
-            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetAliasName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             if (tableName == null) {
-                tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+                tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
                 return false;
             }
             return true;
