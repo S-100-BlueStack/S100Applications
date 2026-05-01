@@ -419,3 +419,4 @@ FodyWeavers.xsd
 /src/VortexLoader/Properties/launchSettings.json
 /src/ImporterNIS/Properties/launchSettings.json
 /src/ImporterYAML/Properties/launchSettings.json
+/src/ExporterYAML/Properties/launchSettings.json
