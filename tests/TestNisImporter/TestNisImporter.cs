@@ -740,7 +740,7 @@ namespace TestNisImporter
 
         [Fact]
         public void BuildImportS57ToGeodatabaseScripts() {
-            var root = new IO.DirectoryInfo(@"e:\ArcGIS\Projects\NOAA\All_ENCs\ENC_ROOT");
+            var root = new IO.DirectoryInfo(@"l:\B061450\ArcGIS\IIC Technologies\s57\US550\05GCD\ENC_ROOT");
 
             var python = new StringBuilder();
 
@@ -749,7 +749,7 @@ namespace TestNisImporter
                 if (enc.Name.Contains("cancel", StringComparison.InvariantCultureIgnoreCase)) continue;
                 if (!enc.Name.Contains(filter)) continue;
 
-                var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true);
+                var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
 
                 python.AppendLine(command);
             }
@@ -757,7 +757,7 @@ namespace TestNisImporter
             this._output.WriteLine(python.ToString());
         }
 
-        private static string ImportS57ToGeodatabase(DirectoryInfo folder, string connection, Func<string, bool> include) {
+        private static string ImportS57ToGeodatabase(DirectoryInfo folder, string connection, Func<string, bool> filter, bool updates) {
             var tasks = new List<string>();
 
             var regex = new Regex(@"\d{3}$");
@@ -769,16 +769,17 @@ namespace TestNisImporter
             foreach (var file in folder.GetFiles("*.000").OrderBy(e => IO.Path.GetFileNameWithoutExtension(e.FullName))) {
                 var name = IO.Path.GetFileNameWithoutExtension(file.FullName);
 
-                if (!include.Invoke(name))
+                if (!filter.Invoke(name))
                     continue;
 
-                var updates = folder.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(e => !e.Extension.Equals(".000") && !e.Extension.Equals(".031") && regex.IsMatch(e.Name)).ToList();
+
+                var _updates = updates ? folder.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(e => !e.Extension.Equals(".000") && !e.Extension.Equals(".031") && regex.IsMatch(e.Name)).ToList() : [];
 
 
                 tasks.Add($"arcpy.maritime.ImportS57ToGeodatabase(" + Environment.NewLine +
                 $"    in_base_cell = r\"{file.FullName}\"," + Environment.NewLine +
                 $"    target_workspace=r\"{connection}\"," + Environment.NewLine +
-                $"    in_update_cells=r\"{string.Join(';', updates)}\"," + Environment.NewLine +
+                $"    in_update_cells=r\"{string.Join(';', _updates)}\"," + Environment.NewLine +
                  "    in_product_config=None" + Environment.NewLine +
                 ")" + Environment.NewLine);
             }
