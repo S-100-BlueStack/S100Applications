@@ -3,8 +3,9 @@ using ArcGIS.Core.Geometry;
 using CommandLine;
 using S100FC;
 using S100FC.S101;
-using S100FC.YAML;
+using S100FC.S128.SimpleAttributes;
 using S100FC.Topology;
+using S100FC.YAML;
 using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
@@ -149,11 +150,11 @@ namespace S100Framework.Applications
 
                 var datasets = new List<(Dataset Dataset, SpatialQueryFilter Filter)>();
                 {
-                    using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => e.GetAliasName().Equals("surface")).GetName());
+                    using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => e.GetName().EndsWith("surface")).GetName());
 
                     if (!string.IsNullOrEmpty(wildcard)) {
                         using var cursor = surface.Search(new QueryFilter {
-                            WhereClause = $"upper(ps) = 'S-128' and FLATTEN LIKE '%\"datasetName\":%\"{wildcard}\"%'",
+                            WhereClause = $"upper(ps) = 'S-128' and attributeBindings LIKE '%\"datasetName\":%\"{wildcard}\"%'",
                         }, true);
 
                         while (cursor.MoveNext()) {
@@ -169,7 +170,7 @@ namespace S100Framework.Applications
 
                     foreach (var ds in datasetNames) {
                         using var cursor = surface.Search(new QueryFilter {
-                            WhereClause = string.IsNullOrEmpty(ds) ? "upper(ps) = 'S-128'" : $"upper(ps) = 'S-128' and FLATTEN LIKE '%\"datasetName\":%\"{ds.ToUpperInvariant()}\"%'",
+                            WhereClause = string.IsNullOrEmpty(ds) ? "upper(ps) = 'S-128'" : $"upper(ps) = 'S-128' and attributeBindings LIKE '%\"datasetName\":%\"{ds.ToUpperInvariant()}\"%'",
                         }, true);
 
                         while (cursor.MoveNext()) {
@@ -228,7 +229,7 @@ namespace S100Framework.Applications
                     var informationsTypesAdded = new List<string>();
 
                     try {
-                        using var informationType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetAliasName().Equals("informationtype")).GetName());
+                        using var informationType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("informationtype")).GetName());
                         using var informationCursor = informationType.Search();
                         while (informationCursor.MoveNext()) {
                             var current = informationCursor.Current;
@@ -275,7 +276,7 @@ namespace S100Framework.Applications
                     var featureTypesAdded = new List<string>();
 
                     try {
-                        using var featureType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetAliasName().Equals("featuretype")).GetName());
+                        using var featureType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("featuretype")).GetName());
                         using var featureCursor = featureType.Search();
                         while (featureCursor.MoveNext()) {
                             var current = featureCursor.Current;
@@ -322,7 +323,7 @@ namespace S100Framework.Applications
 
                     // Features
                     foreach (var def in source.GetDefinitions<FeatureClassDefinition>()) {
-                        var tableName = def.GetAliasName();
+                        var tableName = def.GetName().Split('.').Last();
 
                         var supported = tableName switch {
                             "surface" => true,
@@ -362,6 +363,18 @@ namespace S100Framework.Applications
                                 GeometryType.Polyline => Primitive.Curve,
                                 GeometryType.Polygon => Primitive.Surface,
                                 _ => throw new InvalidOperationException(),
+                            };
+
+                            Action geometryConverter = tableName switch {
+                                "pointset" => () => {
+                                    var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
+                                    geometries.Add(new(_, name!));
+                                }
+                                ,
+                                _ => () => {
+                                    geometries.Add(new(current.GetShape(), name!));
+                                }
+                                ,
                             };
 
                             try {
@@ -414,7 +427,7 @@ namespace S100Framework.Applications
                                     if (informationBindings != default && informationBindings.Any()) {
                                         foreach (var binding in informationBindings) {
                                             var asso = new S100FC.YAML.Association {
-                                                Name = binding.GetType().GenericTypeArguments[0].Name,
+                                                Name = binding.association!.S100FC_code,
                                                 Role = binding.role,
                                                 To = binding.informationId!,
                                             };
@@ -447,7 +460,7 @@ namespace S100Framework.Applications
                                                 continue;
 
                                             var asso = new S100FC.YAML.Association {
-                                                Name = binding.GetType().GenericTypeArguments[0].Name,
+                                                Name = binding.association!.S100FC_code,
                                                 Role = binding.role,
                                                 To = $"110:{binding.featureId!.Substring(1)}:1"
                                             };
@@ -465,7 +478,8 @@ namespace S100Framework.Applications
 
                                 dataset?.AddFeature(feature!);
 
-                                geometries.Add(new(current.GetShape(), name!));
+                                geometryConverter();
+                                //geometries.Add(new(current.GetShape(), name!));
                             }
                             catch (Exception ex) {
                                 Log.Information(ex.Message);
@@ -505,7 +519,7 @@ namespace S100Framework.Applications
                     File.WriteAllText(IO.Path.Combine(@"c:\temp", $"{datasetName}.yaml"), yaml);
 
                     if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
-                        var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{@"\\nas.gst.dk\public\projektdata\produktion\S-100\Product Specifications\S-101 Electronic Navigational Chart\2.0.0\101_Feature_Catalogue_2.0.0.xml"}\" -d \"{output}\"";
+                        var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{@"e:\ArcGIS\Projects\IIC Technologies\FeatureCatalogue.xml"}\" -d \"{output}\"";
 
                         if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
                             IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);

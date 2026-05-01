@@ -194,41 +194,7 @@ namespace S100Framework.Applications
             _converterRegistry.Register<OffshoreInstallationsP, FogSignal>(Converters.CreateFogSignal);
 
 
-            long[] scalesCompilation = [];
-
-            S101ProductCoverage[] s101ProductCoverages = [];
-            using (var destination = createTargetGeodatabase()) {
-                QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
-
-                using (Geodatabase source = createGeodatabase()) {
-                    Logger.Current.Information($"Converting Product Coverages");
-                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
-                }
-            }
-
-            scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
-
-            //  Clipping
-            //using (Geodatabase source = createGeodatabase()) {
-            //    using var productDefinitions = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
-            //    using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
-
-
-            //    using var search = productDefinitions.Search(new QueryFilter {
-            //        SubFields = "CSCL",
-            //        PrefixClause = "DISTINCT",
-            //        PostfixClause = "ORDER BY CSCL DESC",
-            //        WhereClause = $"CSCL >= {maximumDisplayScale} AND CSCL < {minimumDisplayScale}"
-            //    }, true);
-
-            //    while (search.MoveNext()) {
-            //        var cscl = Convert.ToInt64(search.Current["CSCL"]);
-            //        scalesCompilation = [.. scalesCompilation, cscl];
-            //    }
-            //}
-            ;
-
-            //goto __skip_truncate;
+           //goto __skip_truncate;
 
             //  Truncate geodatabase
             using (Geodatabase destination = createTargetGeodatabase()) {
@@ -276,6 +242,20 @@ namespace S100Framework.Applications
                     DeleteAll(informationtype);
                 }, destination);
             }
+
+            long[] scalesCompilation = [];
+
+            S101ProductCoverage[] s101ProductCoverages = [];
+            using (var destination = createTargetGeodatabase()) {
+                QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+
+                using (Geodatabase source = createGeodatabase()) {
+                    Logger.Current.Information($"Converting Product Coverages");
+                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
+                }
+            }
+
+            scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
         __skip_truncate:
             foreach (var scale in scalesCompilation) {

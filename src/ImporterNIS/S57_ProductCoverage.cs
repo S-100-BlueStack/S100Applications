@@ -283,6 +283,7 @@ namespace S100Framework.Applications
 namespace S100Framework.Applications
 {
     using ArcGIS.Core.CIM;
+    using ArcGIS.Core.Data.UtilityNetwork.Trace;
     using S100FC.S128;
     using S100FC.S128.SimpleAttributes;
     using S100Framework.Applications.S57auto.esri;
@@ -356,21 +357,21 @@ namespace S100Framework.Applications
                     _ => throw new InvalidDataException(),
                 };
 
-                //var instance = new S100FC.S128.FeatureTypes.ElectronicProduct {
-                //    catalogueElementClassification = [1], // catalogueElementClassification.Enc
-                //    editionNumber = edtn,
-                //    updateNumber = updn,
-                //    issueDate = DateOnly.FromDateTime(isdt),
-                //    notForNavigation = true,
-                //    typeOfProductFormat = 2,    //typeOfProductFormat.IsoIec8211,
-                //    datasetName = dsnm,
-                //    specificUsage = specificUsage,
-                //    productSpecification = new productSpecification {
-                //        editionDate = S100FC.S101.Summary.VersionDate,
-                //        name = S100FC.S101.Summary.ProductId,
-                //        version = S100FC.S101.Summary.Version.ToString(),
-                //    },
-                //};
+                var electronicProduct = new S100FC.S128.FeatureTypes.ElectronicProduct {
+                    catalogueElementClassification = [1], // catalogueElementClassification.Enc
+                    editionNumber = edtn,
+                    updateNumber = updn,
+                    issueDate = DateOnly.FromDateTime(isdt),
+                    notForNavigation = true,
+                    typeOfProductFormat = 2,    //typeOfProductFormat.IsoIec8211,
+                    datasetName = dsnm,
+                    specificUsage = specificUsage,
+                    productSpecification = new productSpecification {
+                        editionDate = S100FC.S101.Summary.VersionDate,
+                        name = S100FC.S101.Summary.ProductId,
+                        version = S100FC.S101.Summary.Version.ToString(),
+                    },
+                };
 
                 using var cursorCoverage = productCoverageFeatureClass.Search(new QueryFilter {
                     WhereClause = $"Product_GUID = '{globalid:B}' AND CATCOV = 1",
@@ -395,6 +396,32 @@ namespace S100Framework.Applications
                 var sdat = GetSoundingDatum(current.SDAT!.Value);
 
                 coverages = [.. coverages, (dsnm, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons)];
+
+                if (s128) {
+                    using var _ = productCoverageFeatureClass.Search(new QueryFilter {
+                        WhereClause = $"Product_GUID = '{globalid:B}'",
+                    }, true);
+
+                    Polygon[] productCoverages = [];
+                    while (_.MoveNext()) {
+                        productCoverages = [.. productCoverages, (Polygon)((Feature)_.Current).GetShape().Clone()];
+                    }
+                    
+                    using (var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"))) {
+
+                        using var buffer = featureClass.CreateRowBuffer();
+                        buffer["ps"] = ps128;
+
+                        buffer["code"] = electronicProduct.S100FC_code;
+                        buffer["attributebindings"] = electronicProduct.Flatten();
+                        buffer["informationbindings"] = "[]";
+                        buffer["featurebindings"] = "[]";
+
+                        SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
+                        var featureN = featureClass.CreateRow(buffer);
+                        var name = featureN.UID();
+                    }
+                }
             }
 
             foreach (var m_sclPolygon in allM_CSCL) {
@@ -425,7 +452,6 @@ namespace S100Framework.Applications
 
 
             for (int i = 0; i < scales.Length; i++) {
-                ;
                 foreach (var coverage in coverages.Where(e => e.PLTS_COMP_SCALE == scales[i])) {
                     //if (!"101DK001NORSO".Equals(coverage.Name)) continue;
                     var multipart = coverage.Coverage.Length == 1 ? coverage.Coverage[0] : PolygonBuilderEx.CreatePolygon(coverage.Coverage);
@@ -474,7 +500,7 @@ namespace S100Framework.Applications
             }
 
             (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, Polygon[] Coverage)[] cscl = [];
-            
+
 
             converages = products;
             ;

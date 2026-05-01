@@ -39,7 +39,12 @@ namespace S100Framework.Applications
                 verticalDatums = [.. verticalDatums, (instance!, m_sdat.PLTS_COMP_SCALE!.Value, (Polygon)m_sdat.SHAPE!)];
             }
 
-            if (verticalDatums.Any() && System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
+
+
+            if (verticalDatums.Any()) {
+                Logger.Current.Warning($"verticalDatums.Count() = #{verticalDatums.Count()}");
+                //if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
+            }
 
             //  Clip DataCoverage geometries
             var combined = PolygonBuilderEx.CreatePolygon(verticalDatums.Select(e => e.shape));
