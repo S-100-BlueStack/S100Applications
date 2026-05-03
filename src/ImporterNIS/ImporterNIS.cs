@@ -144,28 +144,22 @@ namespace S100Framework.Applications
             });
 
             Func<Action<Geodatabase>, Geodatabase, bool> Store = (a, database) => {
-                a.Invoke(database);
+                database.ApplyEdits(() => {
+                    a.Invoke(database);
+                });
                 return true;
             };
 
-            using (var destination = createTargetGeodatabase()) {
-                if (destination.IsTraditionallyVersioned()) {
-                    Store = (a, _) => {
-                        _.ApplyEdits(() => {
-                            a.Invoke(_);
-                        }, true);
-
-                        //if (_.IsTraditionallyVersioned()) {
-                        //    _.ApplyEdits(() => {
-                        //        a.Invoke(_);
-                        //    }, true);
-                        //}
-                        //else
-                        //    a.Invoke(_);
-                        return true;
-                    };
-                }
-            }
+            //using (var destination = createTargetGeodatabase()) {
+            //    if (destination.IsTraditionallyVersioned()) {
+            //        Store = (a, _) => {
+            //            _.ApplyEdits(() => {
+            //                a.Invoke(_);
+            //            }, true);
+            //            return true;
+            //        };
+            //    }
+            //}
 
             _converterRegistry.Register<AidsToNavigationP, CardinalBeacon>(Converters.CreateCardinalBeacon);
             _converterRegistry.Register<AidsToNavigationP, RadarTransponderBeacon>(Converters.CreateRadarTransponderBeacon);
@@ -1643,7 +1637,9 @@ namespace S100Framework.Applications
                 return default;
             }
 
-            string result = Regex.Replace(fileReference, @"^dk", match => {
+            return $"101{fileReference.Substring(0, 2)}00{fileReference.Substring(2)}";
+
+            string result = Regex.Replace(fileReference, @"^[dk]", match => {
                 string matched = match.Value;
 
                 string replacement = "101";
