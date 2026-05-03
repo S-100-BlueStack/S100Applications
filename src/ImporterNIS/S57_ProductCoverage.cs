@@ -118,7 +118,7 @@ namespace S100Framework.Applications
                     serie = dsnm!.Substring(0, 3);
                 }
 
-                dsnm = "101DK00" + dsnm!.Substring(2);
+                dsnm = $"101{dsnm!.Substring(0, 2)}00{dsnm!.Substring(2)}";
 
                 var specificUsage = dsnm[7] switch {
                     '5' => 5,   //S100FC.S128.specificUsage.NavigationalPurposeHarbour,
@@ -346,7 +346,7 @@ namespace S100Framework.Applications
                     serie = dsnm!.Substring(0, 3);
                 }
 
-                dsnm = "101DK00" + dsnm!.Substring(2);
+                dsnm = $"101{dsnm!.Substring(0, 2)}00{dsnm!.Substring(2)}";
 
                 var specificUsage = dsnm[7] switch {
                     '5' => 5,   //S100FC.S128.specificUsage.NavigationalPurposeHarbour,
