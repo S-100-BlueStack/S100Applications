@@ -119,9 +119,22 @@ namespace S100Framework.Applications
                         }
                     };
 
-
                     createGeodatabase = () => {
                         var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(target))));
+
+                        return geodatabase;
+                    };
+                }
+                else if (".geodatabase".Equals(IO.Path.GetExtension(target), StringComparison.OrdinalIgnoreCase)) {
+                    initialize = (append) => {
+                        if (!append) {
+                            FastZip fastZip = new();                            
+                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed12.geodatabase"), IO.Path.GetFullPath(target), true);
+                        }
+                    };
+
+                    createGeodatabase = () => {
+                        var geodatabase = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(target))));
 
                         return geodatabase;
                     };

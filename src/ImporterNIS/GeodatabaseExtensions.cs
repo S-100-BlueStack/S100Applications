@@ -8,9 +8,9 @@ namespace S100Framework.Applications
 
         internal static string? GetName(this Geodatabase geodatabase, string name) {
             var _layerDefinitions = geodatabase.GetDefinitions<FeatureClassDefinition>();
-            var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();
+            var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();            
 
-            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             if (tableName == null) {
                 tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             }
@@ -20,7 +20,7 @@ namespace S100Framework.Applications
             var _layerDefinitions = geodatabase.GetDefinitions<FeatureClassDefinition>();
             var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();
 
-            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
+            var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             if (tableName == null) {
                 tableName = _tableDefinitions?.FirstOrDefault<TableDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase) || e.GetName().ToLower().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
                 return false;
@@ -56,14 +56,14 @@ namespace ArcGIS.Core.Data
 {
     public static class DataExtensions
     {
-        public static string Prefix(string tableName) => tableName.ToLower() switch {
-            "point" or "s100.point" => "P102",
-            "pointset" or "s100.pointset" => "M103",
-            "curve" or "s100.curve" => "C101",
-            "surface" or "s100.surface" => "S104",
-            "featuretype" or "s100.featuretype" => "F105",
-            "informationtype" or "s100.informationtype" => "I106",
-            "attachment" or "s100.attachment" => "A107",
+        public static string Prefix(string tableName) => tableName.ToLower().Split('.')[^1] switch {
+            "point" => "P102",
+            "pointset" => "M103",
+            "curve" => "C101",
+            "surface" => "S104",
+            "featuretype" => "F105",
+            "informationtype" => "I106",
+            "attachment" => "A107",
             _ => throw new NotImplementedException(),
         };
 

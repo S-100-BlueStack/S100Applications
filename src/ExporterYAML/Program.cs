@@ -117,6 +117,9 @@ namespace S100Framework.Applications
                     else if (IO.Directory.Exists(geodatabase) && ".gdb".Equals(IO.Path.GetExtension(geodatabase), StringComparison.InvariantCultureIgnoreCase)) {
                         createGeodatabase = () => { return new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(geodatabase)))); };
                     }
+                    else if (IO.File.Exists(geodatabase) && ".geodatabase".Equals(IO.Path.GetExtension(geodatabase), StringComparison.OrdinalIgnoreCase)) {
+                        createGeodatabase = () => { return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(geodatabase)))); };
+                    }
                     else
                         throw new System.ArgumentOutOfRangeException(nameof(geodatabase));
 
