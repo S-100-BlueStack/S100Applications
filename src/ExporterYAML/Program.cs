@@ -9,6 +9,7 @@ using S100FC.YAML;
 using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Dataset = S100FC.YAML.Dataset;
 using Esri = ArcGIS.Core.Hosting.Host;
 using IO = System.IO;
@@ -18,6 +19,9 @@ namespace S100Framework.Applications
     internal class VortexExporter
     {
         private const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff}| [{Level:u3}] {Message:lj} {NewLine}{Exception}";
+        
+        const string fileReferencePattern = @"^101[A-Z]{2}\d{2}";
+        static Regex fileReferenceRegex = new Regex(fileReferencePattern);
 
         public class Options
         {
@@ -257,7 +261,8 @@ namespace S100Framework.Applications
                             foreach (var filename in filenames) {
                                 if (!supportFiles.Contains(filename)) {
                                     supportFiles.Add(filename);
-                                    var file = directoryNotes?.GetFiles(filename.Replace("101DK00", "DK"), SearchOption.AllDirectories).First();
+                                    var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                    var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
                                     if (file != null) {
                                         var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
                                         dataset?.Metadata.AddSupportFile(filename, base64);
@@ -308,7 +313,9 @@ namespace S100Framework.Applications
                             foreach (var filename in filenames) {
                                 if (!supportFiles.Contains(filename)) {
                                     supportFiles.Add(filename);
-                                    var file = directoryNotes.GetFiles(filename.Replace("101DK00", "DK"), SearchOption.AllDirectories).First();
+
+                                    var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                    var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
                                     var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
                                     dataset?.Metadata.AddSupportFile(filename, base64);
                                 }
@@ -386,6 +393,11 @@ namespace S100Framework.Applications
                                 }
 
                                 var json = Convert.ToString(current["attributebindings"])!;
+
+                                //var structuredObject = JsonUnflattener.Unflatten(json)!;
+
+                                //var __ = structuredObject.ToJsonString();
+
                                 var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
                                 //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
 
@@ -395,7 +407,8 @@ namespace S100Framework.Applications
                                 foreach (var filename in filenames) {
                                     if (!supportFiles.Contains(filename)) {
                                         supportFiles.Add(filename);
-                                        var file = directoryNotes.GetFiles(filename.Replace("101DK00", "DK"), SearchOption.AllDirectories).First();
+                                        var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                        var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
                                         var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
                                         dataset?.Metadata.AddSupportFile(filename, base64);
                                     }
