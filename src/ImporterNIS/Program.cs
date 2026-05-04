@@ -67,6 +67,7 @@ namespace S100Framework.Applications
             public int? maximumDisplayScale { get; set; }
         }
 
+        [STAThread]
         static void Main(string[] args) {
             var arguments = Parser.Default.ParseArguments<Options>(args)
                                .WithParsed<Options>(o => {
@@ -126,9 +127,13 @@ namespace S100Framework.Applications
                     };
                 }
                 else if (".geodatabase".Equals(IO.Path.GetExtension(target), StringComparison.OrdinalIgnoreCase)) {
+
                     initialize = (append) => {
                         if (!append) {
-                            FastZip fastZip = new();                            
+                            var name = IO.Path.GetFileNameWithoutExtension(target);
+                            foreach(var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
+                                IO.File.Delete(IO.Path.GetFullPath(f));
+                            }
                             IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed12.geodatabase"), IO.Path.GetFullPath(target), true);
                         }
                     };

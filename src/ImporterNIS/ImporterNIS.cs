@@ -195,6 +195,7 @@ namespace S100Framework.Applications
                 var query = new QueryFilter {
                     WhereClause = $"1=1",
                 };
+
                 using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
                 using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
                 using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
@@ -203,8 +204,8 @@ namespace S100Framework.Applications
 
                 //using var associationBinding = destination.OpenDataset<Table>(destination.GetName("associationbinding"));
                 //using var attributeBinding = destination.OpenDataset<Table>(destination.GetName("attributebinding"));                                               
-                using var informationtype = destination.OpenDataset<Table>(destination.GetName("InformationType"));
-                using var featureType = destination.OpenDataset<Table>(destination.GetName("featureType"));
+                using var informationtype = destination.OpenDataset<Table>(destination.GetName("informationtype"));
+                using var featureType = destination.OpenDataset<Table>(destination.GetName("featuretype"));
                 //using var messages = destination.OpenDataset<Table>(destination.GetName("messages"));
 
                 Store((destination) => {
