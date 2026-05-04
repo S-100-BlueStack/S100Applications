@@ -140,7 +140,9 @@ namespace S100Framework.Applications
                                     }
                                 }
                             }
-                            instance.surfaceCharacteristics = surfaceCharacteristics;
+
+                            if (surfaceCharacteristics.Any())
+                                instance.surfaceCharacteristics = surfaceCharacteristics;
 
 
                             //foreach (var natsur in list1) {
