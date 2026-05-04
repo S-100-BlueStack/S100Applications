@@ -739,6 +739,20 @@ namespace TestNisImporter
         }
 
         [Fact]
+        public void H2P() {
+            var root = new IO.DirectoryInfo("");
+
+            foreach(var survey in root.GetDirectories()) {
+                var name = survey.Name;
+
+                foreach (var gpkg in survey.GetFiles("*.gpkg")) {
+                    this._output.WriteLine($"layer = m.addDataFromPath(r\"{IO.Path.GetDirectoryName(gpkg.FullName)}\\{gpkg.Name}\\main.dataset_polygon\")");
+                    this._output.WriteLine($"layer.name = r\"{gpkg.Name.Split('.')[0]}\"");
+                }
+            }
+        }
+        
+        [Fact]
         public void BuildImportS57ToGeodatabaseScripts() {
             var root = new IO.DirectoryInfo(@"l:\B061450\ArcGIS\IIC Technologies\s57\US550\05GCD\ENC_ROOT");
 
