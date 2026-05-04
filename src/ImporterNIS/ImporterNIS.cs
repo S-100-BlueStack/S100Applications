@@ -287,13 +287,13 @@ namespace S100Framework.Applications
                     //}
 
                     using (var destination = createTargetGeodatabase()) {
-
                         foreach (var queryPolygon in clipping) {
                             using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("point"))) {
                                 var targetSR = featureClass.GetDefinition().GetSpatialReference();
                                 var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                 var spatialFilter = new SpatialQueryFilter {
+                                    WhereClause = "UPPER(ps) = 'S-101'",
                                     FilterGeometry = queryPolygonProjected,
                                     SpatialRelationship = SpatialRelationship.Contains
                                 };
@@ -307,6 +307,7 @@ namespace S100Framework.Applications
                                 var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                 var spatialFilter = new SpatialQueryFilter {
+                                    WhereClause = "UPPER(ps) = 'S-101'",
                                     FilterGeometry = queryPolygonProjected,
                                     SpatialRelationship = SpatialRelationship.Contains
                                 };
@@ -324,6 +325,7 @@ namespace S100Framework.Applications
                                     var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                     var spatialFilter = new SpatialQueryFilter {
+                                        WhereClause = "UPPER(ps) = 'S-101'",
                                         FilterGeometry = queryPolygonProjected,
                                         SpatialRelationship = SpatialRelationship.IndexIntersects
                                     };
@@ -391,6 +393,7 @@ namespace S100Framework.Applications
                                         }
 
                                         featureClass.DeleteRows(new SpatialQueryFilter {
+                                            WhereClause = "UPPER(ps) = 'S-101'",
                                             FilterGeometry = queryPolygonProjected,
                                             SpatialRelationship = SpatialRelationship.Contains
                                         });
@@ -405,6 +408,7 @@ namespace S100Framework.Applications
                                     var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                     var spatialFilter = new SpatialQueryFilter {
+                                        WhereClause = "UPPER(ps) = 'S-101'",
                                         FilterGeometry = queryPolygonProjected,
                                         SpatialRelationship = SpatialRelationship.IndexIntersects
                                     };
@@ -497,6 +501,7 @@ namespace S100Framework.Applications
                                         }
 
                                         featureClass.DeleteRows(new SpatialQueryFilter {
+                                            WhereClause = "UPPER(ps) = 'S-101'",
                                             FilterGeometry = queryPolygonProjected,
                                             SpatialRelationship = SpatialRelationship.Contains
                                         });
