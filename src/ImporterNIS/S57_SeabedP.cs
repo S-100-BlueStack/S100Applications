@@ -56,8 +56,11 @@ namespace S100Framework.Applications
                                 featureName = GetFeatureName(current.OBJNAM, current.NOBJNM)
                             };
 
+                            if (current.OBJECTID == 6399) System.Diagnostics.Debugger.Break();
+
                             // TODO: interoperabilityIdentifier
 
+#if null
                             var natureOfSurfaceQualifyingTermsCount = 0;
                             var naturOfSurfaceCount = 0;
 
@@ -79,6 +82,7 @@ namespace S100Framework.Applications
                                 if (enumValues is not null && enumValues.Any())
                                     natureOfSurfaceQualifyingTermsList = enumValues;
                             }
+#endif
 
                             // TODO: Verify this against action point 48
 
@@ -86,6 +90,24 @@ namespace S100Framework.Applications
 
                             surfaceCharacteristics[] surfaceCharacteristics = [];
 
+                            var natsur = string.IsNullOrEmpty(current.NATSUR?.Trim()) ? [] : current.NATSUR.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                            var natqua = string.IsNullOrEmpty(current.NATQUA?.Trim()) ? [] : current.NATQUA.Split(",");
+
+                            int[] _ = [natsur.Length, natqua.Length];
+
+                            for (var i = 0; i < _.Max(); i++) {
+                                var s = new surfaceCharacteristics();
+
+                                if (i < natsur.Length)
+                                    s.natureOfSurface = EnumHelper.GetEnumValue(natsur[i]);
+                                if (i < natqua.Length) {
+                                    if(!string.IsNullOrEmpty(natqua[i]))
+                                    s.natureOfSurfaceQualifyingTerms = [EnumHelper.GetEnumValue(natqua[i])];
+                                }
+
+                                surfaceCharacteristics = [.. surfaceCharacteristics, s];
+                            }
+#if null
                             var list1 = string.IsNullOrWhiteSpace(current.NATSUR) || string.IsNullOrEmpty(current.NATSUR.Trim().Trim(',')) ? [""] : current.NATSUR.Trim().Trim(',').Split(',').ToList();
                             var list2 = string.IsNullOrWhiteSpace(current.NATQUA) || string.IsNullOrEmpty(current.NATQUA.Trim().Trim(',')) ? [""] : current.NATQUA.Trim().Trim(',').Split(',').ToList();
 
@@ -139,9 +161,10 @@ namespace S100Framework.Applications
                                     }
                                 }
                             }
+#endif
+                            //if (!surfaceCharacteristics.Any()) System.Diagnostics.Debugger.Break();
 
-                            if (surfaceCharacteristics.Any())
-                                instance.surfaceCharacteristics = surfaceCharacteristics;
+                            instance.surfaceCharacteristics = surfaceCharacteristics;
 
                             //foreach (var natsur in list1) {
                             //    foreach (var natqua in list2) {
@@ -207,6 +230,7 @@ namespace S100Framework.Applications
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
+                            JsonUnflattener.Unflatten(Convert.ToString(buffer["attributebindings"])!);
                         }
                         break;
                     case 25: { // SNDWAV_SandWaves
@@ -252,6 +276,7 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                            JsonUnflattener.Unflatten(Convert.ToString(buffer["attributebindings"])!);
                         }
                         break;
 
@@ -299,7 +324,7 @@ namespace S100Framework.Applications
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(seagrass, ImporterNIS.jsonSerializerOptions));
-
+                                JsonUnflattener.Unflatten(Convert.ToString(buffer["attributebindings"])!);
                             }
                             else {
 
@@ -349,7 +374,7 @@ namespace S100Framework.Applications
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
+                                JsonUnflattener.Unflatten(Convert.ToString(buffer["attributebindings"])!);
                             }
                         }
                         break;
