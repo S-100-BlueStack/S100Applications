@@ -188,7 +188,7 @@ namespace S100Framework.Applications
             _converterRegistry.Register<OffshoreInstallationsP, FogSignal>(Converters.CreateFogSignal);
 
 
-           //goto __skip_truncate;
+            //goto __skip_truncate;
 
             //  Truncate geodatabase
             using (Geodatabase destination = createTargetGeodatabase()) {
@@ -625,9 +625,27 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Seabeds");
-                            Store((destination) => S57_SeabedA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_SeabedL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_SeabedP(source, destination, QueryFilter), destination);
+                            //Store((destination) => S57_SeabedA(source, destination, QueryFilter), destination);
+                            //Store((destination) => S57_SeabedL(source, destination, QueryFilter), destination);
+                            //Store((destination) => S57_SeabedP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Seabed(
+                                "SeabedA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)), 
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_Seabed(
+                                "SeabedL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),  
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_Seabed(
+                                "SeabedP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)), 
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting CoastLines");
                             Store((destination) => S57_CoastlineA(source, destination, QueryFilter), destination);

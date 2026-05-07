@@ -2131,7 +2131,7 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
-    internal class SeabedP : S100Framework.Applications.S57.esri.S57Object
+    internal class Seabed : S100Framework.Applications.S57.esri.S57Object
     {
 
         /// <summary>
@@ -2391,7 +2391,7 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
-        public SeabedP(Feature feature) {
+        public Seabed(Feature feature) {
             base.TableName = "SeabedP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
@@ -2515,14 +2515,20 @@ namespace S100Framework.Applications.S57.esri
                 SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
                 base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
             }
-            if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
-                P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+            if (feature.GetFields().Any(e => e.Name.Equals("P_QUAPOS", StringComparison.InvariantCultureIgnoreCase))) {
+                if (DBNull.Value != feature["P_QUAPOS"] && feature["P_QUAPOS"] is not null) {
+                    P_QUAPOS = Convert.ToInt32(feature["P_QUAPOS"]);
+                }
             }
-            if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
-                P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+            if (feature.GetFields().Any(e => e.Name.Equals("P_POSACC", StringComparison.InvariantCultureIgnoreCase))) {
+                if (DBNull.Value != feature["P_POSACC"] && feature["P_POSACC"] is not null) {
+                    P_POSACC = Convert.ToDecimal(feature["P_POSACC"]);
+                }
             }
-            if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
-                P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+            if (feature.GetFields().Any(e => e.Name.Equals("P_HORDAT", StringComparison.InvariantCultureIgnoreCase))) {
+                if (DBNull.Value != feature["P_HORDAT"] && feature["P_HORDAT"] is not null) {
+                    P_HORDAT = Convert.ToInt32(feature["P_HORDAT"]);
+                }
             }
             if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
                 NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
@@ -2551,399 +2557,17 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
-    internal class SeabedA : S100Framework.Applications.S57.esri.S57Object
+
+    internal class SeabedP : Seabed
     {
-
-        /// <summary>
-        /// OBJECTID
-        /// </summary>
-        [Description("OBJECTID")]
-        internal int? OBJECTID = default;
-
-        /// <summary>
-        /// GlobalID
-        /// </summary>
-        [Description("GlobalID")]
-        internal Guid GLOBALID = Guid.Empty;
-
-        /// <summary>
-        /// Data set name
-        /// </summary>
-        [Description("Data set name")]
-        internal string? DSNM = default;
-
-        /// <summary>
-        /// Long name
-        /// </summary>
-        [Description("Long name")]
-        internal string? LNAM = default;
-
-        /// <summary>
-        /// Nautical Object ID
-        /// </summary>
-        [Description("Nautical Object ID")]
-        internal string? NOID = default;
-
-        /// <summary>
-        /// Information
-        /// </summary>
-        [Description("Information")]
-        internal string? INFORM = default;
-
-        /// <summary>
-        /// Information in national language
-        /// </summary>
-        [Description("Information in national language")]
-        internal string? NINFOM = default;
-
-        /// <summary>
-        /// Textual description in national language
-        /// </summary>
-        [Description("Textual description in national language")]
-        internal string? NTXTDS = default;
-
-        /// <summary>
-        /// Pictorial representation
-        /// </summary>
-        [Description("Pictorial representation")]
-        internal string? PICREP = default;
-
-        /// <summary>
-        /// Textual description
-        /// </summary>
-        [Description("Textual description")]
-        internal string? TXTDSC = default;
-
-        /// <summary>
-        /// Source date
-        /// </summary>
-        [Description("Source date")]
-        internal string? SORDAT = default;
-
-        /// <summary>
-        /// Source indication
-        /// </summary>
-        [Description("Source indication")]
-        internal string? SORIND = default;
-
-        /// <summary>
-        /// Object name
-        /// </summary>
-        [Description("Object name")]
-        internal string? OBJNAM = default;
-
-        /// <summary>
-        /// Object name in national language
-        /// </summary>
-        [Description("Object name in national language")]
-        internal string? NOBJNM = default;
-
-        /// <summary>
-        /// Editor
-        /// </summary>
-        [Description("Editor")]
-        internal string? EDITOR = default;
-
-        /// <summary>
-        /// Last modified date
-        /// </summary>
-        [Description("Last modified date")]
-        internal DateTime? LAST_MOD = default;
-
-        /// <summary>
-        /// Editor comments
-        /// </summary>
-        [Description("Editor comments")]
-        internal string? EDITOR_COMMENT = default;
-
-        /// <summary>
-        /// Verified state
-        /// </summary>
-        [Description("Verified state")]
-        internal int? VERIFIED = default;
-
-        /// <summary>
-        /// Verifier
-        /// </summary>
-        [Description("Verifier")]
-        internal string? VERIFIER = default;
-
-        /// <summary>
-        /// Verified date
-        /// </summary>
-        [Description("Verified date")]
-        internal DateTime? VERIFIED_DATE = default;
-
-        /// <summary>
-        /// Delete comment
-        /// </summary>
-        [Description("Delete comment")]
-        internal string? DELETE_COMMENT = default;
-
-        /// <summary>
-        /// PLTS compilation scale
-        /// </summary>
-        [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
-
-        /// <summary>
-        /// NIS product type
-        /// </summary>
-        [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
-
-        /// <summary>
-        /// Is Conflate
-        /// </summary>
-        [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
-
-        /// <summary>
-        /// Colour
-        /// </summary>
-        [Description("Colour")]
-        internal string? COLOUR = default;
-
-        /// <summary>
-        /// Nature of surface - qualifying terms
-        /// </summary>
-        [Description("Nature of surface - qualifying terms")]
-        internal string? NATQUA = default;
-
-        /// <summary>
-        /// Nature of surface
-        /// </summary>
-        [Description("Nature of surface")]
-        internal string? NATSUR = default;
-
-        /// <summary>
-        /// Vertical accuracy
-        /// </summary>
-        [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
-
-        /// <summary>
-        /// Vertical length
-        /// </summary>
-        [Description("Vertical length")]
-        internal decimal? VERLEN = default;
-
-        /// <summary>
-        /// Water level effect
-        /// </summary>
-        [Description("Water level effect")]
-        internal int? WATLEV = default;
-
-        /// <summary>
-        /// FCSubtype
-        /// </summary>
-        [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
-
-        /// <summary>
-        /// Category of weed/kelp
-        /// </summary>
-        [Description("Category of weed/kelp")]
-        internal int? CATWED = default;
-
-        /// <summary>
-        /// SCAMIN step
-        /// </summary>
-        [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
-
-        /// <summary>
-        /// NIS Verified state
-        /// </summary>
-        [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
-
-        /// <summary>
-        /// NIS Verifier
-        /// </summary>
-        [Description("NIS Verifier")]
-        internal string? NIS_VERIFIER = default;
-
-        /// <summary>
-        /// NIS Verified date
-        /// </summary>
-        [Description("NIS Verified date")]
-        internal DateTime? NIS_VERIFY_DATE = default;
-
-        /// <summary>
-        /// NIS_EDITOR
-        /// </summary>
-        [Description("NIS_EDITOR")]
-        internal string? NIS_EDITOR = default;
-
-        /// <summary>
-        /// NIS_LAST_MOD
-        /// </summary>
-        [Description("NIS_LAST_MOD")]
-        internal DateTime? NIS_LAST_MOD = default;
-
-        /// <summary>
-        /// NIS editor comments
-        /// </summary>
-        [Description("NIS editor comments")]
-        internal string? NIS_EDITOR_COMMENT = default;
-
-        /// <summary>
-        /// Shape
-        /// </summary>
-        [Description("Shape")]
-        internal Geometry? SHAPE = default;
-        public SeabedA(Feature feature) {
-            base.TableName = "SeabedA";
-            if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
-                OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
-            }
-            if (DBNull.Value != feature["GLOBALID"] && feature["GLOBALID"] is not null) {
-                Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out GLOBALID);
-                base.GlobalId = this.GLOBALID;
-            }
-            if (DBNull.Value != feature["DSNM"] && feature["DSNM"] is not null) {
-                var text = Convert.ToString(feature["DSNM"]);
-                this.DSNM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["LNAM"] && feature["LNAM"] is not null) {
-                var text = Convert.ToString(feature["LNAM"]);
-                this.LNAM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NOID"] && feature["NOID"] is not null) {
-                var text = Convert.ToString(feature["NOID"]);
-                this.NOID = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["INFORM"] && feature["INFORM"] is not null) {
-                var text = Convert.ToString(feature["INFORM"]);
-                this.INFORM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NINFOM"] && feature["NINFOM"] is not null) {
-                var text = Convert.ToString(feature["NINFOM"]);
-                this.NINFOM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NTXTDS"] && feature["NTXTDS"] is not null) {
-                var text = Convert.ToString(feature["NTXTDS"]);
-                this.NTXTDS = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["PICREP"] && feature["PICREP"] is not null) {
-                var text = Convert.ToString(feature["PICREP"]);
-                this.PICREP = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["TXTDSC"] && feature["TXTDSC"] is not null) {
-                var text = Convert.ToString(feature["TXTDSC"]);
-                this.TXTDSC = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["SORDAT"] && feature["SORDAT"] is not null) {
-                var text = Convert.ToString(feature["SORDAT"]);
-                this.SORDAT = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["SORIND"] && feature["SORIND"] is not null) {
-                var text = Convert.ToString(feature["SORIND"]);
-                this.SORIND = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["OBJNAM"] && feature["OBJNAM"] is not null) {
-                var text = Convert.ToString(feature["OBJNAM"]);
-                this.OBJNAM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NOBJNM"] && feature["NOBJNM"] is not null) {
-                var text = Convert.ToString(feature["NOBJNM"]);
-                this.NOBJNM = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["EDITOR"] && feature["EDITOR"] is not null) {
-                var text = Convert.ToString(feature["EDITOR"]);
-                this.EDITOR = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["LAST_MOD"] && feature["LAST_MOD"] is not null) {
-                LAST_MOD = Convert.ToDateTime(feature["LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["EDITOR_COMMENT"] && feature["EDITOR_COMMENT"] is not null) {
-                var text = Convert.ToString(feature["EDITOR_COMMENT"]);
-                this.EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["VERIFIED"] && feature["VERIFIED"] is not null) {
-                VERIFIED = Convert.ToInt32(feature["VERIFIED"]);
-            }
-            if (DBNull.Value != feature["VERIFIER"] && feature["VERIFIER"] is not null) {
-                var text = Convert.ToString(feature["VERIFIER"]);
-                this.VERIFIER = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["VERIFIED_DATE"] && feature["VERIFIED_DATE"] is not null) {
-                VERIFIED_DATE = Convert.ToDateTime(feature["VERIFIED_DATE"]);
-            }
-            if (DBNull.Value != feature["DELETE_COMMENT"] && feature["DELETE_COMMENT"] is not null) {
-                var text = Convert.ToString(feature["DELETE_COMMENT"]);
-                this.DELETE_COMMENT = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["PLTS_COMP_SCALE"] && feature["PLTS_COMP_SCALE"] is not null) {
-                PLTS_COMP_SCALE = Convert.ToInt32(feature["PLTS_COMP_SCALE"]);
-                base.PLTS_COMP_SCALE = this.PLTS_COMP_SCALE.Value;
-            }
-            if (DBNull.Value != feature["NIS_PRODUCTS"] && feature["NIS_PRODUCTS"] is not null) {
-                NIS_PRODUCTS = Convert.ToInt32(feature["NIS_PRODUCTS"]);
-            }
-            if (DBNull.Value != feature["IS_CONFLATE"] && feature["IS_CONFLATE"] is not null) {
-                IS_CONFLATE = Convert.ToInt32(feature["IS_CONFLATE"]);
-            }
-            if (DBNull.Value != feature["COLOUR"] && feature["COLOUR"] is not null) {
-                var text = Convert.ToString(feature["COLOUR"]);
-                this.COLOUR = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NATQUA"] && feature["NATQUA"] is not null) {
-                var text = Convert.ToString(feature["NATQUA"]);
-                this.NATQUA = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NATSUR"] && feature["NATSUR"] is not null) {
-                var text = Convert.ToString(feature["NATSUR"]);
-                this.NATSUR = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["VERACC"] && feature["VERACC"] is not null) {
-                VERACC = Convert.ToDecimal(feature["VERACC"]);
-            }
-            if (DBNull.Value != feature["VERLEN"] && feature["VERLEN"] is not null) {
-                VERLEN = Convert.ToDecimal(feature["VERLEN"]);
-            }
-            if (DBNull.Value != feature["WATLEV"] && feature["WATLEV"] is not null) {
-                WATLEV = Convert.ToInt32(feature["WATLEV"]);
-            }
-            if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
-                FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
-                base.FcSubtype = this.FCSUBTYPE.Value;
-            }
-            if (DBNull.Value != feature["CATWED"] && feature["CATWED"] is not null) {
-                CATWED = Convert.ToInt32(feature["CATWED"]);
-            }
-            if (DBNull.Value != feature["SCAMIN_STEP"] && feature["SCAMIN_STEP"] is not null) {
-                SCAMIN_STEP = Convert.ToInt32(feature["SCAMIN_STEP"]);
-                base.SCAMIN_STEP = this.SCAMIN_STEP.Value;
-            }
-            if (DBNull.Value != feature["NIS_VERIFIED"] && feature["NIS_VERIFIED"] is not null) {
-                NIS_VERIFIED = Convert.ToInt32(feature["NIS_VERIFIED"]);
-            }
-            if (DBNull.Value != feature["NIS_VERIFIER"] && feature["NIS_VERIFIER"] is not null) {
-                var text = Convert.ToString(feature["NIS_VERIFIER"]);
-                this.NIS_VERIFIER = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NIS_VERIFY_DATE"] && feature["NIS_VERIFY_DATE"] is not null) {
-                NIS_VERIFY_DATE = Convert.ToDateTime(feature["NIS_VERIFY_DATE"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR"] && feature["NIS_EDITOR"] is not null) {
-                var text = Convert.ToString(feature["NIS_EDITOR"]);
-                this.NIS_EDITOR = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["NIS_LAST_MOD"] && feature["NIS_LAST_MOD"] is not null) {
-                NIS_LAST_MOD = Convert.ToDateTime(feature["NIS_LAST_MOD"]);
-            }
-            if (DBNull.Value != feature["NIS_EDITOR_COMMENT"] && feature["NIS_EDITOR_COMMENT"] is not null) {
-                var text = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
-                this.NIS_EDITOR_COMMENT = string.IsNullOrEmpty(text) ? default : text;
-            }
-            if (DBNull.Value != feature["SHAPE"] && feature["SHAPE"] is not null) {
-                SHAPE = (Geometry?)(feature["SHAPE"]);
-                base.Shape = this.SHAPE;
-            }
-        }
+        public SeabedP(Feature feature) : base(feature) { }
     }
+
+    internal class SeabedA : SeabedP
+    {
+        public SeabedA(Feature feature) : base(feature) { }
+    }
+
     internal class DangersL : S100Framework.Applications.S57.esri.S57Object
     {
 

@@ -10,6 +10,12 @@
     <Configurations>Debug</Configurations>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="S57_SeabedA.cs" />
+    <Compile Remove="S57_SeabedL.cs" />
+    <Compile Remove="S57_SeabedP.cs" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Compile Remove="ImporterYAML.cs" />
   </ItemGroup>-->
