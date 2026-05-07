@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
@@ -18,6 +18,12 @@
     </Reference>
     <Reference Include="ArcGIS.CoreHost">
       <HintPath>C:\Program Files\ArcGIS\Pro\bin\ArcGIS.CoreHost.dll</HintPath>
+    </Reference>
+    <Reference Include="ArcGIS.Desktop.Core">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\ArcGIS\Pro\bin\Extensions\Core\ArcGIS.Desktop.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ArcGIS.Desktop.Framework">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\ArcGIS\Pro\bin\ArcGIS.Desktop.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
 
