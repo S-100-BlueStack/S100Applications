@@ -2392,7 +2392,8 @@ namespace S100Framework.Applications.S57.esri
         [Description("Shape")]
         internal Geometry? SHAPE = default;
         public Seabed(Feature feature) {
-            base.TableName = "SeabedP";
+            base.TableName = feature.GetTable().GetName().Split(',', StringSplitOptions.RemoveEmptyEntries)[^1];
+
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }

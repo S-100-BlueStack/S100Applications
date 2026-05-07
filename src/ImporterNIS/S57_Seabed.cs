@@ -13,14 +13,14 @@ namespace S100Framework.Applications
         private static void S57_Seabed(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape) {
             var ps101 = "S-101";
 
-            using var seabedp = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
-            Subtypes.Instance.RegisterSubtypes(seabedp);
+            using var seabed = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
+            Subtypes.Instance.RegisterSubtypes(seabed);
 
             using var featureClass = target();    // target.OpenDataset<FeatureClass>(target.GetName("point"));
 
             using var buffer = featureClass.CreateRowBuffer();
 
-            using var cursor = seabedp.Search(filter, true);
+            using var cursor = seabed.Search(filter, true);
             int recordCount = 0;
 
             while (cursor.MoveNext()) {

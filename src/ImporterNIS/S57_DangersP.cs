@@ -459,7 +459,7 @@ namespace S100Framework.Applications
                             }
 
                             if (!instance.valueOfSounding.HasValue && instance.attributeBindings.Count(e => e.S100FC_code.Equals("defaultClearanceDepth")) == 0) {
-                                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth");
+                                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.OBJECTID);
                             }
 
                             buffer["ps"] = ps101;
