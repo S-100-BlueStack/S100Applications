@@ -1,26 +1,31 @@
-﻿namespace LicenseChecker
+﻿using NLog;
+
+namespace LicenseChecker
 {
     internal class Program
     {
         static int Main(string[] args) {
+            NLog.LogManager.Setup().LoadConfiguration(builder => {
+                builder.ForLogger().FilterMinLevel(LogLevel.Trace).WriteToConsole();
+            });
+
             Console.Clear();
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("Hello, LicenseChecker!");
 
 
-            Console.WriteLine();
+            var Logger = NLog.LogManager.GetCurrentClassLogger();
 
+            Logger.Info("ArcGIS.Core.Hosting.Host.Initialize()");
             try {
                 Console.WriteLine("ArcGIS.Core.Hosting.Host.Initialize()");
-                ArcGIS.Core.Hosting.Host.Initialize();
-
+                ArcGIS.Core.Hosting.Host.Initialize(ArcGIS.Core.Hosting.Host.LicenseProductCode.ArcGISPro);
             }
-            catch(System.Exception ex) {
-                Console.WriteLine(ex.ToString());
+            catch (System.Exception ex) {
+                Logger.Error(ex);                
                 return -1;
             }
 
-            Console.WriteLine();
-            Console.WriteLine("All systems ready to go!");
+            Logger.Info("All systems ready to go!");
             return 0;
         }
     }
