@@ -142,9 +142,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GeospatialInformationRegistry\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\S100Framework.WPF.S100AttributeEditor\S100Framework.WPF.S100AttributeEditor.csproj" />
     <ProjectReference Include="..\S100Framework.WPF\S100Framework.WPF.csproj" />
   </ItemGroup>
@@ -160,6 +157,9 @@
     </None>
     <None Update="GeospatialInformationRegistry\131_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="GeospatialInformationRegistry\Rules.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
    <Import Project="C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets" Condition="Exists('C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets') AND !Exists('Esri.ArcGISPro.Extensions.targets')" />

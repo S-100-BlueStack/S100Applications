@@ -124,8 +124,18 @@ namespace SelectorUI
             ;
             //var typePoints = ps.GetFeatureTypes(Primitives.point);
 
+
+
+
+            var productId = ps.Element(XName.Get("productId", scopes["S100FC"]))!.Value;
+
+            var _ = XDocument.Load("Rules.xml").Descendants("Rule");
+
+            var rules = _.Where(e => e.Element(XName.Get("productId", scopes["S100FC"]))!.Value.Equals(productId));
+
+
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModel(ps).Initialize(code, "F123456")
+            var selectedObjectFC = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("ref")!.Value)).Initialize(code, "F123456")
                 .LoadAttributeBindings(jsonLateralBuoy);
                 //.LoadInformationBindings(jsonSpanFixedInformationBindings)
                 //.LoadFeatureBindings(jsonSpanFixedFeatureBindings);

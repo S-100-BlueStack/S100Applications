@@ -2,8 +2,7 @@
   "profiles": {
     "NuvionPro": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\ArcGISPro.exe",
-      "commandLineArgs": "/enablediagnostics /loglevel=debug"
+      "executablePath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\ArcGISPro.exe"
     }
   }
 }

@@ -13,6 +13,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace NuvionPro
 {
@@ -43,6 +44,8 @@ namespace NuvionPro
         public string[] GetFeatureCatalogueNames() => this._featureCatalogues.Select(e => e.Name).ToArray();
 
         public FeatureCatalogue GetFeatureCatalogue(string name) => this._featureCatalogues.Single(e => e.ID.Equals(name));
+
+        public XElement[] Rules { get; set; } = [];
 
         /// <summary>
         /// A new MapView is incoming
@@ -127,6 +130,10 @@ namespace NuvionPro
             foreach (var catalogue in System.IO.Directory.GetFiles(System.IO.Path.Combine(path, "GeospatialInformationRegistry"), "*FC*.xml")) {
                 this._featureCatalogues = [.. this._featureCatalogues, new FeatureCatalogue(System.IO.Path.GetFileNameWithoutExtension(catalogue), System.IO.Path.GetFullPath(catalogue))];
             }
+
+            var rules = XDocument.Load(System.IO.Path.Combine(path, "GeospatialInformationRegistry", "Rules.xml"));
+
+            this.Rules = [.. rules.Descendants("Rule")];
 
             return base.Initialize();
         }
