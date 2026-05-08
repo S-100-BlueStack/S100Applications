@@ -97,6 +97,8 @@ namespace S100Framework.Applications
             int maximumDisplayScale = 0;
             int minimumDisplayScale = int.MaxValue;
 
+            string? filter = default;
+
             arguments.WithParsed<Options>(o => {
                 if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
                     VerticalDatumConverter = o.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
@@ -141,6 +143,8 @@ namespace S100Framework.Applications
                 //append = o.Append;
 
                 s128 = o.S128;
+
+                filter = o.filter;
             });
 
             Func<Action<Geodatabase>, Geodatabase, bool> Store = (a, database) => {
@@ -246,7 +250,7 @@ namespace S100Framework.Applications
 
                 using (Geodatabase source = createGeodatabase()) {
                     Logger.Current.Information($"Converting Product Coverages");
-                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages), destination);
+                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages, filter), destination);
                 }
             }
 

@@ -2,6 +2,8 @@
 using ArcGIS.Core.SystemCore;
 using CommandLine;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Collections;
+
 
 
 //using S100Framework.DomainModel
@@ -43,6 +45,9 @@ namespace S100Framework.Applications
 
             [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
             public bool Verbose { get; set; }
+
+            [Option('f', "filter", Required = false, HelpText = "Filter datasets (RegEx).")]
+            public string? filter { get; set; } = default;
 
             [Option("s128", Required = false, HelpText = "Create ElectronicProducts.", Default = true)]
             public bool S128 { get; set; }

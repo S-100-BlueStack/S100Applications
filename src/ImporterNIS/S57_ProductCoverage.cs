@@ -288,13 +288,14 @@ namespace S100Framework.Applications
     using S100FC.S128.SimpleAttributes;
     using S100Framework.Applications.S57auto.esri;
     using System.Collections.Immutable;
+    using System.Text.RegularExpressions;
     using Windows.System.Diagnostics;
 
     internal static partial class ImporterNIS
     {
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage);
 
-        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale, bool s128, ref S101ProductCoverage[] converages) {
+        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -324,6 +325,8 @@ namespace S100Framework.Applications
 
             (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon[] Coverage)[] coverages = [];
 
+            var regex =string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
+
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
                 var row = (Row)productDefinitions.Current;
@@ -341,6 +344,9 @@ namespace S100Framework.Applications
                 var updn = current.UPDN ?? default;
                 var isdt = current.ISDT ?? default;
                 var serie = current.SERIES ?? default;
+
+                if (dsnm is null || !regex.IsMatch(dsnm))
+                    continue;
 
                 if (serie == default) {
                     serie = dsnm!.Substring(0, 3);
@@ -441,6 +447,8 @@ namespace S100Framework.Applications
 
                 var hits = coverages.Where(e => e.PLTS_COMP_SCALE > PLTS_COMP_SCALE && GeometryEngine.Instance.Contains(PolygonBuilderEx.CreatePolygon(e.Coverage), centroid)).ToArray();
 
+                if (!hits.Any())
+                    continue;
                 var hit = hits.OrderByDescending(e => e.PLTS_COMP_SCALE).First();
 
                 coverages = [.. coverages, (dsnm, PLTS_COMP_SCALE, dataCoverage, hit.VDAT, hit.SDAT, [shape])];
