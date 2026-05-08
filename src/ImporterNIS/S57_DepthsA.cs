@@ -24,8 +24,12 @@ namespace S100Framework.Applications
 
 
             while (cursor.MoveNext()) {
-                recordCount += 1;
                 var feature = (Feature)cursor.Current;
+
+                if (feature.GetShape() is null) continue;
+
+                recordCount += 1;                           
+
                 var current = new DepthsA(feature);
 
                 var objectid = current.OBJECTID ?? default;

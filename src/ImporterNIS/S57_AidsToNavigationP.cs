@@ -1945,7 +1945,7 @@ namespace S100Framework.Applications
                                 topmark shape information populated in the S-57 attribute INFORM will be converted to the S-101
                                 complex attribute shape information. See also clause 12.6.
                             */
-
+                            continue;
                             throw new NotImplementedException("Impossible! No stand alone topmarks alloved.");
 
                         }
