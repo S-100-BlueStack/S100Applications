@@ -44,7 +44,7 @@ namespace S100Framework.Applications
             [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
             public bool Verbose { get; set; }
 
-            [Option("s128", Required = false, HelpText = "Create ElectronicProducts.", Default = false)]
+            [Option("s128", Required = false, HelpText = "Create ElectronicProducts.", Default = true)]
             public bool S128 { get; set; }
 
             [Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
