@@ -214,196 +214,51 @@ namespace S100Framework.Applications
                 S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 foreach (var e in datasets) {
-                    var supportFiles = new List<string>();
-
-                    var dataset = e.Dataset;
-                    var filter = e.Filter;
-
-                    var datasetName = dataset.CellName.Split('.')[0];
-
-                    Log.Information("{dataset}", datasetName);
-                    var spatialAssociations = new Dictionary<string, S100FC.YAML.Association>();
-                    var geometries = new List<(ArcGIS.Core.Geometry.Geometry geometry, string name)>();
-
-                    // Build Topology
-                    Log.Information("Building topology..");
-                    S100FC.Topology.IMatrix topology = source.BuildTopology(filter)!;
-
-                    Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
-
-                    // InformationTypes
-                    var informationTypes = new List<S100FC.YAML.Information>();
-                    var informationsTypesAdded = new List<string>();
-
                     try {
-                        using var informationType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("informationtype")).GetName());
-                        using var informationCursor = informationType.Search();
-                        while (informationCursor.MoveNext()) {
-                            var current = informationCursor.Current;
+                        var supportFiles = new List<string>();
 
-                            var name = Convert.ToString(current["UID"]);
-                            var code = current["code"].ToString()!;
-                            //var json = current["attributebindings"].ToString()!;
+                        var dataset = e.Dataset;
+                        var filter = e.Filter;
 
-                            var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "InformationTypes")}.{code}", true)!;
+                        var datasetName = dataset.CellName.Split('.')[0];
 
-                            var json = Convert.ToString(current["attributebindings"]);
-                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<InformationType>(json, type);
+                        Log.Information("{dataset}", datasetName);
+                        var spatialAssociations = new Dictionary<string, S100FC.YAML.Association>();
+                        var geometries = new List<(ArcGIS.Core.Geometry.Geometry geometry, string name)>();
 
-                            //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                        // Build Topology
+                        Log.Information("Building topology..");
+                        S100FC.Topology.IMatrix topology = source.BuildTopology(filter)!;
 
-                            var information = new S100FC.YAML.Information {
-                                Name = code,
-                                ID = name,
-                                Attributes = (S100FC.InformationType)instance!
-                            };
-                            informationTypes.Add(information);
+                        Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
 
-                            var filenames = S100FC.YAML.Extensions.GetFileNames(json);
+                        // InformationTypes
+                        var informationTypes = new List<S100FC.YAML.Information>();
+                        var informationsTypesAdded = new List<string>();
 
-                            foreach (var filename in filenames) {
-                                if (!supportFiles.Contains(filename)) {
-                                    supportFiles.Add(filename);
-                                    var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                    var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
-                                    if (file != null) {
-                                        var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                        dataset?.Metadata.AddSupportFile(filename, base64);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex) {
-                        Log.Information("Table: informationtype: {message} ", ex.Message);
-                        Logger.Current.Error("Exception: {ex}", ex);
-                    }
+                        try {
+                            using var informationType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("informationtype")).GetName());
+                            using var informationCursor = informationType.Search();
+                            while (informationCursor.MoveNext()) {
+                                var current = informationCursor.Current;
 
-                    // FeatureTypes
-                    var featureTypes = new List<S100FC.YAML.Feature>();
-                    var featureTypesAdded = new List<string>();
+                                var name = Convert.ToString(current["UID"]);
+                                var code = current["code"].ToString()!;
+                                //var json = current["attributebindings"].ToString()!;
 
-                    try {
-                        using var featureType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("featuretype")).GetName());
-                        using var featureCursor = featureType.Search();
-                        while (featureCursor.MoveNext()) {
-                            var current = featureCursor.Current;
+                                var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "InformationTypes")}.{code}", true)!;
 
-                            var name = Convert.ToString(current["UID"]);
-                            var code = current["code"].ToString()!;
-                            //var json = current["json"].ToString()!;
+                                var json = Convert.ToString(current["attributebindings"]);
+                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<InformationType>(json, type);
 
-                            var json = Convert.ToString(current["attributebindings"]);
+                                //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
 
-                            var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true)!;
-
-                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                            //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
-
-                            var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
-
-                            var feature = new S100FC.YAML.Feature {
-                                Prim = Primitive.NoGeometry,
-                                Name = code,
-                                Foid = foid,
-                                Attributes = instance,
-                            };
-
-                            featureTypes.Add(feature);
-
-                            var filenames = S100FC.YAML.Extensions.GetFileNames(json);
-
-                            foreach (var filename in filenames) {
-                                if (!supportFiles.Contains(filename)) {
-                                    supportFiles.Add(filename);
-
-                                    var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                    var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
-                                    var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                    dataset?.Metadata.AddSupportFile(filename, base64);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex) {
-                        Log.Information("Table: featuretype: {message} ", ex.Message);
-                        Logger.Current.Error("Exception: {ex}", ex);
-                    }
-
-
-                    // Features
-                    foreach (var def in source.GetDefinitions<FeatureClassDefinition>()) {
-                        var tableName = def.GetName().Split('.').Last();
-
-                        var supported = tableName switch {
-                            "surface" => true,
-                            "curve" => true,
-                            "point" => true,
-                            "pointset" => true,
-                            _ => false
-                        };
-
-                        if (!supported) {
-                            Log.Information("Unsupported table detected: {tableName}", tableName);
-                            continue;
-                        }
-
-                        using var fc = source.OpenDataset<FeatureClass>(def.GetName());
-
-                        using var cursor = fc.Search(filter, true);
-                        while (cursor.MoveNext()) {
-                            var current = (ArcGIS.Core.Data.Feature)cursor.Current;
-                            var name = Convert.ToString(current["UID"]);
-
-                            // Only map geometry, and keep name seperate so foids remain unique
-                            var geometry = name;
-
-                            if (topology.Mapping.TryGetValue(name!, out var value))
-                                geometry = value;
-
-                            var shapetype = def.GetShapeType();
-
-                            var code = Convert.ToString(current["code"]);
-
-                            var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
-
-                            var prim = shapetype switch {
-                                GeometryType.Point => Primitive.Point,
-                                GeometryType.Multipoint => Primitive.Point,
-                                GeometryType.Polyline => Primitive.Curve,
-                                GeometryType.Polygon => Primitive.Surface,
-                                _ => throw new InvalidOperationException(),
-                            };
-
-                            Action geometryConverter = tableName switch {
-                                "pointset" => () => {
-                                    var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
-                                    geometries.Add(new(_, name!));
-                                }
-                                ,
-                                _ => () => {
-                                    geometries.Add(new(current.GetShape(), name!));
-                                }
-                                ,
-                            };
-
-                            try {
-                                var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
-
-                                if (type == default) {
-                                    Log.Error("Could not get type: {type} for feature: {name}", code, name);
-                                    continue;
-                                }
-
-                                var json = Convert.ToString(current["attributebindings"])!;
-
-                                //var structuredObject = JsonUnflattener.Unflatten(json)!;
-
-                                //var __ = structuredObject.ToJsonString();
-
-                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                                //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
-
+                                var information = new S100FC.YAML.Information {
+                                    Name = code,
+                                    ID = name,
+                                    Attributes = (S100FC.InformationType)instance!
+                                };
+                                informationTypes.Add(information);
 
                                 var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
@@ -411,183 +266,333 @@ namespace S100Framework.Applications
                                     if (!supportFiles.Contains(filename)) {
                                         supportFiles.Add(filename);
                                         var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                        var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
+                                        if (file != null) {
+                                            var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                            dataset?.Metadata.AddSupportFile(filename, base64);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex) {
+                            Log.Information("Table: informationtype: {message} ", ex.Message);
+                            Logger.Current.Error("Exception: {ex}", ex);
+                        }
+
+                        // FeatureTypes
+                        var featureTypes = new List<S100FC.YAML.Feature>();
+                        var featureTypesAdded = new List<string>();
+
+                        try {
+                            using var featureType = source.OpenDataset<Table>(definitionTables.Single(e => e.GetName().EndsWith("featuretype")).GetName());
+                            using var featureCursor = featureType.Search();
+                            while (featureCursor.MoveNext()) {
+                                var current = featureCursor.Current;
+
+                                var name = Convert.ToString(current["UID"]);
+                                var code = current["code"].ToString()!;
+                                //var json = current["json"].ToString()!;
+
+                                var json = Convert.ToString(current["attributebindings"]);
+
+                                var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true)!;
+
+                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
+                                //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
+
+                                var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
+
+                                var feature = new S100FC.YAML.Feature {
+                                    Prim = Primitive.NoGeometry,
+                                    Name = code,
+                                    Foid = foid,
+                                    Attributes = instance,
+                                };
+
+                                featureTypes.Add(feature);
+
+                                var filenames = S100FC.YAML.Extensions.GetFileNames(json);
+
+                                foreach (var filename in filenames) {
+                                    if (!supportFiles.Contains(filename)) {
+                                        supportFiles.Add(filename);
+
+                                        var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
                                         var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
                                         var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
                                         dataset?.Metadata.AddSupportFile(filename, base64);
                                     }
                                 }
+                            }
+                        }
+                        catch (Exception ex) {
+                            Log.Information("Table: featuretype: {message} ", ex.Message);
+                            Logger.Current.Error("Exception: {ex}", ex);
+                        }
 
-                                // Surface Masks
-                                var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-                                // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
-                                var masks = new[] {
+                        // Features
+                        foreach (var def in source.GetDefinitions<FeatureClassDefinition>()) {
+                            var tableName = def.GetName().Split('.').Last();
+
+                            var supported = tableName switch {
+                                "surface" => true,
+                                "curve" => true,
+                                "point" => true,
+                                "pointset" => true,
+                                _ => false
+                            };
+
+                            if (!supported) {
+                                Log.Information("Unsupported table detected: {tableName}", tableName);
+                                continue;
+                            }
+
+                            using var fc = source.OpenDataset<FeatureClass>(def.GetName());
+
+                            using var cursor = fc.Search(filter, true);
+                            while (cursor.MoveNext()) {
+                                var current = (ArcGIS.Core.Data.Feature)cursor.Current;
+                                var name = Convert.ToString(current["UID"]);
+
+                                // Only map geometry, and keep name seperate so foids remain unique
+                                var geometry = name;
+
+                                if (topology.Mapping.TryGetValue(name!, out var value))
+                                    geometry = value;
+
+                                var shapetype = def.GetShapeType();
+
+                                var code = Convert.ToString(current["code"]);
+
+                                var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
+
+                                var prim = shapetype switch {
+                                    GeometryType.Point => Primitive.Point,
+                                    GeometryType.Multipoint => Primitive.Point,
+                                    GeometryType.Polyline => Primitive.Curve,
+                                    GeometryType.Polygon => Primitive.Surface,
+                                    _ => throw new InvalidOperationException(),
+                                };
+
+                                Action geometryConverter = tableName switch {
+                                    "pointset" => () => {
+                                        var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
+                                        geometries.Add(new(_, name!));
+                                    }
+                                    ,
+                                    _ => () => {
+                                        geometries.Add(new(current.GetShape(), name!));
+                                    }
+                                    ,
+                                };
+
+                                try {
+                                    var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
+
+                                    if (type == default) {
+                                        Log.Error("Could not get type: {type} for feature: {name}", code, name);
+                                        continue;
+                                    }
+
+                                    var json = Convert.ToString(current["attributebindings"])!;
+
+                                    //var structuredObject = JsonUnflattener.Unflatten(json)!;
+
+                                    //var __ = structuredObject.ToJsonString();
+
+                                    var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
+                                    //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
+
+
+                                    var filenames = S100FC.YAML.Extensions.GetFileNames(json);
+
+                                    foreach (var filename in filenames) {
+                                        if (!supportFiles.Contains(filename)) {
+                                            supportFiles.Add(filename);
+                                            var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                            var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
+                                            var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                            dataset?.Metadata.AddSupportFile(filename, base64);
+                                        }
+                                    }
+
+                                    // Surface Masks
+                                    var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+                                    // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
+                                    var masks = new[] {
                                     topologySurface?.Masks1?.Select(e => $"C{e}:1"),
                                     topologySurface?.Masks2?.Select(e => $"C{e}:2")
                                 }.Where(m => m != null).SelectMany(m => m!);
 
-                                var feature = new S100FC.YAML.Feature {
-                                    Name = code,
-                                    Foid = foid,
-                                    Prim = prim,
-                                    Geometry = geometry,
-                                    Masks = masks.Any() ? string.Join(",", masks) : null,
-                                    Attributes = instance?.attributeBindings.Length > 0 ? instance : null
+                                    var feature = new S100FC.YAML.Feature {
+                                        Name = code,
+                                        Foid = foid,
+                                        Prim = prim,
+                                        Geometry = geometry,
+                                        Masks = masks.Any() ? string.Join(",", masks) : null,
+                                        Attributes = instance?.attributeBindings.Length > 0 ? instance : null
+                                    };
+
+
+                                    // Information Associations
+                                    if (!current.IsNull("informationbindings")) {
+                                        var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(current["informationbindings"])!, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+
+                                        if (informationBindings != default && informationBindings.Any()) {
+                                            foreach (var binding in informationBindings) {
+                                                var asso = new S100FC.YAML.Association {
+                                                    Name = binding.association!.S100FC_code,
+                                                    Role = binding.role,
+                                                    To = binding.informationId!,
+                                                };
+
+                                                // Special case for SpatialAssociation. Add to dictionary for later processing.
+                                                if (prim != Primitive.Surface && asso.Name.Equals("SpatialAssociation", StringComparison.CurrentCultureIgnoreCase))
+                                                    spatialAssociations.TryAdd(geometry, asso);
+                                                else
+                                                    feature?.AddAssociation(asso);
+
+                                                if (!informationsTypesAdded.Contains(binding.informationId!)) {
+                                                    informationsTypesAdded.Add(binding.informationId!);
+                                                    dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // Feature Associations
+                                    if (!current.IsNull("featurebindings")) {
+                                        var featureBindingsJson = Convert.ToString(current["featurebindings"])!;
+                                        var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(featureBindingsJson, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+
+                                        if (featureBindings != default && featureBindings.Any()) {
+                                            foreach (var binding in featureBindings) {
+                                                var roleType = binding.roleType;
+
+                                                // Skip association roleType for now
+                                                if (roleType == "association")
+                                                    continue;
+
+                                                var asso = new S100FC.YAML.Association {
+                                                    Name = binding.association!.S100FC_code,
+                                                    Role = binding.role,
+                                                    To = $"110:{binding.featureId!.Substring(1)}:1"
+                                                };
+
+                                                feature?.AddFeatureAssociation(asso);
+
+                                                var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{binding.featureId.Substring(1)}:1"));
+                                                if (noGeometry != null && !featureTypesAdded.Contains(binding.featureId)) {
+                                                    featureTypesAdded.Add(binding.featureId);
+                                                    dataset?.AddFeature(noGeometry);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    dataset?.AddFeature(feature!);
+
+                                    geometryConverter();
+                                    //geometries.Add(new(current.GetShape(), name!));
+                                }
+                                catch (Exception ex) {
+                                    Log.Information(ex.Message);
+                                    Logger.Current.Error("Exception: {ex}", ex);
+                                    continue;
+                                }
+                            }
+                        }
+
+                        Log.Information("FeatureTypes (noGeometry) found: #{count}", featureTypesAdded.Count);
+                        Log.Information("InformationTypes found: #{count}", informationsTypesAdded.Count);
+
+                        // Geometries
+                        foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
+                            if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
+                            if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
+                            dataset?.AddGeometry(geometry, name!);
+                            Log.Verbose("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
+                        }
+
+                        // Add curves/surfaces after points
+                        dataset!.AddTopology(topology);
+
+                        // Add Spatial Association Informationbindings. Must be handled after curves are added to dataset.
+                        foreach (var sa in spatialAssociations) {
+                            var curve = dataset?.Curves?.FirstOrDefault(e => e.Name == sa.Key);
+
+                            curve?.AddAssociation(sa.Value);
+                        }
+
+                        // Serialize to YAML
+                        var yaml = S100FC.YAML.Converter.Serialize(dataset!);
+
+
+
+                        File.WriteAllText(IO.Path.Combine(output, $"{datasetName}.yaml"), yaml);
+                        File.WriteAllText(IO.Path.Combine(@"c:\temp", $"{datasetName}.yaml"), yaml);
+
+                        if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
+                            var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{@"e:\ArcGIS\Projects\IIC Technologies\FeatureCatalogue.xml"}\" -d \"{output}\"";
+
+                            if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
+                                IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
+                            // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
+
+                            if (!exchangeset) {
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
+
+                                var p = new Process();
+                                p.StartInfo.CreateNoWindow = true;
+                                p.StartInfo.UseShellExecute = true;
+                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
+                                p.StartInfo.Arguments = commandline;
+                                p.StartInfo.WorkingDirectory = output;
+                                p.EnableRaisingEvents = true;
+                                p.Exited += (s, e) => {
                                 };
 
+                                p.Start();
+                                p.WaitForExit();
 
-                                // Information Associations
-                                if (!current.IsNull("informationbindings")) {
-                                    var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(current["informationbindings"])!, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                if (p.ExitCode != 0) {
+                                    Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    return p.ExitCode;
+                                }
+                            }
+                            else {
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -C {dataset} -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
+                                commandline += $" -C {datasetName}";
 
-                                    if (informationBindings != default && informationBindings.Any()) {
-                                        foreach (var binding in informationBindings) {
-                                            var asso = new S100FC.YAML.Association {
-                                                Name = binding.association!.S100FC_code,
-                                                Role = binding.role,
-                                                To = binding.informationId!,
-                                            };
+                                var p = new Process();
+                                p.StartInfo.CreateNoWindow = true;
+                                p.StartInfo.UseShellExecute = true;
+                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
+                                p.StartInfo.Arguments = commandline;
+                                p.StartInfo.WorkingDirectory = output;
+                                p.EnableRaisingEvents = true;
+                                p.Exited += (s, e) => {
+                                };
 
-                                            // Special case for SpatialAssociation. Add to dictionary for later processing.
-                                            if (prim != Primitive.Surface && asso.Name.Equals("SpatialAssociation", StringComparison.CurrentCultureIgnoreCase))
-                                                spatialAssociations.TryAdd(geometry, asso);
-                                            else
-                                                feature?.AddAssociation(asso);
+                                p.Start();
+                                p.WaitForExit();
 
-                                            if (!informationsTypesAdded.Contains(binding.informationId!)) {
-                                                informationsTypesAdded.Add(binding.informationId!);
-                                                dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
-                                            }
-                                        }
-                                    }
+                                if (p.ExitCode != 0) {
+                                    Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    return p.ExitCode;
                                 }
 
-                                // Feature Associations
-                                if (!current.IsNull("featurebindings")) {
-                                    var featureBindingsJson = Convert.ToString(current["featurebindings"])!;
-                                    var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(featureBindingsJson, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
-
-                                    if (featureBindings != default && featureBindings.Any()) {
-                                        foreach (var binding in featureBindings) {
-                                            var roleType = binding.roleType;
-
-                                            // Skip association roleType for now
-                                            if (roleType == "association")
-                                                continue;
-
-                                            var asso = new S100FC.YAML.Association {
-                                                Name = binding.association!.S100FC_code,
-                                                Role = binding.role,
-                                                To = $"110:{binding.featureId!.Substring(1)}:1"
-                                            };
-
-                                            feature?.AddFeatureAssociation(asso);
-
-                                            var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{binding.featureId.Substring(1)}:1"));
-                                            if (noGeometry != null && !featureTypesAdded.Contains(binding.featureId)) {
-                                                featureTypesAdded.Add(binding.featureId);
-                                                dataset?.AddFeature(noGeometry);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                dataset?.AddFeature(feature!);
-
-                                geometryConverter();
-                                //geometries.Add(new(current.GetShape(), name!));
-                            }
-                            catch (Exception ex) {
-                                Log.Information(ex.Message);
-                                Logger.Current.Error("Exception: {ex}", ex);
-                                continue;
+                                IO.Directory.Move(IO.Path.Combine(output, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
                             }
                         }
                     }
-
-                    Log.Information("FeatureTypes (noGeometry) found: #{count}", featureTypesAdded.Count);
-                    Log.Information("InformationTypes found: #{count}", informationsTypesAdded.Count);
-
-                    // Geometries
-                    foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
-                        if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
-                        if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
-                        dataset?.AddGeometry(geometry, name!);
-                        Log.Verbose("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
-                    }
-
-                    // Add curves/surfaces after points
-                    dataset!.AddTopology(topology);
-
-                    // Add Spatial Association Informationbindings. Must be handled after curves are added to dataset.
-                    foreach (var sa in spatialAssociations) {
-                        var curve = dataset?.Curves?.FirstOrDefault(e => e.Name == sa.Key);
-
-                        curve?.AddAssociation(sa.Value);
-                    }
-
-                    // Serialize to YAML
-                    var yaml = S100FC.YAML.Converter.Serialize(dataset!);
-
-
-
-                    File.WriteAllText(IO.Path.Combine(output, $"{datasetName}.yaml"), yaml);
-                    File.WriteAllText(IO.Path.Combine(@"c:\temp", $"{datasetName}.yaml"), yaml);
-
-                    if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
-                        var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{@"e:\ArcGIS\Projects\IIC Technologies\FeatureCatalogue.xml"}\" -d \"{output}\"";
-
-                        if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
-                            IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
-                        // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
-
-                        if (!exchangeset) {
-                            Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
-
-                            var p = new Process();
-                            p.StartInfo.CreateNoWindow = true;
-                            p.StartInfo.UseShellExecute = true;
-                            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                            p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
-                            p.StartInfo.Arguments = commandline;
-                            p.StartInfo.WorkingDirectory = output;
-                            p.EnableRaisingEvents = true;
-                            p.Exited += (s, e) => {
-                            };
-
-                            p.Start();
-                            p.WaitForExit();
-
-                            if (p.ExitCode != 0) {
-                                Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
-                                return p.ExitCode;
-                            }
-                        }
-                        else {
-                            Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -C {dataset} -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
-                            commandline += $" -C {datasetName}";
-
-                            var p = new Process();
-                            p.StartInfo.CreateNoWindow = true;
-                            p.StartInfo.UseShellExecute = true;
-                            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                            p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
-                            p.StartInfo.Arguments = commandline;
-                            p.StartInfo.WorkingDirectory = output;
-                            p.EnableRaisingEvents = true;
-                            p.Exited += (s, e) => {
-                            };
-
-                            p.Start();
-                            p.WaitForExit();
-
-                            if (p.ExitCode != 0) {
-                                Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
-                                return p.ExitCode;
-                            }
-
-                            IO.Directory.Move(IO.Path.Combine(output, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
-                        }
+                    catch(System.Exception ex) {
+                        Log.Fatal("error: {database}", e.Dataset);
                     }
                     Log.Information("------------------------------------------------------------");
                 }
