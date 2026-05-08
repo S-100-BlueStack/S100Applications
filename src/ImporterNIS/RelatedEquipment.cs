@@ -32,7 +32,8 @@ namespace S100Framework.Applications
             }
 
             if (topmarks.Count() > 1) {
-                throw new NotSupportedException("Multiple related topmarks");
+                Logger.Current.Error("Multiple related topmarks #{count} ({objectid})", topmarks.Count(), structure.OBJECTID);
+                //throw new NotSupportedException("Multiple related topmarks");
             }
 
             var relatedTopmark = topmarks.First();
