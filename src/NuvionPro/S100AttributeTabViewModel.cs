@@ -222,7 +222,9 @@ namespace NuvionPro
 
                     Module.FeatureCatalogue[] featureCatalogues = [];
 
-                    using var configuration = geodatabase.OpenDataset<Table>(syntax.QualifyTableName(tableNames.Item1, tableNames.Item2, "configuration"));
+                    var definitions = geodatabase.GetDefinitions<TableDefinition>().ToLookup(e => e.GetName());
+
+                    using var configuration = geodatabase.OpenDataset<Table>(definitions.Single(e => e.Key.EndsWith("configuration")).Key);
 
                     using var cursor = configuration.Search(null, true);
                     while (cursor.MoveNext()) {
