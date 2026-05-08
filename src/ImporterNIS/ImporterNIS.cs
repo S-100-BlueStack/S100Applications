@@ -87,7 +87,7 @@ namespace S100Framework.Applications
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
 
             // default value - overwritten by args
-            var s128 = false;
+            var s128 = true;
 
             // default value - overwritten by args
             var skinOfEarthOnly = false;
