@@ -29,6 +29,10 @@ namespace S100Framework.Applications
             while (cursor.MoveNext()) {
                 recordCount += 1;
                 var feature = (Feature)cursor.Current;
+
+                if (feature.GetShape() is null) continue;
+                if (feature.GetShape().IsEmpty) continue;
+
                 var current = new OffshoreInstallationsA(feature); // (Row)cursor.Current;
 
                 var objectid = current.OBJECTID ?? default;

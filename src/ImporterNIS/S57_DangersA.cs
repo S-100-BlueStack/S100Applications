@@ -85,9 +85,10 @@ namespace S100Framework.Applications
                                 }
                             }
 
-                            if (current.STATUS != default) {
-                                instance.status = GetSingleStatus(current.STATUS)?.value;
-                            }
+                            //  Doesn't exist in S-57
+                            //if (current.STATUS != default) {
+                            //    instance.status = GetSingleStatus(current.STATUS)?.value;
+                            //}
 
                             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
                                 string subtype = "";

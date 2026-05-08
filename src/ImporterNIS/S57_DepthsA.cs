@@ -27,6 +27,7 @@ namespace S100Framework.Applications
                 var feature = (Feature)cursor.Current;
 
                 if (feature.GetShape() is null) continue;
+                if (feature.GetShape().IsEmpty) continue;
 
                 recordCount += 1;                           
 
