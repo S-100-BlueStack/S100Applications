@@ -249,23 +249,34 @@ namespace S100Framework.WPF.ViewModel
                         var type = e.Element("type")!.Value;
 
                         if ("ConditionalMandatory".Equals(type)) {
-                            var _attribute = e.Element("condition")!.Element("attribute")!.Value;
-                            var _operator = e.Element("condition")!.Element("operator")!.Value;
-                            var _value = e.Element("condition")!.Element("value")!.Value;
-
                             var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
 
-                            Action <AddError, attributeBinding> validator = (action, instance) => {
-                                if(instance is ComplexAttribute complexAttribute) {
+                            var condition = e.Element("condition");
+                            if (condition is not null) {
+                                var _attribute = e.Element("condition")!.Element("attribute")!.Value;
+                                var _operator = e.Element("condition")!.Element("operator")!.Value;
+                                var _value = e.Element("condition")!.Element("value")!.Value;
 
-                                }
-                                //if (instance is TextAttribute textAttribute) {
-                                //    if (stringLength < textAttribute.value?.Length) {
-                                //        action("", $"StringLengthConstraint: {stringLength}!");
-                                //    }
-                                //}
-                            };
-                            binding.Validators = [.. binding.Validators, validator];
+                                Action<AddError, attributeBinding> validator = (action, instance) => {
+                                    if (instance is ComplexAttribute complexAttribute) {
+                                        var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
+
+                                        if (v.Equals(_value)) {
+
+                                        }
+
+                                    }
+                                    //if (instance is TextAttribute textAttribute) {
+                                    //    if (stringLength < textAttribute.value?.Length) {
+                                    //        action("", $"StringLengthConstraint: {stringLength}!");
+                                    //    }
+                                    //}
+                                };
+                                binding.Validators = [.. binding.Validators, validator];
+                            }
+                            else {
+
+                            }                                                        
                         }
                     }
                 }
@@ -538,6 +549,14 @@ namespace S100Framework.WPF.ViewModel
                 //}
 
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
+
+                if(attribute is ComplexAttributeViewModel complexAttribute) {
+                    var binding = this.attributeBindingsCatalogue.Single(e => e.attribute.Equals(complexAttribute.code));
+                    if (binding.Validators.Any()) {
+                        foreach (var action in binding.Validators)
+                            action.Invoke(complexAttribute.AddError, complexAttribute.attribute);
+                    }
+                }
 
                 this.Validate();
             }

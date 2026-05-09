@@ -232,8 +232,10 @@ namespace S100Framework.WPF.ViewModel
         private S100FC.attributeBindingDefinition? _attributeBindingDefinition { get; init; } = default;
     }
 
-    public class ComplexAttributeViewModel : AttributeViewModel, IAttributeBindingContainer
+    public class ComplexAttributeViewModel : AttributeViewModel, IAttributeBindingContainer, INotifyDataErrorInfo
     {
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
         public attributeBindingDefinition[] attributeBindingsCatalogue { get; init; } = [];
 
         public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
@@ -313,6 +315,19 @@ namespace S100Framework.WPF.ViewModel
             //else
             base.OnPropertyChanged(e.PropertyName);
         }
+
+        public bool HasErrors => this._errors.Any();
+
+        public IEnumerable GetErrors(string? propertyName) {
+            //if (!nameof(this.value).Equals(propertyName)) return Enumerable.Empty<string>();
+            return this._errors;
+        }
+
+        public void AddError(string propertyName, string error) {
+            this._errors = [.. this._errors, error];
+        }
+
+        private string[] _errors = [];
 
         private readonly S100FC.ComplexAttribute? _attribute = default;
     }
