@@ -25,6 +25,10 @@ namespace S100Framework.Applications
             while (cursor.MoveNext()) {
                 recordCount += 1;
                 var feature = (Feature)cursor.Current;
+
+                if (feature.GetShape() is null) continue;
+                if (feature.GetShape().IsEmpty) continue;
+
                 var current = new NaturalFeaturesA(feature);
 
                 var objectid = current.OBJECTID ?? default;

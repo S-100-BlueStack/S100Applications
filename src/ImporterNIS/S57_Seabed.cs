@@ -28,6 +28,9 @@ namespace S100Framework.Applications
 
                 var feature = (Feature)cursor.Current;
 
+                if (feature.GetShape() is null) continue;
+                if (feature.GetShape().IsEmpty) continue;
+
                 var current = new Seabed(feature);
 
                 var objectid = current.OBJECTID ?? default;

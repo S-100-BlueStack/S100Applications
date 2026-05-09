@@ -32,7 +32,6 @@ namespace S100Framework.Applications
                 if (feature.GetShape() is null) continue;
                 if (feature.GetShape().IsEmpty) continue;
 
-
                 var current = new CoastlineL(feature);
 
                 var objectid = current.OBJECTID ?? default;
