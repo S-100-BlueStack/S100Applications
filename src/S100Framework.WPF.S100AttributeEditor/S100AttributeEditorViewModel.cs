@@ -261,8 +261,13 @@ namespace S100Framework.WPF.ViewModel
                                     if (instance is ComplexAttribute complexAttribute) {
                                         var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
 
-                                        if (v.Equals(_value)) {
-
+                                        var match = _operator switch {
+                                            "eq" => v.Equals(_value),
+                                            "ne" => !v.Equals(_value),
+                                            _ => false,
+                                        };
+                                        if (match) {
+                                            ;
                                         }
 
                                     }
