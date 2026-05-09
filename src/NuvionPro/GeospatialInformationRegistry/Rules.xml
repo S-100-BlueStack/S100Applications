@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rules xmlns:S100FC="http://www.iho.int/S100FC/5.2">
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAllAround">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+</Rules>

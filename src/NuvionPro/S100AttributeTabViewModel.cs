@@ -18,7 +18,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
+using static NuvionPro.Module;
 
 namespace NuvionPro
 {
@@ -127,12 +130,40 @@ namespace NuvionPro
 
                 if (this.SelectedProperty is null) {
                     var ps = XDocument.Load(this.PS.FullPath);
-                    this.SelectedProperty = new S100AttributeEditorViewModel(ps);
+
+                    var navigator = ps.CreateNavigator();
+                    navigator.MoveToFollowing(XPathNodeType.Element);
+
+                    var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                    var namespaceManager = new XmlNamespaceManager(new NameTable());
+                    foreach (var s in scopes)
+                        namespaceManager.AddNamespace(s.Key, s.Value);
+
+                    var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
+
+                    var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+
+                    this.SelectedProperty = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
                 }
                 else if (this.SelectedProperty is not null && string.IsNullOrEmpty(this.SelectedProperty.ProductID)) {
                     if (!this.PS.Equals(this.SelectedProperty.ProductID)) {
                         var ps = XDocument.Load(this.PS.FullPath);
-                        this.SelectedProperty = new S100AttributeEditorViewModel(ps);
+
+                        var navigator = ps.CreateNavigator();
+                        navigator.MoveToFollowing(XPathNodeType.Element);
+
+                        var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                        var namespaceManager = new XmlNamespaceManager(new NameTable());
+                        foreach (var s in scopes)
+                            namespaceManager.AddNamespace(s.Key, s.Value);
+
+                        var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
+
+                        var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+
+                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
                     }
                 }
 
@@ -268,9 +299,22 @@ namespace NuvionPro
                         return default(S100AttributeEditorViewModel);
                     }
 
-                    var xDocument = XDocument.Load(this.PS.FullPath);
+                    var ps = XDocument.Load(this.PS.FullPath);
 
-                    var viewModel = new S100AttributeEditorViewModel(xDocument);
+                    var navigator = ps.CreateNavigator();
+                    navigator.MoveToFollowing(XPathNodeType.Element);
+
+                    var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                    var namespaceManager = new XmlNamespaceManager(new NameTable());
+                    foreach (var s in scopes)
+                        namespaceManager.AddNamespace(s.Key, s.Value);
+
+                    var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
+                    
+                    var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+
+                    var viewModel = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
 
                     if (this.Code is null)
                         return viewModel;

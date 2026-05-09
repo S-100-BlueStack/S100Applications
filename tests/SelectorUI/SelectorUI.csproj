@@ -36,4 +36,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Rules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
