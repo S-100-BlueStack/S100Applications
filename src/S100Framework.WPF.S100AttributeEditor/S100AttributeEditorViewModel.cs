@@ -112,6 +112,12 @@ namespace S100Framework.WPF.ViewModel
         }
         #endregion
 
+        public String ErrorMessage {
+            get {
+                return "Hello";
+            }
+        }
+
         public RequestInformationsEventHandler RequestInformation = async (s, e) => { return []; };
 
         public RequestFeaturesEventHandler RequestFeatures = async (s, e) => { return []; };
@@ -514,6 +520,12 @@ namespace S100Framework.WPF.ViewModel
                     if (binding.Validators.Any()) {
                         foreach (var action in binding.Validators)
                             action.Invoke(complexAttribute.AddError, complexAttribute.attribute);
+                    }
+                }
+
+                if(attribute is INotifyDataErrorInfo notifyDataError) {
+                    if (notifyDataError.HasErrors) {
+
                     }
                 }
 

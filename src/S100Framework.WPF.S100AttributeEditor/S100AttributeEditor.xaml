@@ -312,7 +312,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical">
-            <Grid x:Name="PropertyGrid" Grid.IsSharedSizeScope="True" IsEnabled="{Binding IsEditingEnabled}" ToolTip="Hello">
+            <Grid x:Name="PropertyGrid" Grid.IsSharedSizeScope="True" IsEnabled="{Binding IsEditingEnabled}" ToolTip="{Binding SelectedObject.ErrorMessage}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>

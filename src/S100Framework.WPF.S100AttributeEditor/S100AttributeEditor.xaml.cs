@@ -195,7 +195,7 @@ namespace S100Framework.WPF
             set {
                 this.SetValue(IsEditingEnabledProperty, value);
             }
-        }
+        }       
 
         public S100AttributeEditor() {
             this.InitializeComponent();
