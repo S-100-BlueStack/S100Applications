@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace S100Framework.WPF.ViewModel
 {
@@ -101,7 +102,7 @@ namespace S100Framework.WPF.ViewModel
             this._attribute = attribute;
             this._attributeBindingDefinition = attributeBindingDefinition;
             this._validators = default;
-            if(attributeBindingDefinition is attributeBindingDefinitionViewModel attributeBindingDefinitionViewModel) {
+            if (attributeBindingDefinition is attributeBindingDefinitionViewModel attributeBindingDefinitionViewModel) {
                 this._validators = attributeBindingDefinitionViewModel.Validators;
             }
 
@@ -240,7 +241,7 @@ namespace S100Framework.WPF.ViewModel
 
         public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
 
-        public ComplexAttributeViewModel(ref ComplexAttribute attribute) : base(attribute) {
+        public ComplexAttributeViewModel(ref ComplexAttribute attribute, IEnumerable<XElement> rules) : base(attribute) {
             this._attribute = attribute;
 
             this.attributeBindingsCatalogue = this._attribute.attributeBindingsCatalogue;
@@ -280,8 +281,68 @@ namespace S100Framework.WPF.ViewModel
                     this.attributeBindings.Add(viewmodel);
                 }
                 else if (e is ComplexAttribute complexAttribute) {
-                    var viewmodel = new ComplexAttributeViewModel(ref complexAttribute);
+                    var viewmodel = new ComplexAttributeViewModel(ref complexAttribute, rules);
                     this.attributeBindings.Add(viewmodel);
+                }
+            }
+
+            ;
+            foreach (var e in rules) {
+                var _ = e.Attribute("attribute")!.Value;
+
+                var type = e.Element("type")!.Value;
+
+                if ("ConditionalMandatory".Equals(type)) {
+                    var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
+
+                    var condition = e.Element("condition");
+                    if (condition is not null) {
+                        var _attribute = e.Element("condition")!.Element("attribute")!.Value;
+                        var _operator = e.Element("condition")!.Element("operator")!.Value;
+                        var _value = e.Element("condition")!.Element("value")!.Value;
+
+                        Action<AddError, attributeBinding> validator = (action, instance) => {
+                            if (instance is ComplexAttribute complexAttribute) {
+                                var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
+
+                                var match = _operator switch {
+                                    "eq" => v.Equals(_value),
+                                    "ne" => !v.Equals(_value),
+                                    _ => false,
+                                };
+                                if (match) {
+                                    var containsAttribute = false;
+                                    var subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
+                                    foreach (var subAttribute in subAttributes) {
+                                        if (default != complexAttribute.attributeBindings.SingleOrDefault(e => e.S100FC_code.Equals(subAttribute)))
+                                            containsAttribute = true;
+                                    }
+
+                                    //if (!containsAttribute) 
+                                    {
+                                        var sign = _operator switch {
+                                            "eq" => "=",
+                                            "ne" => "\u2260",
+                                            _ => throw new InvalidOperationException(),
+                                        };
+                                        var error = $"The sub-attribute {_attribute} {sign}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
+
+                                        action(_, error);
+                                    }
+                                }
+
+                            }
+                            //if (instance is TextAttribute textAttribute) {
+                            //    if (stringLength < textAttribute.value?.Length) {
+                            //        action("", $"StringLengthConstraint: {stringLength}!");
+                            //    }
+                            //}
+                        };
+                        this._validators = [.. this._validators, validator];
+                    }
+                    else {
+
+                    }
                 }
             }
 
@@ -313,18 +374,36 @@ namespace S100Framework.WPF.ViewModel
             //if(sender is S100FC.SimpleAttribute simpleAttribute)
             //    base.OnPropertyChanged(simpleAttribute.S100FC_code);
             //else
-            base.OnPropertyChanged(e.PropertyName);
+
+
+            //base.OnPropertyChanged(e.PropertyName);
+            base.OnPropertyChanged(this.code);
+
+            this.Validate();
         }
+
+        private Action<AddError, attributeBinding>[] _validators { get; init; } = [];
 
         public bool HasErrors => this._errors.Any();
 
         public IEnumerable GetErrors(string? propertyName) {
-            //if (!nameof(this.value).Equals(propertyName)) return Enumerable.Empty<string>();
+            if (!this.attributeBindings.Select(e => e.code).Contains(propertyName)) return Enumerable.Empty<string>();
             return this._errors;
+        }
+
+        private void Validate() {
+            this._errors = [];
+            if (this._validators is not null && this._validators.Any())
+                foreach (var action in this._validators) {
+                    if (this._attribute is not null)
+                        action.Invoke(this.AddError, this._attribute);
+                }
+            base.OnPropertyChanged(nameof(HasErrors));
         }
 
         public void AddError(string propertyName, string error) {
             this._errors = [.. this._errors, error];
+            //base.OnPropertyChanged(nameof(ErrorsChanged));
         }
 
         private string[] _errors = [];

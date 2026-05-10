@@ -239,54 +239,6 @@ namespace S100Framework.WPF.ViewModel
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
 
-            ;
-            if (this._rules.Contains(code)) {
-                foreach (var e in this._rules[code]) {
-                    var _ = e.Attribute("attribute")!.Value;
-
-                    var binding = this.attributeBindingsCatalogue.SingleOrDefault(e => e.attribute.Equals(_));
-                    if(binding is not null) {
-                        var type = e.Element("type")!.Value;
-
-                        if ("ConditionalMandatory".Equals(type)) {
-                            var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
-
-                            var condition = e.Element("condition");
-                            if (condition is not null) {
-                                var _attribute = e.Element("condition")!.Element("attribute")!.Value;
-                                var _operator = e.Element("condition")!.Element("operator")!.Value;
-                                var _value = e.Element("condition")!.Element("value")!.Value;
-
-                                Action<AddError, attributeBinding> validator = (action, instance) => {
-                                    if (instance is ComplexAttribute complexAttribute) {
-                                        var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
-
-                                        var match = _operator switch {
-                                            "eq" => v.Equals(_value),
-                                            "ne" => !v.Equals(_value),
-                                            _ => false,
-                                        };
-                                        if (match) {
-                                            ;
-                                        }
-
-                                    }
-                                    //if (instance is TextAttribute textAttribute) {
-                                    //    if (stringLength < textAttribute.value?.Length) {
-                                    //        action("", $"StringLengthConstraint: {stringLength}!");
-                                    //    }
-                                    //}
-                                };
-                                binding.Validators = [.. binding.Validators, validator];
-                            }
-                            else {
-
-                            }                                                        
-                        }
-                    }
-                }
-            }
-
             if (element.Name.LocalName.Equals("S100_FC_InformationType") || element.Name.LocalName.Equals("S100_FC_FeatureType"))
                 this._informationBindingDefinitions = Parser.InformationBindings(this._featureCatalogue, code);
             if (element.Name.LocalName.Equals("S100_FC_FeatureType"))
@@ -331,8 +283,8 @@ namespace S100Framework.WPF.ViewModel
                     var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingsCatalogue[simpleAttribute.S100FC_code]);
                     this.attributeBindings.Add(viewModel);
                 }
-                else if (attributeBinding is ComplexAttribute complexAttribute) {
-                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute);
+                else if (attributeBinding is ComplexAttribute complexAttribute) {                    
+                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute, this._rules[code]);
                     this.attributeBindings.Add(viewModel);
                 }
                 else
@@ -539,6 +491,8 @@ namespace S100Framework.WPF.ViewModel
         private featureBindingDefinition[] _featureBindingDefinitions { get; set; } = [];
 
         private XDocument _featureCatalogue { get; init; }
+
+        public ILookup<string, XElement> Rules => this._rules;
 
         private ILookup<string, XElement> _rules { get; init; }
 

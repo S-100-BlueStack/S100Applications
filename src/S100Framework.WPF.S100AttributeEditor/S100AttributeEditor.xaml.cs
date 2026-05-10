@@ -44,8 +44,10 @@ namespace S100Framework.WPF
                         container?.AddAttribute(new DateTimeAttributeViewModel(ref dateTimeAttribute, attributeBinding));
                     else if (instance is SimpleAttribute simpleAttribute)
                         container?.AddAttribute(new SimpleAttributeViewModel(ref simpleAttribute, attributeBinding));
-                    else if (instance is ComplexAttribute complexAttribute)
-                        container?.AddAttribute(new ComplexAttributeViewModel(ref complexAttribute));
+                    else if (instance is ComplexAttribute complexAttribute) {
+                        if(System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
+                        container?.AddAttribute(new ComplexAttributeViewModel(ref complexAttribute, []));
+                    }
                     else
                         throw new NotImplementedException();
                 }
