@@ -507,6 +507,16 @@ namespace S100Framework.WPF.ViewModel
         private bool _isInitialized = false;
 
         private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
+            var _internal = e.PropertyName switch {
+                "ErrorMessage" => true,
+                _ => false,
+            };
+
+            if (_internal) {
+                this.PropertyChanged?.Invoke(this, e);
+                return;
+            }
+
             if (sender is AttributeViewModel attribute) {
                 //if (!attribute.attribute.IsValid(this.attributeBindings.Select(e => e.attribute))) {
                 //    this._errors[attribute.code] = new List<string> { "Dependency" };

@@ -65,7 +65,13 @@ namespace S100Framework.WPF.ViewModel
             //    nestedProperties.Add(valueViewModel, propertyName);
             //}
             backingFiled = value;
-            this.OnPropertyChanged(this.code);
+
+            var _ = propertyName switch {
+                "ErrorMessage" => "ErrorMessage",
+                _ => this.code,
+            };
+
+            this.OnPropertyChanged(_);
         }
 
         private void ChildViewModelChanged(object? sender, PropertyChangedEventArgs e) {
@@ -235,7 +241,18 @@ namespace S100Framework.WPF.ViewModel
 
     public class ComplexAttributeViewModel : AttributeViewModel, IAttributeBindingContainer, INotifyDataErrorInfo
     {
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;        
+
+        private string _errorMessage = string.Empty;
+
+        public string ErrorMessage {
+            get {
+                return this._errorMessage;
+            }
+            set {
+                this.SetProperty(ref this._errorMessage, value);
+            }
+        }
 
         public attributeBindingDefinition[] attributeBindingsCatalogue { get; init; } = [];
 
@@ -323,7 +340,7 @@ namespace S100Framework.WPF.ViewModel
                                             "ne" => "\u2260",
                                             _ => throw new InvalidOperationException(),
                                         };
-                                        var error = $"The sub-attribute {_attribute} {sign}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
+                                        var error = $"The sub-attribute {_attribute} {sign} {_value}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
                                         action(_, error);
                                     }
                                 }
@@ -339,7 +356,7 @@ namespace S100Framework.WPF.ViewModel
 
             //note: Must be added right by the end!
             this.attributeBindings.CollectionChanged += (s, e) => {
-                this.Validate();                
+                this.Validate();
                 base.OnPropertyChanged(nameof(this.attributeBindings));
             };
 
@@ -368,7 +385,7 @@ namespace S100Framework.WPF.ViewModel
             //base.OnPropertyChanged(e.PropertyName);
             //base.OnPropertyChanged(this.code);
             this.Validate();
-            base.OnPropertyChanged(nameof(this.attributeBindings));            
+            base.OnPropertyChanged(nameof(this.attributeBindings));
         }
 
         private Action<AddError, attributeBinding>[] _validators { get; init; } = [];
@@ -389,6 +406,7 @@ namespace S100Framework.WPF.ViewModel
                 }
 
             if (this.HasErrors) {
+                this.ErrorMessage = string.Join(Environment.NewLine, this._errors);
                 //base.OnPropertyChanged(nameof(HasErrors));
                 //base.OnPropertyChanged(nameof(ErrorsChanged));
             }

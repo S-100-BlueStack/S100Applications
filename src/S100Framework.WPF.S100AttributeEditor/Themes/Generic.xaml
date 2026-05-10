@@ -193,6 +193,7 @@
             ShowButtonSpinner="False"
             ShowDropDownButton="True" TimePickerVisibility="Visible"/>
     </DataTemplate>
+    
     <DataTemplate x:Key="DateOnlyEditorTemplate">
         <xctk:DateTimePicker 
             Value="{Binding value}" 
@@ -202,9 +203,11 @@
             ShowButtonSpinner="False"
             ShowDropDownButton="True" TimePickerVisibility="Collapsed"/>
     </DataTemplate>
+    
     <DataTemplate x:Key="TimeEditorTemplate">
         <xctk:DateTimeUpDown Value="{Binding value}" Format="Custom" FormatString="HH:mm" Watermark="[HH:mm]" ShowButtonSpinner="False"/>
     </DataTemplate>
+    
     <DataTemplate x:Key="TruncatedDateEditorTemplate">
         <xctk:WatermarkTextBox Watermark="[UNKNOWN]">
             <xctk:WatermarkTextBox.Text>
@@ -216,7 +219,6 @@
             </xctk:WatermarkTextBox.Text>
         </xctk:WatermarkTextBox>
     </DataTemplate>
-
 
     <!-- Template for Booleans -->
     <DataTemplate x:Key="BooleanEditorTemplate">
