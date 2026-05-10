@@ -12,4 +12,40 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightFogDetector">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAirObstruction">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+	<Rule attribute="sectorCharacteristics" productId="S-101" code="LightSectored">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
 </Rules>
