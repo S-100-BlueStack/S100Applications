@@ -321,11 +321,29 @@ namespace S100Framework.WPF.ViewModel
                             if (instance is ComplexAttribute complexAttribute) {
                                 var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
 
-                                var match = _operator switch {
-                                    "eq" => v.Equals(_value),
-                                    "ne" => !v.Equals(_value),
-                                    _ => false,
-                                };
+                                bool match = false;
+                                if(v is IntegerAttribute integerAttribute) {
+                                    match = _operator switch {
+                                        "eq" => integerAttribute.value.Equals(_value),
+                                        "ne" => !integerAttribute.value.Equals(_value),
+                                        _ => false,
+                                    };
+                                }
+                                else if (v is EnumerationAttribute enumerationAttribute) {
+                                    match = _operator switch {
+                                        "eq" => enumerationAttribute.value.Equals(_value),
+                                        "ne" => !enumerationAttribute.value.Equals(_value),
+                                        _ => false,
+                                    };
+                                }
+                                else if (v is CodeListAttribute codeListAttribute) {
+                                    match = _operator switch {
+                                        "eq" => codeListAttribute.value.Equals(_value),
+                                        "ne" => !codeListAttribute.value.Equals(_value),
+                                        _ => false,
+                                    };
+                                }
+
                                 if (match) {
                                     var containsAttribute = false;
                                     var subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
