@@ -324,22 +324,22 @@ namespace S100Framework.WPF.ViewModel
                                 bool match = false;
                                 if(v is IntegerAttribute integerAttribute) {
                                     match = _operator switch {
-                                        "eq" => integerAttribute.value.Equals(_value),
-                                        "ne" => !integerAttribute.value.Equals(_value),
+                                        "eq" => integerAttribute.value.Equals(int.Parse(_value)),
+                                        "ne" => !integerAttribute.value.Equals(int.Parse(_value)),
                                         _ => false,
                                     };
                                 }
                                 else if (v is EnumerationAttribute enumerationAttribute) {
                                     match = _operator switch {
-                                        "eq" => enumerationAttribute.value.Equals(_value),
-                                        "ne" => !enumerationAttribute.value.Equals(_value),
+                                        "eq" => enumerationAttribute.value.Equals(int.Parse(_value)),
+                                        "ne" => !enumerationAttribute.value.Equals(int.Parse(_value)),
                                         _ => false,
                                     };
                                 }
                                 else if (v is CodeListAttribute codeListAttribute) {
                                     match = _operator switch {
-                                        "eq" => codeListAttribute.value.Equals(_value),
-                                        "ne" => !codeListAttribute.value.Equals(_value),
+                                        "eq" => codeListAttribute.value.Equals(int.Parse(_value)),
+                                        "ne" => !codeListAttribute.value.Equals(int.Parse(_value)),
                                         _ => false,
                                     };
                                 }
