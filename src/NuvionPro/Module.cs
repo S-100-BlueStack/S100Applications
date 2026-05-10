@@ -131,7 +131,7 @@ namespace NuvionPro
                 this._featureCatalogues = [.. this._featureCatalogues, new FeatureCatalogue(System.IO.Path.GetFileNameWithoutExtension(catalogue), System.IO.Path.GetFullPath(catalogue))];
             }
 
-            var rules = XDocument.Load(System.IO.Path.Combine(path, "GeospatialInformationRegistry", "Rules.xml"));
+            var rules = XDocument.Load(System.IO.Path.Combine(path, "GeospatialInformationRegistry", "constraints.xml"));
 
             this.Rules = [.. rules.Descendants("Rule")];
 

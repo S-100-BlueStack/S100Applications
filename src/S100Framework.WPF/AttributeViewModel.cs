@@ -286,7 +286,6 @@ namespace S100Framework.WPF.ViewModel
                 }
             }
 
-            ;
             foreach (var e in rules) {
                 var _ = e.Attribute("attribute")!.Value;
 
@@ -318,25 +317,17 @@ namespace S100Framework.WPF.ViewModel
                                             containsAttribute = true;
                                     }
 
-                                    //if (!containsAttribute) 
-                                    {
+                                    if (!containsAttribute) {
                                         var sign = _operator switch {
                                             "eq" => "=",
                                             "ne" => "\u2260",
                                             _ => throw new InvalidOperationException(),
                                         };
                                         var error = $"The sub-attribute {_attribute} {sign}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
-
                                         action(_, error);
                                     }
                                 }
-
                             }
-                            //if (instance is TextAttribute textAttribute) {
-                            //    if (stringLength < textAttribute.value?.Length) {
-                            //        action("", $"StringLengthConstraint: {stringLength}!");
-                            //    }
-                            //}
                         };
                         this._validators = [.. this._validators, validator];
                     }
@@ -348,8 +339,11 @@ namespace S100Framework.WPF.ViewModel
 
             //note: Must be added right by the end!
             this.attributeBindings.CollectionChanged += (s, e) => {
+                this.Validate();                
                 base.OnPropertyChanged(nameof(this.attributeBindings));
             };
+
+            this.Validate();
         }
 
         public bool HasCapacity(attributeBindingDefinition binding) {
@@ -371,15 +365,10 @@ namespace S100Framework.WPF.ViewModel
         }
 
         private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
-            //if(sender is S100FC.SimpleAttribute simpleAttribute)
-            //    base.OnPropertyChanged(simpleAttribute.S100FC_code);
-            //else
-
-
             //base.OnPropertyChanged(e.PropertyName);
-            base.OnPropertyChanged(this.code);
-
+            //base.OnPropertyChanged(this.code);
             this.Validate();
+            base.OnPropertyChanged(nameof(this.attributeBindings));            
         }
 
         private Action<AddError, attributeBinding>[] _validators { get; init; } = [];
@@ -387,7 +376,7 @@ namespace S100Framework.WPF.ViewModel
         public bool HasErrors => this._errors.Any();
 
         public IEnumerable GetErrors(string? propertyName) {
-            if (!this.attributeBindings.Select(e => e.code).Contains(propertyName)) return Enumerable.Empty<string>();
+            if (!nameof(this.attributeBindings).Equals(propertyName)) return Enumerable.Empty<string>();
             return this._errors;
         }
 
@@ -398,12 +387,15 @@ namespace S100Framework.WPF.ViewModel
                     if (this._attribute is not null)
                         action.Invoke(this.AddError, this._attribute);
                 }
-            base.OnPropertyChanged(nameof(HasErrors));
+
+            if (this.HasErrors) {
+                //base.OnPropertyChanged(nameof(HasErrors));
+                //base.OnPropertyChanged(nameof(ErrorsChanged));
+            }
         }
 
         public void AddError(string propertyName, string error) {
             this._errors = [.. this._errors, error];
-            //base.OnPropertyChanged(nameof(ErrorsChanged));
         }
 
         private string[] _errors = [];

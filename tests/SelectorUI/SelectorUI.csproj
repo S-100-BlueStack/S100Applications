@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Rules.xml">
+    <None Update="constraints.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

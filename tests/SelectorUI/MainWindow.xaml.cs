@@ -129,7 +129,7 @@ namespace SelectorUI
 
             var productId = ps.Element(XName.Get("productId", scopes["S100FC"]))!.Value;
 
-            var _ = XDocument.Load("Rules.xml").Descendants("Rule");
+            var _ = XDocument.Load("constraints.xml").Descendants("Rule");
 
             var rules = _.Where(e => e.Element(XName.Get("productId", scopes["S100FC"]))!.Value.Equals(productId));
 

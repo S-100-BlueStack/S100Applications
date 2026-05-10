@@ -158,7 +158,7 @@
     <None Update="GeospatialInformationRegistry\131_FC_2.0.0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="GeospatialInformationRegistry\Rules.xml">
+    <None Update="GeospatialInformationRegistry\constraints.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
