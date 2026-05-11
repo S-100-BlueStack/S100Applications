@@ -188,7 +188,7 @@ namespace S100Framework.Applications
                     switch (catcov) {
                         case 1: {
                                 //buffer["ps"] = ps128;
-                                //buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                //buffer["code"] = instance.GetType().Name;
                                 //buffer["version"] = ImporterNIS.s101version;
                                 //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, jsonTestSerializerOptions);
                                 //SetShape(buffer, productCoverage.SHAPE);
@@ -259,7 +259,7 @@ namespace S100Framework.Applications
                 if (s128) {
                     //Store S-128 polygons
                     buffer["ps"] = ps128;
-                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                    buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = instance.Flatten();
                     buffer["informationbindings"] = "[]";
@@ -612,7 +612,7 @@ namespace S100Framework.Applications
 
                     {
                         //buffer["ps"] = ps128;
-                        //buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                        //buffer["code"] = instance.GetType().Name;
                         //buffer["version"] = ImporterNIS.s101version;
                         //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, jsonTestSerializerOptions);
                         //SetShape(buffer, productCoverage.SHAPE);
@@ -682,7 +682,7 @@ namespace S100Framework.Applications
                 if (s128) {
                     //Store S-128 polygons
                     buffer["ps"] = ps128;
-                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                    buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = instance.Flatten();
                     buffer["informationbindings"] = "[]";

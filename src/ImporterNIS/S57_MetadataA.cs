@@ -18,8 +18,10 @@ namespace S100Framework.Applications
             Subtypes.Instance.RegisterSubtypes(metadataa);
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-
             using var buffer = featureClass.CreateRowBuffer();
+
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = metadataa.Search(filter, true);
             int recordCount = 0;
@@ -116,7 +118,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -199,7 +201,7 @@ namespace S100Framework.Applications
                                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -376,7 +378,7 @@ namespace S100Framework.Applications
 
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -495,7 +497,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -541,7 +543,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();

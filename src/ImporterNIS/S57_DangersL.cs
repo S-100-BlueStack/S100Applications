@@ -116,7 +116,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -206,7 +206,7 @@ namespace S100Framework.Applications
                                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -233,7 +233,7 @@ namespace S100Framework.Applications
                                 var instance = ImporterNIS._converterRegistry.Convert<Obstruction>(current);
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -305,7 +305,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();

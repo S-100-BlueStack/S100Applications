@@ -37,6 +37,9 @@ namespace S100Framework.Applications
             [Option('s', "source", Required = false, HelpText = "Source Geodatabase.")]
             public string? Source { get; set; }
 
+            [Option('c', "clipping", Required = false, HelpText = "Clip features.", Default = false)]
+            public bool Clipping { get; set; }
+
             //[Option('a', "append", Required = false, HelpText = "Append dataset.")]
             //public bool Append { get; set; }
 
@@ -55,7 +58,7 @@ namespace S100Framework.Applications
             [Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
             public string? NotesPath { get; set; }
 
-            [Option('s', "skinofearthonly", Required = false, HelpText = "Exports only DEPARE, DRGARE, UNSARE and LNDARE.")]
+            [Option("skinofearthonly", Required = false, HelpText = "Exports only DEPARE, DRGARE, UNSARE and LNDARE.")]
             public string? SkinOfEarthOnly { get; set; }
 
             [Option('f', "scaminfiles", Required = false, HelpText = "Path to folder with scamin files. Supports only Grønland and Denmark scamin files.")]
@@ -63,7 +66,6 @@ namespace S100Framework.Applications
 
             [Option("vdat", Required = false, Default = "3=44")]
             public string? VerticalDatumConverter { get; set; } //  --vdat 3=44            
-
 
             [Option('l', "minimumDisplayScale", Default = int.MaxValue, Required = false)]
             public int? minimumDisplayScale { get; set; }
@@ -139,7 +141,7 @@ namespace S100Framework.Applications
                             foreach(var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
                                 IO.File.Delete(IO.Path.GetFullPath(f));
                             }
-                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed12.geodatabase"), IO.Path.GetFullPath(target), true);
+                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed13.geodatabase"), IO.Path.GetFullPath(target), true);
                         }
                     };
 

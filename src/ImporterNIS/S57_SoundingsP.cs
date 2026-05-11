@@ -213,7 +213,7 @@ namespace S100Framework.Applications
 
                                     buffer["attributebindings"] = instance.Flatten();
                                     buffer["ps"] = ps101;
-                                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                    buffer["code"] = instance.GetType().Name;
 
                                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 

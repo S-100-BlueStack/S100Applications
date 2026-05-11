@@ -107,7 +107,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -172,7 +172,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -222,7 +222,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -291,7 +291,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();

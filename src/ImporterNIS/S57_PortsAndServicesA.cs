@@ -21,8 +21,10 @@ namespace S100Framework.Applications
             Subtypes.Instance.RegisterSubtypes(portsAndServicesA);
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-
             using var buffer = featureClass.CreateRowBuffer();
+
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = portsAndServicesA.Search(filter, true);
             int recordCount = 0;
@@ -130,7 +132,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -203,7 +205,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -340,7 +342,7 @@ namespace S100Framework.Applications
 
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -419,7 +421,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -513,7 +515,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -602,7 +604,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -715,13 +717,12 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(buffer, current.SHAPE);
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetShape(buffer, current.SHAPE);                                
 
                                 var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -730,9 +731,7 @@ namespace S100Framework.Applications
                                     relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
                                 }
 
-
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
                             // Create an UNSURVEYED AREA on the flodoc
@@ -745,16 +744,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                bufferTopo["ps"] = ps101;
+                                bufferTopo["code"] = instance.GetType().Name;
 
 
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(buffer, current.SHAPE);
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                bufferTopo["attributebindings"] = instance.Flatten();
+                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(bufferTopo, current.SHAPE);
+                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                var featureN = featureClassTopo.CreateRow(bufferTopo);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
@@ -840,7 +839,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -937,7 +936,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1050,7 +1049,7 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1079,16 +1078,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                bufferTopo["ps"] = ps101;
+                                bufferTopo["code"] = instance.GetType().Name;
 
 
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(buffer, current.SHAPE);
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                bufferTopo["attributebindings"] = instance.Flatten();
+                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(bufferTopo, current.SHAPE);
+                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                var featureN = featureClassTopo.CreateRow(bufferTopo);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
@@ -1142,7 +1141,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1270,7 +1269,7 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1351,7 +1350,7 @@ namespace S100Framework.Applications
 
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1482,7 +1481,7 @@ namespace S100Framework.Applications
                                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1588,7 +1587,7 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1696,7 +1695,7 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1781,7 +1780,7 @@ namespace S100Framework.Applications
 
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -1869,7 +1868,7 @@ namespace S100Framework.Applications
                                 }
 
                                 buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                buffer["code"] = instance.GetType().Name;
 
 
                                 buffer["attributebindings"] = instance.Flatten();
@@ -1920,16 +1919,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                bufferTopo["ps"] = ps101;
+                                bufferTopo["code"] = instance.GetType().Name;
 
 
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(buffer, current.SHAPE);
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                bufferTopo["attributebindings"] = instance.Flatten();
+                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(bufferTopo, current.SHAPE);
+                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                var featureN = featureClassTopo.CreateRow(bufferTopo);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));

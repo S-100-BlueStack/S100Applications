@@ -643,7 +643,7 @@ namespace S100Framework.Applications.Singletons
                         ; // var t = _srcObjectToSlaves[System.Guid.Parse("37F8BF16-D879-4EB7-B6FA-49B143B320E2")];
                     }
 
-                    if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("aidstonavigationp")) {
+                    if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("aidstonavigationp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new AidsToNavigationP((Feature)cursorRelated.Current);
@@ -662,7 +662,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("dangersp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("dangersp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new DangersP((Feature)cursorRelated.Current);
@@ -680,7 +680,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("naturalfeaturesa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("naturalfeaturesa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new NaturalFeaturesA((Feature)cursorRelated.Current);
@@ -698,7 +698,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("naturalfeaturesp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("naturalfeaturesp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new NaturalFeaturesP((Feature)cursorRelated.Current);
@@ -716,7 +716,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("naturalfeaturesl")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("naturalfeaturesl")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new NaturalFeaturesL((Feature)cursorRelated.Current);
@@ -734,7 +734,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("culturalfeaturesp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("culturalfeaturesp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new CulturalFeaturesP((Feature)cursorRelated.Current);
@@ -752,7 +752,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("culturalfeaturesl")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("culturalfeaturesl")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new CulturalFeaturesL((Feature)cursorRelated.Current);
@@ -770,7 +770,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("culturalfeaturesa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("culturalfeaturesa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new CulturalFeaturesA((Feature)cursorRelated.Current);
@@ -788,7 +788,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("tracksandroutesa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("tracksandroutesa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new TracksAndRoutesA((Feature)cursorRelated.Current);
@@ -806,7 +806,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("tracksandroutesl")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("tracksandroutesl")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             // idIndex[currentGlobalId].S57Object = new TracksAndRoutesL((Feature)cursorRelated.Current);
@@ -824,7 +824,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("portsandservicesp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("portsandservicesp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new PortsAndServicesP((Feature)cursorRelated.Current);
@@ -842,7 +842,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("regulatedareasandlimitsp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("regulatedareasandlimitsp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new RegulatedAreasAndLimitsP((Feature)cursorRelated.Current);
@@ -860,7 +860,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("userdefinedfeaturesp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("userdefinedfeaturesp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new UserDefinedFeaturesP((Feature)cursorRelated.Current);
@@ -878,7 +878,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("tracksandroutesp")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("tracksandroutesp")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new TracksAndRoutesP((Feature)cursorRelated.Current);
@@ -896,7 +896,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("offshoreinstallationsl")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("offshoreinstallationsl")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new OffshoreInstallationsL((Feature)cursorRelated.Current);
@@ -914,7 +914,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("depthsa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("depthsa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new DepthsA((Feature)cursorRelated.Current);
@@ -932,7 +932,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("portsandservicesl")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("portsandservicesl")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new PortsAndServicesL((Feature)cursorRelated.Current);
@@ -950,7 +950,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("dangersa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("dangersa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new DangersA((Feature)cursorRelated.Current);
@@ -968,7 +968,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("regulatedareasandlimitsa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("regulatedareasandlimitsa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new RegulatedAreasAndLimitsA((Feature)cursorRelated.Current);
@@ -986,7 +986,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("offshoreinstallationsa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("offshoreinstallationsa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             //idIndex[currentGlobalId].S57Object = new OffshoreInstallationsA((Feature)cursorRelated.Current);
@@ -1004,7 +1004,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("metadataa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("metadataa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             foreach (var kvp in _srcObjectToSlaves) {
@@ -1021,7 +1021,7 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
-                    else if (destinationFeatureClassName.Split('.').Last().ToLower().Equals("portsandservicesa")) {
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("portsandservicesa")) {
                         if (idIndex.ContainsKey(currentGlobalId)) {
                             loadedRelatedObjectsCount++;
                             foreach (var kvp in _srcObjectToSlaves) {
@@ -1038,6 +1038,40 @@ namespace S100Framework.Applications.Singletons
                             }
                         }
                     }
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("regulatedareasandlimitsl")) {
+                        if (idIndex.ContainsKey(currentGlobalId)) {
+                            loadedRelatedObjectsCount++;
+                            foreach (var kvp in _srcObjectToSlaves) {
+                                var key = kvp.Key;
+                                var list = kvp.Value;
+
+                                if (list.Any(o => o.GlobalId == currentGlobalId)) {
+                                    foreach (var obj in list) {
+                                        if (obj.GlobalId == currentGlobalId) {
+                                            obj.S57Object = new RegulatedAreasAndLimitsL((Feature)cursorRelated.Current);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (destinationFeatureClassName.Split('.')[^1].ToLower().Equals("militaryfeaturesa")) {
+                        if (idIndex.ContainsKey(currentGlobalId)) {
+                            loadedRelatedObjectsCount++;
+                            foreach (var kvp in _srcObjectToSlaves) {
+                                var key = kvp.Key;
+                                var list = kvp.Value;
+
+                                if (list.Any(o => o.GlobalId == currentGlobalId)) {
+                                    foreach (var obj in list) {
+                                        if (obj.GlobalId == currentGlobalId) {
+                                            obj.S57Object = new MilitaryFeaturesA((Feature)cursorRelated.Current);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }                    
                     else {
                         throw new NotSupportedException($"GetRelated: {destinationFeatureClassName}");
                     }

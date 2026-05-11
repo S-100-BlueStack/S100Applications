@@ -97,7 +97,9 @@ namespace S100Framework.Applications
             int maximumDisplayScale = 0;
             int minimumDisplayScale = int.MaxValue;
 
-            string? filter = default;
+            string? filter = "";
+
+            bool clip = false;
 
             arguments.WithParsed<Options>(o => {
                 if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
@@ -145,6 +147,8 @@ namespace S100Framework.Applications
                 s128 = o.S128;
 
                 filter = o.filter;
+
+                clip = o.Clipping;
             });
 
             Func<Action<Geodatabase>, Geodatabase, bool> Store = (a, database) => {
@@ -200,48 +204,32 @@ namespace S100Framework.Applications
                     WhereClause = $"1=1",
                 };
 
-                using var point = destination.OpenDataset<FeatureClass>(destination.GetName("point"));
-                using var pointset = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"));
-                using var curve = destination.OpenDataset<FeatureClass>(destination.GetName("curve"));
-                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
-                using var attachment = destination.OpenDataset<Table>(destination.GetName("attachment"));
+                var featureClasses = destination.GetDefinitions<FeatureClassDefinition>();
 
-                //using var associationBinding = destination.OpenDataset<Table>(destination.GetName("associationbinding"));
-                //using var attributeBinding = destination.OpenDataset<Table>(destination.GetName("attributebinding"));                                               
-                using var informationtype = destination.OpenDataset<Table>(destination.GetName("informationtype"));
-                using var featureType = destination.OpenDataset<Table>(destination.GetName("featuretype"));
-                //using var messages = destination.OpenDataset<Table>(destination.GetName("messages"));
+                foreach(var featureClass in featureClasses) {
+                    using var _ = destination.OpenDataset<FeatureClass>(featureClass.GetName());
 
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {featureType.GetName()}");
-                    DeleteAll(featureType);//featureType.DeleteRows(query);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {point.GetName()}");
-                    DeleteAll(point); // point.DeleteRows(query);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {pointset.GetName()}");
-                    DeleteAll(pointset); // pointset.DeleteRows(query);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {curve.GetName()}");
-                    DeleteAll(curve); // curve.DeleteRows(query);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {surface.GetName()}");
-                    DeleteAll(surface); // surface.DeleteRows(query);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {attachment.GetName()}");
-                    DeleteAll(attachment);
-                }, destination);
-                Store((destination) => {
-                    Logger.Current.Information($"Deleting data from destination: {informationtype.GetName()}");
-                    DeleteAll(informationtype);
-                }, destination);
+                    Store((destination) => {
+                        Logger.Current.Information($"Deleting data from destination: {_.GetName()}");
+                        _.DeleteRows(query);
+                    }, destination);
+                }
+
+                var tables = destination.GetDefinitions<TableDefinition>();
+
+                foreach (var table in tables) {
+                    if (table.GetName().Split(',')[^1].EndsWith("configuration")) continue;
+                    
+                    using var _ = destination.OpenDataset<Table>(table.GetName());
+
+                    Store((destination) => {
+                        Logger.Current.Information($"Deleting data from destination: {_.GetName()}");
+                        _.DeleteRows(query);
+                    }, destination);
+                }
             }
 
+        __skip_truncate:
             long[] scalesCompilation = [];
 
             S101ProductCoverage[] s101ProductCoverages = [];
@@ -256,14 +244,10 @@ namespace S100Framework.Applications
 
             scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
-        __skip_truncate:
             foreach (var scale in scalesCompilation) {
-                if (Array.IndexOf(scalesCompilation, scale) == 0) {
-
+                if (!clip || Array.IndexOf(scalesCompilation, scale) == 0) {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
                     Logger.Current.Verbose(QueryFilter.WhereClause);
-
-                    //continue;   //TESTING....
                 }
                 else {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
@@ -543,12 +527,16 @@ namespace S100Framework.Applications
                             var whereClause = QueryFilter.WhereClause.Clone();
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";
                             Store((destination) => S57_DepthsA(source, destination, QueryFilter), destination);
+
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (5)";
                             Store((destination) => S57_NaturalFeaturesA(source, destination, QueryFilter), destination);
+
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40,60,80)";
                             Store((destination) => S57_PortsAndServicesA(source, destination, QueryFilter), destination);
+
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40)";
                             Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
+
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1)";
                             Store((destination) => S57_ProductCoverage(source, destination, QueryFilter, s128), destination);
                             //Store(() => FeatureRelations.Instance.CreateRelations(destination));
@@ -1124,6 +1112,19 @@ namespace S100Framework.Applications
                 //buffer["shape"] = GeometryEngine.Instance.SimplifyAsFeature(shape, true);
                 buffer["shape"] = shape;
             }
+        }
+
+        internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
+            var _ = scale switch {
+                -1 => throw new InvalidOperationException("compilation scale isn't initialized!"),
+                < 22000 => 5,
+                < 90000 => 4,
+                < 180000 => 3,
+                < 700000 => 2,
+                _ => 1
+            };
+
+            buffer["usageband"] = _;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {

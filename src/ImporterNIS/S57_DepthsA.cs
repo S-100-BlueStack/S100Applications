@@ -14,7 +14,7 @@ namespace S100Framework.Applications
             using var depthsA = source.OpenDataset<FeatureClass>(source.GetName("DepthsA"));
             var subtypes = depthsA.GetSubtypes();
 
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
 
             using var buffer = featureClass.CreateRowBuffer();
 
@@ -43,9 +43,6 @@ namespace S100Framework.Applications
                 if (ConversionAnalytics.Instance.IsConverted(globalid)) {
                     throw new Exception("Ups. Not supported");
                 }
-
-
-
 
                 var fcSubtype = current.FCSUBTYPE ?? default;
 
@@ -76,14 +73,14 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
-                            ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetTopoUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -165,14 +162,14 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
-                            ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetTopoUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -203,14 +200,14 @@ namespace S100Framework.Applications
                             // TODO: InteroperabilityIdentifier
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
-                            ImporterNIS.SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetTopoUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -225,6 +222,7 @@ namespace S100Framework.Applications
 
                         }
                         break;
+
                     default:
                         // code block
                         System.Diagnostics.Debugger.Break();

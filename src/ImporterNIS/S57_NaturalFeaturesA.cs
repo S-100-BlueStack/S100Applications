@@ -14,9 +14,11 @@ namespace S100Framework.Applications
             using var naturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(naturalFeaturesA);
 
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-
+            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));            
             using var buffer = featureClass.CreateRowBuffer();
+
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = naturalFeaturesA.Search(filter, true);
 
@@ -41,8 +43,6 @@ namespace S100Framework.Applications
                 if (ConversionAnalytics.Instance.IsConverted(globalid)) {
                     throw new Exception("Ups. Not supported");
                 }
-
-
 
                 var fcSubtype = current.FCSUBTYPE ?? default;
                 var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
@@ -91,7 +91,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -158,19 +158,19 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            bufferTopo["ps"] = ps101;
+                            bufferTopo["code"] = instance.GetType().Name;
 
 
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            bufferTopo["attributebindings"] = instance.Flatten();
+                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(buffer, current.SHAPE);
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(bufferTopo, current.SHAPE);
+                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
                             LandAreas.Instance.Add(current.SHAPE!.Clone());
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClassTopo.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -180,7 +180,6 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
 
@@ -225,7 +224,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -277,7 +276,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -342,7 +341,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -420,7 +419,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
@@ -486,7 +485,7 @@ namespace S100Framework.Applications
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                             buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
