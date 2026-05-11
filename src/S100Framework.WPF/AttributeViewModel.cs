@@ -68,6 +68,7 @@ namespace S100Framework.WPF.ViewModel
 
             var _ = propertyName switch {
                 "ErrorMessage" => "ErrorMessage",
+                "IsErrorMessageEnabled" => "IsErrorMessageEnabled",
                 _ => this.code,
             };
 
@@ -439,6 +440,8 @@ namespace S100Framework.WPF.ViewModel
         }
 
         private void Validate() {
+            var hasErrors = this.HasErrors;
+
             this._errors = [];
             if (this._validators is not null && this._validators.Any())
                 foreach (var action in this._validators) {
@@ -448,9 +451,9 @@ namespace S100Framework.WPF.ViewModel
 
             if (this.HasErrors) {
                 this.ErrorMessage = string.Join(Environment.NewLine, this._errors);
-                //base.OnPropertyChanged(nameof(HasErrors));
-                //base.OnPropertyChanged(nameof(ErrorsChanged));
             }
+
+            this.IsErrorMessageEnabled = this.HasErrors;
         }
 
         public void AddError(string propertyName, string error) {

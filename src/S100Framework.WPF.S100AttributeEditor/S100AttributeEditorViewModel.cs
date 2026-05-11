@@ -260,7 +260,7 @@ namespace S100Framework.WPF.ViewModel
                 else if (attributeBinding is ComplexAttribute complexAttribute) {
                     var subAttributes = complexAttribute.attributeBindingsCatalogue.Select(e => e.attribute).ToArray();
 
-                    var rules = this._rules.SelectMany(e => e).Where(e=>e.Attribute("attribute") is null || e.Attribute("code")!.Equals(code));
+                    var rules = this._rules.SelectMany(e => e).Where(e=>e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
 
 
                     //var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [..this._rules[code], .. this._rules.Where(e => e.Attribute.Contains(e.Key)).SelectMany(e=>e)]);
@@ -482,8 +482,8 @@ namespace S100Framework.WPF.ViewModel
 
         private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
             var _internal = e.PropertyName switch {
-                "ErrorMessage" => true,
-                _ => false,
+                "attributeBindings" => false,
+                _ => true,
             };
 
             if (_internal) {
