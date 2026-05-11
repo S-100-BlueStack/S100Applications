@@ -48,4 +48,12 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
+
+  <Rule productId="S-101" code="information">
+    <type>ConditionalMandatory</type>
+    <subAttributeBinding>
+      <attribute ref="fileReference" />
+      <attribute ref="text" />
+    </subAttributeBinding>
+  </Rule>
 </Rules>

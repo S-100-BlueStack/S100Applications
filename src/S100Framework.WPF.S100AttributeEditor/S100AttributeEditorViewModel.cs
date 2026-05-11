@@ -12,7 +12,7 @@ using static S100Framework.WPF.ViewModel.S100AttributeEditorViewModel;
 
 namespace S100Framework.WPF.ViewModel
 {
-    public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
+    public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer
     {
         #region Delegates
         public class RequestInformationsEventArgs(string? informationType) : EventArgs
@@ -61,36 +61,10 @@ namespace S100Framework.WPF.ViewModel
         #endregion
 
         #region INotifyDataErrorInfo
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged = default;
-
-        public bool HasErrors => this._errors.Any();
-
-        public IEnumerable GetErrors(string? propertyName) => string.IsNullOrEmpty(propertyName) ? Enumerable.Empty<string>() : _errors.ContainsKey(propertyName) ? _errors[propertyName] : Enumerable.Empty<string>();
-        //{
-        //    if (string.IsNullOrEmpty(propertyName)) return Enumerable.Empty<string>();
-
-        //    if (!this._errors.ContainsKey(propertyName) || !this._errors[propertyName].Any()) return Enumerable.Empty<string>();
-
-        //    return this._errors[propertyName];
-        //}
 
         private void Validate() {
-            this._errors.Clear();
-
-            //if (this.Instance is InformationType informationType) {
-            //    this._errors[nameof(this.attributeBindings)] = [];
-
-            //}
-            //else if (this.Instance is FeatureType featureType) {
-            //    this._errors[nameof(this.attributeBindings)] = [];
-
-            //    featureType.Validate(this._errors[nameof(this.attributeBindings)]);
-
-            //    this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(this.HasErrors)));
-            //}
         }
 
-        private readonly Dictionary<string, List<string>> _errors = [];
         #endregion
 
         #region IAttributeBindingContainer
@@ -111,12 +85,6 @@ namespace S100Framework.WPF.ViewModel
             this.attributeBindings.Add(attributeBinding);
         }
         #endregion
-
-        public String ErrorMessage {
-            get {
-                return "Hello";
-            }
-        }
 
         public RequestInformationsEventHandler RequestInformation = async (s, e) => { return []; };
 
@@ -289,8 +257,14 @@ namespace S100Framework.WPF.ViewModel
                     var viewModel = new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingsCatalogue[simpleAttribute.S100FC_code]);
                     this.attributeBindings.Add(viewModel);
                 }
-                else if (attributeBinding is ComplexAttribute complexAttribute) {                    
-                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute, this._rules[code]);
+                else if (attributeBinding is ComplexAttribute complexAttribute) {
+                    var subAttributes = complexAttribute.attributeBindingsCatalogue.Select(e => e.attribute).ToArray();
+
+                    var rules = this._rules.SelectMany(e => e).Where(e=>e.Attribute("attribute") is null || e.Attribute("code")!.Equals(code));
+
+
+                    //var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [..this._rules[code], .. this._rules.Where(e => e.Attribute.Contains(e.Key)).SelectMany(e=>e)]);
+                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [.. rules]);
                     this.attributeBindings.Add(viewModel);
                 }
                 else
