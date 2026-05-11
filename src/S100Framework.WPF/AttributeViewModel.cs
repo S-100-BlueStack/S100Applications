@@ -251,6 +251,19 @@ namespace S100Framework.WPF.ViewModel
             }
             set {
                 this.SetProperty(ref this._errorMessage, value);
+
+                this.IsErrorMessageEnabled = !string.IsNullOrEmpty(value);
+            }
+        }
+
+        private bool _isErrorMessageEnabled;
+
+        public bool IsErrorMessageEnabled {
+            get {
+                return this._isErrorMessageEnabled;
+            }
+            set {
+                this.SetProperty(ref this._isErrorMessageEnabled, value);
             }
         }
 
