@@ -1124,7 +1124,7 @@ namespace S100Framework.Applications
                 _ => 1
             };
 
-            buffer["usageband"] = _;
+            buffer["specificusage"] = _;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
