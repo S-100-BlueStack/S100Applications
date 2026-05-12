@@ -191,7 +191,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, shape);
                     ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
 
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
 
                     if (equipmentName == null || string.IsNullOrEmpty(equipmentName)) {
@@ -225,7 +225,7 @@ namespace S100Framework.Applications
                             return;
 
                         buffer["ps"] = ImporterNIS.ps101;
-                        buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
+                        buffer["code"] = instance.GetType().Name;
 
                         buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                         if (instance is FeatureType) {
@@ -238,7 +238,7 @@ namespace S100Framework.Applications
                         ImporterNIS.SetShape(buffer, shape);
                         ImporterNIS.SetUsageBand(buffer, relatedObject.S57Object!.PLTS_COMP_SCALE!.Value);
 
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var equipmentName = featureN.UID();
                         if (equipmentName == null) {
                             throw new NotSupportedException("empty equipment name");
@@ -295,7 +295,7 @@ namespace S100Framework.Applications
                     var instance = ImporterNIS._converterRegistry.Convert(s57master, typeof(LightSectored), scaleMinimum);
 
                     buffer["ps"] = ImporterNIS.ps101;
-                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
+                    buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                     if (instance is FeatureType) {
@@ -309,7 +309,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, s57master.Shape);
                     ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
 
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
                     if (equipmentName == null) {
                         throw new NotSupportedException("empty equipment name");
@@ -349,7 +349,7 @@ namespace S100Framework.Applications
                     }
 
                     buffer["ps"] = ImporterNIS.ps101;
-                    buffer["code"] = instance.GetType().Name; buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
+                    buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = ((FeatureType)instance).Flatten();
 
@@ -363,7 +363,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, relatedObject.S57Object.Shape);
                     ImporterNIS.SetUsageBand(buffer, relatedObject.S57Object.PLTS_COMP_SCALE!.Value);
 
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
                     if (equipmentName == null) {
                         throw new NotSupportedException("empty equipment name");
@@ -427,7 +427,7 @@ namespace S100Framework.Applications
             //        //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //        SetShape(buffer, s57master.SHAPE);
 
-            //        var featureN = featureClass.CreateRow(buffer);
+            //        using var featureN = featureClass.CreateRow(buffer);
             //        var equipmentName = featureN.Crc32();
 
             //        if (equipmentName == null) {
@@ -467,7 +467,7 @@ namespace S100Framework.Applications
             //            //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //            SetShape(buffer, light.SHAPE);
 
-            //            var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer);
             //            var equipmentName = featureN.Crc32();
             //            if (equipmentName == null) {
             //                throw new NotSupportedException("empty equipment name");
@@ -529,7 +529,7 @@ namespace S100Framework.Applications
             //        //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //        SetShape(buffer, s57master.SHAPE);
 
-            //        var featureN = featureClass.CreateRow(buffer);
+            //        using var featureN = featureClass.CreateRow(buffer);
             //        var equipmentName = featureN.Crc32();
             //        if (equipmentName == null) {
             //            throw new NotSupportedException("empty equipment name");
@@ -564,7 +564,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer);
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -602,7 +602,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer);
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -639,7 +639,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer);
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -675,7 +675,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer);
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {

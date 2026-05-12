@@ -107,10 +107,10 @@ namespace S100Framework.Applications
             buffer["ps"] = ps101;
 
             foreach (var e in soundingDatums) {
-                buffer["code"] = e.SoundingDatum.GetType().Name; buffer["sourceIdentifier"] = e.SoundingDatum.sourceIdentifier;
+                buffer["code"] = e.SoundingDatum.GetType().Name;
                 buffer["attributebindings"] = e.SoundingDatum.Flatten();
                 SetShape(buffer, e.Coverage);
-                var featureN = featureClass.CreateRow(buffer);
+                using var featureN = featureClass.CreateRow(buffer);
                 var name = featureN.UID();
             }
         }
@@ -220,9 +220,9 @@ namespace S100Framework.Applications
                     //buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, item);
-                    ImporterNIS.SetUsageBand(buffer, uniqueComscalesMQuals[0]);
+                    SetUsageBand(buffer, uniqueComscalesMQuals[0]);
                     dissolved_M_QUAL_Count++;
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var name = featureN.UID();
                 }
 
@@ -243,9 +243,9 @@ namespace S100Framework.Applications
                     //buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, item.Geometry);
-                    ImporterNIS.SetUsageBand(buffer, uniqueComscalesMSdats[0]);
+                    SetUsageBand(buffer, uniqueComscalesMSdats[0]);
 
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var name = featureN.UID();
                     M_SDAT_Count++;
                 }

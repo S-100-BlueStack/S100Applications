@@ -58,9 +58,13 @@ namespace ArcGIS.Core.Data
     {
         public static string Prefix(string tableName) => tableName.ToLower().Split('.')[^1] switch {
             "point" => "P102",
+            "topo_point" => "T102",
             "pointset" => "M103",
+            "topo_pointset" => "T103",
             "curve" => "C101",
+            "topo_curve" => "T101",
             "surface" => "S104",
+            "topo_surface" => "T104",
             "featuretype" => "F105",
             "informationtype" => "I106",
             "attachment" => "A107",

@@ -151,7 +151,7 @@ namespace S100Framework.Applications
 
                                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(sounding.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
 
-                                    //var featureN = featureClass.CreateRow(bufferPointset);
+                                    //using var featureN = featureClass.CreateRow(bufferPointset);
                                     var id = insertCursor.Insert(buffer);
                                     //var name = featureN.Crc32();
 
