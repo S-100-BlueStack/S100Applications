@@ -71,20 +71,9 @@ namespace S100Framework.Applications
 
 
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
-
-
-            { //    TESTING
-                S100FC.informationBinding[] informationBinding = [new S100FC.informationBinding<AdditionalInformation>() {
-                }];
-
-                var json = System.Text.Json.JsonSerializer.Serialize(informationBinding, jsonSerializerOptions);
-
-                //System.Diagnostics.Debugger.Break();
-            }
-
-
             Logger.Current.Information("Starting");
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
+            
 
             // default value - overwritten by args
             var s128 = true;
@@ -259,20 +248,6 @@ namespace S100Framework.Applications
                         var ring = shape.GetExteriorRing(0, true);
                         clipping = [.. clipping, ring];
                     }
-
-                    //using (Geodatabase source = createGeodatabase()) {
-                    //    using var productCoverage = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
-
-                    //    using var search = productCoverage.Search(new QueryFilter {
-                    //        WhereClause = $"CATCOV = 1 AND (PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]})"
-                    //    }, true);
-
-                    //    while (search.MoveNext()) {
-                    //        var shape = (Polygon)((Feature)search.Current).GetShape();
-                    //        var ring = shape.GetExteriorRing(0, true);
-                    //        clipping = [.. clipping, ring];
-                    //    }
-                    //}
 
                     using (var destination = createTargetGeodatabase()) {
                         foreach (var queryPolygon in clipping) {
@@ -1114,8 +1089,8 @@ namespace S100Framework.Applications
             }
         }
 
-        internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
-            var _ = scale switch {
+        internal static int SpecificUsage(int scale) {
+            return scale switch {
                 -1 => throw new InvalidOperationException("compilation scale isn't initialized!"),
                 < 22000 => 5,
                 < 90000 => 4,
@@ -1123,20 +1098,15 @@ namespace S100Framework.Applications
                 < 700000 => 2,
                 _ => 1
             };
+        }
 
+        internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
+            var _ = SpecificUsage(scale);
             buffer["specificusage"] = _;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
-            var _ = scale switch {
-                -1 => throw new InvalidOperationException("compilation scale isn't initialized!"),
-                < 22000 => 5,
-                < 90000 => 4,
-                < 180000 => 3,
-                < 700000 => 2,
-                _ => 1
-            };
-
+            var _ = SpecificUsage(scale);
             buffer["specificusage"] = _;
         }
 

@@ -294,7 +294,7 @@ namespace S100Framework.Applications
 
     internal static partial class ImporterNIS
     {
-        public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage);
+        public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
         private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
@@ -314,7 +314,7 @@ namespace S100Framework.Applications
 
             ProductCoverages.Initialize(source, QueryFilter);
 
-            var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20" });
+            //var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20" });
 
             int recordCount = 0;
 
@@ -475,6 +475,12 @@ namespace S100Framework.Applications
 
                         if (m_cscl.Any()) {
                             foreach (var e in m_cscl) {
+                                products = [.. products, new S101ProductCoverage(coverage.Name, e.CSCALE!.Value, new DataCoverage {
+                                    maximumDisplayScale = Convert.ToInt32(e.CSCALE!.Value / 2),
+                                    optimumDisplayScale = e.CSCALE!.Value,
+                                    minimumDisplayScale = coverage.DataCoverage.minimumDisplayScale,
+                                }, coverage.VDAT, coverage.SDAT, (Polygon)e.SHAPE!, SpecificUsage(coverage.PLTS_COMP_SCALE))];
+
                                 if (GeometryEngine.Instance.Disjoint(_geometry, (Polygon)e.Shape!)) continue;
 
                                 var difference = GeometryEngine.Instance.Difference(_geometry, (Polygon)e.Shape!);
@@ -512,50 +518,7 @@ namespace S100Framework.Applications
                     }
 
                     var multipart = polygons.Length == 1 ? polygons[0] : PolygonBuilderEx.CreatePolygon(polygons);
-                    products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
-
-                    ////var multipart = coverage.Coverage.Length == 1 ? coverage.Coverage[0] : PolygonBuilderEx.CreatePolygon(coverage.Coverage);
-
-                    ////for (int j = i + 1; j < scales.Length; j++) {
-                    ////    foreach (var part in coverages.Where(e => e.PLTS_COMP_SCALE == scales[j])) {
-                    ////        var combined = PolygonBuilderEx.CreatePolygon(part.Coverage);
-                    ////        if (GeometryEngine.Instance.Disjoint(multipart, combined)) continue;
-
-                    ////        var difference = GeometryEngine.Instance.Difference(multipart, combined);
-
-                    ////        if (difference is Polygon polygon) {
-                    ////            if (polygon.ExteriorRingCount > 1) {
-                    ////                Polygon[] polygons = [];
-                    ////                ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
-                    ////                for (int x = 1; x < polygon.PartCount; x++) {
-                    ////                    var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
-                    ////                    if (p.Area < 0)
-                    ////                        segments = [.. segments, polygon.Parts[x]];
-                    ////                    else {
-                    ////                        var _ = PolygonBuilderEx.CreatePolygon(segments);
-                    ////                        polygons = [.. polygons, _];
-                    ////                        segments = [polygon.Parts[x]];
-                    ////                    }
-                    ////                }
-                    ////                if (segments.Any()) {
-                    ////                    var _ = PolygonBuilderEx.CreatePolygon(segments);
-                    ////                    polygons = [.. polygons, _];
-                    ////                }
-
-                    ////                multipart = PolygonBuilderEx.CreatePolygon(polygons);
-                    ////            }
-                    ////            else
-                    ////                multipart = PolygonBuilderEx.CreatePolygon(polygon);
-                    ////        }
-                    ////        else
-                    ////            System.Diagnostics.Debugger.Break();
-                    ////    }
-                    ////}
-
-                    ////if (multipart.IsEmpty) continue;
-
-                    ////products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
-                    //break;
+                    products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart, SpecificUsage(coverage.PLTS_COMP_SCALE))];                    
                 }
             }
 
@@ -590,6 +553,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = c.DataCoverage.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
+                    buffer["specificusage"] = c.specificUsage;
 
                     foreach (var p in c.Coverage.Split()) {
                         SetShape(buffer, p);
