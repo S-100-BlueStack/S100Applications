@@ -152,7 +152,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -241,7 +241,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -379,7 +379,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -482,7 +482,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -588,7 +588,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -688,7 +688,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -790,7 +790,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -883,7 +883,7 @@ namespace S100Framework.Applications
                             foreach (var shape in geometries) {
                                 SetShape(buffer, shape);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var n = featureN.UID();
                                 name += $"{n},";
 
@@ -981,7 +981,7 @@ namespace S100Framework.Applications
                             foreach (var shape in geometries) {
                                 SetShape(buffer, shape);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var n = featureN.UID();
                                 name += $"{n},";
 
@@ -1054,7 +1054,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1148,7 +1148,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {

@@ -85,9 +85,9 @@ namespace S100Framework.Applications
 
                     buffer["attributebindings"] = dataCoverage_m_scl.Flatten();
                     SetShape(buffer, m_sclPolygon.SHAPE);
-                    ImporterNIS.SetUsageBand(buffer, Convert.ToInt32(m_sclPolygon.PLTS_COMP_SCALE));
+                    SetUsageBand(buffer, Convert.ToInt32(m_sclPolygon.PLTS_COMP_SCALE));
 
-                    var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var name = featureN.UID();
 
                     // TODO: Create relations
@@ -192,8 +192,8 @@ namespace S100Framework.Applications
                                 //buffer["version"] = ImporterNIS.s101version;
                                 //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, jsonTestSerializerOptions);
                                 //SetShape(buffer, productCoverage.SHAPE);
-                                //ImporterNIS.SetUsageBand(buffer, productCoverage!.PLTS_COMP_SCALE!.Value);
-                                //var featureN = featureClass.CreateRow(buffer);
+                                //SetUsageBand(buffer, productCoverage!.PLTS_COMP_SCALE!.Value);
+                                //using var featureN = featureClass.CreateRow(buffer);
                                 //var name = featureN.Crc32();
                                 //// TODO: Create relations
                                 //ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
@@ -212,9 +212,9 @@ namespace S100Framework.Applications
                                 buffer["informationbindings"] = "[]";
 
                                 SetShape(buffer, cutOutM_SCL[0]); // productCoverage.SHAPE);
-                                ImporterNIS.SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE!.Value);
+                                SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 // TODO: Create relations
@@ -236,9 +236,9 @@ namespace S100Framework.Applications
                                 buffer["informationbindings"] = "[]";
 
                                 SetShape(buffer, productCoverage.SHAPE);
-                                ImporterNIS.SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE.Value);
+                                SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 // Registering vertical datum information for all areas
@@ -265,8 +265,8 @@ namespace S100Framework.Applications
                     buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, (ArcGIS.Core.Geometry.Polygon)GeometryEngine.Instance.Union(polygons));
-                    ImporterNIS.SetUsageBand(buffer, polygonsCompScale);
-                    var featureN = featureClass.CreateRow(buffer);
+                    SetUsageBand(buffer, polygonsCompScale);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var name = featureN.UID();
                     // TODO: Create relations
                     ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
@@ -424,7 +424,7 @@ namespace S100Framework.Applications
                         buffer["featurebindings"] = "[]";
 
                         SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
                     }
                 }
@@ -541,7 +541,7 @@ namespace S100Framework.Applications
 
                     foreach (var p in c.Coverage.Split()) {
                         SetShape(buffer, p);
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
                     }
                 }
@@ -558,7 +558,7 @@ namespace S100Framework.Applications
 
                     foreach (var p in c.Coverage.Split()) {
                         SetShape(buffer, p);
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
 
                         VerticalDatums.Instance.Add(p, vdat.verticalDatum);
@@ -616,8 +616,8 @@ namespace S100Framework.Applications
                         //buffer["version"] = ImporterNIS.s101version;
                         //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, jsonTestSerializerOptions);
                         //SetShape(buffer, productCoverage.SHAPE);
-                        //ImporterNIS.SetUsageBand(buffer, productCoverage!.PLTS_COMP_SCALE!.Value);
-                        //var featureN = featureClass.CreateRow(buffer);
+                        //SetUsageBand(buffer, productCoverage!.PLTS_COMP_SCALE!.Value);
+                        //using var featureN = featureClass.CreateRow(buffer);
                         //var name = featureN.Crc32();
                         //// TODO: Create relations
                         //ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
@@ -637,9 +637,9 @@ namespace S100Framework.Applications
                         buffer["informationbindings"] = "[]";
 
                         SetShape(buffer, cutOutM_SCL[0]); // productCoverage.SHAPE);
-                        ImporterNIS.SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE!.Value);
+                        SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE!.Value);
 
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
 
                         // TODO: Create relations
@@ -661,9 +661,9 @@ namespace S100Framework.Applications
                         buffer["informationbindings"] = "[]";
 
                         SetShape(buffer, productCoverage.SHAPE);
-                        ImporterNIS.SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE.Value);
+                        SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE.Value);
 
-                        var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
 
                         // Registering vertical datum information for all areas
@@ -688,8 +688,8 @@ namespace S100Framework.Applications
                     buffer["informationbindings"] = "[]";
 
                     SetShape(buffer, (ArcGIS.Core.Geometry.Polygon)GeometryEngine.Instance.Union(polygons));
-                    ImporterNIS.SetUsageBand(buffer, polygonsCompScale);
-                    var featureN = featureClass.CreateRow(buffer);
+                    SetUsageBand(buffer, polygonsCompScale);
+                    using var featureN = featureClass.CreateRow(buffer);
                     var name = featureN.UID();
                     // TODO: Create relations
                     ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);

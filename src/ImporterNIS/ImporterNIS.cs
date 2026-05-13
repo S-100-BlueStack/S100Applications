@@ -1128,28 +1128,16 @@ namespace S100Framework.Applications
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
-            return;
-
-            _ = scale switch {
+            var _ = scale switch {
                 -1 => throw new InvalidOperationException("compilation scale isn't initialized!"),
-                < 22000 => buffer["usageband"] = 5,
-                < 90000 => buffer["usageband"] = 4,
-                < 180000 => buffer["usageband"] = 3,
-                < 700000 => buffer["usageband"] = 2,
-                _ => buffer["usageband"] = 1
+                < 22000 => 5,
+                < 90000 => 4,
+                < 180000 => 3,
+                < 700000 => 2,
+                _ => 1
             };
 
-            //_ = shape.GeometryType switch {
-            //    GeometryType.Unknown => throw new NotSupportedException("Geometry type: unknown "),
-            //    GeometryType.Point => null,
-            //    GeometryType.Envelope => throw new NotSupportedException("Geometry type: envelope"),
-            //    GeometryType.Multipoint => null,
-            //    GeometryType.Polyline => buffer["usageband"] = 4,
-            //    GeometryType.Polygon => buffer["usageband"] = 4,
-            //    GeometryType.Multipatch => throw new NotSupportedException("Geometry type: multipatch"),
-            //    GeometryType.GeometryBag => throw new NotSupportedException("Geometry type: geometrybag"),
-            //    _ => throw new NotSupportedException($"Unhandled geometry type {shape.GeometryType}")
-            //};
+            buffer["specificusage"] = _;
         }
 
         /// <summary>

@@ -116,7 +116,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
@@ -181,7 +181,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
@@ -231,7 +231,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
@@ -300,7 +300,7 @@ anomaly values, remove the associated instance of the complex attribute informat
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
