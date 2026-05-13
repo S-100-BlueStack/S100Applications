@@ -742,39 +742,39 @@ namespace S100Framework.Applications
                     schemaBuilder.Build();
                 }
                 {
-                    var features = Summary.PrimitiveFeatures(Primitives.noGeometry);
+                    //var features = Summary.PrimitiveFeatures(Primitives.noGeometry);
 
-                    var tableDefinition = destination.GetDefinition<TableDefinition>("featuretype");
+                    //var tableDefinition = destination.GetDefinition<TableDefinition>("featuretype");
 
-                    var tableDescription = new TableDescription(tableDefinition);
+                    //var tableDescription = new TableDescription(tableDefinition);
 
-                    var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
-                    schemaBuilder.Modify(tableDescription);
-                    schemaBuilder.Build();
+                    //var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    //tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    //schemaBuilder.Modify(tableDescription);
+                    //schemaBuilder.Build();
 
-                    foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
-                        definitionReferences.Add(e.sourceIdentifier, e.code);
-                    }
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
-                    schemaBuilder.Modify(tableDescription);
-                    schemaBuilder.Build();
+                    //foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
+                    //    definitionReferences.Add(e.sourceIdentifier, e.code);
+                    //}
+                    //tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    //schemaBuilder.Modify(tableDescription);
+                    //schemaBuilder.Build();
                 }
                 {
-                    var tableDefinition = destination.GetDefinition<TableDefinition>("informationtype");
+                    //var tableDefinition = destination.GetDefinition<TableDefinition>("informationtype");
 
-                    var tableDescription = new TableDescription(tableDefinition);
+                    //var tableDescription = new TableDescription(tableDefinition);
 
-                    var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    schemaBuilder.Modify(tableDescription);
-                    schemaBuilder.Build();
+                    //var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
+                    //schemaBuilder.Modify(tableDescription);
+                    //schemaBuilder.Build();
 
-                    foreach (var e in Summary.definitionReferenceInformationTypes.OrderBy(e => e.sourceIdentifier)) {
-                        definitionReferences.Add(e.sourceIdentifier, e.code);
-                    }
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
-                    schemaBuilder.Modify(tableDescription);
-                    schemaBuilder.Build();
+                    //foreach (var e in Summary.definitionReferenceInformationTypes.OrderBy(e => e.sourceIdentifier)) {
+                    //    definitionReferences.Add(e.sourceIdentifier, e.code);
+                    //}
+                    //tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    //schemaBuilder.Modify(tableDescription);
+                    //schemaBuilder.Build();
                 }
                 //schemaBuilder.Build();
             }
