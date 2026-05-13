@@ -73,7 +73,7 @@ namespace S100Framework.Applications
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
             Logger.Current.Information("Starting");
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
-            
+
 
             // default value - overwritten by args
             var s128 = true;
@@ -195,7 +195,7 @@ namespace S100Framework.Applications
 
                 var featureClasses = destination.GetDefinitions<FeatureClassDefinition>();
 
-                foreach(var featureClass in featureClasses) {
+                foreach (var featureClass in featureClasses) {
                     using var _ = destination.OpenDataset<FeatureClass>(featureClass.GetName());
 
                     Store((destination) => {
@@ -208,7 +208,7 @@ namespace S100Framework.Applications
 
                 foreach (var table in tables) {
                     if (table.GetName().Split(',')[^1].EndsWith("configuration")) continue;
-                    
+
                     using var _ = destination.OpenDataset<Table>(table.GetName());
 
                     Store((destination) => {
@@ -234,9 +234,15 @@ namespace S100Framework.Applications
             scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
             foreach (var scale in scalesCompilation) {
-                if (!clip || Array.IndexOf(scalesCompilation, scale) == 0) {
-                    QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
-                    Logger.Current.Verbose(QueryFilter.WhereClause);
+                if (!clip) {
+                    if (Array.IndexOf(scalesCompilation, scale) == 0) {
+                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                        Logger.Current.Verbose(QueryFilter.WhereClause);
+                    }
+                    else {
+                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
+                        Logger.Current.Verbose(QueryFilter.WhereClause);
+                    }
                 }
                 else {
                     QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
@@ -597,19 +603,19 @@ namespace S100Framework.Applications
                             //Store((destination) => S57_SeabedP(source, destination, QueryFilter), destination);
                             Store((destination) => S57_Seabed(
                                 "SeabedA",
-                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)), 
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
                             Store((destination) => S57_Seabed(
                                 "SeabedL",
-                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),  
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
                             Store((destination) => S57_Seabed(
                                 "SeabedP",
-                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)), 
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
