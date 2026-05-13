@@ -245,237 +245,243 @@ namespace S100Framework.Applications
                     }
                 }
                 else {
-                    QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
-                    Logger.Current.Verbose(QueryFilter.WhereClause);
-
-                    Polygon[] clipping = [];
-                    foreach (var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE < scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
-                        var shape = e.Coverage;
-                        var ring = shape.GetExteriorRing(0, true);
-                        clipping = [.. clipping, ring];
+                    if (Array.IndexOf(scalesCompilation, scale) == 0) {
+                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                        Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
+                    else {
+                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
+                        Logger.Current.Verbose(QueryFilter.WhereClause);
 
-                    using (var destination = createTargetGeodatabase()) {
-                        foreach (var queryPolygon in clipping) {
-                            using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("point"))) {
-                                var targetSR = featureClass.GetDefinition().GetSpatialReference();
-                                var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
+                        Polygon[] clipping = [];
+                        foreach (var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE < scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
+                            var shape = e.Coverage;
+                            var ring = shape.GetExteriorRing(0, true);
+                            clipping = [.. clipping, ring];
+                        }
 
-                                var spatialFilter = new SpatialQueryFilter {
-                                    WhereClause = "UPPER(ps) = 'S-101'",
-                                    FilterGeometry = queryPolygonProjected,
-                                    SpatialRelationship = SpatialRelationship.Contains
-                                };
-                                Store((destination) => {
-                                    featureClass.DeleteRows(spatialFilter);
-                                }, destination);
-                            }
-
-                            using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"))) {
-                                var targetSR = featureClass.GetDefinition().GetSpatialReference();
-                                var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
-
-                                var spatialFilter = new SpatialQueryFilter {
-                                    WhereClause = "UPPER(ps) = 'S-101'",
-                                    FilterGeometry = queryPolygonProjected,
-                                    SpatialRelationship = SpatialRelationship.Contains
-                                };
-
-                                Store((destination) => {
-                                    featureClass.DeleteRows(spatialFilter);
-                                }, destination);
-                            }
-
-                            {   //  curve
-                                long[] hits = [];
-
-                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("curve"))) {
+                        using (var destination = createTargetGeodatabase()) {
+                            foreach (var queryPolygon in clipping) {
+                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("point"))) {
                                     var targetSR = featureClass.GetDefinition().GetSpatialReference();
                                     var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                     var spatialFilter = new SpatialQueryFilter {
                                         WhereClause = "UPPER(ps) = 'S-101'",
                                         FilterGeometry = queryPolygonProjected,
-                                        SpatialRelationship = SpatialRelationship.IndexIntersects
+                                        SpatialRelationship = SpatialRelationship.Contains
                                     };
-
-                                    using (var cursor = featureClass.Search(spatialFilter, true)) {
-                                        while (cursor.MoveNext()) {
-                                            hits = [.. hits, cursor.Current.GetObjectID()];
-                                        }
-                                    }
+                                    Store((destination) => {
+                                        featureClass.DeleteRows(spatialFilter);
+                                    }, destination);
                                 }
 
-                                long[] updated = [];
-                                long[] created = [];
-                                long[] deleted = [];
+                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("pointset"))) {
+                                    var targetSR = featureClass.GetDefinition().GetSpatialReference();
+                                    var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
-                                Store((destination) => {
+                                    var spatialFilter = new SpatialQueryFilter {
+                                        WhereClause = "UPPER(ps) = 'S-101'",
+                                        FilterGeometry = queryPolygonProjected,
+                                        SpatialRelationship = SpatialRelationship.Contains
+                                    };
+
+                                    Store((destination) => {
+                                        featureClass.DeleteRows(spatialFilter);
+                                    }, destination);
+                                }
+
+                                {   //  curve
+                                    long[] hits = [];
+
                                     using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("curve"))) {
                                         var targetSR = featureClass.GetDefinition().GetSpatialReference();
                                         var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
-                                        using var insert = featureClass.CreateInsertCursor();
-
-                                        using var buffer = featureClass.CreateRowBuffer();
-
-                                        foreach (var objectid in hits) {
-                                            using var cursor = featureClass.Search(new QueryFilter {
-                                                WhereClause = $"OBJECTID = {objectid}",
-                                            }, false);
-
-                                            cursor.MoveNext();
-
-                                            using var feature = (Feature)cursor.Current;
-                                            var shape = (Polyline)feature.GetShape();
-
-                                            if (GeometryEngine.Instance.Disjoint(shape, queryPolygonProjected))
-                                                continue;
-
-                                            if (GeometryEngine.Instance.Within(shape, queryPolygonProjected)) {
-                                                deleted = [.. deleted, objectid];
-                                            }
-                                            else if (GeometryEngine.Instance.Intersects(queryPolygonProjected, shape)) {
-                                                deleted = [.. deleted, objectid];
-                                                var difference = GeometryEngine.Instance.Difference(shape, queryPolygonProjected);
-
-                                                if (difference is Polyline polyline) {
-                                                    //if (polyline.PartCount > 1) System.Diagnostics.Debugger.Break();
-
-                                                    //using var buffer = featureClass.CreateRowBuffer(feature);
-                                                    feature.Clone(buffer, ["shape"]);
-                                                    buffer["shape"] = polyline;
-                                                    var _ = insert.Insert(buffer);
-                                                    created = [.. created, _];
-                                                }
-                                                else
-                                                    System.Diagnostics.Debugger.Break();
-                                            }
-                                        }
-
-                                        insert.Flush();
-
-                                        if (deleted.Any()) {
-                                            featureClass.DeleteRows(new QueryFilter {
-                                                WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
-                                            });
-                                        }
-
-                                        featureClass.DeleteRows(new SpatialQueryFilter {
+                                        var spatialFilter = new SpatialQueryFilter {
                                             WhereClause = "UPPER(ps) = 'S-101'",
                                             FilterGeometry = queryPolygonProjected,
-                                            SpatialRelationship = SpatialRelationship.Contains
-                                        });
-                                    }
-                                }, destination);
-                            }
+                                            SpatialRelationship = SpatialRelationship.IndexIntersects
+                                        };
 
-                            {   //  surface
-                                long[] hits = [];
-                                using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("surface"))) {
-                                    var targetSR = featureClass.GetDefinition().GetSpatialReference();
-                                    var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
-
-                                    var spatialFilter = new SpatialQueryFilter {
-                                        WhereClause = "UPPER(ps) = 'S-101'",
-                                        FilterGeometry = queryPolygonProjected,
-                                        SpatialRelationship = SpatialRelationship.IndexIntersects
-                                    };
-
-                                    using (var cursor = featureClass.Search(spatialFilter, true)) {
-                                        while (cursor.MoveNext()) {
-                                            hits = [.. hits, cursor.Current.GetObjectID()];
+                                        using (var cursor = featureClass.Search(spatialFilter, true)) {
+                                            while (cursor.MoveNext()) {
+                                                hits = [.. hits, cursor.Current.GetObjectID()];
+                                            }
                                         }
                                     }
+
+                                    long[] updated = [];
+                                    long[] created = [];
+                                    long[] deleted = [];
+
+                                    Store((destination) => {
+                                        using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("curve"))) {
+                                            var targetSR = featureClass.GetDefinition().GetSpatialReference();
+                                            var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
+
+                                            using var insert = featureClass.CreateInsertCursor();
+
+                                            using var buffer = featureClass.CreateRowBuffer();
+
+                                            foreach (var objectid in hits) {
+                                                using var cursor = featureClass.Search(new QueryFilter {
+                                                    WhereClause = $"OBJECTID = {objectid}",
+                                                }, false);
+
+                                                cursor.MoveNext();
+
+                                                using var feature = (Feature)cursor.Current;
+                                                var shape = (Polyline)feature.GetShape();
+
+                                                if (GeometryEngine.Instance.Disjoint(shape, queryPolygonProjected))
+                                                    continue;
+
+                                                if (GeometryEngine.Instance.Within(shape, queryPolygonProjected)) {
+                                                    deleted = [.. deleted, objectid];
+                                                }
+                                                else if (GeometryEngine.Instance.Intersects(queryPolygonProjected, shape)) {
+                                                    deleted = [.. deleted, objectid];
+                                                    var difference = GeometryEngine.Instance.Difference(shape, queryPolygonProjected);
+
+                                                    if (difference is Polyline polyline) {
+                                                        //if (polyline.PartCount > 1) System.Diagnostics.Debugger.Break();
+
+                                                        //using var buffer = featureClass.CreateRowBuffer(feature);
+                                                        feature.Clone(buffer, ["shape"]);
+                                                        buffer["shape"] = polyline;
+                                                        var _ = insert.Insert(buffer);
+                                                        created = [.. created, _];
+                                                    }
+                                                    else
+                                                        System.Diagnostics.Debugger.Break();
+                                                }
+                                            }
+
+                                            insert.Flush();
+
+                                            if (deleted.Any()) {
+                                                featureClass.DeleteRows(new QueryFilter {
+                                                    WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
+                                                });
+                                            }
+
+                                            featureClass.DeleteRows(new SpatialQueryFilter {
+                                                WhereClause = "UPPER(ps) = 'S-101'",
+                                                FilterGeometry = queryPolygonProjected,
+                                                SpatialRelationship = SpatialRelationship.Contains
+                                            });
+                                        }
+                                    }, destination);
                                 }
 
-                                long[] updated = [];
-                                long[] created = [];
-                                long[] deleted = [];
-
-                                Store((destination) => {
+                                {   //  surface
+                                    long[] hits = [];
                                     using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("surface"))) {
                                         var targetSR = featureClass.GetDefinition().GetSpatialReference();
                                         var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
-                                        using var insert = featureClass.CreateInsertCursor();
+                                        var spatialFilter = new SpatialQueryFilter {
+                                            WhereClause = "UPPER(ps) = 'S-101'",
+                                            FilterGeometry = queryPolygonProjected,
+                                            SpatialRelationship = SpatialRelationship.IndexIntersects
+                                        };
 
-                                        using var buffer = featureClass.CreateRowBuffer();
-
-                                        foreach (var objectid in hits) {
-                                            using var cursor = featureClass.Search(new QueryFilter {
-                                                WhereClause = $"OBJECTID = {objectid}",
-                                            }, false);
-
-                                            cursor.MoveNext();
-
-                                            using var feature = (Feature)cursor.Current;
-                                            var shape = (Polygon)feature.GetShape();
-
-                                            if (GeometryEngine.Instance.Disjoint(shape, queryPolygonProjected))
-                                                continue;
-
-                                            if (GeometryEngine.Instance.Within(shape, queryPolygonProjected)) {
-                                                deleted = [.. deleted, objectid];
+                                        using (var cursor = featureClass.Search(spatialFilter, true)) {
+                                            while (cursor.MoveNext()) {
+                                                hits = [.. hits, cursor.Current.GetObjectID()];
                                             }
-                                            else if (GeometryEngine.Instance.Intersects(queryPolygonProjected, shape)) {
-                                                deleted = [.. deleted, objectid];
-                                                var difference = GeometryEngine.Instance.Difference(shape, queryPolygonProjected);
+                                        }
+                                    }
 
-                                                if (difference is Polygon polygon) {
-                                                    if (polygon.ExteriorRingCount > 1) {
-                                                        Polygon[] polygons = [];
-                                                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
-                                                        for (int i = 1; i < polygon.PartCount; i++) {
-                                                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
-                                                            if (p.Area < 0)
-                                                                segments = [.. segments, polygon.Parts[i]];
-                                                            else {
+                                    long[] updated = [];
+                                    long[] created = [];
+                                    long[] deleted = [];
+
+                                    Store((destination) => {
+                                        using (var featureClass = destination.OpenDataset<FeatureClass>(destination.GetName("surface"))) {
+                                            var targetSR = featureClass.GetDefinition().GetSpatialReference();
+                                            var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
+
+                                            using var insert = featureClass.CreateInsertCursor();
+
+                                            using var buffer = featureClass.CreateRowBuffer();
+
+                                            foreach (var objectid in hits) {
+                                                using var cursor = featureClass.Search(new QueryFilter {
+                                                    WhereClause = $"OBJECTID = {objectid}",
+                                                }, false);
+
+                                                cursor.MoveNext();
+
+                                                using var feature = (Feature)cursor.Current;
+                                                var shape = (Polygon)feature.GetShape();
+
+                                                if (GeometryEngine.Instance.Disjoint(shape, queryPolygonProjected))
+                                                    continue;
+
+                                                if (GeometryEngine.Instance.Within(shape, queryPolygonProjected)) {
+                                                    deleted = [.. deleted, objectid];
+                                                }
+                                                else if (GeometryEngine.Instance.Intersects(queryPolygonProjected, shape)) {
+                                                    deleted = [.. deleted, objectid];
+                                                    var difference = GeometryEngine.Instance.Difference(shape, queryPolygonProjected);
+
+                                                    if (difference is Polygon polygon) {
+                                                        if (polygon.ExteriorRingCount > 1) {
+                                                            Polygon[] polygons = [];
+                                                            ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                                            for (int i = 1; i < polygon.PartCount; i++) {
+                                                                var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
+                                                                if (p.Area < 0)
+                                                                    segments = [.. segments, polygon.Parts[i]];
+                                                                else {
+                                                                    var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                                    polygons = [.. polygons, _];
+                                                                    segments = [polygon.Parts[i]];
+                                                                }
+                                                            }
+                                                            if (segments.Any()) {
                                                                 var _ = PolygonBuilderEx.CreatePolygon(segments);
                                                                 polygons = [.. polygons, _];
-                                                                segments = [polygon.Parts[i]];
+                                                            }
+
+                                                            //using var buffer = featureClass.CreateRowBuffer(feature);
+
+                                                            for (int i = 0; i < polygons.Length; i++) {
+                                                                feature.Clone(buffer, ["shape"]);
+                                                                buffer["shape"] = polygons[i];
+                                                                var _ = insert.Insert(buffer);
+                                                                created = [.. created, _];
                                                             }
                                                         }
-                                                        if (segments.Any()) {
-                                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                                            polygons = [.. polygons, _];
-                                                        }
-
-                                                        //using var buffer = featureClass.CreateRowBuffer(feature);
-
-                                                        for (int i = 0; i < polygons.Length; i++) {
+                                                        else {
+                                                            //using var buffer = featureClass.CreateRowBuffer(feature);
                                                             feature.Clone(buffer, ["shape"]);
-                                                            buffer["shape"] = polygons[i];
+                                                            buffer["shape"] = polygon;
                                                             var _ = insert.Insert(buffer);
                                                             created = [.. created, _];
                                                         }
                                                     }
-                                                    else {
-                                                        //using var buffer = featureClass.CreateRowBuffer(feature);
-                                                        feature.Clone(buffer, ["shape"]);
-                                                        buffer["shape"] = polygon;
-                                                        var _ = insert.Insert(buffer);
-                                                        created = [.. created, _];
-                                                    }
                                                 }
                                             }
-                                        }
 
-                                        insert.Flush();
+                                            insert.Flush();
 
-                                        if (deleted.Any()) {
-                                            featureClass.DeleteRows(new QueryFilter {
-                                                WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
+                                            if (deleted.Any()) {
+                                                featureClass.DeleteRows(new QueryFilter {
+                                                    WhereClause = $"OBJECTID IN ({string.Join(',', deleted)})",
+                                                });
+                                            }
+
+                                            featureClass.DeleteRows(new SpatialQueryFilter {
+                                                WhereClause = "UPPER(ps) = 'S-101'",
+                                                FilterGeometry = queryPolygonProjected,
+                                                SpatialRelationship = SpatialRelationship.Contains
                                             });
                                         }
-
-                                        featureClass.DeleteRows(new SpatialQueryFilter {
-                                            WhereClause = "UPPER(ps) = 'S-101'",
-                                            FilterGeometry = queryPolygonProjected,
-                                            SpatialRelationship = SpatialRelationship.Contains
-                                        });
-                                    }
-                                }, destination);
+                                    }, destination);
+                                }
                             }
                         }
                     }
