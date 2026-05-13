@@ -290,6 +290,7 @@ namespace S100Framework.Applications
     using System.Collections.Immutable;
     using System.Text.RegularExpressions;
     using Windows.System.Diagnostics;
+    using static System.Net.Mime.MediaTypeNames;
 
     internal static partial class ImporterNIS
     {
@@ -325,7 +326,7 @@ namespace S100Framework.Applications
 
             (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon[] Coverage)[] coverages = [];
 
-            var regex =string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
+            var regex = string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
 
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
@@ -412,7 +413,7 @@ namespace S100Framework.Applications
                     while (_.MoveNext()) {
                         productCoverages = [.. productCoverages, (Polygon)((Feature)_.Current).GetShape().Clone()];
                     }
-                    
+
                     using (var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"))) {
 
                         using var buffer = featureClass.CreateRowBuffer();
@@ -430,29 +431,29 @@ namespace S100Framework.Applications
                 }
             }
 
-            foreach (var m_sclPolygon in allM_CSCL) {
-                var dsnm = $"M_CSCL:{m_sclPolygon.OBJECTID}";
-                var PLTS_COMP_SCALE = m_sclPolygon.CSCALE!.Value;
+            ////foreach (var m_sclPolygon in allM_CSCL) {
+            ////    var dsnm = $"M_CSCL:{m_sclPolygon.OBJECTID}";
+            ////    var PLTS_COMP_SCALE = m_sclPolygon.CSCALE!.Value;
 
-                var shape = (Polygon)m_sclPolygon.Shape!;
+            ////    var shape = (Polygon)m_sclPolygon.Shape!;
 
-                var dataCoverage = new DataCoverage {
-                    maximumDisplayScale = PLTS_COMP_SCALE / 2,
-                    minimumDisplayScale = minimumDisplayScale,
-                    optimumDisplayScale = PLTS_COMP_SCALE,
-                };
+            ////    var dataCoverage = new DataCoverage {
+            ////        maximumDisplayScale = PLTS_COMP_SCALE / 2,
+            ////        minimumDisplayScale = minimumDisplayScale,
+            ////        optimumDisplayScale = PLTS_COMP_SCALE,
+            ////    };
 
-                //  Calculate center point
-                var centroid = GeometryEngine.Instance.Centroid(shape);
+            ////    //  Calculate center point
+            ////    var centroid = GeometryEngine.Instance.Centroid(shape);
 
-                var hits = coverages.Where(e => e.PLTS_COMP_SCALE > PLTS_COMP_SCALE && GeometryEngine.Instance.Contains(PolygonBuilderEx.CreatePolygon(e.Coverage), centroid)).ToArray();
+            ////    var hits = coverages.Where(e => e.PLTS_COMP_SCALE > PLTS_COMP_SCALE && GeometryEngine.Instance.Contains(PolygonBuilderEx.CreatePolygon(e.Coverage), centroid)).ToArray();
 
-                if (!hits.Any())
-                    continue;
-                var hit = hits.OrderByDescending(e => e.PLTS_COMP_SCALE).First();
+            ////    if (!hits.Any())
+            ////        continue;
+            ////    var hit = hits.OrderByDescending(e => e.PLTS_COMP_SCALE).First();
 
-                coverages = [.. coverages, (dsnm, PLTS_COMP_SCALE, dataCoverage, hit.VDAT, hit.SDAT, [shape])];
-            }
+            ////    coverages = [.. coverages, (dsnm, PLTS_COMP_SCALE, dataCoverage, hit.VDAT, hit.SDAT, [shape])];
+            ////}
 
             var scales = coverages.Select(e => e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
@@ -461,48 +462,99 @@ namespace S100Framework.Applications
 
             for (int i = 0; i < scales.Length; i++) {
                 foreach (var coverage in coverages.Where(e => e.PLTS_COMP_SCALE == scales[i])) {
-                    //if (!"101DK001NORSO".Equals(coverage.Name)) continue;
-                    var multipart = coverage.Coverage.Length == 1 ? coverage.Coverage[0] : PolygonBuilderEx.CreatePolygon(coverage.Coverage);
+                    Polygon[] polygons = [];
 
-                    for (int j = i + 1; j < scales.Length; j++) {
-                        foreach (var part in coverages.Where(e => e.PLTS_COMP_SCALE == scales[j])) {
-                            var combined = PolygonBuilderEx.CreatePolygon(part.Coverage);
-                            if (GeometryEngine.Instance.Disjoint(multipart, combined)) continue;
+                    foreach (var c in coverage.Coverage) {
+                        var m_cscl = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
+                            WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20",
+                            SpatialRelationship = SpatialRelationship.Contains,
+                            FilterGeometry = c,
+                        });
 
-                            var difference = GeometryEngine.Instance.Difference(multipart, combined);
+                        var _geometry = (Polygon)c.Clone();
 
-                            if (difference is Polygon polygon) {
-                                if (polygon.ExteriorRingCount > 1) {
-                                    Polygon[] polygons = [];
-                                    ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
-                                    for (int x = 1; x < polygon.PartCount; x++) {
-                                        var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
-                                        if (p.Area < 0)
-                                            segments = [.. segments, polygon.Parts[x]];
-                                        else {
-                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                            polygons = [.. polygons, _];
-                                            segments = [polygon.Parts[x]];
+                        if (m_cscl.Any()) {
+                            foreach (var e in m_cscl) {
+                                if (GeometryEngine.Instance.Disjoint(_geometry, (Polygon)e.Shape!)) continue;
+
+                                var difference = GeometryEngine.Instance.Difference(_geometry, (Polygon)e.Shape!);
+
+                                if (difference is Polygon polygon) {
+                                    if (polygon.ExteriorRingCount > 1) {
+                                        Polygon[] _polygons = [];
+                                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                        for (int x = 1; x < polygon.PartCount; x++) {
+                                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
+                                            if (p.Area < 0)
+                                                segments = [.. segments, polygon.Parts[x]];
+                                            else {
+                                                var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                _polygons = [.. _polygons, _];
+                                                segments = [polygon.Parts[x]];
+                                            }
                                         }
-                                    }
-                                    if (segments.Any()) {
-                                        var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                        polygons = [.. polygons, _];
-                                    }
+                                        if (segments.Any()) {
+                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                            _polygons = [.. _polygons, _];
+                                        }
 
-                                    multipart = PolygonBuilderEx.CreatePolygon(polygons);
+                                        _geometry = PolygonBuilderEx.CreatePolygon(_polygons);
+                                    }
+                                    else
+                                        _geometry = PolygonBuilderEx.CreatePolygon(polygon);
                                 }
                                 else
-                                    multipart = PolygonBuilderEx.CreatePolygon(polygon);
+                                    System.Diagnostics.Debugger.Break();
                             }
-                            else
-                                System.Diagnostics.Debugger.Break();
                         }
+
+                        polygons = [.. polygons, _geometry];
                     }
 
-                    if (multipart.IsEmpty) continue;
-
+                    var multipart = polygons.Length == 1 ? polygons[0] : PolygonBuilderEx.CreatePolygon(polygons);
                     products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
+
+                    ////var multipart = coverage.Coverage.Length == 1 ? coverage.Coverage[0] : PolygonBuilderEx.CreatePolygon(coverage.Coverage);
+
+                    ////for (int j = i + 1; j < scales.Length; j++) {
+                    ////    foreach (var part in coverages.Where(e => e.PLTS_COMP_SCALE == scales[j])) {
+                    ////        var combined = PolygonBuilderEx.CreatePolygon(part.Coverage);
+                    ////        if (GeometryEngine.Instance.Disjoint(multipart, combined)) continue;
+
+                    ////        var difference = GeometryEngine.Instance.Difference(multipart, combined);
+
+                    ////        if (difference is Polygon polygon) {
+                    ////            if (polygon.ExteriorRingCount > 1) {
+                    ////                Polygon[] polygons = [];
+                    ////                ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                    ////                for (int x = 1; x < polygon.PartCount; x++) {
+                    ////                    var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[x]);
+                    ////                    if (p.Area < 0)
+                    ////                        segments = [.. segments, polygon.Parts[x]];
+                    ////                    else {
+                    ////                        var _ = PolygonBuilderEx.CreatePolygon(segments);
+                    ////                        polygons = [.. polygons, _];
+                    ////                        segments = [polygon.Parts[x]];
+                    ////                    }
+                    ////                }
+                    ////                if (segments.Any()) {
+                    ////                    var _ = PolygonBuilderEx.CreatePolygon(segments);
+                    ////                    polygons = [.. polygons, _];
+                    ////                }
+
+                    ////                multipart = PolygonBuilderEx.CreatePolygon(polygons);
+                    ////            }
+                    ////            else
+                    ////                multipart = PolygonBuilderEx.CreatePolygon(polygon);
+                    ////        }
+                    ////        else
+                    ////            System.Diagnostics.Debugger.Break();
+                    ////    }
+                    ////}
+
+                    ////if (multipart.IsEmpty) continue;
+
+                    ////products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart)];
                     //break;
                 }
             }
@@ -513,7 +565,7 @@ namespace S100Framework.Applications
             converages = products;
             ;
 
-            using (var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(System.IO.Path.GetFullPath("coverage.gdb"))))) {
+            using (var geodatabase = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(System.IO.Path.GetFullPath("coverage.geodatabase"))))) {
                 using var fc = geodatabase.OpenDataset<FeatureClass>("surface");
 
                 var b = fc.CreateRowBuffer();

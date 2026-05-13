@@ -99,8 +99,13 @@ namespace S100Framework.Applications
             {
                 FastZip fastZip = new();
                 fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "scamin.gdb.zip"), IO.Path.GetFullPath(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "scamin.gdb")), null);
-                fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "coverage.gdb.zip"), IO.Path.GetFullPath(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "coverage.gdb")), null);
-           }
+                //fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "coverage.gdb.zip"), IO.Path.GetFullPath(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "coverage.gdb")), null);
+
+                foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*coverage*.geodatabase*")) {
+                    if (IO.Path.GetFileName(f).Equals("coverage.geodatabase")) continue;
+                    System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                }
+            }
 
             arguments.WithParsed<Options>(o => {
                 var target = o.Target!;
@@ -138,7 +143,7 @@ namespace S100Framework.Applications
                     initialize = (append) => {
                         if (!append) {
                             var name = IO.Path.GetFileNameWithoutExtension(target);
-                            foreach(var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
+                            foreach (var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
                                 IO.File.Delete(IO.Path.GetFullPath(f));
                             }
                             IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed13.geodatabase"), IO.Path.GetFullPath(target), true);
