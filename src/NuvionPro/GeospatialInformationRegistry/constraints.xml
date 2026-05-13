@@ -48,6 +48,18 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
+  
+  <Rule productId="S-101" code="QualityOfBathymetricData">
+    <type>ConditionalMandatoryCount</type>
+    <condition>
+      <attribute>zoneOfConfidence</attribute>
+      <operator>gt</operator>
+      <value>1</value>
+    </condition>
+    <subAttributeBinding>
+      <attribute ref="fixedDateRange" />
+    </subAttributeBinding>
+  </Rule>
 
   <Rule productId="S-101" code="information">
     <type>ConditionalMandatory</type>

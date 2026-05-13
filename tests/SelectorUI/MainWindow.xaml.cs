@@ -33,25 +33,25 @@ namespace SelectorUI
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            var featureTypeTestFeature = new TestFeature {
-                featuresDetectedNested = new featuresDetectedNested {
-                    featureName = [new featureName {
-                        name ="Nested",
-                        language="eng",
-                    }],
-                },
+            //var featureTypeTestFeature = new TestFeature {
+            //    featuresDetectedNested = new featuresDetectedNested {
+            //        featureName = [new featureName {
+            //            name ="Nested",
+            //            language="eng",
+            //        }],
+            //    },
 
-                categoryOfTemporalVariation = 1,
-                dataAssessment = 1,
+            //    categoryOfTemporalVariation = 1,
+            //    dataAssessment = 1,
 
-                featuresDetected = new featuresDetected {
-                    significantFeaturesDetected = true,
-                    leastDepthOfDetectedFeaturesMeasured = false,
-                },
-                zoneOfConfidence = [new zoneOfConfidence {
-                    categoryOfZoneOfConfidenceInData = 1,
-                }]
-            };
+            //    featuresDetected = new featuresDetected {
+            //        significantFeaturesDetected = true,
+            //        leastDepthOfDetectedFeaturesMeasured = false,
+            //    },
+            //    zoneOfConfidence = [new zoneOfConfidence {
+            //        categoryOfZoneOfConfidenceInData = 1,
+            //    }]
+            //};
 
             var featureTypeWreck = new Wreck {
 
@@ -77,11 +77,11 @@ namespace SelectorUI
                     significantFeaturesDetected = false,
                     sizeOfFeaturesDetected = 3.5m,
                 },
-                zoneOfConfidence = [new zoneOfConfidence {
-                    categoryOfZoneOfConfidenceInData = 1,
-                }, new zoneOfConfidence {
-                    categoryOfZoneOfConfidenceInData = 2,
-                }],
+                //zoneOfConfidence = [new zoneOfConfidence {
+                //    categoryOfZoneOfConfidenceInData = 1,
+                //}, new zoneOfConfidence {
+                //    categoryOfZoneOfConfidenceInData = 2,
+                //}],
             };
 
 
@@ -97,8 +97,11 @@ namespace SelectorUI
             var jsonObstructionAttributeBindings = "{\"waterLevelEffect\": null,\"surroundingDepth\": 4,\"valueOfSounding\": null,\"scaleMinimum\": 89999,\"defaultClearanceDepth\": -15}";
             var jsonObstructionInformationBindings = "[{\"code\":\"AdditionalInformation\",\"association\":{\"attributes\":[]},\"roleType\":\"association\",\"role\":\"theInformation\",\"informationType\":\"NauticalInformation\",\"informationId\":\"I13\"}]";
 
-            var code = codeLateralBuoy;
-            var json = jsonLateralBuoy;
+            var codeQualityOfBathymetricData = "QualityOfBathymetricData";
+            var jsonQualityOfBathymetricData = qualityOfBathymetricData.Flatten();
+
+            var code = qualityOfBathymetricData.S100FC_code;
+            var json = jsonQualityOfBathymetricData;
 
 
             //var json = qualityOfBathymetricData.Flatten();
@@ -127,16 +130,15 @@ namespace SelectorUI
 
 
 
-            var productId = ps.Element(XName.Get("productId", scopes["S100FC"]))!.Value;
+            var productId = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
 
             var _ = XDocument.Load("constraints.xml").Descendants("Rule");
 
-            var rules = _.Where(e => e.Element(XName.Get("productId", scopes["S100FC"]))!.Value.Equals(productId));
-
+            var rules = _.Where(e => e.Attribute("productId")!.Value.Equals(productId));
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
-            var selectedObjectFC = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("ref")!.Value)).Initialize(code, "F123456")
-                .LoadAttributeBindings(jsonLateralBuoy);
+            var selectedObjectFC = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code")!.Value)).Initialize(code, "F123456")
+                .LoadAttributeBindings(json);
                 //.LoadInformationBindings(jsonSpanFixedInformationBindings)
                 //.LoadFeatureBindings(jsonSpanFixedFeatureBindings);
 

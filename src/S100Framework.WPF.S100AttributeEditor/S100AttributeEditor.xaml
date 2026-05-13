@@ -312,13 +312,13 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical">
-            <Grid x:Name="PropertyGrid" Grid.IsSharedSizeScope="True" IsEnabled="{Binding IsEditingEnabled}" ToolTip="{Binding SelectedObject.ErrorMessage}">
+            <Grid x:Name="PropertyGrid" Grid.IsSharedSizeScope="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <DockPanel Grid.Row="0" LastChildFill="True" Background="#C7D4D5">
+                <DockPanel Grid.Row="0" LastChildFill="True" Background="#C7D4D5" IsEnabled="{Binding IsEditingEnabled}" ToolTip="{Binding SelectedObject.ErrorMessage}" ToolTipService.IsEnabled="{Binding SelectedObject.IsErrorMessageEnabled}">
                     <DockPanel.Style>
                         <Style TargetType="DockPanel">
                             <Style.Triggers>

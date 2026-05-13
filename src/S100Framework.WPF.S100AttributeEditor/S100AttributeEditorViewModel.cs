@@ -12,7 +12,7 @@ using static S100Framework.WPF.ViewModel.S100AttributeEditorViewModel;
 
 namespace S100Framework.WPF.ViewModel
 {
-    public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer
+    public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
     {
         #region Delegates
         public class RequestInformationsEventArgs(string? informationType) : EventArgs
@@ -62,8 +62,63 @@ namespace S100Framework.WPF.ViewModel
 
         #region INotifyDataErrorInfo
 
-        private void Validate() {
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        private string _errorMessage = string.Empty;
+
+        public string ErrorMessage {
+            get {
+                return this._errorMessage;
+            }
+            set {
+                this.SetProperty(ref this._errorMessage, value);
+                this.IsErrorMessageEnabled = !string.IsNullOrEmpty(value);
+            }
         }
+
+        private bool _isErrorMessageEnabled;
+
+        public bool IsErrorMessageEnabled {
+            get {
+                return this._isErrorMessageEnabled;
+            }
+            set {
+                this.SetProperty(ref this._isErrorMessageEnabled, value);
+            }
+        }
+
+        private Action<AddError, IEnumerable<attributeBinding>>[] _validators { get; set; } = [];
+
+        public bool HasErrors => this._errors.Any();
+
+        public IEnumerable GetErrors(string? propertyName) {
+            if (!nameof(this.attributeBindings).Equals(propertyName)) return Enumerable.Empty<string>();
+            return this._errors;
+        }
+
+        private void Validate() {
+            var hasErrors = this.HasErrors;
+
+            this._errors = [];
+            if (this._validators is not null && this._validators.Any())
+                foreach (var action in this._validators) {
+                    action.Invoke(this.AddError, this.attributeBindings.Select(e => e.attribute));
+                }
+
+            if (this.HasErrors) {
+                this.ErrorMessage = string.Join(Environment.NewLine, this._errors);
+
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
+            }
+
+            this.IsErrorMessageEnabled = this.HasErrors;
+        }
+
+        public void AddError(string propertyName, string error) {
+            this._errors = [.. this._errors, error];
+        }
+
+        private string[] _errors = [];
 
         #endregion
 
@@ -99,9 +154,6 @@ namespace S100Framework.WPF.ViewModel
         public string[] FeatureTypes = [];
 
         public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
-
-        //public XElement? GetElement(string code) => this._featureCatalogue?.Descendants().FirstOrDefault(e => code.Equals(e.Element(XName.Get("code", this._namespaceManager.LookupNamespace("S100FC")!))?.Value));
-
 
         public S100AttributeEditorViewModel(XDocument featureCatalogue, ILookup<string, XElement> rules) {
             this._featureCatalogue = featureCatalogue;
@@ -207,9 +259,6 @@ namespace S100Framework.WPF.ViewModel
             if (element is null) throw new KeyNotFoundException($"Code not found ({code})!");
             if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) throw new InvalidOperationException($"Abstract types are not supported ({code})!");
 
-            var sourceIdentifier = element.Element(XName.Get("sourceIdentifier", scope))?.Value;
-            this.sourceIdentifier = sourceIdentifier == null ? default(int) : int.Parse(sourceIdentifier);
-
             int index = 0;
             this.attributeBindingsCatalogue = Parser.AttributeBindings(this._featureCatalogue, code, ref index, simpleAttributes, complexAttributes);
 
@@ -243,6 +292,53 @@ namespace S100Framework.WPF.ViewModel
                 attributeBindings = [.. attributeBindings, instance];
             }
 
+            //  Object level validation
+            {
+                var rules = this._rules.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
+
+                foreach (var e in rules) {
+                    var type = e.Element("type")!.Value;
+
+                    if ("ConditionalMandatoryCount".Equals(type)) {
+                        var subAttribute = e.Element("subAttributeBinding")!.Element("attribute")!.Attribute("ref")!.Value;
+
+                        var condition = e.Element("condition");
+                        if (condition is not null) {
+                            var _attribute = e.Element("condition")!.Element("attribute")!.Value;
+                            var _operator = e.Element("condition")!.Element("operator")!.Value;
+                            var _value = e.Element("condition")!.Element("value")!.Value;
+
+                            Action<AddError, IEnumerable<attributeBinding>> validator = (action, instance) => {
+                                var _ = instance.Where(e => e.S100FC_code.Equals(_attribute));
+                                var count = _.Count();
+
+                                var match = _operator switch {
+                                    "eq" => count.Equals(int.Parse(_value)),
+                                    "ne" => !count.Equals(int.Parse(_value)),
+                                    "gt" => count > int.Parse(_value),
+                                    "lt" => count < int.Parse(_value),
+                                    _ => false,
+                                };
+
+                                if (match) {
+                                    var containsAttribute = false;
+                                    foreach (var s in _) {
+                                        if (default != _.SingleOrDefault(e => e.S100FC_code.Equals(subAttribute)))
+                                            containsAttribute = true;
+                                    }
+                                    if (!containsAttribute) {
+                                        var error = $"The sub-complex attribute {subAttribute} is mandatory if more than one instance of the complex attribute {_attribute} is encoded.";
+                                        action(subAttribute, error);
+                                    }
+                                }
+                            };
+
+                            this._validators = [.. this._validators, validator];
+                        }
+                    }
+                }
+            }
+
             var attributeBindingsCatalogue = this.attributeBindingsCatalogue.ToDictionary(e => e.attribute, e => e);
             foreach (var attributeBinding in attributeBindings) {
                 if (attributeBinding is DateAttribute dateAttribute) {
@@ -260,11 +356,10 @@ namespace S100Framework.WPF.ViewModel
                 else if (attributeBinding is ComplexAttribute complexAttribute) {
                     var subAttributes = complexAttribute.attributeBindingsCatalogue.Select(e => e.attribute).ToArray();
 
-                    var rules = this._rules.SelectMany(e => e).Where(e=>e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
-
+                    var rules = this._rules.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
 
                     //var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [..this._rules[code], .. this._rules.Where(e => e.Attribute.Contains(e.Key)).SelectMany(e=>e)]);
-                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [.. rules]);
+                    var viewModel = new ComplexAttributeViewModel(ref complexAttribute, rules);
                     this.attributeBindings.Add(viewModel);
                 }
                 else
@@ -274,8 +369,8 @@ namespace S100Framework.WPF.ViewModel
 
             //note: Must be added right by the end!
             this.attributeBindings.CollectionChanged += (s, e) => {
-                this.OnPropertyChanged("attributeBindings");
-
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
+                this.Validate();
             };
 
             return this;
@@ -337,7 +432,7 @@ namespace S100Framework.WPF.ViewModel
             this.Validate();
 
             //note: Must be added right by the end!
-            this.featureBindings.CollectionChanged += (s, e) => {
+            this.featureBindings.CollectionChanged += (s, e) => {                
                 this.OnPropertyChanged("featureBindings");
                 this.Validate();
             };
@@ -356,17 +451,6 @@ namespace S100Framework.WPF.ViewModel
             }
             set {
                 this.SetProperty(ref this._code, value);
-            }
-        }
-
-        private int? _sourceIdentifier = default;
-
-        public int? sourceIdentifier {
-            get {
-                return this._sourceIdentifier;
-            }
-            set {
-                this.SetProperty(ref this._sourceIdentifier, value);
             }
         }
 
@@ -482,8 +566,9 @@ namespace S100Framework.WPF.ViewModel
 
         private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
             var _internal = e.PropertyName switch {
-                "attributeBindings" => false,
-                _ => true,
+                "ErrorMessage" => true,
+                "IsErrorMessageEnabled" => true,
+                _ => false,
             };
 
             if (_internal) {
@@ -499,7 +584,7 @@ namespace S100Framework.WPF.ViewModel
 
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
 
-                if(attribute is ComplexAttributeViewModel complexAttribute) {
+                if (attribute is ComplexAttributeViewModel complexAttribute) {
                     var binding = this.attributeBindingsCatalogue.Single(e => e.attribute.Equals(complexAttribute.code));
                     if (binding.Validators.Any()) {
                         foreach (var action in binding.Validators)
@@ -507,7 +592,7 @@ namespace S100Framework.WPF.ViewModel
                     }
                 }
 
-                if(attribute is INotifyDataErrorInfo notifyDataError) {
+                if (attribute is INotifyDataErrorInfo notifyDataError) {
                     if (notifyDataError.HasErrors) {
 
                     }
@@ -1019,483 +1104,4 @@ namespace S100Framework.WPF.ViewModel
             private static readonly Regex _regexArray = new Regex(@"\[\d+\]", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }
     }
-
-#if null
-    public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
-    {
-        public class RequestInformationsEventArgs(string? informationType) : EventArgs
-        {
-            public string? InformationType { get; } = informationType;
-        }
-
-        public class RequestFeaturesEventArgs(string? featureType) : EventArgs
-        {
-            public string? FeatureType { get; } = featureType;
-        }
-        public class SelectInformationTypesEvenArgs(InformationTypeID[] uids) : EventArgs
-        {
-            public InformationTypeID[] UIDs { get; } = uids;
-        }
-
-        public class SelectFeatureTypesEvenArgs(FeatureTypeID[] uids) : EventArgs
-        {
-            public FeatureTypeID[] UIDs { get; } = uids;
-        }
-
-        public delegate Task<string[]> RequestInformationsEventHandler(object? sender, RequestInformationsEventArgs e);
-
-        public delegate Task<string[]> RequestFeaturesEventHandler(object? sender, RequestFeaturesEventArgs e);
-
-        public delegate Task SelectInformationTypesEventHandler(object? sender, SelectInformationTypesEvenArgs e);
-
-        public delegate Task SelectFeatureTypessEventHandler(object? sender, SelectFeatureTypesEvenArgs e);
-
-        public class informationBindingContainer
-        {
-            public string[] associations => [.. this._informationBindingDefinitions.Select(e => e.Key)];
-
-            public IEnumerable<IGrouping<string, informationBindingDefinition>> GroupBy => this._informationBindingDefinitions;
-
-            private IEnumerable<IGrouping<string, informationBindingDefinition>> _informationBindingDefinitions { get; init; } = [];
-
-            public informationBindingContainer(S100FC.informationBindingDefinition[] informationBindingDefinitions) {
-                this._informationBindingDefinitions = informationBindingDefinitions.GroupBy(e => e.association);
-            }
-        }
-
-        public class featureBindingContainer
-        {
-            public string[] associations => [.. this._featureBindingDefinitions.Select(e => e.Key)];
-
-            public IEnumerable<IGrouping<string, featureBindingDefinition>> GroupBy => this._featureBindingDefinitions;
-
-            private IEnumerable<IGrouping<string, featureBindingDefinition>> _featureBindingDefinitions { get; init; } = [];
-
-            public featureBindingContainer(S100FC.featureBindingDefinition[] featureBindingDefinitions) {
-                this._featureBindingDefinitions = featureBindingDefinitions.GroupBy(e => e.association);
-            }
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler? PropertyChanged = default;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null) {
-            if (Equals(field, value))
-                return false;
-
-            field = value;
-            this.OnPropertyChanged(propertyName);
-            return true;
-        }
-        #endregion
-
-        #region INotifyDataErrorInfo
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged = default;
-
-        public bool HasErrors => this._errors.Any();
-
-        public IEnumerable GetErrors(string? propertyName) {
-            if (string.IsNullOrEmpty(propertyName)) return Enumerable.Empty<string>();
-
-            if (!this._errors.ContainsKey(propertyName) || !this._errors[propertyName].Any()) return Enumerable.Empty<string>();
-
-            return this._errors[propertyName];
-        }
-
-        private void Validate() {
-            this._errors.Clear();
-
-            if (this.Instance is InformationType informationType) {
-                this._errors[nameof(this.attributeBindings)] = [];
-                //this._errors[nameof(informationBindings)] = new List<string>();
-
-            }
-            else if (this.Instance is FeatureType featureType) {
-                this._errors[nameof(this.attributeBindings)] = [];
-                //this._errors[nameof(informationBindings)] = new List<string>();
-                //this._errors[nameof(featureBindings)] = new List<string>();
-
-                featureType.Validate(this._errors[nameof(this.attributeBindings)]);
-
-                //foreach(var informationBinding in this.informationBindings) {
-                //    informationBinding.Validate(this._errors[nameof(informationBindings)]);
-                //}
-
-                //foreach (var featureBinding in this.featureBindings) {
-                //    featureBinding.Validate(this._errors[nameof(featureBindings)]);
-                //}
-
-                this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(this.HasErrors)));
-            }
-        }
-
-        private readonly Dictionary<string, List<string>> _errors = [];
-        #endregion
-
-        public RequestInformationsEventHandler RequestInformation = async (s, e) => { return []; };
-
-        public RequestFeaturesEventHandler RequestFeatures = async (s, e) => { return []; };
-
-        public SelectInformationTypesEventHandler SelectInformationTypes = async (s, e) => { };
-
-        public SelectFeatureTypessEventHandler SelectFeatureTypes = async (s, e) => { };
-
-        public S100AttributeEditorViewModel(S100FC.InformationType informationType, string uid) {
-            this._informationType = informationType;
-            this._uid = uid;
-            this.code = this._informationType.S100FC_code;
-            this.attributeBindingsCatalogue = this._informationType.attributeBindingsCatalogue;
-
-            this.Flatten = () => this._informationType.Flatten();
-
-            if (informationType is IInformationBindings informationBindings) {
-                this.HasInformationBindings = true;
-
-                this.informationBindingDefinitions = new informationBindingContainer(informationBindings.GetInformationBindingsDefinitions());
-            }
-
-            this.attributeBindings.CollectionChanged += (s, e) => {
-                if (e.OldItems is not null) {
-                    foreach (var item in e.OldItems) {
-                        if (item is SimpleAttributeViewModel simpleAttributeViewModel) {
-                            this._informationType.RemoveAttribute(simpleAttributeViewModel.attribute);
-                        }
-                        if (item is ComplexAttributeViewModel complexAttributeViewModel) {
-                            this._informationType.RemoveAttribute(complexAttributeViewModel.attribute);
-                        }
-
-                        if (item is AttributeViewModel attribute) {
-                            attribute.PropertyChanged -= this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                if (e.NewItems is not null) {
-                    foreach (var item in e.NewItems) {
-                        if (item is SimpleAttributeViewModel simpleAttribute) {
-                            simpleAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                        else if (item is ComplexAttributeViewModel complexAttribute) {
-                            complexAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                //this.OnPropertyChanged("attributeBindings");
-            };
-
-            this.informationBindings.CollectionChanged += (s, e) => {
-                if (e.OldItems is not null) {
-                    foreach (var item in e.OldItems) {
-                        if (item is InformationBindingViewModel informationBinding) {
-                            informationBinding.PropertyChanged -= this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                if (e.NewItems is not null) {
-                    foreach (var item in e.NewItems) {
-                        if (item is InformationBindingViewModel informationBinding) {
-                            informationBinding.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                this.OnPropertyChanged("informationBindings");
-
-                this.Validate();
-            };
-
-            foreach (var e in this._informationType.attributeBindings.OrderBy(e => this.attributeBindingsCatalogue.Single(a => a.attribute.Equals(e.S100FC_code)).order)) {
-                var attributeBindingDefinition = this.attributeBindingsCatalogue.Single(a => a.attribute.Equals(e.S100FC_code));
-
-                if (e is DateAttribute dateAttribute)
-                    this.attributeBindings.Add(new DateAttributeViewModel(ref dateAttribute, attributeBindingDefinition));
-                else if (e is DateTimeAttribute dateTimeAttribute)
-                    this.attributeBindings.Add(new DateTimeAttributeViewModel(ref dateTimeAttribute, attributeBindingDefinition));
-                else if (e is SimpleAttribute simpleAttribute)
-                    this.attributeBindings.Add(new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingDefinition));
-                else if (e is ComplexAttribute complexAttribute)
-                    this.attributeBindings.Add(new ComplexAttributeViewModel(ref complexAttribute));
-            }
-
-            //note: Must be added right by the end!
-            this.attributeBindings.CollectionChanged += (s, e) => {
-                this.OnPropertyChanged("attributeBindings");
-            };
-
-            this.Validate();
-        }
-
-        public S100AttributeEditorViewModel(S100FC.FeatureType feature, string uid) {
-            this._featureType = feature;
-            this._uid = uid;
-            this.code = this._featureType.S100FC_code;
-            this.attributeBindingsCatalogue = this._featureType.attributeBindingsCatalogue;
-
-            this.Flatten = () => this._featureType.Flatten();
-
-            if (feature is IInformationBindings informationBindings) {
-                var _informationBindingDefinitions = informationBindings.GetInformationBindingsDefinitions();
-
-                if (_informationBindingDefinitions.Any())
-                    this.informationBindingDefinitions = new informationBindingContainer(_informationBindingDefinitions);
-
-                this.HasInformationBindings = this.informationBindingDefinitions is not null;
-            }
-
-            if (feature is IFeatureBindings featureBindings) {
-                var _featureBindingDefinitions = featureBindings.GetFeatureBindingsDefinitions();
-
-                if (_featureBindingDefinitions.Any())
-                    this.featureBindingDefinitions = new featureBindingContainer(_featureBindingDefinitions);
-
-                this.HasFeatureBindings = this.featureBindingDefinitions is not null;
-            }
-
-            this.attributeBindings.CollectionChanged += (s, e) => {
-                if (e.OldItems is not null) {
-                    foreach (var item in e.OldItems) {
-                        if (item is SimpleAttributeViewModel simpleAttributeViewModel) {
-                            this._featureType.RemoveAttribute(simpleAttributeViewModel.attribute);
-                        }
-                        if (item is ComplexAttributeViewModel complexAttributeViewModel) {
-                            this._featureType.RemoveAttribute(complexAttributeViewModel.attribute);
-                        }
-
-                        if (item is AttributeViewModel attribute) {
-                            attribute.PropertyChanged -= this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                if (e.NewItems is not null) {
-                    foreach (var item in e.NewItems) {
-                        if (item is SimpleAttributeViewModel simpleAttribute) {
-                            simpleAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                        else if (item is ComplexAttributeViewModel complexAttribute) {
-                            complexAttribute.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-            };
-
-            this.informationBindings.CollectionChanged += (s, e) => {
-                if (e.OldItems is not null) {
-                    foreach (var item in e.OldItems) {
-                        if (item is InformationBindingViewModel informationBinding) {
-                            informationBinding.PropertyChanged -= this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                if (e.NewItems is not null) {
-                    foreach (var item in e.NewItems) {
-                        if (item is InformationBindingViewModel informationBinding) {
-                            informationBinding.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                this.OnPropertyChanged("informationBindings");
-
-                this.Validate();
-            };
-
-            this.featureBindings.CollectionChanged += (s, e) => {
-                if (e.OldItems is not null) {
-                    foreach (var item in e.OldItems) {
-                        if (item is FeatureBindingViewModel featureBinding) {
-                            featureBinding.PropertyChanged -= this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                if (e.NewItems is not null) {
-                    foreach (var item in e.NewItems) {
-                        if (item is FeatureBindingViewModel featureBinding) {
-                            featureBinding.PropertyChanged += this.Viewmodel_PropertyChanged;
-                        }
-                    }
-                }
-                this.OnPropertyChanged("featureBindings");
-
-                this.Validate();
-            };
-
-            foreach (var e in this._featureType.attributeBindings.OrderBy(e => this.attributeBindingsCatalogue.Single(a => a.attribute.Equals(e.S100FC_code)).order)) {
-                var attributeBindingDefinition = this.attributeBindingsCatalogue.Single(a => a.attribute.Equals(e.S100FC_code));
-
-                if (e is DateAttribute dateAttribute)
-                    this.attributeBindings.Add(new DateAttributeViewModel(ref dateAttribute, attributeBindingDefinition));
-                else if (e is DateTimeAttribute dateTimeAttribute)
-                    this.attributeBindings.Add(new DateTimeAttributeViewModel(ref dateTimeAttribute, attributeBindingDefinition));
-                else if (e is SimpleAttribute simpleAttribute)
-                    this.attributeBindings.Add(new SimpleAttributeViewModel(ref simpleAttribute, attributeBindingDefinition));
-                else if (e is ComplexAttribute complexAttribute)
-                    this.attributeBindings.Add(new ComplexAttributeViewModel(ref complexAttribute));
-            }
-
-            //note: Must be added right by the end!
-            this.attributeBindings.CollectionChanged += (s, e) => {
-                this.OnPropertyChanged("attributeBindings");
-            };
-
-            this.Validate();
-        }
-
-        public bool HasInformationBindings { get; init; } = false;
-
-        public informationBindingContainer? informationBindingDefinitions { get; set; } = null;
-
-        public bool HasFeatureBindings { get; init; } = false;
-
-        public featureBindingContainer? featureBindingDefinitions { get; set; } = null;
-
-        public bool HasCapacity(attributeBindingDefinition binding) {
-            var count = this.attributeBindings.Count(e => e.code.Equals(binding.attribute));
-            return binding.upper > count;
-        }
-
-        public bool HasCapacity(IGrouping<string, informationBindingDefinition> binding) {
-            return true;
-            //var count = this.informationBindings.Count(e => e.association.Equals(binding.association) && e.role!.Equals(binding.role));
-
-            //var definition = this.informationBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(binding.association)).Single(e => e.role.Equals(binding.role));
-
-            //return definition.upper > count;
-        }
-
-        public bool HasCapacity(IGrouping<string, featureBindingDefinition> binding) {
-            return true;
-            //var count = this.featureBindings.Count(e => e.association.Equals(binding.association) && e.role!.Equals(binding.role));
-
-            //var definition = this.featureBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(binding.association)).Single(e => e.role.Equals(binding.role));
-
-            //return definition.upper > count;
-        }
-
-        public void AddAttribute(AttributeViewModel attributeBinding) {
-            this.attributeBindings.Add(attributeBinding);
-
-            if (this.Instance is S100FC.InformationType informationType) {
-                informationType.SetAttribute(attributeBinding.attribute);
-            }
-            if (this.Instance is S100FC.FeatureType featureType) {
-                featureType.SetAttribute(attributeBinding.attribute);
-            }
-        }
-
-        private void Viewmodel_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
-            if (sender is AttributeViewModel attribute) {
-                //if (!attribute.attribute.IsValid(this.attributeBindings.Select(e => e.attribute))) {
-                //    this._errors[attribute.code] = new List<string> { "Dependency" };
-                //    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(attribute.code));
-                //}
-
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
-
-                this.Validate();
-            }
-            else if (sender is InformationBindingViewModel informationBinding) {
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.informationBindings)));
-            }
-            else if (sender is FeatureBindingViewModel featureBinding) {
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.featureBindings)));
-            }
-            else if (System.Diagnostics.Debugger.IsAttached)
-                System.Diagnostics.Debugger.Break();
-        }
-
-
-        #region Operators
-        public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, informationBinding informationBinding) {
-            var association = informationBinding.GetType().GetGenericArguments()[0].Name;
-
-            var definitions = viewModel.informationBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
-
-            viewModel.informationBindings.Add(new InformationBindingViewModel(definitions) {
-                roleType = informationBinding.roleType,
-                role = informationBinding.role,
-                informationType = informationBinding.informationType,
-                informationUID = new InformationTypeID(informationBinding.informationType!, informationBinding.informationId),
-            });
-            return viewModel;
-        }
-
-        public static S100AttributeEditorViewModel operator +(S100AttributeEditorViewModel viewModel, featureBinding featureBinding) {
-            var association = featureBinding.GetType().GetGenericArguments()[0].Name;
-
-            var definitions = viewModel.featureBindingDefinitions!.GroupBy.Single(e => e.Key.Equals(association));
-
-            viewModel.featureBindings.Add(new FeatureBindingViewModel(definitions) {
-                roleType = featureBinding.roleType,
-                role = featureBinding.role,
-                featureType = featureBinding.featureType,
-                featureUID = new FeatureTypeID(featureBinding.featureType!, featureBinding.featureId),
-            });
-            return viewModel;
-        }
-
-
-        public static explicit operator informationBinding[](S100AttributeEditorViewModel viewmodel) {
-            informationBinding[] informationBinding = [];
-            if (viewmodel.informationBindings.Any()) {
-                foreach (var binding in viewmodel.informationBindings.ToImmutableArray()) {
-                    if (binding.roleType is null) continue;
-
-                    var f = binding.informationBindingDefinition!.CreateInstance()!;
-                    f.informationType = binding.informationType;
-                    f.informationId = binding.informationUID?.UID!;
-
-                    informationBinding = [.. informationBinding, f];
-                }
-            }
-            return informationBinding;
-        }
-
-        public static explicit operator featureBinding[](S100AttributeEditorViewModel viewmodel) {
-            featureBinding[] featureBindings = [];
-            if (viewmodel.featureBindings.Any()) {
-                foreach (var binding in viewmodel.featureBindings.ToImmutableArray()) {
-                    if (binding.roleType is null) continue;
-
-                    var f = binding.featureBindingDefinition!.CreateInstance()!;
-                    f.featureType = binding.featureType;
-                    f.featureId = binding.featureUID?.UID!;
-
-                    featureBindings = [.. featureBindings, f];
-                }
-            }
-            return featureBindings;
-        }
-        #endregion
-
-        #region Properties        
-
-        private string _code = "UNKNOWN";
-
-        public string code {
-            get {
-                return this._code;
-            }
-            set {
-                this.SetProperty(ref this._code, value);
-            }
-        }
-
-        public ObservableCollection<AttributeViewModel> attributeBindings { get; set; } = [];
-
-        public ObservableCollection<InformationBindingViewModel> informationBindings { get; set; } = [];
-
-        public ObservableCollection<FeatureBindingViewModel> featureBindings { get; set; } = [];
-
-        public attributeBindingDefinition[] attributeBindingsCatalogue { get; init; } = [];
-        #endregion
-
-        public object? Instance => this._informationType != default ? this._informationType : this._featureType;
-
-        public Func<string?> Flatten { get; private set; }
-
-        private readonly S100FC.InformationType? _informationType = default;
-        private readonly S100FC.FeatureType? _featureType = default;
-        private readonly string _uid;
-    }
-#endif
 }

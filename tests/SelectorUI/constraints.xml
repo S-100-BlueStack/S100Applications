@@ -1,14 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules xmlns:S100FC="http://www.iho.int/S100FC/5.2">
-	<Rule attrubute="rhythmOfLight" productId="S-101" code="LightAllAround">
-		<Type>ConditionalMandatory</Type>
-		<Operator>ne</Operator>
-		<Value>1</Value>
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAllAround">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
 		<subAttributeBinding>
 			<attribute ref="signalGroup" />
-		</subAttributeBinding>
-		<subAttributeBinding>
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightFogDetector">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAirObstruction">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+	<Rule attribute="sectorCharacteristics" productId="S-101" code="LightSectored">
+		<type>ConditionalMandatory</type>
+		<condition>
+			<attribute>lightCharacteristic</attribute>
+			<operator>ne</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="signalGroup" />
+			<attribute ref="signalPeriod" />
+		</subAttributeBinding>
+	</Rule>
+  
+  <Rule productId="S-101" code="QualityOfBathymetricData">
+    <type>ConditionalMandatoryCount</type>
+    <condition>
+      <attribute>zoneOfConfidence</attribute>
+      <operator>gt</operator>
+      <value>1</value>
+    </condition>
+    <subAttributeBinding>
+      <attribute ref="fixedDateRange" />
+    </subAttributeBinding>
+  </Rule>
+
+  <Rule productId="S-101" code="information">
+    <type>ConditionalMandatory</type>
+    <subAttributeBinding>
+      <attribute ref="fileReference" />
+      <attribute ref="text" />
+    </subAttributeBinding>
+  </Rule>
 </Rules>
