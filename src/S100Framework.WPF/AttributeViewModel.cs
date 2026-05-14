@@ -345,7 +345,14 @@ namespace S100Framework.WPF.ViewModel
                                     var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
 
                                     bool match = false;
-                                    if (v is IntegerAttribute integerAttribute) {
+                                    if (v is BooleanAttribute booleanAttribute) {
+                                        match = _operator switch {
+                                            "eq" => booleanAttribute.value.Equals(bool.Parse(_value)),
+                                            "ne" => !booleanAttribute.value.Equals(bool.Parse(_value)),
+                                            _ => false,
+                                        };
+                                    }
+                                    else if (v is IntegerAttribute integerAttribute) {
                                         match = _operator switch {
                                             "eq" => integerAttribute.value.Equals(int.Parse(_value)),
                                             "ne" => !integerAttribute.value.Equals(int.Parse(_value)),
