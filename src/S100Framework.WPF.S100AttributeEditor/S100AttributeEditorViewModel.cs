@@ -111,7 +111,10 @@ namespace S100Framework.WPF.ViewModel
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
             }
 
-            this.IsErrorMessageEnabled = this.HasErrors;
+            if (this.IsErrorMessageEnabled != this.HasErrors) {
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.attributeBindings)));
+                this.IsErrorMessageEnabled = this.HasErrors;
+            }
         }
 
         public void AddError(string propertyName, string error) {

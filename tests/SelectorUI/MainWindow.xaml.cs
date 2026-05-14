@@ -132,9 +132,7 @@ namespace SelectorUI
 
             var productId = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
 
-            var _ = XDocument.Load("constraints.xml").Descendants("Rule");
-
-            var rules = _.Where(e => e.Attribute("productId")!.Value.Equals(productId));
+            var rules = XDocument.Load("constraints.xml").Descendants("Rule");            
 
             //var selectedObjectFC = new S100AttributeEditorViewModelFC(ps, "QualityOfBathymetricData").LoadAttributeBindings(json);
             var selectedObjectFC = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code")!.Value)).Initialize(code, "F123456")
