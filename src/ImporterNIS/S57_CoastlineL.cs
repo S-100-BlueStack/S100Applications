@@ -15,11 +15,8 @@ namespace S100Framework.Applications
             using var coastlinel = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(coastlinel); ;
 
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
-
-
-            using var buffer = featureClass.CreateRowBuffer();
-
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = coastlinel.Search(filter, true);
             int recordCount = 0;
@@ -135,17 +132,15 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            bufferTopo["ps"] = ps101;
+                            bufferTopo["code"] = instance.GetType().Name;
+                            bufferTopo["attributebindings"] = instance.Flatten();
+                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
+                            SetShape(bufferTopo, current.SHAPE);
+                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE);
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -274,16 +269,15 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
+                            bufferTopo["ps"] = ps101;
+                            bufferTopo["code"] = instance.GetType().Name;
+                            bufferTopo["attributebindings"] = instance.Flatten();
+                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
+                            SetShape(bufferTopo, current.SHAPE);
+                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE);
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
