@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
 
   <AddInInfo id="{e88a79e5-f75d-4324-b52a-38eca2a1f9a1}" version="3.7.1863.3" desktopVersion="3.7">
-    <Name>NuvionPro</Name>   
+    <Name>NuvionPro</Name>
     <Description>The project aimed to implement the S-100 standard within ArcGIS Pro to improve the creation, management, and dissemination of electronic navigational charts (ENCs) in compliance with the International Hydrographic Organization's (IHO) S-100 framework. The implementation of S-100 standards in ArcGIS Pro facilitates the transition from traditional paper charts to modern digital navigational tools, enhancing safety and efficiency in maritime navigation.</Description>
     <Image>Images\Logo.png</Image>
     <Author>Geodatastyrelsen</Author>
@@ -24,15 +24,34 @@
           <group refID="NuvionPro_Group1"/>
         </tab>-->
       </tabs>
-              
+
       <groups>
       </groups>
-      
+
       <controls>
-        <!-- add your controls here -->
-      </controls> 
-      
-    </insertModule>   
+        <dynamicMenu caption="Specific Usage" className="DynamicMenuSpecificUsage" id="NuvionPro_DynamicMenuSpecificUsage" largeImage="pack://application:,,,/ProTestApp;component/Images/MenuImage32.png" smallImage="pack://application:,,,/ProTestApp;component/Images/MenuImage16.png">
+          <!--<tooltip heading="Heading" image="pack://application:,,,/Acme;component/Images/MenuImage16.png">Some text</tooltip>-->
+        </dynamicMenu>
+        <button id="NuvionPro_ButtonOverview" caption="Navigational Purpose Overview" className="NuvionPro.Commands.ButtonOverview" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="1"></button>
+        <button id="NuvionPro_ButtonGeneral" caption="Navigational Purpose General" className="NuvionPro.Commands.ButtonGeneral" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="2"></button>
+        <button id="NuvionPro_ButtonCoastal" caption="Navigational Purpose Coastal" className="NuvionPro.Commands.ButtonCoastal" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="3"></button>
+        <button id="NuvionPro_ButtonApproach" caption="Navigational Purpose Approach" className="NuvionPro.Commands.ButtonApproach" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="4"></button>
+        <button id="NuvionPro_ButtonHarbour" caption="Navigational Purpose Harbour" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="5"></button>
+        <button id="NuvionPro_ButtonBerthing" caption="Navigational Purpose Berthing" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="6"></button>
+        <button id="NuvionPro_ButtonClear" caption="Clear" className="NuvionPro.Commands.ButtonClear" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/FilterRemove16.png" largeImage="GenericButtonBlue32" keytip="0"></button>
+      </controls>
+    </insertModule>
+
+    <updateModule refID="esri_mapping">
+      <menus>
+        <updateMenu refID="esri_mapping_layerContextMenu">
+          <insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_editing_table_openTablePaneButton" separator="false" />
+        </updateMenu>
+        <updateMenu refID="esri_mapping_groupLayerContextMenu">
+          <insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_mapping_addDataToGroupLayerButton" separator="false" />
+        </updateMenu>
+      </menus>
+    </updateModule>
   </modules>
 
   <categories>
