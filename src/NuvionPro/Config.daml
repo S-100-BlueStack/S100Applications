@@ -29,7 +29,7 @@
       </groups>
 
       <controls>
-        <dynamicMenu caption="Specific Usage" className="DynamicMenuSpecificUsage" id="NuvionPro_DynamicMenuSpecificUsage" largeImage="pack://application:,,,/ProTestApp;component/Images/MenuImage32.png" smallImage="pack://application:,,,/ProTestApp;component/Images/MenuImage16.png">
+        <dynamicMenu caption="Specific Usage" className="NuvionPro.Commands.DynamicMenuSpecificUsage" id="NuvionPro_DynamicMenuSpecificUsage" largeImage="pack://application:,,,/ProTestApp;component/Images/MenuImage32.png" smallImage="pack://application:,,,/ProTestApp;component/Images/MenuImage16.png">
           <!--<tooltip heading="Heading" image="pack://application:,,,/Acme;component/Images/MenuImage16.png">Some text</tooltip>-->
         </dynamicMenu>
         <button id="NuvionPro_ButtonOverview" caption="Navigational Purpose Overview" className="NuvionPro.Commands.ButtonOverview" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="1"></button>
