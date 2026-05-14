@@ -155,9 +155,9 @@ namespace S100Framework.WPF.ViewModel
 
         public XElement? GetElement(string code) => this._featureCatalogue?.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
 
-        public S100AttributeEditorViewModel(XDocument featureCatalogue, ILookup<string, XElement> rules) {
+        public S100AttributeEditorViewModel(XDocument featureCatalogue, ILookup<string, XElement> constraints) {
             this._featureCatalogue = featureCatalogue;
-            this._rules = rules;
+            this._constraints = constraints;
 
             var navigator = featureCatalogue.CreateNavigator();
             navigator.MoveToFollowing(XPathNodeType.Element);
@@ -294,7 +294,7 @@ namespace S100Framework.WPF.ViewModel
 
             //  Object level validation
             {
-                var rules = this._rules.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
+                var rules = this._constraints.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
 
                 foreach (var e in rules) {
                     var type = e.Element("type")!.Value;
@@ -356,7 +356,7 @@ namespace S100Framework.WPF.ViewModel
                 else if (attributeBinding is ComplexAttribute complexAttribute) {
                     var subAttributes = complexAttribute.attributeBindingsCatalogue.Select(e => e.attribute).ToArray();
 
-                    var rules = this._rules.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
+                    var rules = this._constraints.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(code));
 
                     //var viewModel = new ComplexAttributeViewModel(ref complexAttribute, [..this._rules[code], .. this._rules.Where(e => e.Attribute.Contains(e.Key)).SelectMany(e=>e)]);
                     var viewModel = new ComplexAttributeViewModel(ref complexAttribute, rules);
@@ -556,9 +556,9 @@ namespace S100Framework.WPF.ViewModel
 
         private XDocument _featureCatalogue { get; init; }
 
-        public ILookup<string, XElement> Rules => this._rules;
+        public ILookup<string, XElement> Constraints => this._constraints;
 
-        private ILookup<string, XElement> _rules { get; init; }
+        private ILookup<string, XElement> _constraints { get; init; }
 
         private XmlNamespaceManager _namespaceManager { get; init; }
 

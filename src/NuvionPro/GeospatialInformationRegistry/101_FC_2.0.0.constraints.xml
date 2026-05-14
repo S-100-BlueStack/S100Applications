@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules xmlns:S100FC="http://www.iho.int/S100FC/5.2">
-	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAllAround">
+	<Rule attribute="rhythmOfLight" code="LightAllAround">
 		<type>ConditionalMandatory</type>
 		<condition>
 			<attribute>lightCharacteristic</attribute>
@@ -12,7 +12,7 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
-	<Rule attribute="rhythmOfLight" productId="S-101" code="LightFogDetector">
+	<Rule attribute="rhythmOfLight" code="LightFogDetector">
 		<type>ConditionalMandatory</type>
 		<condition>
 			<attribute>lightCharacteristic</attribute>
@@ -24,7 +24,7 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
-	<Rule attribute="rhythmOfLight" productId="S-101" code="LightAirObstruction">
+	<Rule attribute="rhythmOfLight" code="LightAirObstruction">
 		<type>ConditionalMandatory</type>
 		<condition>
 			<attribute>lightCharacteristic</attribute>
@@ -36,7 +36,7 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
-	<Rule attribute="sectorCharacteristics" productId="S-101" code="LightSectored">
+	<Rule attribute="sectorCharacteristics" code="LightSectored">
 		<type>ConditionalMandatory</type>
 		<condition>
 			<attribute>lightCharacteristic</attribute>
@@ -48,24 +48,32 @@
 			<attribute ref="signalPeriod" />
 		</subAttributeBinding>
 	</Rule>
-  
-  <Rule productId="S-101" code="QualityOfBathymetricData">
-    <type>ConditionalMandatoryCount</type>
-    <condition>
-      <attribute>zoneOfConfidence</attribute>
-      <operator>gt</operator>
-      <value>1</value>
-    </condition>
-    <subAttributeBinding>
-      <attribute ref="fixedDateRange" />
-    </subAttributeBinding>
-  </Rule>
+	<Rule attribute="sectorCharacteristics" code="UpdateInformation">
+		<type>fixedDateRange</type>
+		<subAttributeBinding>
+			<attribute ref="dateStart" />
+			<attribute ref="dateEnd" />
+		</subAttributeBinding>
+	</Rule>	
+	
 
-  <Rule productId="S-101" code="information">
-    <type>ConditionalMandatory</type>
-    <subAttributeBinding>
-      <attribute ref="fileReference" />
-      <attribute ref="text" />
-    </subAttributeBinding>
-  </Rule>
+	<Rule code="QualityOfBathymetricData">
+		<type>ConditionalMandatoryCount</type>
+		<condition>
+			<attribute>zoneOfConfidence</attribute>
+			<operator>gt</operator>
+			<value>1</value>
+		</condition>
+		<subAttributeBinding>
+			<attribute ref="fixedDateRange" />
+		</subAttributeBinding>
+	</Rule>
+
+	<Rule code="information">
+		<type>ConditionalMandatory</type>
+		<subAttributeBinding>
+			<attribute ref="fileReference" />
+			<attribute ref="text" />
+		</subAttributeBinding>
+	</Rule>
 </Rules>

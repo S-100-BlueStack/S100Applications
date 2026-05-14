@@ -142,9 +142,9 @@ namespace NuvionPro
 
                     var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
 
-                    var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+                    var constraints = this.PS.Constraints;
 
-                    this.SelectedProperty = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
+                    this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
                 }
                 else if (this.SelectedProperty is not null && string.IsNullOrEmpty(this.SelectedProperty.ProductID)) {
                     if (!this.PS.Equals(this.SelectedProperty.ProductID)) {
@@ -161,9 +161,9 @@ namespace NuvionPro
 
                         var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
 
-                        var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+                        var constraints = this.PS.Constraints;
 
-                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
+                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
                     }
                 }
 
@@ -312,9 +312,9 @@ namespace NuvionPro
 
                     var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
                     
-                    var rules = this._module.Rules.Where(e => e.Attribute("productId").Value.Equals(productID));
+                    var constraints = this.PS.Constraints;
 
-                    var viewModel = new S100AttributeEditorViewModel(ps, rules.ToLookup(e => e.Attribute("code").Value));
+                    var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
 
                     if (this.Code is null)
                         return viewModel;
