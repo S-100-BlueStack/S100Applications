@@ -138,9 +138,7 @@ namespace NuvionPro
 
                     var namespaceManager = new XmlNamespaceManager(new NameTable());
                     foreach (var s in scopes)
-                        namespaceManager.AddNamespace(s.Key, s.Value);
-
-                    var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
+                        namespaceManager.AddNamespace(s.Key, s.Value);                    
 
                     var constraints = this.PS.Constraints;
 
@@ -158,8 +156,6 @@ namespace NuvionPro
                         var namespaceManager = new XmlNamespaceManager(new NameTable());
                         foreach (var s in scopes)
                             namespaceManager.AddNamespace(s.Key, s.Value);
-
-                        var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
 
                         var constraints = this.PS.Constraints;
 
@@ -308,9 +304,7 @@ namespace NuvionPro
 
                     var namespaceManager = new XmlNamespaceManager(new NameTable());
                     foreach (var s in scopes)
-                        namespaceManager.AddNamespace(s.Key, s.Value);
-
-                    var productID = ps.XPathSelectElement("/S100FC:S100_FC_FeatureCatalogue/S100FC:productId", namespaceManager)!.Value;
+                        namespaceManager.AddNamespace(s.Key, s.Value);                    
                     
                     var constraints = this.PS.Constraints;
 
@@ -340,7 +334,7 @@ namespace NuvionPro
                                 if (selection.GetCount() == 0) continue;
 
                                 using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
+                                    WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
                                 }, true);
 
                                 while (cursor.MoveNext()) {
@@ -382,7 +376,7 @@ namespace NuvionPro
                                     if (selection.GetCount() == 0) continue;
 
                                     using var cursor = selection.Search(new QueryFilter {
-                                        WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                        WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
                                     }, true);
 
                                     while (cursor.MoveNext()) {
@@ -395,7 +389,7 @@ namespace NuvionPro
                                 if (selection.GetCount() == 0) continue;
 
                                 using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.PS}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                    WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
                                 }, true);
 
                                 while (cursor.MoveNext()) {
