@@ -103,7 +103,7 @@ namespace S100Framework.Applications.Singletons
         }
 
         const string fileReferencePattern = @"^101[A-Z]{2}\d{2}";
-        static Regex fileReferenceRegex = new Regex(fileReferencePattern);
+        static readonly Regex fileReferenceRegex = new Regex(fileReferencePattern);
 
         internal void Flush(Geodatabase destination) {
             var fileCount = 0;
@@ -119,9 +119,9 @@ namespace S100Framework.Applications.Singletons
                                 FileName = info!.fileReference!
                             };
 
-                            var s57FileName = fileReferenceRegex.Replace(info.fileReference!, info.fileReference.Substring(3,2));
+                            var s57FileName = fileReferenceRegex.Replace(info.fileReference!, info.fileReference.Substring(3, 2));
 
-//                            var s57FileName = info.fileReference!.Clone().ToString()!.Replace("101DK00", "DK");
+                            //                            var s57FileName = info.fileReference!.Clone().ToString()!.Replace("101DK00", "DK");
 
                             string? filePath = default;
 

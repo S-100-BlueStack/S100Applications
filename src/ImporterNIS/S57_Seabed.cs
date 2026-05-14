@@ -51,7 +51,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 15: { // SBDARE_SeabedArea                            
-                            var instance = new SeabedArea {                                
+                            var instance = new SeabedArea {
                             };
 
                             var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
@@ -79,16 +79,16 @@ namespace S100Framework.Applications
                                 if (i < natsur.Length)
                                     s.natureOfSurface = EnumHelper.GetEnumValue(natsur[i]);
                                 if (i < natqua.Length) {
-                                    if(!string.IsNullOrEmpty(natqua[i]))
-                                    s.natureOfSurfaceQualifyingTerms = [EnumHelper.GetEnumValue(natqua[i])];
+                                    if (!string.IsNullOrEmpty(natqua[i]))
+                                        s.natureOfSurfaceQualifyingTerms = [EnumHelper.GetEnumValue(natqua[i])];
                                 }
 
                                 surfaceCharacteristics = [.. surfaceCharacteristics, s];
                             }
-                            
+
                             //if (!surfaceCharacteristics.Any()) System.Diagnostics.Debugger.Break();
 
-                            instance.surfaceCharacteristics = surfaceCharacteristics;                            
+                            instance.surfaceCharacteristics = surfaceCharacteristics;
 
                             if (current.WATLEV.HasValue) {
                                 instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV);
@@ -225,7 +225,7 @@ namespace S100Framework.Applications
                     case 35: { // WEDKLP_WeedKelp
 
                             if (current.CATWED.HasValue && current.CATWED.Value == 3) {
-                                var seagrass = new Seagrass {                                    
+                                var seagrass = new Seagrass {
                                 };
 
                                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);

@@ -2,7 +2,6 @@
 using ArcGIS.Core.SystemCore;
 using CommandLine;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Collections;
 
 
 

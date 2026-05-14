@@ -282,15 +282,9 @@ namespace S100Framework.Applications
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.CIM;
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
     using S100FC.S128;
-    using S100FC.S128.SimpleAttributes;
     using S100Framework.Applications.S57auto.esri;
-    using System.Collections.Immutable;
     using System.Text.RegularExpressions;
-    using Windows.System.Diagnostics;
-    using static System.Net.Mime.MediaTypeNames;
 
     internal static partial class ImporterNIS
     {
@@ -518,7 +512,7 @@ namespace S100Framework.Applications
                     }
 
                     var multipart = polygons.Length == 1 ? polygons[0] : PolygonBuilderEx.CreatePolygon(polygons);
-                    products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart, SpecificUsage(coverage.PLTS_COMP_SCALE))];                    
+                    products = [.. products, new S101ProductCoverage(coverage.Name, coverage.PLTS_COMP_SCALE, coverage.DataCoverage, coverage.VDAT, coverage.SDAT, multipart, SpecificUsage(coverage.PLTS_COMP_SCALE))];
                 }
             }
 

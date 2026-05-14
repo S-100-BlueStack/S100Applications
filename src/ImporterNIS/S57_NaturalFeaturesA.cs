@@ -14,7 +14,7 @@ namespace S100Framework.Applications
             using var naturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(naturalFeaturesA);
 
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));            
+            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var buffer = featureClass.CreateRowBuffer();
 
             using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));

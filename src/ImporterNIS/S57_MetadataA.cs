@@ -32,7 +32,7 @@ namespace S100Framework.Applications
                 if (feature.GetShape().IsEmpty) continue;
 
                 var current = new MetaDataA(feature);
-                
+
                 var objectid = current.OBJECTID ?? default;
                 var globalid = current.GLOBALID;
 

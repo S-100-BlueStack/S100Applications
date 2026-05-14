@@ -20,7 +20,7 @@ namespace S100Framework.Applications
             //}
             //else {
             //    current = fogsignals.First();
-           // }
+            // }
 
             if (current.CATFOG.HasValue != default) {
                 instance.categoryOfFogSignal = EnumHelper.GetEnumValue(current.CATFOG.Value);

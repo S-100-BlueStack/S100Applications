@@ -1071,7 +1071,7 @@ namespace S100Framework.Applications.Singletons
                                 }
                             }
                         }
-                    }                    
+                    }
                     else {
                         throw new NotSupportedException($"GetRelated: {destinationFeatureClassName}");
                     }

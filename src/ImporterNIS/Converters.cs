@@ -10,7 +10,7 @@ namespace VortexLoader
 
         public bool Exist(Type TFrom, Type TTo) => this._converters.ContainsKey((TFrom, TTo));
 
-        public bool Exist<TFrom,TTo>() => this._converters.ContainsKey((typeof(TFrom), typeof(TTo)));
+        public bool Exist<TFrom, TTo>() => this._converters.ContainsKey((typeof(TFrom), typeof(TTo)));
 
 
         public void Register<TFrom, TTo>(Func<TFrom, int?, Geodatabase, TTo> converter) {

@@ -95,7 +95,7 @@ namespace S100Framework.Applications
                                 mooringArea.information = result.information.ToArray();
                                 mooringArea.SetInformationBindings(result.InformationBindings.ToArray());
 
-                                instance = mooringArea;                                
+                                instance = mooringArea;
                             }
                             else {
                                 var anchorageArea = new AnchorageArea();

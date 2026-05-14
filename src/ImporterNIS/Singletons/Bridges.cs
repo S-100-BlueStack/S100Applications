@@ -157,26 +157,26 @@ namespace S100Framework.Applications.Singletons
 
         private static List<BridgeElement>? _groups;
 
-        private Dictionary<string, List<BridgeRelation>> _bindings = [];
+        private readonly Dictionary<string, List<BridgeRelation>> _bindings = [];
 
-        private QueryFilter _whereClause;
+        private readonly QueryFilter _whereClause;
 
 
         internal List<BridgeRelation> GetBindings(string bridgeName) {
-            if (!_bindings.ContainsKey(bridgeName)) {
+            if (!this._bindings.ContainsKey(bridgeName)) {
                 return [];
             }
 
 
-            return _bindings[bridgeName];
+            return this._bindings[bridgeName];
         }
 
         internal void AddRelation(string parentName, string childName, Type childTypeS101, string? childDisplayName, string? nationalChildDisplayName) {
             // featureBinding with bridge aggregation
             // samme a-nr - featureBinding.
 
-            if (_bindings.ContainsKey(parentName)) {
-                _bindings[parentName].Add(new BridgeRelation() {
+            if (this._bindings.ContainsKey(parentName)) {
+                this._bindings[parentName].Add(new BridgeRelation() {
                     ChildName = childName,
                     childTypeS101 = childTypeS101,
                     ParentName = parentName,
@@ -185,7 +185,7 @@ namespace S100Framework.Applications.Singletons
                 });
             }
             else {
-                _bindings.Add(parentName, [ new BridgeRelation() {
+                this._bindings.Add(parentName, [ new BridgeRelation() {
                     ChildName = childName,
                     childTypeS101 = childTypeS101,
                     ParentName = parentName,
@@ -212,8 +212,8 @@ namespace S100Framework.Applications.Singletons
 
             _source = source ?? throw new ArgumentNullException(nameof(source));
             _destination = destination ?? throw new ArgumentNullException(nameof(destination));
-            _whereClause = whereClause;
-            
+            this._whereClause = whereClause;
+
 
             var culturalFeaturesATableName = "CulturalFeaturesA";
             var portsAndServicesTableName = "PortsAndServicesA";
@@ -223,10 +223,10 @@ namespace S100Framework.Applications.Singletons
 
             var featureGrouper = new FeatureGrouper();
             //_groups = featureGrouper.GroupAndDissolveToBridgeElements(new() { culturalFeaturesA, portsAndServicesA }, ImporterNIS.QueryFilter);
-            
+
             var sqlSyntax = _source.GetSQLSyntax();
 
-            _groups = featureGrouper.GroupAndDissolveToBridgeElements(sqlSyntax, [culturalFeaturesA], _whereClause);
+            _groups = featureGrouper.GroupAndDissolveToBridgeElements(sqlSyntax, [culturalFeaturesA], this._whereClause);
         }
 
         internal static void Initialize(Geodatabase source, Geodatabase destination, QueryFilter whereClause) {
@@ -300,7 +300,7 @@ namespace S100Framework.Applications.Singletons
                             var relatedBridge = row.UID();
                             var bridgeElement = bridgeElements.FirstOrDefault(e => e.Name == relatedBridge);
                             if (bridgeElement is null) {
-                                Logger.Current.Error($"Can't find bridge ({relatedBridge}) element ({binding.ChildName},{binding .childTypeS101})!");
+                                Logger.Current.Error($"Can't find bridge ({relatedBridge}) element ({binding.ChildName},{binding.childTypeS101})!");
                                 continue;
                             }
 
@@ -320,7 +320,7 @@ namespace S100Framework.Applications.Singletons
                                 //Magretheholmsbroen
                                 //Logger.Current.Error($"Bridge (opening) has no opening elements [{displayName}].");
                                 continue;
-                                
+
                             }
                             if (c.Count() != c.Distinct().Count()) {
                                 Logger.Current.Error($"Bridge (opening) has elements with multiple categoryOfBridge this cannot be converted [{displayName}].");

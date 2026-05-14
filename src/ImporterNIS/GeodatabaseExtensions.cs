@@ -8,7 +8,7 @@ namespace S100Framework.Applications
 
         internal static string? GetName(this Geodatabase geodatabase, string name) {
             var _layerDefinitions = geodatabase.GetDefinitions<FeatureClassDefinition>();
-            var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();            
+            var _tableDefinitions = geodatabase.GetDefinitions<TableDefinition>();
 
             var tableName = _layerDefinitions?.FirstOrDefault<FeatureClassDefinition>(e => e.GetAliasName().Equals(name.ToLower(), StringComparison.InvariantCultureIgnoreCase))?.GetName();
             if (tableName == null) {

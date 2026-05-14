@@ -1,14 +1,8 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using NetTopologySuite.Index.HPRtree;
 using S100FC;
 using S100FC.S101.FeatureTypes;
-using S100FC.S101.SimpleAttributes;
-using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
-using S100Framework.Applications.Singletons;
-using VortexLoader.Singletons;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace S100Framework.Applications
