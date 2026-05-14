@@ -754,18 +754,20 @@ namespace TestNisImporter
         
         [Fact]
         public void BuildImportS57ToGeodatabaseScripts() {
-            var root = new IO.DirectoryInfo(@"c:\Users\Jens Søe\OneDrive\Geodatastyrelsen\ENC");
+            var root = new IO.DirectoryInfo(@"l:\B061450\ArcGIS\NOAA\S57_20260513\");
 
             var python = new StringBuilder();
 
-            var filter = "";
-            foreach (var enc in root.EnumerateDirectories()) {
-                if (enc.Name.Contains("cancel", StringComparison.InvariantCultureIgnoreCase)) continue;
-                if (!string.IsNullOrEmpty(filter) &&!enc.Name.Contains(filter)) continue;
+            string[] filters = ["US3", "US4", "US5", "US6"];
+            foreach (var filter in filters) {
+                foreach (var enc in root.EnumerateDirectories()) {
+                    if (enc.Name.Contains("cancel", StringComparison.InvariantCultureIgnoreCase)) continue;
+                    if (!string.IsNullOrEmpty(filter) && !enc.Name.Contains(filter)) continue;
 
-                var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
+                    var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
 
-                python.AppendLine(command);
+                    python.AppendLine(command);
+                }
             }
 
             this._output.WriteLine(python.ToString());
