@@ -57,17 +57,18 @@ namespace ArcGIS.Core.Data
     public static class DataExtensions
     {
         public static string Prefix(string tableName) => tableName.ToLower().Split('.')[^1] switch {
-            "point" => "F102",
-            "topo_point" => "T102",
-            "pointset" => "F103",
-            "topo_pointset" => "T103",
+            "featuretype" => "F100",
             "curve" => "F101",
-            "topo_curve" => "T101",
+            "point" => "F102",
+            "pointset" => "F103",
             "surface" => "F104",
-            "topo_surface" => "T104",
-            "featuretype" => "F105",
-            "informationtype" => "I106",
-            "attachment" => "A107",
+            "topo_curve" => "F105",
+            "topo_point" => "F106",            
+            "topo_pointset" => "F107",                      
+            "topo_surface" => "F108",
+            
+            "informationtype" => "I109",
+            "attachment" => "I110",
             _ => throw new NotImplementedException(),
         };
 

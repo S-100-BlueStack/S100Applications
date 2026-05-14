@@ -30,7 +30,7 @@ namespace S100Framework.Applications
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
             using var buffer = featureClass.CreateRowBuffer();
 
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_curve"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
 
