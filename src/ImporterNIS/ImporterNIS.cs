@@ -765,6 +765,7 @@ namespace S100Framework.Applications
 
                             var catbrg = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.CATBRG));
                             var condtn = parts.Where(e => e.Item2!.CONDTN.HasValue);
+                            var natcon = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.NATCON));
 
                             if (hashFeatureType.Where(e => ids.Contains(e.Key)).Any(e => e.Value is SpanOpening)) {
                                 instance.openingBridge = true;
@@ -790,13 +791,13 @@ namespace S100Framework.Applications
                             else {
                                 instance.openingBridge = false;
                             }
-                            
+
                             if (catbrg.Any()) {
                                 var values = catbrg.SelectMany(e => e.Item2!.CATBRG!.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
                                 string[] construction = ["10", "6", "12", "8"];
                                 if (values.Any(e => construction.Contains(e))) {
-                                    var c = values.Where(e=>construction.Contains(e)).Distinct();
+                                    var c = values.Where(e => construction.Contains(e)).Distinct();
                                     if (c.Count() != 1) System.Diagnostics.Debugger.Break();
                                     instance.bridgeConstruction = c.First() switch {
                                         "10" => 2,  //  viaduct
@@ -806,7 +807,24 @@ namespace S100Framework.Applications
                                         "-32767" => null,
                                         _ => throw new NotImplementedException(),
                                     };
-                                }                                
+                                }
+                            }
+
+                            if (natcon.Any()) {
+                                var values = natcon.SelectMany(e => e.Item2!.NATCON!.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+                                string[] natureOfConstruction = ["1", "2", "6", "7"];
+                                if (values.Any(e => natureOfConstruction.Contains(e))) {
+                                    var c = values.Where(e => natureOfConstruction.Contains(e)).Distinct().Select(e => e switch {
+                                        "1" => 1,
+                                        "2" => 2,
+                                        "6" => 6,
+                                        "7" => 7,
+                                        "-32767" => default(int?),
+                                        _ => throw new NotImplementedException(),
+                                    });
+                                    instance.natureOfConstruction = [..c];
+                                }
                             }
 
                             if (condtn.Any()) {
@@ -826,7 +844,7 @@ namespace S100Framework.Applications
                                 }
                             }
 
-                            var pylons = parts.Where(e => e.Item2!.FcSubtype== 45);
+                            var pylons = parts.Where(e => e.Item2!.FcSubtype == 45);
                             if (pylons.Any()) {
                                 var height = pylons.Where(e => e.Item2!.HEIGHT.HasValue);
                                 if (height.Any()) {
@@ -843,6 +861,31 @@ namespace S100Framework.Applications
                             var colour = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.COLOUR));
                             if (colour.Any()) {
                                 System.Diagnostics.Debugger.Break();
+                            }
+
+                            var date = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.DATEND) || !string.IsNullOrEmpty(e.Item2.DATSTA));
+                            if (date.Any()) {
+                                var datsta = date.Where(e => !string.IsNullOrEmpty(e.Item2!.DATSTA));
+                                var datend = date.Where(e => !string.IsNullOrEmpty(e.Item2!.DATEND));
+
+                                var fixedDateRange = new fixedDateRange();
+                                if (datsta.Any()) {
+                                    var values = datsta.Select(e => e.Item2!.DATSTA!).Distinct();
+                                    if (values.Count() > 1) System.Diagnostics.Debugger.Break();
+                                    fixedDateRange.dateStart = values.First() switch {
+                                        "-32767" => null,
+                                        _ => values.First(),
+                                    };
+                                }
+                                if (datend.Any()) {
+                                    var values = datend.Select(e => e.Item2!.DATEND!).Distinct();
+                                    if (values.Count() > 1) System.Diagnostics.Debugger.Break();
+                                    fixedDateRange.dateEnd = values.First() switch {
+                                        "-32767" => null,
+                                        _ => values.First(),
+                                    };
+                                }
+                                instance.fixedDateRange = fixedDateRange;
                             }
 
                             featureName[] featureNames = [];
