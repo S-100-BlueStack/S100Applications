@@ -872,6 +872,8 @@ namespace S100Framework.Applications
                             var featureN = surface.CreateRow(bufferBridge);
                             var name = featureN.UID();
 
+                            string[] aggregation = [nameof(SpanFixed), nameof(SpanOpening), nameof(Pontoon), nameof(PylonBridgeSupport)];
+
                             foreach (var uid in ids) {
                                 using var cursor = surface.CreateUpdateCursor(new QueryFilter {
                                     WhereClause = $"UID = '{uid}'"
@@ -879,6 +881,8 @@ namespace S100Framework.Applications
                                 cursor.MoveNext();
 
                                 using var current = cursor.Current;
+
+                                if (!aggregation.Contains(Convert.ToString(current["code"]))) continue;
 
                                 var json = current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(current["featureBindings"])!;
                                 var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
@@ -891,7 +895,7 @@ namespace S100Framework.Applications
                                      association = new association{
                                          S100FC_code = nameof(BridgeAggregation),
                                      },
-                                     featureType = "Bridge",
+                                     featureType = nameof(Bridge),
                                      featureId = name,
                                 }];
 
