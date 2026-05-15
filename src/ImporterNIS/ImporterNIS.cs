@@ -3,8 +3,11 @@ using ArcGIS.Core.Geometry;
 
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
+using ImporterNIS.Singletons;
+using S100FC;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
+using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
@@ -55,7 +58,7 @@ namespace S100Framework.Applications
         internal static string s101version = S100FC.S101.Summary.Version.ToString();
         internal static Geodatabase? _geodatabase;
 
-        internal static bool createBridgesAndRelations = true;
+        //internal static bool createBridgesAndRelations = false;
 
         //internal static FeatureRelations featureRelations = null;
         internal static RelatedEquipment? relatedEquipment;
@@ -692,6 +695,205 @@ namespace S100Framework.Applications
                 }
                 append = true;
             }
+
+            //  Bridges
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Building bridges");
+
+                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+
+                var whereClause = $"ps = '{ps101}' AND code IN ('SpanFixed','SpanOpening','Pontoon','PylonBridgeSupport')";
+
+                int[] specificUsage = [];
+                {
+                    using var cursor = surface.Search(new QueryFilter {
+                        PrefixClause = "Distinct",
+                        WhereClause = whereClause,
+                        SubFields = "specificusage",
+                        PostfixClause = "ORDER BY specificusage DESC",
+                    }, true);
+
+                    while (cursor.MoveNext()) {
+                        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
+                        specificUsage = [.. specificUsage, _];
+                    }
+                }
+
+                foreach (var usage in specificUsage.OrderDescending()) {
+                    var hashGeometry = new Dictionary<string, Polygon>();
+                    var hashFeatureType = new Dictionary<string, FeatureType>();
+
+                    using var cursor = surface.Search(new QueryFilter {
+                        WhereClause = whereClause + $" AND specificUsage = {usage}",
+                    }, true);
+
+                    while (cursor.MoveNext()) {
+                        var f = (Feature)cursor.Current;
+
+                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
+
+                        FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
+                            "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
+                            "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"]), typeof(SpanOpening)),
+                            "pontoon" => AttributeFlattenExtensions.Unflatten<Pontoon>(Convert.ToString(f["attributeBindings"]), typeof(Pontoon)),
+                            "pylonbridgesupport" => AttributeFlattenExtensions.Unflatten<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"]), typeof(PylonBridgeSupport)),
+                            _ => throw new NotImplementedException(),
+                        };
+                        hashFeatureType.Add(Convert.ToString(f["UID"])!, featureType);
+                    }
+
+                    var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
+
+
+                    var hashSetUnion = GroupTouchingPolygons([.. geometries]);
+
+                    Store((d) => {
+                        using var surface = d.OpenDataset<FeatureClass>(d.GetName("surface"));
+                        using var bufferBridge = surface.CreateRowBuffer();
+
+                        bufferBridge["ps"] = ps101;
+
+                        foreach (var _ in hashSetUnion) {
+                            var dissolvedGeometry = _.Select(e => e.polygon);
+                            var polygon = (Polygon)GeometryEngine.Instance.Union([.. dissolvedGeometry]);
+
+                            var instance = new Bridge();
+
+                            var ids = _.Select(e => e.key).ToList();
+
+                            var parts = ids.Where(e => BridgeParts.Instance.Parts(e) is not null).Select(e => (e, BridgeParts.Instance.Parts(e)));
+
+                            var catbrg = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.CATBRG));
+                            var condtn = parts.Where(e => e.Item2!.CONDTN.HasValue);
+
+                            if (hashFeatureType.Where(e => ids.Contains(e.Key)).Any(e => e.Value is SpanOpening)) {
+                                instance.openingBridge = true;
+
+                                if (catbrg.Any()) {
+                                    var values = catbrg.SelectMany(e => e.Item2!.CATBRG!.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+                                    string[] categoryOfOpeningBridge = ["3", "4", "5", "7"];
+                                    if (values.Any(e => categoryOfOpeningBridge.Contains(e))) {
+                                        var c = values.Where(e => categoryOfOpeningBridge.Contains(e)).Distinct();
+                                        if (c.Count() != 1) System.Diagnostics.Debugger.Break();
+                                        instance.categoryOfOpeningBridge = c.First() switch {
+                                            "3" => 3,  //  swing bridge
+                                            "4" => 4,   //  lifting bridge
+                                            "5" => 5,  //  bascule bridge
+                                            "7" => 7,    //  drawbridge
+                                            "-32767" => null,
+                                            _ => throw new NotImplementedException(),
+                                        };
+                                    }
+                                }
+                            }
+                            else {
+                                instance.openingBridge = false;
+                            }
+                            
+                            if (catbrg.Any()) {
+                                var values = catbrg.SelectMany(e => e.Item2!.CATBRG!.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+                                string[] construction = ["10", "6", "12", "8"];
+                                if (values.Any(e => construction.Contains(e))) {
+                                    var c = values.Where(e=>construction.Contains(e)).Distinct();
+                                    if (c.Count() != 1) System.Diagnostics.Debugger.Break();
+                                    instance.bridgeConstruction = c.First() switch {
+                                        "10" => 2,  //  viaduct
+                                        "6" => 3,   //  pontoon bridge
+                                        "12" => 4,  //  suspension bridge
+                                        "8" => 5,   //  transporter bridge
+                                        "-32767" => null,
+                                        _ => throw new NotImplementedException(),
+                                    };
+                                }                                
+                            }
+
+                            if (condtn.Any()) {
+                                var values = condtn.Select(e => e.Item2!.CONDTN!.Value);
+
+                                List<int> condition = [1, 2, 5];
+                                if (values.Any(e => condition.Contains(e))) {
+                                    var c = values.Where(e => condition.Contains(e)).Distinct();
+                                    if (c.Count() != 1) System.Diagnostics.Debugger.Break();
+                                    instance.condition = c.First() switch {
+                                        1 => 1, //  under construction
+                                        2 => 2, //  ruined
+                                        5 => 5, //  planned construction                                     
+                                        -32767 => null,
+                                        _ => throw new NotImplementedException(),
+                                    };
+                                }
+                            }
+
+                            var pylons = parts.Where(e => e.Item2!.FcSubtype== 45);
+                            if (pylons.Any()) {
+                                var height = pylons.Where(e => e.Item2!.HEIGHT.HasValue);
+                                if (height.Any()) {
+                                    var values = height.Select(e => e.Item2!.HEIGHT!.Value);
+
+                                    instance.height = values.Max() switch {
+                                        -32767 => null,
+                                        _ => values.Max(),
+                                    };
+                                }
+                            }
+
+                            featureName[] featureNames = [];
+                            foreach (var p in parts) {
+                                var featureName = GetFeatureName(p.Item2!.OBJNAM, p.Item2!.NOBJNM);
+                                if (featureName is not null) {
+                                    if (featureNames.Any()) {
+                                        foreach (var e in featureName) {
+                                            if (!featureNames.Any(f => f.name!.Equals(e.name, StringComparison.InvariantCultureIgnoreCase) && f.language!.Equals(e.language, StringComparison.InvariantCultureIgnoreCase))) {
+                                                System.Diagnostics.Debugger.Break();
+                                            }
+                                        }
+                                    }
+                                    featureNames = featureName;
+                                }
+                            }
+
+                            if (featureNames.Any())
+                                instance.featureName = featureNames;
+
+                            bufferBridge["code"] = instance.GetType().Name;
+                            bufferBridge["attributebindings"] = instance.Flatten();
+
+                            SetShape(bufferBridge, polygon);
+                            SetUsageBand(bufferBridge, usage);
+
+                            var featureN = surface.CreateRow(bufferBridge);
+                            var name = featureN.UID();
+
+                            foreach (var uid in ids) {
+                                using var cursor = surface.CreateUpdateCursor(new QueryFilter {
+                                    WhereClause = $"UID = '{uid}'"
+                                }, true);
+                                cursor.MoveNext();
+
+                                using var current = cursor.Current;
+
+                                var json = current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(current["featureBindings"])!;
+                                var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                if (featureBindings is null)
+                                    featureBindings = [];
+
+                                featureBindings = [.. featureBindings, new featureBinding {
+                                     roleType = "aggregation",
+                                     role = "theCollection",
+                                     featureType = "Bridge",
+                                     featureId = name,
+                                }];
+
+                                current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                current.Store();
+                            }
+                        }
+                    }, destination);
+                }
+            }
+
             using (Geodatabase source = createGeodatabase()) {
                 using (var destination = createTargetGeodatabase()) {
                     Store((d) => {
@@ -1734,6 +1936,55 @@ namespace S100Framework.Applications
             }
 
             throw new NotSupportedException("Unsupported EsriJSON geometry type.");
+        }
+
+        public static List<List<(string key, Polygon polygon)>> GroupTouchingPolygons((string key, Polygon polygon)[] polygons) {
+            int count = polygons.Length;
+
+            // --- Union-Find setup ---
+            int[] parent = new int[count];
+            int[] rank = new int[count];
+            for (int i = 0; i < count; i++) parent[i] = i;
+
+            int Find(int x) {
+                if (parent[x] != x) parent[x] = Find(parent[x]); // path compression
+                return parent[x];
+            }
+
+            void Union(int a, int b) {
+                int ra = Find(a), rb = Find(b);
+                if (ra == rb) return;
+                if (rank[ra] < rank[rb]) (ra, rb) = (rb, ra);
+                parent[rb] = ra;
+                if (rank[ra] == rank[rb]) rank[ra]++;
+            }
+
+            // --- Check each pair ---
+            var engine = GeometryEngine.Instance;
+
+            for (int i = 0; i < count; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    // Touches = share boundary but interiors don't overlap
+                    // Intersects = catches overlapping polygons too
+                    bool adjacent = engine.Touches(polygons[i].polygon, polygons[j].polygon)
+                                 || engine.Intersects(polygons[i].polygon, polygons[j].polygon);
+
+                    if (adjacent)
+                        Union(i, j);
+                }
+            }
+
+            // --- Collect groups ---
+            var groups = new Dictionary<int, List<(string, Polygon)>>();
+
+            for (int i = 0; i < count; i++) {
+                int root = Find(i);
+                if (!groups.ContainsKey(root))
+                    groups[root] = new List<(string, Polygon)>();
+                groups[root].Add(polygons[i]);
+            }
+
+            return new List<List<(string, Polygon)>>(groups.Values);
         }
     }
 }

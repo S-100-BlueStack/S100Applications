@@ -1,9 +1,11 @@
 ﻿using ArcGIS.Core.Data;
+using ImporterNIS.Singletons;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
+using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 
@@ -13,56 +15,54 @@ namespace S100Framework.Applications
     {
         private static void S57_CulturalFeaturesA(Geodatabase source, Geodatabase target, QueryFilter filter) {
 
+            var names = new List<(string UID, string? OBJNAM, string? NOBJNM)>();
 
             var tableName = "CulturalFeaturesA";
 
             using var culturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(culturalFeaturesA);
 
-            using var surface = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-            using var featureType = target.OpenDataset<Table>(target.GetName("featuretype"));
-
-            using var buffer = featureType.CreateRowBuffer();
-
-            using var bufferSurface = surface.CreateRowBuffer();
-
             // Bridges - Store an aggregation per bridge
-            if (createBridgesAndRelations) {
-                Bridges.Initialize(source, target, filter);
+            //if (createBridgesAndRelations) {
+            //    using var featureTypeBridge = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+            //    using var bufferBridge = featureTypeBridge.CreateRowBuffer();
 
-                foreach (var bridge in Bridges.Instance.BridgeElements()) {
-                    var instance = new Bridge();
+            //    Bridges.Initialize(source, target, filter);
+
+            //    foreach (var bridge in Bridges.Instance.BridgeElements()) {
+            //        var instance = new Bridge();
 
 
-                    buffer["ps"] = ps101;
-                    buffer["code"] = instance.GetType().Name;
+            //        bufferBridge["ps"] = ps101;
+            //        bufferBridge["code"] = instance.GetType().Name;
+            //        bufferBridge["attributebindings"] = instance.Flatten();
 
+            //        SetShape(bufferBridge, bridge.DissolvedGeometry);
+            //        SetUsageBand(bufferBridge, bridge.PLTS_COMP_SCALE);
 
-                    buffer["attributebindings"] = instance.Flatten();
+            //        var featureN = featureTypeBridge.CreateRow(bufferBridge);
+            //        var name = featureN.UID();
 
-                    //SetShape(buffer, bridge.DissolvedGeometry);
-                    //SetUsageBand(buffer, ImporterNIS._compilationScale);
+            //        bridge.Name = name;
 
-                    var featureN = featureType.CreateRow(buffer);
-                    var name = featureN.UID();
+            //        //// Create association to use in bridge relations
+            //        //var featureAssociationBuffer = featureAssociation.CreateRowBuffer();
 
-                    bridge.Name = name;
+            //        //featureAssociationBuffer["ps"] = ImporterNIS.ps101;
+            //        //featureAssociationBuffer["code"] = "BridgeAggregation";
+            //        //featureAssociation
 
-                    //// Create association to use in bridge relations
-                    //var featureAssociationBuffer = featureAssociation.CreateRowBuffer();
+            //        //var association = featureAssociation.CreateRow(featureAssociationBuffer);
+            //        //string featureAssociationName = association.Crc32();
+            //        //bridge.BridgeAggregationName = featureAssociationName;
 
-                    //featureAssociationBuffer["ps"] = ImporterNIS.ps101;
-                    //featureAssociationBuffer["code"] = "BridgeAggregation";
-                    //featureAssociation
+            //        //ConversionAnalytics.Instance.AddConverted("DerivedBridgeElement", Guid.Empty, name);
 
-                    //var association = featureAssociation.CreateRow(featureAssociationBuffer);
-                    //string featureAssociationName = association.Crc32();
-                    //bridge.BridgeAggregationName = featureAssociationName;
+            //    }
+            //}
 
-                    //ConversionAnalytics.Instance.AddConverted("DerivedBridgeElement", Guid.Empty, name);
-
-                }
-            }
+            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+            using var buffer = featureClass.CreateRowBuffer();
 
             using var cursor = culturalFeaturesA.Search(filter, true);
             int recordCount = 0;
@@ -148,17 +148,17 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -176,13 +176,13 @@ namespace S100Framework.Applications
 
                             BridgeElement relatedBridge = null!;
 
-                            if (createBridgesAndRelations) {
-                                var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                                if (relatedBridges.Count() != 1) {
-                                    throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
-                                }
-                                relatedBridge = relatedBridges[0];
-                            }
+                            //if (createBridgesAndRelations) {
+                            //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
+                            //    if (relatedBridges.Count() != 1) {
+                            //        throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
+                            //    }
+                            //    relatedBridge = relatedBridges[0];
+                            //}
 
                             bool openingBridge = false;
                             List<bridgeFunction> bridgeFunctionValue = [];
@@ -330,35 +330,36 @@ namespace S100Framework.Applications
                                 instance.information = result.information.ToArray();
                                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                                bufferSurface["ps"] = ps101;
-                                bufferSurface["code"] = instance.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
 
 
-                                bufferSurface["attributebindings"] = instance.Flatten();
-                                bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
 
-                                SetShape(bufferSurface, current.SHAPE);
-                                SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                                SetShape(buffer, current.SHAPE);
+                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = surface.CreateRow(bufferSurface);
+                                var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
+                                BridgeParts.Instance.Add(name, current);
 
-                                if (createBridgesAndRelations) {
-                                    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanOpening), current.OBJNAM, current.NOBJNM);
+                                //if (createBridgesAndRelations) {
+                                //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanOpening), current.OBJNAM, current.NOBJNM);
 
-                                    // Create link to bridge - SpanOpening
-                                    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                                        role = "theCollection",
-                                        roleType = "aggregation",
-                                        featureId = relatedBridge.Name,
-                                        featureType = nameof(Bridge),
-                                    }];
+                                //    // Create link to bridge - SpanOpening
+                                //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
+                                //        role = "theCollection",
+                                //        roleType = "aggregation",
+                                //        featureId = relatedBridge.Name,
+                                //        featureType = nameof(Bridge),
+                                //    }];
 
-                                    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                                    featureN.Store();
-                                }
+                                //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
+                                //    featureN.Store();
+                                //}
 
                                 if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                     relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
@@ -370,13 +371,13 @@ namespace S100Framework.Applications
                             }
 
                             if (!openingBridge) {
-                                if (createBridgesAndRelations) {
-                                    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                                    if (relatedBridges.Count() != 1) {
-                                        throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
-                                    }
-                                    relatedBridge = relatedBridges[0];
-                                }
+                                //if (createBridgesAndRelations) {
+                                //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
+                                //    if (relatedBridges.Count() != 1) {
+                                //        throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
+                                //    }
+                                //    relatedBridge = relatedBridges[0];
+                                //}
 
                                 SpanFixed instance = null!;
 
@@ -427,35 +428,36 @@ namespace S100Framework.Applications
                                         instance.verticalDatum = verticalDatum.value;
                                 }
 
-                                bufferSurface["ps"] = ps101;
-                                bufferSurface["code"] = instance.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
 
 
-                                bufferSurface["attributebindings"] = instance.Flatten();
-                                bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
 
-                                SetShape(bufferSurface, current.SHAPE);
-                                SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                                SetShape(buffer, current.SHAPE);
+                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = surface.CreateRow(bufferSurface);
+                                var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
-                                if (createBridgesAndRelations) {
-                                    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanFixed), current.OBJNAM, current.NOBJNM);
+                                BridgeParts.Instance.Add(name, current);
 
-                                    // Create link to bridge - Spanfixed
-                                    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                                        role = "theCollection",
-                                        roleType = "aggregation",
-                                        featureId = relatedBridge.Name,
-                                        featureType = nameof(Bridge),
-                                    }];
+                                //if (createBridgesAndRelations) {
+                                //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanFixed), current.OBJNAM, current.NOBJNM);
 
-                                    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                                    featureN.Store();
+                                //    // Create link to bridge - Spanfixed
+                                //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
+                                //        role = "theCollection",
+                                //        roleType = "aggregation",
+                                //        featureId = relatedBridge.Name,
+                                //        featureType = nameof(Bridge),
+                                //    }];
 
-                                }
+                                //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
+                                //    featureN.Store();
+                                //}
 
                                 if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                     relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
@@ -541,17 +543,17 @@ namespace S100Framework.Applications
                             */
                             instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
@@ -660,17 +662,17 @@ namespace S100Framework.Applications
 
                             instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -798,17 +800,17 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -901,17 +903,17 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -923,6 +925,7 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
+                    
                     case 30: { // FORSTC_FortifiedStructure
                             var instance = new FortifiedStructure();
 
@@ -1001,17 +1004,17 @@ namespace S100Framework.Applications
 
 
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1028,17 +1031,17 @@ namespace S100Framework.Applications
                             if (current.CATLMK == "19") {
                                 var windturbine = ImporterNIS._converterRegistry.Convert<WindTurbine>(current);
 
-                                bufferSurface["ps"] = ps101;
-                                bufferSurface["code"] = windturbine.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = windturbine.GetType().Name;
 
                                 System.Text.Json.JsonSerializer.Serialize(windturbine, jsonSerializerOptions);
-                                bufferSurface["attributebindings"] = windturbine.Flatten();
-                                bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(windturbine.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["attributebindings"] = windturbine.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(windturbine.GetInformationBindings(), jsonSerializerOptions);
 
-                                SetShape(bufferSurface, current.SHAPE);
-                                SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                                SetShape(buffer, current.SHAPE);
+                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var windturbineFeature = surface.CreateRow(bufferSurface);
+                                var windturbineFeature = featureClass.CreateRow(buffer);
 
                                 if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                     relatedEquipment?.CreateRelatedAreaEquipment(current, windturbine, windturbineFeature, windturbine.scaleMinimum);
@@ -1152,17 +1155,17 @@ namespace S100Framework.Applications
                             instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1260,17 +1263,17 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1285,15 +1288,15 @@ namespace S100Framework.Applications
 
                     case 45: { // PYLONS_PylonBridgeSupport
 
-                            BridgeElement? relatedBridge = default;
+                            //BridgeElement? relatedBridge = default;
 
-                            if (createBridgesAndRelations) {
-                                var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                                if (relatedBridges.Count() != 1)
-                                    throw new NotSupportedException("Multiple bridges share elements");
+                            //if (createBridgesAndRelations) {
+                            //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
+                            //    if (relatedBridges.Count() != 1)
+                            //        throw new NotSupportedException("Multiple bridges share elements");
 
-                                relatedBridge = relatedBridges[0];
-                            }
+                            //    relatedBridge = relatedBridges[0];
+                            //}
                             var instance = new PylonBridgeSupport {
                                 categoryOfPylon = default,
                             };
@@ -1390,35 +1393,33 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (createBridgesAndRelations) {
+                            //if (createBridgesAndRelations) {
+                            //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(PylonBridgeSupport), current.OBJNAM, current.NOBJNM);
 
-                                Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(PylonBridgeSupport), current.OBJNAM, current.NOBJNM);
+                            //    // Create link to bridge - PylonBridgeSupport
+                            //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
+                            //            role = "theCollection",
+                            //            roleType = "aggregation",
+                            //            featureId = relatedBridge.Name,
+                            //            featureType = nameof(Bridge),
+                            //        }];
 
-                                // Create link to bridge - PylonBridgeSupport
-                                featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                                        role = "theCollection",
-                                        roleType = "aggregation",
-                                        featureId = relatedBridge.Name,
-                                        featureType = nameof(Bridge),
-                                    }];
-
-                                featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                                featureN.Store();
-
-                            }
+                            //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
+                            //    featureN.Store();
+                            //}
 
                             //FeatureRelations.Instance.AddRelation(new(typeof(Bridge), relatedBridge, new(instance.GetType(), name), featureN, s101MasterFeature, _featureAssociation);
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1479,17 +1480,17 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1551,17 +1552,17 @@ namespace S100Framework.Applications
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1673,17 +1674,17 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1768,17 +1769,17 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            bufferSurface["ps"] = ps101;
-                            bufferSurface["code"] = instance.GetType().Name;
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
 
 
-                            bufferSurface["attributebindings"] = instance.Flatten();
-                            bufferSurface["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferSurface, current.SHAPE);
-                            SetUsageBand(bufferSurface, current.PLTS_COMP_SCALE!.Value);
+                            SetShape(buffer, current.SHAPE);
+                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = surface.CreateRow(bufferSurface);
+                            var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1798,9 +1799,9 @@ namespace S100Framework.Applications
                 }
             }
 
-            if (createBridgesAndRelations) {
-                Bridges.Instance.CreateRelations();
-            }
+            //if (createBridgesAndRelations) {
+            //    Bridges.Instance.CreateRelations();
+            //}
 
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }

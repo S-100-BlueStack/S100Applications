@@ -14,19 +14,22 @@ namespace S100Framework.Applications.Singletons
         public int Id { get; }
         public string Name { get; set; } = null!;
 
-        public List<string> ObjectIDs { get; private set; }
+        public List<string> ObjectIDs { get; init; }
 
-        public List<long> BridgeCategories { get; private set; }
+        public List<long> BridgeCategories { get; init; }
 
         public string BridgeAggregationName { get; set; } = null!;
 
-        public Geometry DissolvedGeometry { get; private set; }
+        public Geometry DissolvedGeometry { get; init; }
 
-        public BridgeElement(int id, List<string> objectIDs, List<long> bridgeCategories, Geometry dissolvedGeometry) {
+        public int PLTS_COMP_SCALE { get; init; }
+
+        public BridgeElement(int id, List<string> objectIDs, List<long> bridgeCategories, Geometry dissolvedGeometry, int PLTS_COMP_SCALE) {
             this.Id = id;
             this.ObjectIDs = objectIDs;
             this.DissolvedGeometry = dissolvedGeometry;
             this.BridgeCategories = bridgeCategories;
+            this.PLTS_COMP_SCALE = PLTS_COMP_SCALE;
         }
 
         public bool ContainsOID(string tableName, long oid) {
@@ -39,7 +42,7 @@ namespace S100Framework.Applications.Singletons
         internal List<BridgeElement> GroupAndDissolveToBridgeElements(SQLSyntax syntax, List<FeatureClass> featureclasses, QueryFilter filter) {
             var groups = new List<List<string>>();
             var bridgeCategories = new List<(string ObjectID, long catbrg)>();
-            var features = new List<(string ObjectID, Geometry Geometry)>();
+            var features = new List<(string ObjectID, Geometry Geometry, int PLTS_COMP_SCALE)>();
 
             foreach (var featureclass in featureclasses) {
                 var tuple = syntax.ParseTableName(featureclass.GetName());
@@ -51,7 +54,7 @@ namespace S100Framework.Applications.Singletons
                             long catbrg = Convert.ToInt32(row["CATBRG"]);
                             var shape = row.GetShape();
 
-                            features.Add(($"{tableName}:{oid}", shape));
+                            features.Add(($"{tableName}:{oid}", shape, Convert.ToInt32(row["PLTS_COMP_SCALE"])));
                             bridgeCategories.Add(($"{tableName}:{oid}", catbrg));
                         }
                     }
@@ -65,6 +68,8 @@ namespace S100Framework.Applications.Singletons
                 }
                 return -1;
             }
+
+            var compilationScale = new Dictionary<int, int>();
 
             foreach (var feature in features) {
                 string oid = feature.ObjectID;
@@ -117,8 +122,17 @@ namespace S100Framework.Applications.Singletons
             int idCounter = 1;
 
             foreach (var group in groups) {
-                var geoms = group.Select(oid => features.First(f => f.ObjectID == oid).Geometry).ToList();
-                var cats = group.Select(oid => bridgeCategories.First(f => f.ObjectID == oid).catbrg).ToList();
+                //var geoms = group.Select(oid => features.First(f => f.ObjectID == oid).Geometry).ToList();
+                //var cats = group.Select(oid => bridgeCategories.First(f => f.ObjectID == oid).catbrg).ToList();
+
+                var geoms = group.Select(oid => features.Single(f => f.ObjectID == oid).Geometry).ToList();
+                var cats = group.Select(oid => bridgeCategories.Single(f => f.ObjectID == oid).catbrg).ToList();
+
+
+                
+                var PLTS_COMP_SCALE = group.Select(oid => features.Single(f => f.ObjectID == oid).PLTS_COMP_SCALE);
+                if (PLTS_COMP_SCALE.Distinct().Count() > 1)
+                    System.Diagnostics.Debugger.Break();
 
                 Geometry dissolved = null!;
                 if (geoms.Count == 1) {
@@ -128,7 +142,7 @@ namespace S100Framework.Applications.Singletons
                     dissolved = GeometryEngine.Instance.Union(geoms);
                 }
 
-                var element = new BridgeElement(idCounter++, group, cats, dissolved);
+                var element = new BridgeElement(idCounter++, group, cats, dissolved, PLTS_COMP_SCALE.First());
 
                 bridgeElements.Add(element);
             }
