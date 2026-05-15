@@ -888,6 +888,9 @@ namespace S100Framework.Applications
                                 featureBindings = [.. featureBindings, new featureBinding {
                                      roleType = "aggregation",
                                      role = "theCollection",
+                                     association = new association{
+                                         S100FC_code = nameof(BridgeAggregation),
+                                     },
                                      featureType = "Bridge",
                                      featureId = name,
                                 }];
