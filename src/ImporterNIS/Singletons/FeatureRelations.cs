@@ -282,6 +282,48 @@ namespace S100Framework.Applications.Singletons
                         throw new NotSupportedException($"AtoN subtype: {psp?.FCSUBTYPE}");
                     }
                 }
+                else if (s57Obj is CulturalFeaturesP) {
+                    var psp = s57Obj as CulturalFeaturesP;
+                    if (psp != null && psp.FCSUBTYPE == 1) {
+                        this.S101Type = typeof(AirportAirfield);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 10) {
+                        this.S101Type = typeof(BuiltUpArea);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 15) {
+                        this.S101Type = typeof(Building);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 20) {
+                        System.Diagnostics.Debugger.Break();
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 25) {
+                        this.S101Type = typeof(Dam);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 30) {
+                        this.S101Type = typeof(FortifiedStructure);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 35) {
+                        System.Diagnostics.Debugger.Break();
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 40) {
+                        this.S101Type = typeof(ProductionStorageArea);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 45) {
+                        this.S101Type = typeof(PylonBridgeSupport);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 50) {
+                        throw new NotImplementedException();
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 55) {
+                        this.S101Type = typeof(Runway);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 60) {
+                        this.S101Type = typeof(SiloTank);
+                    }
+                    else if (psp != null && psp.FCSUBTYPE == 65) {
+                        this.S101Type = typeof(Tunnel);
+                    }
+                }
                 else {
                     throw new NotSupportedException($"AtoN subtype: {s57Obj?.GetType()}");
                 }

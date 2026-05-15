@@ -105,6 +105,11 @@ namespace S100Framework.Applications
                 else if (IO.Directory.Exists(source) && ".gdb".Equals(IO.Path.GetExtension(source), StringComparison.OrdinalIgnoreCase)) {
                     createGeodatabase = () => { return new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(source)))); };
                 }
+                else if (".geodatabase".Equals(IO.Path.GetExtension(source), StringComparison.OrdinalIgnoreCase)) {
+                    createGeodatabase = () => {
+                        return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(source))));
+                    };
+                }
                 else if (source.StartsWith("https://")) {
                     createGeodatabase = () => { return new Geodatabase(new ServiceConnectionProperties(new Uri(source))); };
                 }
@@ -159,6 +164,7 @@ namespace S100Framework.Applications
             _converterRegistry.Register<AidsToNavigationP, RadarTransponderBeacon>(Converters.CreateRadarTransponderBeacon);
             _converterRegistry.Register<AidsToNavigationP, LightAllAround>(Converters.CreateLightAllAround);
             _converterRegistry.Register<CulturalFeaturesP, LightSectored>(Converters.CreateLightSectored);
+            _converterRegistry.Register<CulturalFeaturesP, Building>(Converters.CreateBuilding);
             _converterRegistry.Register<AidsToNavigationP, LightSectored>(Converters.CreateLightSectored);
             _converterRegistry.Register<AidsToNavigationP, LightAirObstruction>(Converters.CreateLightAirObstruction);
             _converterRegistry.Register<AidsToNavigationP, LightFogDetector>(Converters.CreateLightFogDetector);

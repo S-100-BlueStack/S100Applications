@@ -590,9 +590,19 @@ namespace S100Framework.Applications
                                     This value has been replaced by the technique of vertical measurement value 18 (mechanically swept). 
                                     During the automated conversion process, all instances of TECSOU = 6 will be converted to technique of vertical measurement = 18.
                                  */
-                                var tecsou = !string.IsNullOrEmpty(current.TECSOU) && int.Parse(current.TECSOU) == 6 ? "18" : current.TECSOU;
-                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(tecsou);
-                                if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
+
+                                int?[] techniqueOfVerticalMeasurement = [];
+                                foreach (var e in current.TECSOU.Split(',', StringSplitOptions.RemoveEmptyEntries)) {
+                                    if (e.Equals("-32768")) {
+                                        techniqueOfVerticalMeasurement = [.. techniqueOfVerticalMeasurement, null];
+                                    }
+                                    else {
+                                        var tecsou = int.Parse(e) == 6 ? "18" : e;
+                                        var value = EnumHelper.GetEnumValue(tecsou);
+                                        techniqueOfVerticalMeasurement = [.. techniqueOfVerticalMeasurement, value];
+                                    }
+                                }
+                                if(techniqueOfVerticalMeasurement.Any())
                                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                             }
 
