@@ -836,7 +836,13 @@ namespace S100Framework.Applications
                                         -32767 => null,
                                         _ => values.Max(),
                                     };
+                                    System.Diagnostics.Debugger.Break();
                                 }
+                            }
+
+                            var colour = parts.Where(e => !string.IsNullOrEmpty(e.Item2!.COLOUR));
+                            if (colour.Any()) {
+                                System.Diagnostics.Debugger.Break();
                             }
 
                             featureName[] featureNames = [];
