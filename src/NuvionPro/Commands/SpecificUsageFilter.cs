@@ -66,7 +66,7 @@ namespace NuvionPro.Commands
                 }
             }
 
-            var whereClause = $"specificUsage = {specificUsage}";
+            var whereClause = $"specificUsage = {specificUsage} OR specificUsage = 0";
 
             if (queries.Any(e => e.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
                 layer.SetActiveDefinitionQuery(name);

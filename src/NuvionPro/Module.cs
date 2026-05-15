@@ -183,7 +183,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>nuvion</keyword>") && !fc.GetName().EndsWith("pointset"))
+                if (!metadata.Contains("<keyword>nuvionpro</keyword>") && !fc.GetName().EndsWith("pointset"))
                     return;
 
                 var fcName = fc.GetName();
@@ -223,7 +223,7 @@ namespace NuvionPro
                     return;
 
                 var metadata = layer.GetMetadata();
-                if (!metadata.Contains("<keyword>nuvion</keyword>"))
+                if (!metadata.Contains("<keyword>nuvionpro</keyword>"))
                     return;
 
                 var fcName = table.GetName();
