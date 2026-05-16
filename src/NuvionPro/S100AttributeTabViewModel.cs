@@ -256,8 +256,15 @@ namespace NuvionPro
                     using var cursor = configuration.Search(null, true);
                     while (cursor.MoveNext()) {
                         var settings = JsonSerializer.Deserialize<S100BlueStack.Settings.Editor>(Convert.ToString(cursor.Current["json"]));
-                        if (!settings.ExcludeInEditor && System.IO.File.Exists(settings.FullPath))
-                            featureCatalogues = [.. featureCatalogues, new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First().Substring(2), settings.FullPath)];
+                        if (!settings.ExcludeInEditor && System.IO.File.Exists(settings.FullPath)) {
+                            var featureCatalogue = new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First().Substring(2), settings.FullPath);
+                            var constraints = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(settings.FullPath), $"{System.IO.Path.GetFileNameWithoutExtension(settings.FullPath)}.constraints.xml");
+                            if (System.IO.File.Exists(constraints)) {
+                                featureCatalogue.Constraints = [.. XDocument.Load(constraints).Descendants("Rule")];
+                            }
+
+                            featureCatalogues = [.. featureCatalogues, featureCatalogue];
+                        }
                     }
                     if (!featureCatalogues.Any())
                         featureCatalogues = this._module.GetFeatureCatalogues();  //  DEFAULT

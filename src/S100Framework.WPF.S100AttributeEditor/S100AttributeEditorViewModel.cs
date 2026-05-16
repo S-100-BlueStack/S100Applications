@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -1018,8 +1019,8 @@ namespace S100Framework.WPF.ViewModel
                                 Action<AddError, attributeBinding> validator = (action, instance) => {
                                     if (instance is RealAttribute realAttribute) {
                                         if (realAttribute.value.HasValue) {
-                                            var _lowerBound = lowerBound is null ? decimal.MinValue : decimal.Parse(lowerBound!.Value);
-                                            var _upperBound = upperBound is null ? decimal.MaxValue : decimal.Parse(upperBound!.Value);
+                                            var _lowerBound = lowerBound is null ? decimal.MinValue : decimal.Parse(lowerBound!.Value, CultureInfo.InvariantCulture);
+                                            var _upperBound = upperBound is null ? decimal.MaxValue : decimal.Parse(upperBound!.Value, CultureInfo.InvariantCulture);
 
                                             var _ = realAttribute.value!.Value;
                                             var error = closure switch {

@@ -1,4 +1,5 @@
-﻿using S100FC;
+﻿using Newtonsoft.Json.Linq;
+using S100FC;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -318,12 +319,106 @@ namespace S100Framework.WPF.ViewModel
                 }
             }
 
+            Action<AddError, attributeBinding>[] ConditionalMandatory(XElement e) {
+                var _ = e.Attribute("attribute")!.Value;
+
+                var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
+
+                var condition = e.Element("condition");
+                if (condition is not null) {
+                    var _attribute = e.Element("condition")!.Element("attribute")!.Value;
+                    var _operator = e.Element("condition")!.Element("operator")!.Value;
+                    var _value = e.Element("condition")!.Element("value")!.Value;
+
+                    Action<AddError, attributeBinding> validator = (action, instance) => {
+                        if (instance is ComplexAttribute complexAttribute) {
+                            var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
+
+                            bool match = false;
+                            if (v is BooleanAttribute booleanAttribute) {
+                                match = _operator switch {
+                                    "eq" => booleanAttribute.value.Equals(bool.Parse(_value)),
+                                    "ne" => !booleanAttribute.value.Equals(bool.Parse(_value)),
+                                    _ => false,
+                                };
+                            }
+                            else if (v is IntegerAttribute integerAttribute) {
+                                match = _operator switch {
+                                    "eq" => integerAttribute.value.Equals(int.Parse(_value)),
+                                    "ne" => !integerAttribute.value.Equals(int.Parse(_value)),
+                                    _ => false,
+                                };
+                            }
+                            else if (v is EnumerationAttribute enumerationAttribute) {
+                                match = _operator switch {
+                                    "eq" => enumerationAttribute.value.Equals(int.Parse(_value)),
+                                    "ne" => !enumerationAttribute.value.Equals(int.Parse(_value)),
+                                    _ => false,
+                                };
+                            }
+                            else if (v is CodeListAttribute codeListAttribute) {
+                                match = _operator switch {
+                                    "eq" => codeListAttribute.value.Equals(int.Parse(_value)),
+                                    "ne" => !codeListAttribute.value.Equals(int.Parse(_value)),
+                                    _ => false,
+                                };
+                            }
+
+                            if (match) {
+                                var containsAttribute = false;
+                                var subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
+                                foreach (var subAttribute in subAttributes) {
+                                    if (default != complexAttribute.attributeBindings.SingleOrDefault(e => e.S100FC_code.Equals(subAttribute)))
+                                        containsAttribute = true;
+                                }
+
+                                if (!containsAttribute) {
+                                    var sign = _operator switch {
+                                        "eq" => "=",
+                                        "ne" => "\u2260",
+                                        _ => throw new InvalidOperationException(),
+                                    };
+                                    var error = $"The sub-attribute {_attribute} {sign} {_value}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
+                                    action(_, error);
+                                }
+                            }
+                        }
+                    };
+                    return [.. this._validators, validator];
+                }
+                else {
+                    Action<AddError, attributeBinding> validator = (action, instance) => {
+                        if (instance is ComplexAttribute complexAttribute) {
+                            var containsAttribute = false;
+                            var subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
+                            foreach (var subAttribute in subAttributes) {
+                                if (default != complexAttribute.attributeBindings.SingleOrDefault(e => e.S100FC_code.Equals(subAttribute)))
+                                    containsAttribute = true;
+                            }
+
+                            if (!containsAttribute) {
+                                var error = $"For each instance of {_attribute},  at least one of the sub-attributes {string.Join(',', subAttributes)} must be populated.";
+                                action(_, error);
+                            }
+                        }
+                    };
+                    return [.. this._validators, validator];
+                }
+            }
+
             foreach (var e in rules) {
                 if (e.Attribute("attribute") is null) {
                     var _ = e.Attribute("code")!.Value;
+                    
+                    var type = e.Element("type")!.Value;
 
-                    if (default != this.attributeBindingsCatalogue.SingleOrDefault(e => e.attribute.Equals(_))) {
-
+                    if (this.code.Equals(_)) {
+                        if ("ConditionalMandatory".Equals(type)) {
+                            ConditionalMandatory(e);                            
+                        }
+                    }
+                    else if (default != this.attributeBindingsCatalogue.SingleOrDefault(e => e.attribute.Equals(_))) {
+                        ;
                     }
                 }
                 else {
@@ -332,73 +427,7 @@ namespace S100Framework.WPF.ViewModel
                     var type = e.Element("type")!.Value;
 
                     if ("ConditionalMandatory".Equals(type)) {
-                        var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
-
-                        var condition = e.Element("condition");
-                        if (condition is not null) {
-                            var _attribute = e.Element("condition")!.Element("attribute")!.Value;
-                            var _operator = e.Element("condition")!.Element("operator")!.Value;
-                            var _value = e.Element("condition")!.Element("value")!.Value;
-
-                            Action<AddError, attributeBinding> validator = (action, instance) => {
-                                if (instance is ComplexAttribute complexAttribute) {
-                                    var v = complexAttribute.attributeBindings.Single(e => e.S100FC_code.Equals(_attribute));
-
-                                    bool match = false;
-                                    if (v is BooleanAttribute booleanAttribute) {
-                                        match = _operator switch {
-                                            "eq" => booleanAttribute.value.Equals(bool.Parse(_value)),
-                                            "ne" => !booleanAttribute.value.Equals(bool.Parse(_value)),
-                                            _ => false,
-                                        };
-                                    }
-                                    else if (v is IntegerAttribute integerAttribute) {
-                                        match = _operator switch {
-                                            "eq" => integerAttribute.value.Equals(int.Parse(_value)),
-                                            "ne" => !integerAttribute.value.Equals(int.Parse(_value)),
-                                            _ => false,
-                                        };
-                                    }
-                                    else if (v is EnumerationAttribute enumerationAttribute) {
-                                        match = _operator switch {
-                                            "eq" => enumerationAttribute.value.Equals(int.Parse(_value)),
-                                            "ne" => !enumerationAttribute.value.Equals(int.Parse(_value)),
-                                            _ => false,
-                                        };
-                                    }
-                                    else if (v is CodeListAttribute codeListAttribute) {
-                                        match = _operator switch {
-                                            "eq" => codeListAttribute.value.Equals(int.Parse(_value)),
-                                            "ne" => !codeListAttribute.value.Equals(int.Parse(_value)),
-                                            _ => false,
-                                        };
-                                    }
-
-                                    if (match) {
-                                        var containsAttribute = false;
-                                        var subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
-                                        foreach (var subAttribute in subAttributes) {
-                                            if (default != complexAttribute.attributeBindings.SingleOrDefault(e => e.S100FC_code.Equals(subAttribute)))
-                                                containsAttribute = true;
-                                        }
-
-                                        if (!containsAttribute) {
-                                            var sign = _operator switch {
-                                                "eq" => "=",
-                                                "ne" => "\u2260",
-                                                _ => throw new InvalidOperationException(),
-                                            };
-                                            var error = $"The sub-attribute {_attribute} {sign} {_value}, the sub-attributes {string.Join(',', subAttributes)} ara mandatory.";
-                                            action(_, error);
-                                        }
-                                    }
-                                }
-                            };
-                            this._validators = [.. this._validators, validator];
-                        }
-                        else {
-
-                        }
+                        ConditionalMandatory(e);
                     }
                 }
             }
