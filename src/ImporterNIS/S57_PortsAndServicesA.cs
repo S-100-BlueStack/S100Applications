@@ -1806,7 +1806,7 @@ namespace S100Framework.Applications
                             {
                                 var instance = new Pontoon();
 
-                                BridgeElement relatedBridge = null!;
+                                //BridgeElement relatedBridge = null!;
 
                                 //if (createBridgesAndRelations) {
                                 //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
