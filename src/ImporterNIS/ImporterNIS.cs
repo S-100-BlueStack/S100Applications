@@ -960,15 +960,15 @@ namespace S100Framework.Applications
                 }
             }
 
-            using (Geodatabase source = createGeodatabase()) {
-                using (var destination = createTargetGeodatabase()) {
-                    Store((d) => {
-                        ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
-                        Bridges.Initialize(source, d, ImporterNIS.QueryFilter);
-                        Bridges.Instance.CreateRelations();
-                    }, destination);
-                }
-            }
+            //using (Geodatabase source = createGeodatabase()) {
+            //    using (var destination = createTargetGeodatabase()) {
+            //        Store((d) => {
+            //            ImporterNIS.QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+            //            Bridges.Initialize(source, d, ImporterNIS.QueryFilter);
+            //            Bridges.Instance.CreateRelations();
+            //        }, destination);
+            //    }
+            //}
 
 #if CREATE_SUBTYPES
             Logger.Current.Verbose("Creating subtypes...");
