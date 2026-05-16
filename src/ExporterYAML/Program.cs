@@ -379,6 +379,8 @@ namespace S100Framework.Applications
                                     var name = Convert.ToString(current["UID"])!;
 
                                     //if (name.Equals("F10400001035")) System.Diagnostics.Debugger.Break();
+                                    //if (name.Equals("F10800000092")) System.Diagnostics.Debugger.Break();
+
 
                                     // Only map geometry, and keep name seperate so foids remain unique
                                     var geometry = name;
@@ -447,9 +449,9 @@ namespace S100Framework.Applications
 
                                         // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
                                         var masks = new[] {
-                                    topologySurface?.Masks1?.Select(e => $"C{e}:1"),
-                                    topologySurface?.Masks2?.Select(e => $"C{e}:2")
-                                }.Where(m => m != null).SelectMany(m => m!);
+                                                        topologySurface?.Masks1?.Select(e => $"C{e}:1"),
+                                                        topologySurface?.Masks2?.Select(e => $"C{e}:2")
+                                                    }.Where(m => m != null).SelectMany(m => m!);
 
                                         var feature = new S100FC.YAML.Feature {
                                             Name = code,

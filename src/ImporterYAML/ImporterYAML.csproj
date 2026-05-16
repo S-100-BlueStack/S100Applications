@@ -28,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.1" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.2" />
     <PackageReference Include="S100Framework.Catalogues" Version="3.1.12" />
     <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.8" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
