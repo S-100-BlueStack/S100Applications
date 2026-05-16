@@ -417,6 +417,7 @@ namespace S100Framework.Applications
                         buffer["attributebindings"] = electronicProduct.Flatten();
                         buffer["informationbindings"] = "[]";
                         buffer["featurebindings"] = "[]";
+                        buffer["specificusage"] = electronicProduct.specificUsage.Value;
 
                         SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
                         using var featureN = featureClass.CreateRow(buffer);

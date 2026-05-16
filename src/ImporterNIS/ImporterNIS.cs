@@ -908,9 +908,11 @@ namespace S100Framework.Applications
 
                             bufferBridge["code"] = instance.GetType().Name;
                             bufferBridge["attributebindings"] = instance.Flatten();
+                            bufferBridge["featureBindings"] = "[]";
+                            bufferBridge["informationbindings"] = "[]";
+                            bufferBridge["specificusage"] = usage;
 
-                            SetShape(bufferBridge, polygon);
-                            SetUsageBand(bufferBridge, usage);
+                            SetShape(bufferBridge, polygon);                            
 
                             var featureN = surface.CreateRow(bufferBridge);
                             var name = featureN.UID();
