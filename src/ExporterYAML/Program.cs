@@ -194,7 +194,7 @@ namespace S100Framework.Applications
 
                             var whereClause = "upper(ps) = 'S-101'";
                             if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
-                                whereClause += $" AND specificusage = {Convert.ToInt32(current["specificusage"])}";
+                                whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
 
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
@@ -361,7 +361,7 @@ namespace S100Framework.Applications
 
                             using var fc = source.OpenDataset<FeatureClass>(def.GetName());
 
-                            string[] filters = [Matrix.DE9IM_Contains, Matrix.DE9IM_Crosses];
+                            string[] filters = [Matrix.DE9IM_Contains, Matrix.DE9IM_Crosses, "T**F**FF*"];
 
                             var hashSet = new HashSet<long>();
 
@@ -378,8 +378,11 @@ namespace S100Framework.Applications
 
                                     var name = Convert.ToString(current["UID"])!;
 
+                                    if ("SoundingDatum".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10400001035")) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10800000092")) System.Diagnostics.Debugger.Break();
+                                    //if (name.Equals("F10400001041")) System.Diagnostics.Debugger.Break();
+
 
 
                                     // Only map geometry, and keep name seperate so foids remain unique

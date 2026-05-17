@@ -43,13 +43,13 @@ namespace S100Framework.Applications
             //  Clip DataCoverage geometries
             var combined = PolygonBuilderEx.CreatePolygon(verticalDatums.Select(e => e.shape));
 
-            (SoundingDatum SoundingDatum, Polygon Coverage)[] soundingDatums = verticalDatums.Select(e => (e.SDAT, e.shape)).ToArray();
+            (SoundingDatum SoundingDatum, Polygon Coverage, int PLTS_COMP_SCALE)[] soundingDatums = verticalDatums.Select(e => (e.SDAT, e.shape, e.PLTS_COMP_SCALE)).ToArray();
 
             foreach (var c in coverages) {
                 if (GeometryEngine.Instance.Disjoint(c.Coverage, combined)) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
                         verticalDatum = c.VDAT!.value,
-                    }, c.Coverage)];
+                    }, c.Coverage, c.PLTS_COMP_SCALE)];
                     continue;
                 }
 
@@ -89,7 +89,7 @@ namespace S100Framework.Applications
                 foreach (var p in multipart.Split()) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
                         verticalDatum = c.VDAT!.value,
-                    }, p)];
+                    }, p, c.PLTS_COMP_SCALE)];
                 }
             }
 
@@ -104,6 +104,7 @@ namespace S100Framework.Applications
                 buffer["code"] = e.SoundingDatum.GetType().Name;
                 buffer["attributebindings"] = e.SoundingDatum.Flatten();
                 SetShape(buffer, e.Coverage);
+                SetUsageBand(buffer, e.PLTS_COMP_SCALE);
                 using var featureN = featureClass.CreateRow(buffer);
                 var name = featureN.UID();
             }
