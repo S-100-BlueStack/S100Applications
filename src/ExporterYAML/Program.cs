@@ -361,7 +361,7 @@ namespace S100Framework.Applications
 
                             using var fc = source.OpenDataset<FeatureClass>(def.GetName());
 
-                            string[] filters = [Matrix.DE9IM_Contains, Matrix.DE9IM_Crosses, "T**F**FF*"];
+                            string[] filters = [Matrix.DE9IM_Contains, Matrix.DE9IM_Crosses];
 
                             var hashSet = new HashSet<long>();
 
