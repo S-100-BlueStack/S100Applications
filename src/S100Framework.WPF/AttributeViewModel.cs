@@ -397,7 +397,7 @@ namespace S100Framework.WPF.ViewModel
                             }
 
                             if (!containsAttribute) {
-                                var error = $"For each instance of {_attribute},  at least one of the sub-attributes {string.Join(',', subAttributes)} must be populated.";
+                                var error = $"For each instance of {_attribute.S100FC_code},  at least one of the sub-attributes {string.Join(',', subAttributes)} must be populated.";
                                 action(_, error);
                             }
                         }
