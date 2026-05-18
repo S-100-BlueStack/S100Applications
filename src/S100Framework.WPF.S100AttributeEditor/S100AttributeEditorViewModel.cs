@@ -1024,14 +1024,14 @@ namespace S100Framework.WPF.ViewModel
 
                                             var _ = realAttribute.value!.Value;
                                             var error = closure switch {
-                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),
-                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),
-                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),
-                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),
-                                                //"gtSemiInterval" => 
-                                                //"geSemiInterval" =>
-                                                //"ltSemiInterval" =>
-                                                //"leSemiInterval" =>
+                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),        // The open interval, lower < x < upper
+                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),       // The right half-open interval, lower ≤ x < upper
+                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),       // The left half-open interval, lower < x ≤ upper
+                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),    // The closed interval, lower ≤ x ≤ upper
+                                                "gtSemiInterval" => !(_lowerBound < _),                         // The left half-open ray, lower < x
+                                                "geSemiInterval" => !(_lowerBound <= _),                        // The left closed ray, lower ≤ x
+                                                "ltSemiInterval" => !(_<_upperBound),                           // The right half-open ray, x < upper
+                                                "leSemiInterval" => !(_<=_upperBound),                          // The right closed ray, x ≤ upper
                                                 _ => throw new NotImplementedException(),
                                             };
                                             if (error)
@@ -1045,14 +1045,14 @@ namespace S100Framework.WPF.ViewModel
 
                                             var _ = integerAttribute.value!.Value;
                                             var error = closure switch {
-                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),
-                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),
-                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),
-                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),
-                                                //"gtSemiInterval" => 
-                                                //"geSemiInterval" =>
-                                                //"ltSemiInterval" =>
-                                                //"leSemiInterval" =>
+                                                "openInterval" => !(_ > _lowerBound && _ < _upperBound),        // The open interval, lower < x < upper
+                                                "geLtInterval" => !(_ >= _lowerBound && _ < _upperBound),       // The right half-open interval, lower ≤ x < upper
+                                                "gtLeInterval" => !(_ > _lowerBound && _ <= _upperBound),       // The left half-open interval, lower < x ≤ upper
+                                                "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),    // The closed interval, lower ≤ x ≤ upper
+                                                "gtSemiInterval" => !(_lowerBound < _),                         // The left half-open ray, lower < x
+                                                "geSemiInterval" => !(_lowerBound <= _),                        // The left closed ray, lower ≤ x
+                                                "ltSemiInterval" => !(_ < _upperBound),                         // The right half-open ray, x < upper
+                                                "leSemiInterval" => !(_ <= _upperBound),                        // The right closed ray, x ≤ upper
                                                 _ => throw new NotImplementedException(),
                                             };
                                             if (error)
