@@ -81,7 +81,7 @@ namespace S100Framework.Applications
             }
 
             if (scaleMinimum.HasValue) {
-                instance.scaleMinimum = scaleMinimum;
+                instance.scaleMinimum = scaleMinimum.Value;
             }
             else if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
                 string subtype = "";
@@ -188,7 +188,7 @@ namespace S100Framework.Applications
             }
 
             if (scaleMinimum.HasValue) {
-                instance.scaleMinimum = scaleMinimum;
+                instance.scaleMinimum = scaleMinimum.Value;
             }
             else if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
                 string subtype = "";
@@ -296,7 +296,7 @@ namespace S100Framework.Applications
             }
 
             if (scaleMinimum.HasValue) {
-                instance.scaleMinimum = scaleMinimum;
+                instance.scaleMinimum = scaleMinimum.Value;
             }
             else if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
                 string subtype = "";
