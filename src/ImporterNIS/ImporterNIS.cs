@@ -753,7 +753,7 @@ namespace S100Framework.Applications
 
                         bufferBridge["ps"] = ps101;
 
-                        foreach (var _ in hashSetUnion) {                            
+                        foreach (var _ in hashSetUnion) {
                             var dissolvedGeometry = _.Select(e => e.polygon);
                             var polygon = (Polygon)GeometryEngine.Instance.Union([.. dissolvedGeometry]);
 
@@ -825,7 +825,7 @@ namespace S100Framework.Applications
                                         "-32767" => default(int?),
                                         _ => throw new NotImplementedException(),
                                     });
-                                    instance.natureOfConstruction = [..c];
+                                    instance.natureOfConstruction = [.. c];
                                 }
                             }
 
@@ -914,7 +914,7 @@ namespace S100Framework.Applications
                             bufferBridge["informationbindings"] = "[]";
                             bufferBridge["specificusage"] = usage;
 
-                            SetShape(bufferBridge, polygon);                            
+                            SetShape(bufferBridge, polygon);
 
                             var featureN = surface.CreateRow(bufferBridge);
                             var name = featureN.UID();
@@ -2040,11 +2040,11 @@ namespace S100Framework.Applications
             for (int i = 0; i < count; i++) {
                 int root = Find(i);
                 if (!groups.ContainsKey(root))
-                    groups[root] = new List<(string, Polygon)>();
+                    groups[root] = [];
                 groups[root].Add(polygons[i]);
             }
 
-            return new List<List<(string, Polygon)>>(groups.Values);
+            return [.. groups.Values];
         }
     }
 }

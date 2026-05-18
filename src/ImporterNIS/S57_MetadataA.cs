@@ -284,7 +284,7 @@ namespace S100Framework.Applications
                                     instance.dataAssessment = 1;    // dataAssessment.Assessed;
                                     instance.featuresDetected = new featuresDetected() {
                                         significantFeaturesDetected = true,
-                                        leastDepthOfDetectedFeaturesMeasured = true,                                        
+                                        leastDepthOfDetectedFeaturesMeasured = true,
                                     };
                                     instance.fullSeafloorCoverageAchieved = true;
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {

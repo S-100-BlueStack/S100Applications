@@ -2,7 +2,6 @@
 using ImporterNIS.Singletons;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
-using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
 using S100FC.S128.SimpleAttributes;
@@ -925,7 +924,7 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    
+
                     case 30: { // FORSTC_FortifiedStructure
                             var instance = new FortifiedStructure();
 

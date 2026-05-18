@@ -1,17 +1,12 @@
-﻿using S100FC.S101.ComplexAttributes;
-using S100Framework.Applications.S57.esri;
-using S100Framework.Applications.Singletons;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using S100Framework.Applications.S57.esri;
 
 namespace ImporterNIS.Singletons
-{    
+{
     internal sealed class BridgeParts
     {
         private static BridgeParts? _instance;
 
-        private Dictionary<string, CulturalFeaturesA> _parts = new Dictionary<string, CulturalFeaturesA>();
+        private readonly Dictionary<string, CulturalFeaturesA> _parts = [];
 
         internal static void Initialize() {
             _instance = new BridgeParts();

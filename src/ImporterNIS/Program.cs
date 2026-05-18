@@ -138,7 +138,6 @@ namespace S100Framework.Applications
                     };
                 }
                 else if (".geodatabase".Equals(IO.Path.GetExtension(target), StringComparison.OrdinalIgnoreCase)) {
-
                     initialize = (append) => {
                         if (!append) {
                             var name = IO.Path.GetFileNameWithoutExtension(target);

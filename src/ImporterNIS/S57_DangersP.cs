@@ -602,7 +602,7 @@ namespace S100Framework.Applications
                                         techniqueOfVerticalMeasurement = [.. techniqueOfVerticalMeasurement, value];
                                     }
                                 }
-                                if(techniqueOfVerticalMeasurement.Any())
+                                if (techniqueOfVerticalMeasurement.Any())
                                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                             }
 

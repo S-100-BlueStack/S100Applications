@@ -63,10 +63,10 @@ namespace ArcGIS.Core.Data
             "pointset" => "F103",
             "surface" => "F104",
             "topo_curve" => "F105",
-            "topo_point" => "F106",            
-            "topo_pointset" => "F107",                      
+            "topo_point" => "F106",
+            "topo_pointset" => "F107",
             "topo_surface" => "F108",
-            
+
             "informationtype" => "I109",
             "attachment" => "I110",
             _ => throw new NotImplementedException(),
