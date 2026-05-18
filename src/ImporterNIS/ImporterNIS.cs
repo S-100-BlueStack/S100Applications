@@ -753,13 +753,15 @@ namespace S100Framework.Applications
 
                         bufferBridge["ps"] = ps101;
 
-                        foreach (var _ in hashSetUnion) {
+                        foreach (var _ in hashSetUnion) {                            
                             var dissolvedGeometry = _.Select(e => e.polygon);
                             var polygon = (Polygon)GeometryEngine.Instance.Union([.. dissolvedGeometry]);
 
                             var instance = new Bridge();
 
                             var ids = _.Select(e => e.key).ToList();
+
+                            if (hashFeatureType.Where(e => ids.Contains(e.Key)).All(e => e.Value is Pontoon)) continue;
 
                             var parts = ids.Where(e => BridgeParts.Instance.Parts(e) is not null).Select(e => (e, BridgeParts.Instance.Parts(e)));
 
