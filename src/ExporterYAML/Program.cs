@@ -3,7 +3,6 @@ using ArcGIS.Core.Geometry;
 using CommandLine;
 using S100FC;
 using S100FC.S101;
-using S100FC.S128.SimpleAttributes;
 using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
@@ -45,6 +44,9 @@ namespace S100Framework.Applications
 
             [Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
             public string? NotesPath { get; set; }
+
+            [Option('f', "featurecatalogue", Required = false, Default = @"c:\Users\Public\Documents\NuvionPro\Product Files\101_FC_2.0.0.xml", HelpText = "Path to feature catalogue.")]
+            public string? FeatureCatalogue { get; set; }
 
             [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
             public bool Verbose { get; set; }
@@ -103,6 +105,7 @@ namespace S100Framework.Applications
                 Esri.Initialize();
 
                 string? output = default;
+                string? featureCataloguePath = default;
                 bool exchangeset = false;
                 string[] datasetNames = [];
                 string? wildcard = default;
@@ -143,6 +146,7 @@ namespace S100Framework.Applications
                     directoryNotes = new IO.DirectoryInfo(o.NotesPath!);
 
                     output = o.OutputPath;
+                    featureCataloguePath = o.FeatureCatalogue;
                 });
 
                 if (datasetNames.Length == 0 && string.IsNullOrEmpty(wildcard))
@@ -564,7 +568,7 @@ namespace S100Framework.Applications
                         File.WriteAllText(IO.Path.Combine(@"c:\temp", $"{datasetName}.yaml"), yaml);
 
                         if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
-                            var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{@"e:\ArcGIS\Projects\IIC Technologies\FeatureCatalogue.xml"}\" -d \"{output}\"";
+                            var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{output}\"";
 
                             if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
                                 IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
