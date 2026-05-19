@@ -566,6 +566,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = vdat.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
+                    buffer["specificusage"] = c.specificUsage;
 
                     foreach (var p in c.Coverage.Split()) {
                         SetShape(buffer, p);
