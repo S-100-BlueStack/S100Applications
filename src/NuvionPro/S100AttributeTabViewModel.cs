@@ -142,7 +142,12 @@ namespace NuvionPro
 
                     var constraints = this.PS.Constraints;
 
-                    this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                    try {
+                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                    }
+                    catch (Exception ex) {
+                        Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                    }
                 }
                 else if (this.SelectedProperty is not null && string.IsNullOrEmpty(this.SelectedProperty.ProductID)) {
                     if (!this.PS.Equals(this.SelectedProperty.ProductID)) {
@@ -159,7 +164,12 @@ namespace NuvionPro
 
                         var constraints = this.PS.Constraints;
 
-                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                        try {
+                            this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                        }
+                        catch (Exception ex) {
+                            Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                        }
                     }
                 }
 
@@ -302,83 +312,98 @@ namespace NuvionPro
                         return default(S100AttributeEditorViewModel);
                     }
 
-                    var ps = XDocument.Load(this.PS.FullPath);
+                    try {
+                        var ps = XDocument.Load(this.PS.FullPath);
 
-                    var navigator = ps.CreateNavigator();
-                    navigator.MoveToFollowing(XPathNodeType.Element);
+                        var navigator = ps.CreateNavigator();
+                        navigator.MoveToFollowing(XPathNodeType.Element);
 
-                    var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+                        var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
 
-                    var namespaceManager = new XmlNamespaceManager(new NameTable());
-                    foreach (var s in scopes)
-                        namespaceManager.AddNamespace(s.Key, s.Value);                    
-                    
-                    var constraints = this.PS.Constraints;
+                        var namespaceManager = new XmlNamespaceManager(new NameTable());
+                        foreach (var s in scopes)
+                            namespaceManager.AddNamespace(s.Key, s.Value);
 
-                    var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                        var constraints = this.PS.Constraints;
 
-                    if (this.Code is null)
-                        return viewModel;
+                        var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
 
-                    var uid = $"{inspector.UID()}";
+                        if (this.Code is null)
+                            return viewModel;
 
-                    viewModel.Initialize(this.Code, uid);
+                        var uid = $"{inspector.UID()}";
 
-                    if (!inspector.IsNull("attributebindings")) {
-                        var json = Convert.ToString(inspector["attributebindings"]);
+                        viewModel.Initialize(this.Code, uid);
 
-                        viewModel = viewModel.LoadAttributeBindings(json);
-                    }
+                        if (!inspector.IsNull("attributebindings")) {
+                            var json = Convert.ToString(inspector["attributebindings"]);
 
-                    viewModel.RequestInformation = async (s, e) => {
-                        if (MapView.Active is null)
-                            return [];
-                        return await QueuedTask.Run(() => {
-                            string[] result = [];
-
-                            foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
-                                var selection = layer.GetSelection();
-                                if (selection.GetCount() == 0) continue;
-
-                                using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
-                                }, true);
-
-                                while (cursor.MoveNext()) {
-                                    result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                }
-                            }
-                            return result;
-                        });
-                    };
-                    viewModel.SelectInformationTypes = async (s, e) => {
-                        var mapView = MapView.Active;
-                        if (mapView is null) return;
-
-                        if (e.UIDs.Any()) {
-                            await QueuedTask.Run(() => {
-                                var query = new QueryFilter {
-                                    WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
-                                };
-                                foreach (var layer in mapView.Map.StandaloneTables) {
-                                    layer.Select(query, SelectionCombinationMethod.Add);
-                                }
-                            }, TaskCreationOptions.None);
+                            viewModel = viewModel.LoadAttributeBindings(json);
                         }
-                    };
-                    if (inspector.HasAttribute("informationbindings")) {
-                        if (!inspector.IsNull("informationbindings"))
-                            viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationbindings"]));
-                    }
 
-                    viewModel.RequestFeatures = async (s, e) => {
-                        if (MapView.Active is null)
-                            return [];
-                        return await QueuedTask.Run(() => {
-                            string[] result = [];
+                        viewModel.RequestInformation = async (s, e) => {
+                            if (MapView.Active is null)
+                                return [];
+                            return await QueuedTask.Run(() => {
+                                string[] result = [];
 
-                            foreach (var layer in MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
-                                if (layer is FeatureLayer featureLayer) {
+                                foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
+                                    var selection = layer.GetSelection();
+                                    if (selection.GetCount() == 0) continue;
+
+                                    using var cursor = selection.Search(new QueryFilter {
+                                        WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.InformationType.ToUpperInvariant()}'"
+                                    }, true);
+
+                                    while (cursor.MoveNext()) {
+                                        result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                    }
+                                }
+                                return result;
+                            });
+                        };
+
+                        viewModel.SelectInformationTypes = async (s, e) => {
+                            var mapView = MapView.Active;
+                            if (mapView is null) return;
+
+                            if (e.UIDs.Any()) {
+                                await QueuedTask.Run(() => {
+                                    var query = new QueryFilter {
+                                        WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                    };
+                                    foreach (var layer in mapView.Map.StandaloneTables) {
+                                        layer.Select(query, SelectionCombinationMethod.Add);
+                                    }
+                                }, TaskCreationOptions.None);
+                            }
+                        };
+                        if (inspector.HasAttribute("informationbindings")) {
+                            if (!inspector.IsNull("informationbindings"))
+                                viewModel.LoadInformationBindings(Convert.ToString(this.Inspector["informationbindings"]));
+                        }
+
+                        viewModel.RequestFeatures = async (s, e) => {
+                            if (MapView.Active is null)
+                                return [];
+                            return await QueuedTask.Run(() => {
+                                string[] result = [];
+
+                                foreach (var layer in MapView.Active.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
+                                    if (layer is FeatureLayer featureLayer) {
+                                        var selection = layer.GetSelection();
+                                        if (selection.GetCount() == 0) continue;
+
+                                        using var cursor = selection.Search(new QueryFilter {
+                                            WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
+                                        }, true);
+
+                                        while (cursor.MoveNext()) {
+                                            result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                        }
+                                    }
+                                }
+                                foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("featuretype"))) {
                                     var selection = layer.GetSelection();
                                     if (selection.GetCount() == 0) continue;
 
@@ -390,46 +415,38 @@ namespace NuvionPro
                                         result = [.. result, Convert.ToString(cursor.Current["UID"])];
                                     }
                                 }
+                                return result;
+                            }, TaskCreationOptions.None);
+                        };
+                        
+                        viewModel.SelectFeatureTypes = async (s, e) => {
+                            var mapView = MapView.Active;
+                            if (mapView is null) return;
+
+                            if (e.UIDs.Any()) {
+                                await QueuedTask.Run(() => {
+                                    var query = new QueryFilter {
+                                        WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                    };
+                                    foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
+                                        layer.Select(query, SelectionCombinationMethod.Add);
+                                    }
+                                    foreach (var layer in mapView.Map.StandaloneTables) {
+                                        layer.Select(query, SelectionCombinationMethod.Add);
+                                    }
+                                });
                             }
-                            foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("featuretype"))) {
-                                var selection = layer.GetSelection();
-                                if (selection.GetCount() == 0) continue;
-
-                                using var cursor = selection.Search(new QueryFilter {
-                                    WhereClause = $"UPPER(PS) = '{this.PS.ID}' AND UPPER(CODE) = '{e.FeatureType.ToUpperInvariant()}'"
-                                }, true);
-
-                                while (cursor.MoveNext()) {
-                                    result = [.. result, Convert.ToString(cursor.Current["UID"])];
-                                }
-                            }
-                            return result;
-                        }, TaskCreationOptions.None);
-                    };
-                    viewModel.SelectFeatureTypes = async (s, e) => {
-                        var mapView = MapView.Active;
-                        if (mapView is null) return;
-
-                        if (e.UIDs.Any()) {
-                            await QueuedTask.Run(() => {
-                                var query = new QueryFilter {
-                                    WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
-                                };
-                                foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
-                                    layer.Select(query, SelectionCombinationMethod.Add);
-                                }
-                                foreach (var layer in mapView.Map.StandaloneTables) {
-                                    layer.Select(query, SelectionCombinationMethod.Add);
-                                }
-                            });
+                        };
+                        if (inspector.HasAttribute("featurebindings")) {
+                            if (!inspector.IsNull("featurebindings"))
+                                viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
                         }
-                    };
-                    if (inspector.HasAttribute("featurebindings")) {
-                        if (!inspector.IsNull("featurebindings"))
-                            viewModel.LoadFeatureBindings(Convert.ToString(this.Inspector["featurebindings"]));
+                        return viewModel;
                     }
-
-                    return viewModel;
+                    catch (Exception ex) {
+                        Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                        return default(S100AttributeEditorViewModel);
+                    }
                 }, TaskCreationOptions.None);
 
                 this.IsVisible = this.SelectedProperty is null ? Visibility.Collapsed : Visibility.Visible;

@@ -67,13 +67,13 @@ namespace S100Framework.WPF.ViewModel
             //}
             backingFiled = value;
 
-            var _ = propertyName switch {
-                "ErrorMessage" => "ErrorMessage",
-                "IsErrorMessageEnabled" => "IsErrorMessageEnabled",
-                _ => this.code,
-            };
+            //var _ = propertyName switch {
+            //    "ErrorMessage" => "ErrorMessage",
+            //    "IsErrorMessageEnabled" => "IsErrorMessageEnabled",
+            //    _ => this.code,
+            //};
 
-            this.OnPropertyChanged(_);
+            this.OnPropertyChanged(propertyName);
         }
 
         private void ChildViewModelChanged(object? sender, PropertyChangedEventArgs e) {
@@ -319,13 +319,13 @@ namespace S100Framework.WPF.ViewModel
                 }
             }
 
-            Action<AddError, attributeBinding>[] ConditionalMandatory(XElement e) {
-                var _ = e.Attribute("attribute")!.Value;
-
+            Action<AddError, attributeBinding>[] ConditionalMandatory(XElement e) {                
                 var _subAttributes = e.Element("subAttributeBinding")!.Elements("attribute").Select(e => e.Attribute("ref")!.Value).ToArray();
 
                 var condition = e.Element("condition");
                 if (condition is not null) {
+                    var _ = e.Attribute("attribute")!.Value;
+
                     var _attribute = e.Element("condition")!.Element("attribute")!.Value;
                     var _operator = e.Element("condition")!.Element("operator")!.Value;
                     var _value = e.Element("condition")!.Element("value")!.Value;
@@ -398,7 +398,7 @@ namespace S100Framework.WPF.ViewModel
 
                             if (!containsAttribute) {
                                 var error = $"For each instance of {_attribute.S100FC_code},  at least one of the sub-attributes {string.Join(',', subAttributes)} must be populated.";
-                                action(_, error);
+                                action(code, error);
                             }
                         }
                     };
@@ -414,7 +414,7 @@ namespace S100Framework.WPF.ViewModel
 
                     if (this.code.Equals(_)) {
                         if ("ConditionalMandatory".Equals(type)) {
-                            ConditionalMandatory(e);                            
+                            this._validators = ConditionalMandatory(e);                            
                         }
                     }
                     else if (default != this.attributeBindingsCatalogue.SingleOrDefault(e => e.attribute.Equals(_))) {
@@ -427,18 +427,18 @@ namespace S100Framework.WPF.ViewModel
                     var type = e.Element("type")!.Value;
 
                     if ("ConditionalMandatory".Equals(type)) {
-                        ConditionalMandatory(e);
+                        this._validators = ConditionalMandatory(e);
                     }
                 }
             }
 
+            this.Validate();
+
             //note: Must be added right by the end!
             this.attributeBindings.CollectionChanged += (s, e) => {
-                this.Validate();
                 base.OnPropertyChanged(nameof(this.attributeBindings));
-            };
-
-            this.Validate();
+                this.Validate();
+            };            
         }
 
         public bool HasCapacity(attributeBindingDefinition binding) {
@@ -481,15 +481,19 @@ namespace S100Framework.WPF.ViewModel
             this._errors = [];
             if (this._validators is not null && this._validators.Any())
                 foreach (var action in this._validators) {
-                    if (this._attribute is not null)
-                        action.Invoke(this.AddError, this._attribute);
+                    action.Invoke(this.AddError, this._attribute);
                 }
 
             if (this.HasErrors) {
                 this.ErrorMessage = string.Join(Environment.NewLine, this._errors);
+
+                this.OnPropertyChanged(nameof(this.attributeBindings));
             }
 
-            this.IsErrorMessageEnabled = this.HasErrors;
+            if (this.IsErrorMessageEnabled != this.HasErrors) {
+                this.OnPropertyChanged(nameof(this.attributeBindings));
+                this.IsErrorMessageEnabled = this.HasErrors;
+            }
         }
 
         public void AddError(string propertyName, string error) {
