@@ -174,7 +174,7 @@ namespace NuvionPro
         /// </summary>
         /// <param name="layer"></param>
         internal static Task RegisterFeatureClassGuidAsync(FeatureLayer layer) {
-            Logger.Current.Debug("{method}({name})", nameof(RegisterFeatureClassGuidAsync), layer.Name);
+            //Logger.Current.Debug("{method}({name})", nameof(RegisterFeatureClassGuidAsync), layer.Name);
 
             return QueuedTask.Run(() => {
                 //note: These methods must be called on the Main CIM Thread. Use QueuedTask.Run.
