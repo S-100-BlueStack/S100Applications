@@ -309,8 +309,7 @@ namespace S100Framework.Applications
                                     instance.dataAssessment = 1;    // dataAssessment.Assessed;
                                     instance.featuresDetected = new featuresDetected() {
                                         significantFeaturesDetected = false,
-                                        leastDepthOfDetectedFeaturesMeasured = null,    //2026-05-17, UNKNOWN
-
+                                        leastDepthOfDetectedFeaturesMeasured = false,
                                     };
                                     instance.fullSeafloorCoverageAchieved = false;
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
@@ -322,7 +321,7 @@ namespace S100Framework.Applications
                                     instance.dataAssessment = 1;    // dataAssessment.Assessed;
                                     instance.featuresDetected = new featuresDetected() {
                                         significantFeaturesDetected = false,
-                                        leastDepthOfDetectedFeaturesMeasured = null,    //2026-05-17, UNKNOWN
+                                        leastDepthOfDetectedFeaturesMeasured = false,
                                     };
                                     instance.fullSeafloorCoverageAchieved = false;
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
@@ -335,7 +334,7 @@ namespace S100Framework.Applications
                                     instance.dataAssessment = 1;    // dataAssessment.Assessed;
                                     instance.featuresDetected = new featuresDetected() {
                                         significantFeaturesDetected = false,
-                                        leastDepthOfDetectedFeaturesMeasured = null,    //2026-05-17, UNKNOWN
+                                        leastDepthOfDetectedFeaturesMeasured = false,
 
                                     };
                                     instance.fullSeafloorCoverageAchieved = false;
@@ -349,7 +348,7 @@ namespace S100Framework.Applications
                                     instance.dataAssessment = 1;    // dataAssessment.Unassessed;
                                     instance.featuresDetected = new featuresDetected() {
                                         significantFeaturesDetected = false,
-                                        leastDepthOfDetectedFeaturesMeasured = null,    //2026-05-17, UNKNOWN
+                                        leastDepthOfDetectedFeaturesMeasured = false,
 
                                     };
                                     instance.fullSeafloorCoverageAchieved = false;
