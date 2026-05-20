@@ -722,7 +722,7 @@ namespace S100Framework.Applications
                 foreach (var usage in specificUsage.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
 
-                    var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
+                    //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
 
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
@@ -731,7 +731,7 @@ namespace S100Framework.Applications
                     }, true);
 
                     while (cursor.MoveNext()) {
-                        var f = (Feature)cursor.Current;                        
+                        var f = (Feature)cursor.Current;
 
                         FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
                             "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
@@ -741,13 +741,7 @@ namespace S100Framework.Applications
                             _ => throw new NotImplementedException(),
                         };
                         hashFeatureType.Add(Convert.ToString(f["UID"])!, featureType);
-
-                        if(featureType is PylonBridgeSupport) {
-                            hashGeometryBridgesupport.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
-                        }
-                        else {
-                            hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
-                        }
+                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
                     }
 
                     var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
@@ -764,12 +758,6 @@ namespace S100Framework.Applications
                         foreach (var _ in hashSetUnion) {
                             var dissolvedGeometry = _.Select(e => e.polygon);
                             var polygon = (Polygon)GeometryEngine.Instance.Union([.. dissolvedGeometry]);
-
-                            foreach(var e in hashGeometryBridgesupport) {
-                                if(GeometryEngine.Instance.Disjoint(e.Value, polygon)) continue;
-
-                                polygon = (Polygon)GeometryEngine.Instance.Union([polygon,e.Value]);
-                            }
 
                             var instance = new Bridge();
 
