@@ -780,15 +780,20 @@ namespace S100Framework.Applications
                                     string[] categoryOfOpeningBridge = ["3", "4", "5", "7"];
                                     if (values.Any(e => categoryOfOpeningBridge.Contains(e))) {
                                         var c = values.Where(e => categoryOfOpeningBridge.Contains(e)).Distinct();
-                                        if (c.Count() != 1) System.Diagnostics.Debugger.Break();
-                                        instance.categoryOfOpeningBridge = c.First() switch {
-                                            "3" => 3,  //  swing bridge
-                                            "4" => 4,   //  lifting bridge
-                                            "5" => 5,  //  bascule bridge
-                                            "7" => 7,    //  drawbridge
-                                            "-32767" => null,
-                                            _ => throw new NotImplementedException(),
-                                        };
+                                        if (c.Count() != 1) {
+                                            Logger.Current.Error($"Bridge having multiple categories #{c.Count()}");
+                                            instance.categoryOfOpeningBridge = null;
+                                        }
+                                        else {
+                                            instance.categoryOfOpeningBridge = c.First() switch {
+                                                "3" => 3,  //  swing bridge
+                                                "4" => 4,   //  lifting bridge
+                                                "5" => 5,  //  bascule bridge
+                                                "7" => 7,    //  drawbridge
+                                                "-32767" => null,
+                                                _ => throw new NotImplementedException(),
+                                            };
+                                        }
                                     }
                                 }
                             }
