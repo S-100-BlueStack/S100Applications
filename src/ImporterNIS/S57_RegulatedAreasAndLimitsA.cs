@@ -826,8 +826,6 @@ namespace S100Framework.Applications
                                 instance.fixedDateRange = dateRange;
                             }
 
-                            // TODO: HEIGHT
-
                             // TODO: interoperability identifier
 
                             DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
@@ -874,6 +872,14 @@ namespace S100Framework.Applications
 
                             if (current.WATLEV.HasValue) {
                                 instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV);
+                            }
+
+                            // TODO: HEIGHT                            
+                            if (instance.waterLevelEffect == 1 || instance.waterLevelEffect == 2) {
+                                /* The attribute height must be populated for Marine Farm/Culture features having attribute water level
+                                   effect = 1 (partly submerged at high water) or 2 (always dry). */
+
+
                             }
 
                             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
