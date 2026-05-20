@@ -721,6 +721,9 @@ namespace S100Framework.Applications
 
                 foreach (var usage in specificUsage.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
+
+                    //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
+
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
@@ -730,8 +733,6 @@ namespace S100Framework.Applications
                     while (cursor.MoveNext()) {
                         var f = (Feature)cursor.Current;
 
-                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
-
                         FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
                             "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
                             "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"]), typeof(SpanOpening)),
@@ -740,6 +741,7 @@ namespace S100Framework.Applications
                             _ => throw new NotImplementedException(),
                         };
                         hashFeatureType.Add(Convert.ToString(f["UID"])!, featureType);
+                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
                     }
 
                     var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
@@ -778,15 +780,20 @@ namespace S100Framework.Applications
                                     string[] categoryOfOpeningBridge = ["3", "4", "5", "7"];
                                     if (values.Any(e => categoryOfOpeningBridge.Contains(e))) {
                                         var c = values.Where(e => categoryOfOpeningBridge.Contains(e)).Distinct();
-                                        if (c.Count() != 1) System.Diagnostics.Debugger.Break();
-                                        instance.categoryOfOpeningBridge = c.First() switch {
-                                            "3" => 3,  //  swing bridge
-                                            "4" => 4,   //  lifting bridge
-                                            "5" => 5,  //  bascule bridge
-                                            "7" => 7,    //  drawbridge
-                                            "-32767" => null,
-                                            _ => throw new NotImplementedException(),
-                                        };
+                                        if (c.Count() != 1) {
+                                            Logger.Current.Error($"Bridge having multiple categories #{c.Count()}");
+                                            instance.categoryOfOpeningBridge = null;
+                                        }
+                                        else {
+                                            instance.categoryOfOpeningBridge = c.First() switch {
+                                                "3" => 3,  //  swing bridge
+                                                "4" => 4,   //  lifting bridge
+                                                "5" => 5,  //  bascule bridge
+                                                "7" => 7,    //  drawbridge
+                                                "-32767" => null,
+                                                _ => throw new NotImplementedException(),
+                                            };
+                                        }
                                     }
                                 }
                             }
@@ -892,16 +899,13 @@ namespace S100Framework.Applications
 
                             featureName[] featureNames = [];
                             foreach (var p in parts) {
-                                var featureName = GetFeatureName(p.Item2!.OBJNAM, p.Item2!.NOBJNM);
-                                if (featureName is not null) {
-                                    if (featureNames.Any()) {
-                                        foreach (var e in featureName) {
-                                            if (!featureNames.Any(f => f.name!.Equals(e.name, StringComparison.InvariantCultureIgnoreCase) && f.language!.Equals(e.language, StringComparison.InvariantCultureIgnoreCase))) {
-                                                System.Diagnostics.Debugger.Break();
-                                            }
-                                        }
+                                var names = GetFeatureName(p.Item2!.OBJNAM, p.Item2!.NOBJNM);
+                                if (names is not null) {
+                                    foreach (var e in names) {
+                                        if (featureNames.Any(f => f.name!.Equals(e.name, StringComparison.InvariantCultureIgnoreCase) && f.language!.Equals(e.language, StringComparison.InvariantCultureIgnoreCase)))
+                                            continue;
+                                        featureNames = [.. featureNames, e];
                                     }
-                                    featureNames = featureName;
                                 }
                             }
 

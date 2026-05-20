@@ -27,8 +27,8 @@ namespace S100Framework.Applications
 
             //using var plts_spatialattributel = source.OpenDataset<FeatureClass>(source.GetName("PLTS_SpatialAttributeL"));
             //using var informationtype = target.OpenDataset<Table>(target.GetName("informationType"));
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
-            using var buffer = featureClass.CreateRowBuffer();
+            //using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
+            //using var buffer = featureClass.CreateRowBuffer();
 
             using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_curve"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
@@ -37,7 +37,7 @@ namespace S100Framework.Applications
             using var cursor = depthsl.Search(filter, true);
             int recordCount = 0;
 
-            var informationBinding = CreateAssociationSpatialQuality(target);
+            var spatialQuality = CreateAssociationSpatialQuality(target);
 
             while (cursor.MoveNext()) {
                 recordCount += 1;
@@ -160,7 +160,7 @@ namespace S100Framework.Applications
                             // Spatial Quality
                             if (spatialQualityHits.Count > 0) {
 
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
                                 featureN.Store();
 
 
