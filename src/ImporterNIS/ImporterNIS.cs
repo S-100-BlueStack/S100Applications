@@ -721,6 +721,9 @@ namespace S100Framework.Applications
 
                 foreach (var usage in specificUsage.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
+
+                    var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
+
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
@@ -728,9 +731,7 @@ namespace S100Framework.Applications
                     }, true);
 
                     while (cursor.MoveNext()) {
-                        var f = (Feature)cursor.Current;
-
-                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
+                        var f = (Feature)cursor.Current;                        
 
                         FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
                             "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
@@ -740,6 +741,13 @@ namespace S100Framework.Applications
                             _ => throw new NotImplementedException(),
                         };
                         hashFeatureType.Add(Convert.ToString(f["UID"])!, featureType);
+
+                        if(featureType is PylonBridgeSupport) {
+                            hashGeometryBridgesupport.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
+                        }
+                        else {
+                            hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
+                        }
                     }
 
                     var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
@@ -756,6 +764,12 @@ namespace S100Framework.Applications
                         foreach (var _ in hashSetUnion) {
                             var dissolvedGeometry = _.Select(e => e.polygon);
                             var polygon = (Polygon)GeometryEngine.Instance.Union([.. dissolvedGeometry]);
+
+                            foreach(var e in hashGeometryBridgesupport) {
+                                if(GeometryEngine.Instance.Disjoint(e.Value, polygon)) continue;
+
+                                polygon = (Polygon)GeometryEngine.Instance.Union([polygon,e.Value]);
+                            }
 
                             var instance = new Bridge();
 
@@ -892,16 +906,13 @@ namespace S100Framework.Applications
 
                             featureName[] featureNames = [];
                             foreach (var p in parts) {
-                                var featureName = GetFeatureName(p.Item2!.OBJNAM, p.Item2!.NOBJNM);
-                                if (featureName is not null) {
-                                    if (featureNames.Any()) {
-                                        foreach (var e in featureName) {
-                                            if (!featureNames.Any(f => f.name!.Equals(e.name, StringComparison.InvariantCultureIgnoreCase) && f.language!.Equals(e.language, StringComparison.InvariantCultureIgnoreCase))) {
-                                                System.Diagnostics.Debugger.Break();
-                                            }
-                                        }
+                                var names = GetFeatureName(p.Item2!.OBJNAM, p.Item2!.NOBJNM);
+                                if (names is not null) {
+                                    foreach (var e in names) {
+                                        if (featureNames.Any(f => f.name!.Equals(e.name, StringComparison.InvariantCultureIgnoreCase) && f.language!.Equals(e.language, StringComparison.InvariantCultureIgnoreCase)))
+                                            continue;
+                                        featureNames = [.. featureNames, e];
                                     }
-                                    featureNames = featureName;
                                 }
                             }
 
