@@ -385,7 +385,8 @@ namespace S100Framework.Applications
                                 instance.valueOfSounding = current.VALSOU.Value != -32767m ? current.VALSOU.Value : null;
                             }
                             else {
-
+                                // Exactly one of the attributes height or value of sounding must be populated
+                                instance.valueOfSounding = null;
                             }
 
                             if (current.VERLEN.HasValue) {

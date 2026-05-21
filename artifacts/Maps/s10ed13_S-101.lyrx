@@ -74,7 +74,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.pointset",
           "datasetType" : "esriDTFeatureClass"
@@ -490,7 +490,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -886,7 +886,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -1211,7 +1211,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -1724,7 +1724,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -4470,7 +4470,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -6113,7 +6113,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -7268,7 +7268,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -8832,7 +8832,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -9576,7 +9576,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -10244,7 +10244,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -11855,7 +11855,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -16767,7 +16767,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -26479,7 +26479,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -27583,7 +27583,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -29211,7 +29211,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -30836,7 +30836,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -32709,7 +32709,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -33486,7 +33486,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -36056,7 +36056,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -39345,7 +39345,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -44825,7 +44825,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -45351,7 +45351,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -46018,7 +46018,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -46544,7 +46544,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -47089,7 +47089,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -47558,7 +47558,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -48040,7 +48040,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -48522,7 +48522,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -49011,7 +49011,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -49487,7 +49487,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -49945,7 +49945,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -50404,7 +50404,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -50882,7 +50882,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -51399,7 +51399,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -51858,7 +51858,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -52317,7 +52317,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -52776,7 +52776,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -53242,7 +53242,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -53711,7 +53711,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -54194,7 +54194,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -54677,7 +54677,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -55189,7 +55189,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -55894,7 +55894,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -56408,7 +56408,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -57273,7 +57273,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -57760,7 +57760,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -58281,7 +58281,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -58767,7 +58767,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -59254,7 +59254,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -59741,7 +59741,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -60307,7 +60307,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -60795,7 +60795,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -61282,7 +61282,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -61771,7 +61771,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -62295,7 +62295,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -62775,7 +62775,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -63281,7 +63281,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -63740,7 +63740,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_curve",
           "datasetType" : "esriDTFeatureClass"
@@ -64198,7 +64198,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_curve",
           "datasetType" : "esriDTFeatureClass"
@@ -65198,7 +65198,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -65683,7 +65683,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -66158,7 +66158,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -66784,7 +66784,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -67271,7 +67271,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -67758,7 +67758,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -68398,7 +68398,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -68885,7 +68885,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -69371,7 +69371,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -69897,7 +69897,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -70383,7 +70383,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -70911,7 +70911,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
@@ -71425,7 +71425,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -71991,7 +71991,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -72476,7 +72476,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -72970,7 +72970,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -73455,7 +73455,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -73943,7 +73943,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -74431,7 +74431,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -74919,7 +74919,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -75407,7 +75407,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -75895,7 +75895,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -76422,7 +76422,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -76910,7 +76910,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -77398,7 +77398,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -77871,7 +77871,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -78425,7 +78425,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -78942,7 +78942,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -79427,7 +79427,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_curve",
           "datasetType" : "esriDTFeatureClass"
@@ -79906,7 +79906,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.pointset",
           "datasetType" : "esriDTFeatureClass"
@@ -80467,7 +80467,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -81010,7 +81010,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -81529,7 +81529,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_surface",
           "datasetType" : "esriDTFeatureClass"
@@ -82037,7 +82037,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_surface",
           "datasetType" : "esriDTFeatureClass"
@@ -82531,7 +82531,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -83015,7 +83015,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -83497,7 +83497,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -83979,7 +83979,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -84461,7 +84461,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -84984,7 +84984,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -85451,7 +85451,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -85946,7 +85946,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -86413,7 +86413,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -86881,7 +86881,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -87440,7 +87440,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -87963,7 +87963,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -88438,7 +88438,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
@@ -88921,7 +88921,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -89404,7 +89404,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -89886,7 +89886,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -90375,7 +90375,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -90865,7 +90865,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -91368,7 +91368,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_surface",
           "datasetType" : "esriDTFeatureClass"
@@ -92067,7 +92067,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -92564,7 +92564,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -93053,7 +93053,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.topology",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.topo_surface",
           "datasetType" : "esriDTFeatureClass"
@@ -93548,7 +93548,7 @@
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
           "featureDataset" : "main.features",
-          "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+          "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
           "workspaceFactory" : "SQLite",
           "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
@@ -94500,7 +94500,7 @@
       "editable" : true,
       "dataConnection" : {
         "type" : "CIMStandardDataConnection",
-        "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+        "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
         "workspaceFactory" : "SQLite",
         "dataset" : "main.featuretype",
         "datasetType" : "esriDTTable"
@@ -94521,7 +94521,7 @@
       "editable" : true,
       "dataConnection" : {
         "type" : "CIMStandardDataConnection",
-        "workspaceConnectionString" : "DATABASE=l:\\b061450\\ArcGIS\\NOAA\\s101_bluestack.geodatabase",
+        "workspaceConnectionString" : "DATABASE=s101_bluestack.geodatabase",
         "workspaceFactory" : "SQLite",
         "dataset" : "main.informationtype",
         "datasetType" : "esriDTTable"
