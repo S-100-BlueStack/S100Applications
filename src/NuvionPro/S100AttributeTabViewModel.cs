@@ -68,11 +68,6 @@ namespace NuvionPro
 
                 if (inspector != default) {
                     await QueuedTask.Run(() => {
-                        var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
-
-                        if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
-                            var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
-                        }
                         inspector["ps"] = this.PS.ID;
                         inspector["code"] = this.Code;
                         inspector["attributebindings"] = "{}";
@@ -128,7 +123,7 @@ namespace NuvionPro
             if (this.PS != default) {
                 var schema = this.PS;
 
-                if (this.SelectedProperty is null) {
+                if (this.SelectedProperty is null || !this.SelectedProperty.ProductID.Equals(this.PS.ID)) {
                     var ps = XDocument.Load(this.PS.FullPath);
 
                     var navigator = ps.CreateNavigator();
@@ -138,7 +133,27 @@ namespace NuvionPro
 
                     var namespaceManager = new XmlNamespaceManager(new NameTable());
                     foreach (var s in scopes)
-                        namespaceManager.AddNamespace(s.Key, s.Value);                    
+                        namespaceManager.AddNamespace(s.Key, s.Value);
+
+                    var constraints = this.PS.Constraints;
+                    try {
+                        this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
+                    }
+                    catch (Exception ex) {
+                        Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                    }
+                }
+                else if (this.SelectedProperty is not null && !this.SelectedProperty.ProductID.Equals(this.PS.ID)) {
+                    var ps = XDocument.Load(this.PS.FullPath);
+
+                    var navigator = ps.CreateNavigator();
+                    navigator.MoveToFollowing(XPathNodeType.Element);
+
+                    var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+
+                    var namespaceManager = new XmlNamespaceManager(new NameTable());
+                    foreach (var s in scopes)
+                        namespaceManager.AddNamespace(s.Key, s.Value);
 
                     var constraints = this.PS.Constraints;
 
@@ -149,31 +164,6 @@ namespace NuvionPro
                         Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
                     }
                 }
-                else if (this.SelectedProperty is not null && string.IsNullOrEmpty(this.SelectedProperty.ProductID)) {
-                    if (!this.PS.Equals(this.SelectedProperty.ProductID)) {
-                        var ps = XDocument.Load(this.PS.FullPath);
-
-                        var navigator = ps.CreateNavigator();
-                        navigator.MoveToFollowing(XPathNodeType.Element);
-
-                        var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
-
-                        var namespaceManager = new XmlNamespaceManager(new NameTable());
-                        foreach (var s in scopes)
-                            namespaceManager.AddNamespace(s.Key, s.Value);
-
-                        var constraints = this.PS.Constraints;
-
-                        try {
-                            this.SelectedProperty = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
-                        }
-                        catch (Exception ex) {
-                            Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
-                        }
-                    }
-                }
-
-                var sourceIdentifiers = this.SelectedProperty.sourceIdentifiers;
 
                 if (inspector.HasGeometry) {
                     var geometryType = inspector.MapMember switch {
@@ -418,7 +408,7 @@ namespace NuvionPro
                                 return result;
                             }, TaskCreationOptions.None);
                         };
-                        
+
                         viewModel.SelectFeatureTypes = async (s, e) => {
                             var mapView = MapView.Active;
                             if (mapView is null) return;
