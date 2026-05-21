@@ -747,7 +747,18 @@ namespace S100Framework.Applications
                     var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
 
 
-                    var hashSetUnion = GroupTouchingPolygons([.. geometries]);
+                    var hashSetUnion = GroupTouchingPolygons([.. geometries], (left, right) => {
+                        // Touches = share boundary but interiors don't overlap
+                        // Intersects = catches overlapping polygons too
+
+                        //// If either feature is a PylonBridgeSupport on check for intersection!
+                        //if (hashFeatureType[left.key] is PylonBridgeSupport || hashFeatureType[right.key] is PylonBridgeSupport) {
+                        //    return GeometryEngine.Instance.Intersects(left.polygon, right.polygon);
+                        //}
+                        return GeometryEngine.Instance.Touches(left.polygon, right.polygon)
+                                                        || GeometryEngine.Instance.Intersects(left.polygon, right.polygon);
+                    });
+                    
 
                     Store((d) => {
                         using var surface = d.OpenDataset<FeatureClass>(d.GetName("surface"));
@@ -1736,7 +1747,7 @@ namespace S100Framework.Applications
                 };
             };
 
-            if (pubref is not null) 
+            if (pubref is not null)
                 pubref = pubref.Trim();
 
             if (!string.IsNullOrEmpty(pubref)) {
@@ -1759,7 +1770,7 @@ namespace S100Framework.Applications
                     string fileReference = ntxtds;
                     string language = "eng";
 
-                    var instance = createNauticalInformation(fileReference,language);
+                    var instance = createNauticalInformation(fileReference, language);
                     result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
                 }
                 else if (!string.IsNullOrEmpty(ntxtds)) {
@@ -2002,7 +2013,7 @@ namespace S100Framework.Applications
             throw new NotSupportedException("Unsupported EsriJSON geometry type.");
         }
 
-        public static List<List<(string key, Polygon polygon)>> GroupTouchingPolygons((string key, Polygon polygon)[] polygons) {
+        public static List<List<(string key, Polygon polygon)>> GroupTouchingPolygons((string key, Polygon polygon)[] polygons, Func<(string key, Polygon polygon), (string key, Polygon polygon), bool> _adjacent) {
             int count = polygons.Length;
 
             // --- Union-Find setup ---
@@ -2028,12 +2039,8 @@ namespace S100Framework.Applications
 
             for (int i = 0; i < count; i++) {
                 for (int j = i + 1; j < count; j++) {
-                    // Touches = share boundary but interiors don't overlap
-                    // Intersects = catches overlapping polygons too
-                    bool adjacent = engine.Touches(polygons[i].polygon, polygons[j].polygon)
-                                 || engine.Intersects(polygons[i].polygon, polygons[j].polygon);
-
-                    if (adjacent)
+                    bool _ = _adjacent(polygons[i], polygons[j]);
+                    if (_)
                         Union(i, j);
                 }
             }
