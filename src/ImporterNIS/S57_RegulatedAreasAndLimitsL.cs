@@ -58,7 +58,6 @@ namespace S100Framework.Applications
                         }
                     case 25: { // MARCUL_MarineFarmCulture
                             var instance = new MarineFarmCulture {
-                                waterLevelEffect = default,
                             };
 
                             if (current.CATMFA != null) {
@@ -108,7 +107,11 @@ namespace S100Framework.Applications
                             }
                             else {
                                 // Exactly one of the attributes height or value of sounding must be populated
-                                instance.valueOfSounding = null;
+                                if (current.WATLEV.HasValue && new int[] { 1, 2, -32767 }.Contains(current.WATLEV.Value)) {
+                                    instance.height = null;
+                                }
+                                else
+                                    instance.valueOfSounding = null;
                             }
 
                             if (current.VERLEN.HasValue) {

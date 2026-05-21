@@ -338,7 +338,6 @@ namespace S100Framework.Applications
                             var instance = new MarineFarmCulture() {
                             };
 
-
                             if (current.CATMFA != null) {
                                 instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA);
                             }
@@ -386,7 +385,11 @@ namespace S100Framework.Applications
                             }
                             else {
                                 // Exactly one of the attributes height or value of sounding must be populated
-                                instance.valueOfSounding = null;
+                                if (current.WATLEV.HasValue && new int[] { 1, 2, -32767 }.Contains(current.WATLEV.Value)) {
+                                    instance.height = null;
+                                }
+                                else
+                                    instance.valueOfSounding = null;                                
                             }
 
                             if (current.VERLEN.HasValue) {
