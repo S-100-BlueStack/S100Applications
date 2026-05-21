@@ -1723,8 +1723,34 @@ namespace S100Framework.Applications
             return null;
         }
 
-        internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform) {
+        internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
             InformationResult result = new();
+
+            var createNauticalInformation = (string fileReference, string language) => {
+                return new NauticalInformation {
+                    information = [
+                        new information() {
+                        fileReference = FixFilename(fileReference) ?? default,
+                        language = language
+                    }]
+                };
+            };
+
+            if (pubref is not null) 
+                pubref = pubref.Trim();
+
+            if (!string.IsNullOrEmpty(pubref)) {
+                createNauticalInformation = (string fileReference, string language) => {
+                    return new NauticalInformation {
+                        information = [
+                            new information() {
+                            fileReference = FixFilename(fileReference) ?? default,
+                            language = language,
+                            headline = pubref.Equals("-32767") ? null : pubref,
+                        }]
+                    };
+                };
+            }
 
             if (!string.IsNullOrEmpty(ntxtds)) {
                 // TODO: make information binding -> Nautical Information - binding.
@@ -1733,13 +1759,7 @@ namespace S100Framework.Applications
                     string fileReference = ntxtds;
                     string language = "eng";
 
-                    var instance = new NauticalInformation {
-                        information = [
-                                new information() {
-                                fileReference = FixFilename(fileReference) ?? default,
-                                language = language
-                                }]
-                    };
+                    var instance = createNauticalInformation(fileReference,language);
                     result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
                 }
                 else if (!string.IsNullOrEmpty(ntxtds)) {
@@ -1762,14 +1782,7 @@ namespace S100Framework.Applications
                     string fileReference = txtdsc;
                     string language = "eng";
 
-                    var instance = new NauticalInformation {
-                        information = [
-                                new information() {
-                                fileReference = FixFilename(fileReference) ?? default,
-                                language = language,
-                            }]
-                    };
-
+                    var instance = createNauticalInformation(fileReference, language);
                     result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
 
                     // information.Add(instance);
@@ -1800,16 +1813,8 @@ namespace S100Framework.Applications
                         string fileReference = txtdsc;
                         string language = "eng";
 
-                        var instance = new NauticalInformation {
-                            information = [
-                                new information() {
-                                fileReference = FixFilename(fileReference) ?? default,
-                                language = language
-                            }]
-                        };
-
+                        var instance = createNauticalInformation(fileReference, language);
                         result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
-
                     }
                     else if (!string.IsNullOrEmpty(value)) {
                         string fileReference = value;
@@ -1839,13 +1844,8 @@ namespace S100Framework.Applications
                             string fileReference = value;
                             string language = "dan";
 
-                            var instance = new NauticalInformation {
-                                information = [new information() {
-                                    fileReference = FixFilename(fileReference) ?? default,
-                                    language = language
-                                }]
-                            };
-
+                            var instance = createNauticalInformation(fileReference, language);
+                            result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
                         }
                         else if (!string.IsNullOrEmpty(value)) {
                             string fileReference = value;
@@ -1950,13 +1950,13 @@ namespace S100Framework.Applications
         //    List<information> information = CreateInformationFrom(current);
         //    instanceInformation.AddRange(information);
         //}
-        internal static InformationResult AddInformation(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform) {
+        internal static InformationResult AddInformation(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref = default) {
             // TODO: TBD.
             //List<information> information = CreateInformationFrom(sourceObjectid, sourceTableName, ntxtds, txtdsc, inform, ninform);
             //instanceInformation.AddRange(information);
 
             //TODO: Fix binding
-            return BindNauticalInformationFrom(sourceObjectid, sourceTableName, ntxtds, txtdsc, inform, ninform);
+            return BindNauticalInformationFrom(sourceObjectid, sourceTableName, ntxtds, txtdsc, inform, ninform, pubref);
 
             //if (!result.information.Any())
             //    return [];

@@ -79,7 +79,7 @@ namespace S100Framework.Applications
                                     instance.scaleMinimum = scamin.Value;
                             }
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
                             var informations = result.information.ToArray();
 
                             if (current.PUBREF != default) {

@@ -100,16 +100,16 @@ namespace S100Framework.Applications
                             if (featureName is not null)
                                 instance.featureName = featureName;
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
 
                             var informations = result.information.ToArray();
 
-                            if (current.PUBREF != default) {
-                                informations = [..informations, new information {
-                                    language = "eng",
-                                    headline = current.PUBREF.Equals("-32767") ? null : current.PUBREF.Trim(),
-                                }];
-                            }
+                            //if (current.PUBREF != default) {
+                            //    informations = [..informations, new information {
+                            //        language = "eng",
+                            //        headline = current.PUBREF.Equals("-32767") ? null : current.PUBREF.Trim(),
+                            //    }];
+                            //}
 
                             if (informations.Any())
                                 instance.information = informations;
@@ -120,7 +120,8 @@ namespace S100Framework.Applications
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            //buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(result.InformationBindings, jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -161,7 +162,7 @@ namespace S100Framework.Applications
                                     localDirectionOfBuoyage.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
                                 }
 
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
                                 localDirectionOfBuoyage.information = result.information.ToArray();
                                 localDirectionOfBuoyage.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -194,7 +195,7 @@ namespace S100Framework.Applications
                                     Logger.Current.DataError(current.OBJECTID ?? default, current.TableName ?? "Unknown tablename", current.LNAM ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
                                 }
 
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
                                 instance.information = result.information.ToArray();
                                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -487,7 +488,7 @@ namespace S100Framework.Applications
                                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                             }
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -533,7 +534,7 @@ namespace S100Framework.Applications
                                     instance.verticalDatum = verticalDatum.value;
                             }
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
