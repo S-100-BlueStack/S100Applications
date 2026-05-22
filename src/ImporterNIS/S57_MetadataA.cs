@@ -395,6 +395,16 @@ namespace S100Framework.Applications
                                         categoryOfZoneOfConfidenceInData = 5,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
                                     }];
 
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = null,
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = null,
+                                           },
+                                        }],
+                                    };
                                 }
                                 else if (catzoc == 6) { // U
                                     instance.categoryOfTemporalVariation = 5;   // categoryOfTemporalVariation.Unassessed;
@@ -408,6 +418,17 @@ namespace S100Framework.Applications
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
                                         categoryOfZoneOfConfidenceInData = 6,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceU,                                        
                                     }];
+
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = null,
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = null,
+                                           },
+                                        }],
+                                    };
                                 }
                                 else {
                                     throw new NotSupportedException($"Unknown catzoc {catzoc}. objectid: {objectid} - {tableName}");
