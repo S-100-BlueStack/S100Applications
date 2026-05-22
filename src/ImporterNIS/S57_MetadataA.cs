@@ -2,9 +2,12 @@
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
+using S100FC.S101.InformationAssociation;
+using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace S100Framework.Applications
 {
@@ -276,6 +279,7 @@ namespace S100Framework.Applications
                              */
 
 
+                            SpatialQuality? spatialQuality = default;
 
                             if (current.CATZOC.HasValue) { // A1
                                 int catzoc = current.CATZOC!.Value;
@@ -291,6 +295,15 @@ namespace S100Framework.Applications
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
                                         categoryOfZoneOfConfidenceInData = 1,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceA1
                                     }];
+
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = 5m,
+                                               uncertaintyVariableFactor = 0.05m,   // 5% of depth
+                                           } 
+                                        }],
+                                    };
                                 }
                                 else if (catzoc == 2) { // A2
                                     instance.categoryOfTemporalVariation = 5;   // categoryOfTemporalVariation.UnlikelyToChange;
@@ -304,6 +317,14 @@ namespace S100Framework.Applications
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
                                         categoryOfZoneOfConfidenceInData = 2,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceA2,
                                     }];
+
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = 20m,
+                                           }
+                                        }],
+                                    };
                                 }
                                 else if (catzoc == 3) { // B
                                     instance.categoryOfTemporalVariation = 5;   // categoryOfTemporalVariation.UnlikelyToChange;
@@ -316,6 +337,14 @@ namespace S100Framework.Applications
                                     instance.zoneOfConfidence = [new zoneOfConfidence() {
                                         categoryOfZoneOfConfidenceInData = 3,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceB,                                        
                                     }];
+
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = 50m,
+                                           }
+                                        }],
+                                    };
                                 }
                                 else if (catzoc == 4) { // C
                                     instance.categoryOfTemporalVariation = 5;   // categoryOfTemporalVariation.UnlikelyToChange;
@@ -329,6 +358,13 @@ namespace S100Framework.Applications
                                         categoryOfZoneOfConfidenceInData = 4,   //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceC,                                        
                                     }];
 
+                                    spatialQuality = new SpatialQuality {
+                                        spatialAccuracy = [new spatialAccuracy {
+                                           horizontalPositionUncertainty = new horizontalPositionUncertainty{
+                                               uncertaintyFixed = 500m,
+                                           }
+                                        }],
+                                    };
                                 }
                                 else if (catzoc == 5) { // D
                                     instance.categoryOfTemporalVariation = 5;   // categoryOfTemporalVariation.UnlikelyToChange;
@@ -372,13 +408,22 @@ namespace S100Framework.Applications
                                 instance.surveyDateRange = surveyDateRange;
                             }
 
+                            var informationBindings = instance.GetInformationBindings();
+
+                            if (spatialQuality is not null) {
+                                var informationBinding = target.CreateInformationType(spatialQuality);
+
+                                if (informationBindings is null)
+                                    informationBindings = [];
+                                informationBindings = [.. informationBindings, informationBinding];
+                            }
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(informationBindings, jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);

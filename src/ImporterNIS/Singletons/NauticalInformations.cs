@@ -6,6 +6,30 @@ using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications.Singletons
 {
+    internal static class InformationBindingExtension {
+        public static informationBinding<QualityOfBathymetricDataComposition> CreateInformationType(this Geodatabase target, SpatialQuality spatialQuality) {
+            using var informationTypeTable = target.OpenDataset<Table>(target.GetName("informationtype"));
+            using var bufferInformationType = informationTypeTable.CreateRowBuffer();
+
+            bufferInformationType["ps"] = ImporterNIS.ps101;
+            bufferInformationType["code"] = spatialQuality.S100FC_code;
+            bufferInformationType["attributebindings"] = spatialQuality.Flatten();
+
+            var informationTypeRow = informationTypeTable.CreateRow(bufferInformationType);
+            var informationName = informationTypeRow.UID();
+
+            // create binding
+            var informationBinding = new informationBinding<QualityOfBathymetricDataComposition> {
+                informationId = informationName,
+                informationType = nameof(SpatialQuality),
+                role = "theQualityInformation",
+                roleType = "association",
+            };
+
+            return informationBinding;
+        }
+    }
+
     internal sealed class NauticalInformations
     {
         private static NauticalInformations? _instance;
