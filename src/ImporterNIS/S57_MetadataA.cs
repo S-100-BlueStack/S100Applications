@@ -301,7 +301,11 @@ namespace S100Framework.Applications
                                            horizontalPositionUncertainty = new horizontalPositionUncertainty{
                                                uncertaintyFixed = 5m,
                                                uncertaintyVariableFactor = 0.05m,   // 5% of depth
-                                           } 
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = 0.5m,
+                                               uncertaintyVariableFactor = 0.01m,
+                                           },
                                         }],
                                     };
                                 }
@@ -322,7 +326,11 @@ namespace S100Framework.Applications
                                         spatialAccuracy = [new spatialAccuracy {
                                            horizontalPositionUncertainty = new horizontalPositionUncertainty{
                                                uncertaintyFixed = 20m,
-                                           }
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = 1m,
+                                               uncertaintyVariableFactor = 0.02m,
+                                           },
                                         }],
                                     };
                                 }
@@ -342,7 +350,11 @@ namespace S100Framework.Applications
                                         spatialAccuracy = [new spatialAccuracy {
                                            horizontalPositionUncertainty = new horizontalPositionUncertainty{
                                                uncertaintyFixed = 50m,
-                                           }
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = 1m,
+                                               uncertaintyVariableFactor = 0.02m,
+                                           },
                                         }],
                                     };
                                 }
@@ -362,7 +374,11 @@ namespace S100Framework.Applications
                                         spatialAccuracy = [new spatialAccuracy {
                                            horizontalPositionUncertainty = new horizontalPositionUncertainty{
                                                uncertaintyFixed = 500m,
-                                           }
+                                           },
+                                           verticalUncertainty = new verticalUncertainty{
+                                               uncertaintyFixed = 2m,
+                                               uncertaintyVariableFactor = 0.05m,
+                                           },
                                         }],
                                     };
                                 }
