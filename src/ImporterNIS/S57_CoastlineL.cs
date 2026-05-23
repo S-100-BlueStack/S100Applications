@@ -1,9 +1,11 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
+using System.Diagnostics;
 
 namespace S100Framework.Applications
 {
@@ -21,6 +23,8 @@ namespace S100Framework.Applications
             using var cursor = coastlinel.Search(filter, true);
             int recordCount = 0;
 
+            var spatialQuality = CreateAssociationSpatialQuality(target);
+
             while (cursor.MoveNext()) {
                 recordCount += 1;
 
@@ -30,6 +34,8 @@ namespace S100Framework.Applications
                 if (feature.GetShape().IsEmpty) continue;
 
                 var current = new CoastlineL(feature);
+
+                var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
 
                 var objectid = current.OBJECTID ?? default;
                 var globalid = current.GLOBALID;
@@ -128,26 +134,55 @@ namespace S100Framework.Applications
                                 instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS.Value);
                             }
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
                             bufferTopo["ps"] = ps101;
                             bufferTopo["code"] = instance.GetType().Name;
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
-                            var name = featureN.UID();
+                            (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                            if (spatialQualityHits.Any()) {
+                                Geometry g = current.SHAPE!;
+
+                                geometry = [];
+
+                                foreach (var p in spatialQualityHits) {
+                                    geometry = [.. geometry, (p, () => {
+                                        bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                    })];
+
+                                    if (GeometryEngine.Instance.Equals(g, p)) continue;
+
+                                    var difference = GeometryEngine.Instance.Difference(g, p);
+
+                                    if (difference.IsEmpty) continue;
+
+                                    if (difference is Polyline polyline) {
+                                        geometry = [.. geometry, (polyline, default)];
+                                    }
+                                    else
+                                        throw new NotImplementedException();
+                                }
                             }
 
-                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            foreach (var p in geometry) {
+                                bufferTopo["informationbindings"] = "[]";
+
+                                SetShape(bufferTopo, p.geometry);
+
+                                p.callback?.Invoke();
+
+                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                var name = featureN.UID();
+
+                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                    relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                                }
+
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            }
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
@@ -265,26 +300,51 @@ namespace S100Framework.Applications
                                     instance.scaleMinimum = scamin.Value;
                             }
 
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
                             bufferTopo["ps"] = ps101;
                             bufferTopo["code"] = instance.GetType().Name;
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
-                            var name = featureN.UID();
+                            (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                            if (spatialQualityHits.Any()) {
+                                Geometry g = current.SHAPE!;
+
+                                geometry = [];
+
+                                foreach (var p in spatialQualityHits) {
+                                    geometry = [.. geometry, (p, () => {
+                                        bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                    })];
+
+                                    var difference = GeometryEngine.Instance.Difference(g, p);
+
+                                    if (difference is Polyline polyline) {
+                                        geometry = [.. geometry, (polyline, default)];
+                                    }
+                                    else
+                                        throw new NotImplementedException();
+                                }
                             }
 
-                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            foreach (var p in geometry) {
+                                bufferTopo["informationbindings"] = "[]";
+
+                                SetShape(bufferTopo, p.geometry);
+
+                                p.callback?.Invoke();
+
+                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                var name = featureN.UID();
+
+                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                    relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                                }
+
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            }
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }

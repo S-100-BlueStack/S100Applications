@@ -52,10 +52,6 @@ namespace S100Framework.Applications
 
                 var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
 
-                if (spatialQualityHits.Any()) {
-                    ;
-                }
-
                 var objectid = current.OBJECTID ?? default;
                 var globalid = current.GLOBALID;
                 if (FeatureRelations.Instance.IsSlave(globalid)) {
@@ -172,14 +168,18 @@ namespace S100Framework.Applications
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }
 
-        private static List<informationBinding<SpatialAssociation>> CreateAssociationSpatialQuality(Geodatabase target) {
+        private static informationBinding<SpatialAssociation>? _spatialAssociation = default;
+
+        private static informationBinding<SpatialAssociation>[] CreateAssociationSpatialQuality(Geodatabase target) {
+            if (_spatialAssociation is not null) return [_spatialAssociation];
+
             // create spatial quality
             SpatialQuality spatialQuality101 = new SpatialQuality();
 
             using var informationTypeTable = target.OpenDataset<Table>(target.GetName("informationtype"));
             using var buffer = informationTypeTable.CreateRowBuffer();
 
-            spatialQuality101.qualityOfHorizontalMeasurement = EnumHelper.GetEnumValue(4);
+            spatialQuality101.qualityOfHorizontalMeasurement = 4; //    Approximate
 
             buffer["ps"] = ps101;
             buffer["code"] = spatialQuality101.S100FC_code;
@@ -197,9 +197,8 @@ namespace S100Framework.Applications
                 roleType = "association",
             };
 
-            return /*informationAssociationName, spatialQuality101,*/ [informationBinding];
-
-
+            _spatialAssociation = informationBinding;
+            return [_spatialAssociation];
         }
 
 
