@@ -224,7 +224,6 @@ namespace S100Framework.Applications
                             // VERTICAL DATUM OF DATA
                             {
                                 var vdat = new VerticalDatumOfData {
-                                    verticalDatum = default,
                                 };
 
                                 vdat.verticalDatum = GetVerticalDatum(current.VDAT ?? 3)?.value;

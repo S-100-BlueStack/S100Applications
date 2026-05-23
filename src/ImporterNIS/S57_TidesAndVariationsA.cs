@@ -128,9 +128,6 @@ anomaly values, remove the associated instance of the complex attribute informat
                         break;
                     case 10: { // MAGVAR_MagneticVariation
                             var instance = new MagneticVariation {
-                                referenceYearForMagneticVariation = default,
-                                valueOfAnnualChangeInMagneticVariation = default,
-                                valueOfMagneticVariation = default,
                             };
 
                             // TODO: interoperabilityIdentifier

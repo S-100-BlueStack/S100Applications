@@ -290,9 +290,6 @@ namespace S100Framework.Applications
 
                     case 35: { // UWTROC
                             var instance = new UnderwaterAwashRock {
-                                surroundingDepth = default,
-                                valueOfSounding = default,
-                                waterLevelEffect = default,
                             };
 
                             if (current.EXPSOU.HasValue) {
@@ -536,8 +533,6 @@ namespace S100Framework.Applications
 
                     case 45: { // WRECKS
                             var instance = new Wreck {
-                                surroundingDepth = default,
-                                waterLevelEffect = default,
                             };
 
                             // action point #42 Attributes converted correctly but the combination of both is prohibited in S-101 (DCEG 13.5). Ignore/ drop CATWRK when VALSOU is populated on conversion.

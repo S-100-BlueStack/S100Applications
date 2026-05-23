@@ -111,7 +111,6 @@ namespace S100Framework.Applications
                         break;
                     case 5: { // LNDELV_LandElevation
                             var instance = new LandElevation() {
-                                elevation = default,
                             };
 
                             if (current.ELEVAT != default) {

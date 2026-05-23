@@ -97,7 +97,6 @@ namespace S100Framework.Applications
         internal static RadarTransponderBeacon CreateRadarTransponderBeacon(S57Object structure, int? scaleMinimum, Geodatabase source) {
 
             var instance = new RadarTransponderBeacon {
-                categoryOfRadarTransponderBeacon = default,
             };
 
             //var beacons = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(RadarTransponderBeacon), structure.GlobalId);

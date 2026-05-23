@@ -840,7 +840,6 @@ namespace S100Framework.Applications
 
                     case 35: { // BOYISD_BuoyIsolatedDanger
                             var instance = new IsolatedDangerBuoy {
-                                buoyShape = default,
                             };
 
                             #region aidstonavigation

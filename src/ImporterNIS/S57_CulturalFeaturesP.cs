@@ -570,7 +570,6 @@ namespace S100Framework.Applications
                             }
 
                             var instance = new Landmark {
-                                visualProminence = default,
                             };
 
                             if (current.CATLMK != default) {
@@ -711,7 +710,6 @@ namespace S100Framework.Applications
 
                     case 40: { // PRDARE_ProductionStorageArea
                             var instance = new ProductionStorageArea {
-                                categoryOfProductionArea = default,
                             };
 
                             if (current.CATPRA.HasValue) {
@@ -819,7 +817,6 @@ namespace S100Framework.Applications
                     case 45: { // PYLONS_PylonBridgeSupport
 
                             var instance = new PylonBridgeSupport {
-                                categoryOfPylon = default,
                             };
 
                             if (current.COLOUR != default) {

@@ -126,9 +126,6 @@ namespace S100Framework.Applications
                         break;
                     case 10: { // MAGVAR_MagneticVariation
                             var instance = new MagneticVariation {
-                                referenceYearForMagneticVariation = default,
-                                valueOfAnnualChangeInMagneticVariation = default,
-                                valueOfMagneticVariation = default,
                             };
 
                             // TODO: interoperabilityIdentifier

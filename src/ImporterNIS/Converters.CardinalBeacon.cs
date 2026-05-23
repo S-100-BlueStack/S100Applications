@@ -9,8 +9,6 @@ namespace S100Framework.Applications
     {
         internal static CardinalBeacon CreateCardinalBeacon(AidsToNavigationP current, int? scaleMinimum, Geodatabase source) {
             var instance = new CardinalBeacon {
-                //beaconShape = default,
-                //categoryOfCardinalMark = default,
             };
 
             if (current.BCNSHP.HasValue) {

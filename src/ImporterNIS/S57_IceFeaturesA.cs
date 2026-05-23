@@ -54,7 +54,6 @@ namespace S100Framework.Applications
                 switch (fcSubtype) {
                     case 15: { // ICEARE_IceArea
                             var instance = new IceArea() {
-                                categoryOfIce = default,
                             };
 
                             if (current.ELEVAT.HasValue) {

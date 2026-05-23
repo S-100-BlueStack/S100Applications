@@ -52,7 +52,6 @@ namespace S100Framework.Applications
                         }
                     case 5: { // RCTLPT_RecommendedTrafficLanePart
                             var instance = new RecommendedTrafficLanePart {
-                                orientationValue = default,
                             };
 
                             DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);

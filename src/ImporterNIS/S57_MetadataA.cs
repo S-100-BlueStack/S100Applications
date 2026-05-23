@@ -144,8 +144,6 @@ namespace S100Framework.Applications
                     case 35: { // M_NSYS_NavigationalSystemOfMarks // Navigational System of Marks - region A and B globally
                             if (current.ORIENT.HasValue) {
                                 var localDirectionOfBuoyage = new LocalDirectionOfBuoyage {
-                                    marksNavigationalSystemOf = default,
-                                    orientationValue = default,
                                 };
 
                                 // TODO: interoperabilityIdentifier
@@ -599,7 +597,6 @@ namespace S100Framework.Applications
                         break;
                     case 55: { // M_VDAT_VerticalDatumOfData
                             var instance = new VerticalDatumOfData {
-                                verticalDatum = default,
                             };
 
                             // TODO: interoperabilityIdentifier
