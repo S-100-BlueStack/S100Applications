@@ -1,22 +1,53 @@
 ﻿using ArcGIS.Core.Data;
 using S100FC;
+using S100FC.S101.ComplexAttributes;
 using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications.Singletons
 {
-    internal static class InformationBindingExtension {
+    internal static class InformationBindingExtension
+    {
+
+        private static (string name, horizontalPositionUncertainty? horizontalPositionUncertainty, verticalUncertainty? verticalUncertainty)[] _archive = [];
+
         public static informationBinding<QualityOfBathymetricDataComposition> CreateInformationType(this Geodatabase target, SpatialQuality spatialQuality) {
-            using var informationTypeTable = target.OpenDataset<Table>(target.GetName("informationtype"));
-            using var bufferInformationType = informationTypeTable.CreateRowBuffer();
+            var s = spatialQuality.spatialAccuracy[0]!;
 
-            bufferInformationType["ps"] = ImporterNIS.ps101;
-            bufferInformationType["code"] = spatialQuality.S100FC_code;
-            bufferInformationType["attributebindings"] = spatialQuality.Flatten();
+            var index = Array.FindIndex(_archive, e => {
+                if (s.verticalUncertainty is null && e.verticalUncertainty is not null) return false;
+                if (s.verticalUncertainty is not null && e.verticalUncertainty is null) return false;
+                if (s.verticalUncertainty is not null) {
+                    if (s.verticalUncertainty.uncertaintyFixed != e.verticalUncertainty!.uncertaintyFixed) return false;
+                    if (s.verticalUncertainty.uncertaintyVariableFactor != e.verticalUncertainty!.uncertaintyVariableFactor) return false;
+                }
 
-            var informationTypeRow = informationTypeTable.CreateRow(bufferInformationType);
-            var informationName = informationTypeRow.UID();
+                if (s.horizontalPositionUncertainty is null && e.horizontalPositionUncertainty is not null) return false;
+                if (s.horizontalPositionUncertainty is not null && e.horizontalPositionUncertainty is null) return false;
+                if (s.horizontalPositionUncertainty is not null) {
+                    if (s.horizontalPositionUncertainty.uncertaintyFixed != e.horizontalPositionUncertainty!.uncertaintyFixed) return false;
+                    if (s.horizontalPositionUncertainty.uncertaintyVariableFactor != e.horizontalPositionUncertainty!.uncertaintyVariableFactor) return false;
+                }
+                return true;
+            });
+
+            string informationName = index < 0 ? string.Empty : _archive[index].name;
+
+            if (index < 0) {
+                using var informationTypeTable = target.OpenDataset<Table>(target.GetName("informationtype"));
+                using var bufferInformationType = informationTypeTable.CreateRowBuffer();
+
+                bufferInformationType["ps"] = ImporterNIS.ps101;
+                bufferInformationType["code"] = spatialQuality.S100FC_code;
+                bufferInformationType["attributebindings"] = spatialQuality.Flatten();
+
+                var informationTypeRow = informationTypeTable.CreateRow(bufferInformationType);
+                informationName = informationTypeRow.UID();
+
+                _archive = [.. _archive, (informationName, s.horizontalPositionUncertainty, s.verticalUncertainty)];
+            }
 
             // create binding
             var informationBinding = new informationBinding<QualityOfBathymetricDataComposition> {
