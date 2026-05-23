@@ -35,22 +35,8 @@ namespace S100Framework.Applications
             PropertyNameCaseInsensitive = true,
         }.AppendTypeInfoResolver();
 
-        //internal static readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions {
-        //    WriteIndented = false,
-        //    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        //    PropertyNameCaseInsensitive = true,
-        //    //TypeInfoResolver = Summary.InformationBindingResolver(),
-        //}.AppendTypeInfoResolver();
-
-        //internal static readonly JsonSerializerOptions jsonFeatureTypeSerializerOptions = new JsonSerializerOptions {
-        //    WriteIndented = false,
-        //    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        //    PropertyNameCaseInsensitive = true,
-        //}.AppendTypeInfoResolver();
-
         //  https://github.com/iho-ohi/S-57-to-S-101-conversion-sub-WG
         internal static string _notesPath = "";
-        //internal static int _compilationScale = -1;
         internal static string _scaminFilesPath = "";
 
         internal static string ps101 = S100FC.S101.Summary.ProductId;
@@ -58,9 +44,6 @@ namespace S100Framework.Applications
         internal static string s101version = S100FC.S101.Summary.Version.ToString();
         internal static Geodatabase? _geodatabase;
 
-        //internal static bool createBridgesAndRelations = false;
-
-        //internal static FeatureRelations featureRelations = null;
         internal static RelatedEquipment? relatedEquipment;
 
         internal static ConverterRegistry _converterRegistry = new ConverterRegistry();
@@ -758,7 +741,7 @@ namespace S100Framework.Applications
                         return GeometryEngine.Instance.Touches(left.polygon, right.polygon)
                                                         || GeometryEngine.Instance.Intersects(left.polygon, right.polygon);
                     });
-                    
+
 
                     Store((d) => {
                         using var surface = d.OpenDataset<FeatureClass>(d.GetName("surface"));
@@ -968,6 +951,83 @@ namespace S100Framework.Applications
                     }, destination);
                 }
             }
+
+            //  Navigational System of Marks
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Fixing Navigational System of Marks");
+
+                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+
+                var whereClause = $"ps = '{ps101}' AND code IN ('NavigationalSystemOfMarks')";
+
+                int[] specificUsage = [];
+                {
+                    using var cursor = surface.Search(new QueryFilter {
+                        PrefixClause = "Distinct",
+                        WhereClause = whereClause,
+                        SubFields = "specificusage",
+                        PostfixClause = "ORDER BY specificusage DESC",
+                    }, true);
+
+                    while (cursor.MoveNext()) {
+                        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
+                        specificUsage = [.. specificUsage, _];
+                    }
+                }
+
+                foreach (var usage in specificUsage.OrderDescending()) {
+                    (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
+
+                    using (var cursor = surface.Search(new QueryFilter {
+                            WhereClause = whereClause + $" AND specificUsage = {usage}",
+                        }, true)) {
+                        while (cursor.MoveNext()) {
+                            var current = (Feature)cursor.Current;
+
+                            var uid = Convert.ToString(current["UID"])!;                            
+                            var json = Convert.ToString(current["attributeBindings"]);
+                            if (string.IsNullOrEmpty(json)) json = "{}";
+
+                            var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json, typeof(NavigationalSystemOfMarks));
+
+                            navigationalSystemOfMarks = [.. navigationalSystemOfMarks, (uid, navigationalSystemOfMark.marksNavigationalSystemOf, (Polygon)current.GetShape().Clone())];
+                        }
+                    }
+
+                    using (var cursor = surface.Search(new QueryFilter {
+                        WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND specificUsage = {usage}",
+                    }, true)) {
+                        while (cursor.MoveNext()) {
+                            var current = (Feature)cursor.Current;
+
+                            var uid = Convert.ToString(current["UID"])!;
+                            var json = Convert.ToString(current["attributeBindings"]);
+                            if (string.IsNullOrEmpty(json)) json = "{}";
+
+                            var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json, typeof(LocalDirectionOfBuoyage));
+                            
+                            foreach(var e in navigationalSystemOfMarks) {
+                                
+
+                                if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
+                                ;
+                                if(GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
+                                    if (e.marksNavigationalSystemOf.HasValue) {
+                                        if(e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
+                                            localDirectionOfBuoyage.marksNavigationalSystemOf = e.marksNavigationalSystemOf;
+
+                                            current["attributeBindings"] = localDirectionOfBuoyage.Flatten();
+                                            current.Store();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
 
             using (Geodatabase source = createGeodatabase()) {
                 using (var destination = createTargetGeodatabase()) {
