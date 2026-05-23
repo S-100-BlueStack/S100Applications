@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationAssociation;
@@ -50,6 +51,10 @@ namespace S100Framework.Applications
                 var current = new DepthsL(feature);
 
                 var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
+
+                if (spatialQualityHits.Any()) {
+                    ;
+                }
 
                 var objectid = current.OBJECTID ?? default;
                 var globalid = current.GLOBALID;
@@ -103,38 +108,6 @@ namespace S100Framework.Applications
                             */
 
 
-                            // TODO: handle spatial quality spatial relation
-
-                            //if (current.SHAPE != null) {
-                            //    foreach (var spatialAttributeL in SelectIn<PLTS_SpatialAttributeL>(current.SHAPE, plts_spatialattributel)) {
-                            //        var p_quapos = spatialAttributeL.P_QUAPOS ?? default;
-                            //        if (p_quapos != default && p_quapos == 4) {
-                            //            var spatialQuality = new SpatialQuality() {
-                            //                qualityOfHorizontalMeasurement = qualityOfHorizontalMeasurement.Approximate,
-                            //                //spatialAccuracy = new List<DomainModel.ComplexAttributes.spatialAccuracy>() {
-                            //                //new DomainModel.ComplexAttributes.spatialAccuracy() {
-                            //                //    horizontalPositionUncertainty = default,
-                            //                //    fixedDateRange = default,
-                            //                //    verticalUncertainty = new DomainModel.ComplexAttributes.verticalUncertainty() {
-                            //                //        uncertaintyFixed = default,
-                            //                //        uncertaintyVariableFactor = default
-                            //                //    }
-                            //                //}
-                            //            //}
-                            //            };
-
-                            //            using var information = informationtype.CreateRowBuffer();
-                            //            information["ps"] = ps101;
-                            //            information["code"] = spatialQuality.GetType().Name;
-                            //            information["json"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality);
-                            //            //information["shape"] = spatialAttributeL.SHAPE;
-
-                            //            using var _ = informationtype.CreateRow(information);
-
-                            //        }
-                            //    }
-                            //}
-
                             var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
@@ -142,70 +115,51 @@ namespace S100Framework.Applications
                             bufferTopo["ps"] = ps101;
                             bufferTopo["code"] = instance.GetType().Name;
 
-
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
-                            var name = featureN.UID();
+                            (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                            if (spatialQualityHits.Any()) {
+                                Geometry g = current.SHAPE!;
+
+                                geometry = [];
+
+                                foreach (var p in spatialQualityHits) {
+                                    geometry = [.. geometry, (p, () => {
+                                        bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                    })];
+
+                                    var difference = GeometryEngine.Instance.Difference(g, p);
+
+                                    if (difference is Polyline polyline) {
+                                        geometry = [.. geometry, (polyline, default)];
+                                    }
+                                    else
+                                        throw new NotImplementedException();
+                                }
                             }
 
-                            // Spatial Quality
-                            if (spatialQualityHits.Count > 0) {
+                            foreach (var p in geometry) {
+                                bufferTopo["informationbindings"] = "[]";
 
-                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
-                                featureN.Store();
+                                SetShape(bufferTopo, p.geometry);
 
+                                p.callback?.Invoke();
 
-                                //foreach (var spatialQuality in spatialQualityHits) {
-                                //    // create spatial quality
-                                //    SpatialQuality spatialQuality101 = new SpatialQuality();
+                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                var name = featureN.UID();
 
-                                //    spatialQuality101.qualityOfHorizontalMeasurement = EnumHelper.GetEnumValue<qualityOfHorizontalMeasurement>(spatialQuality.qualityOfPrecision);
+                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                    relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                                }
 
-                                //    bufferInformationType["ps"] = ps101;
-                                //    bufferInformationType["code"] = spatialQuality101.Code;
-                                //    bufferInformationType["json"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality101, jsonSerializerOptions);
-
-                                //    var informationTypeRow = informationTypeTable.CreateRow(bufferInformationType);
-                                //    var informationName = Convert.ToString(informationTypeRow["name"]);
-
-                                //    // create Association
-
-                                //    var informationAssociationBuffer = informationassociationTable.CreateRowBuffer();
-
-                                //    informationAssociationBuffer["ps"] = ImporterNIS.ps101;
-                                //    informationAssociationBuffer["code"] = "association";
-
-                                //    var association = informationassociationTable.CreateRow(informationAssociationBuffer);
-                                //    var informationAssociationName = $"{association.Crc32()}";
-
-                                //    // create binding
-                                //    var informationBinding = new informationBinding {
-                                //        informationId = informationName,
-                                //        associationId = informationAssociationName,
-                                //        association = nameof(SpatialAssociation),
-                                //        role = Enum.GetName<Role>(Role.theQualityInformation)!,
-                                //        roleType = roleType.association.ToString()
-                                //    };
-
-                                //    buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(informationBinding);
-                                //    featureN.Store();
-                                //}
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
                             }
-
-
-                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     default:

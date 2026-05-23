@@ -19,18 +19,18 @@ namespace S100Framework.Applications.Singletons
 
         private static Geodatabase? _geodatabase;
 
-        private static readonly Dictionary<string, (Guid globalId, int qualityOfPrecision, Geometry Shape)> _spatialAttributesL = [];
+        //private static readonly Dictionary<string, (Guid globalId, int qualityOfPrecision, Geometry Shape)> _spatialAttributesL = [];
+
+        private static (Guid globalId, int qualityOfPrecision, Geometry Shape)[] _spatialAttributesL = [];
 
         private SpatialAssociations(Geodatabase geodatabase, QueryFilter filter) {
             _geodatabase = geodatabase ?? throw new ArgumentNullException(nameof(geodatabase));
-            _spatialAttributesL.Clear();
 
             using var plts_spatialattributelTable = _geodatabase.OpenDataset<FeatureClass>(_geodatabase.GetName("PLTS_SpatialAttributeL"));
 
             using var cursor = plts_spatialattributelTable.Search(filter, true);
 
             int recordCount = 0;
-            int errorCount = 0;
             while (cursor.MoveNext()) {
                 recordCount += 1;
                 var feature = (Feature)cursor.Current;
@@ -50,22 +50,11 @@ namespace S100Framework.Applications.Singletons
 
 
                 foreach (var p in polylines) {
-                    var wkt = ToWktWithDecimals(p, 7);
-
-                    if (_spatialAttributesL.ContainsKey(wkt)) {
-                        errorCount++;
-                        Console.WriteLine($"{plts_spatialattributel.OBJECTID!.Value}::{plts_spatialattributel.LNAM}::{plts_spatialattributel.GlobalId}");
-                        Logger.Current.DataError(plts_spatialattributel.OBJECTID!.Value, "PLTS_SpatialAttributeL", plts_spatialattributel.LNAM!, $"Duplicate geometry. Ignoring this element");
-                        //throw new Exception("Multiple spatialattributeL in same band");
-                        continue;
-
-                    }
-
                     var quapos = plts_spatialattributel.P_QUAPOS.HasValue ? plts_spatialattributel.P_QUAPOS.Value : P_QUAPOS_approximate;
-                    _spatialAttributesL.Add(wkt, (plts_spatialattributel.GLOBALID!, quapos, plts_spatialattributel.SHAPE!));
+                    _spatialAttributesL = [.. _spatialAttributesL, (plts_spatialattributel.GLOBALID!, quapos, plts_spatialattributel.SHAPE!)];
+
                 }
             }
-            ;
         }
 
         public static string ToWktWithDecimals(Geometry geometry, int decimals) {
@@ -92,27 +81,27 @@ namespace S100Framework.Applications.Singletons
             return result;
         }
 
-        internal List<(Guid globalId, int qualityOfPrecision, Geometry Shape)> GetSpatialAttributeL(Geometry geometry) {
-            var intersects = new List<(Guid globalId, int qualityOfPrecision, Geometry Shape)>();
+        internal Polyline[] GetSpatialAttributeL(Geometry geometry) {
+            if(geometry is Polyline polyline) {
+                Polyline[] approximate = [];
+                foreach(var e in _spatialAttributesL) {
+                    if (GeometryEngine.Instance.Disjoint(e.Shape, polyline)) continue;
 
-            var value = ToWktWithDecimals(geometry, 7);
-            if (_spatialAttributesL.ContainsKey(value)) {
-                intersects.Add(_spatialAttributesL[value]);
+                    var intersection = GeometryEngine.Instance.Intersection(e.Shape, polyline);
+
+                    if(intersection is Polyline i) {
+                        foreach(var p in i.Parts) {
+                            approximate = [.. approximate, PolylineBuilderEx.CreatePolyline(p)];
+                        }
+                    }
+                }
+
+                return approximate;
             }
-            return intersects;
+            return [];
         }
 
         internal static void Initialize(Geodatabase geodatabase, QueryFilter filter) {
-            //if (_instance != null) {
-            //    throw new InvalidOperationException("SpatialAssociations has already been initialized.");
-            //}
-
-            //lock (_lock) {
-            //    if (_instance == null) {
-            //        _instance = new SpatialAssociations(geodatabase, filter);
-            //    }
-            //}
-
             _instance = new SpatialAssociations(geodatabase, filter);
         }
 
