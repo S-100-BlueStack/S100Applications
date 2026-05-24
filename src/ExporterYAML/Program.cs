@@ -51,6 +51,9 @@ namespace S100Framework.Applications
 
             [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
             public bool Verbose { get; set; }
+
+            [Option("s57", Required = false, Default = false)]
+            public bool s57 { get; set; }
         }
 
         [STAThread]
@@ -109,6 +112,7 @@ namespace S100Framework.Applications
                 string? output = default;
                 string? featureCataloguePath = default;
                 bool exchangeset = false;
+                bool s57 = false;
                 string[] datasetNames = [];
                 string? wildcard = default;
 
@@ -149,6 +153,8 @@ namespace S100Framework.Applications
 
                     output = o.OutputPath;
                     featureCataloguePath = o.FeatureCatalogue;
+
+                    s57 = o.s57;
                 });
 
                 if (datasetNames.Length == 0 && string.IsNullOrEmpty(wildcard))
@@ -660,57 +666,60 @@ namespace S100Framework.Applications
                                 IO.Directory.Move(IO.Path.Combine(output, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
                             }
                         }
-                        if (IO.File.Exists(@"c:\Program Files\s57compiler\s57compiler.exe")) {
-                            if (IO.File.Exists(@"c:\Program Files\s100mapper\s100mapper.exe")) {
-                                var s101 = IO.Path.Combine(output, $"{datasetName}.yaml");
-                                var s57 = fileReferenceRegex.Replace(datasetName, datasetName.Substring(3, 2));
-                                s57 = IO.Path.Combine(output, $"{s57}.yaml");
 
-                                var pipeline = IO.Path.Combine(IO.Path.GetDirectoryName(featureCataloguePath!)!, "pipeline-S101-S57.yaml");
-                                var s100mapper = $"\"{s101}\" \"{s57}\" --fc \"{IO.Path.GetFullPath(featureCataloguePath!)}\" --pipeline \"{pipeline}\"";
+                        if (s57) {
+                            if (IO.File.Exists(@"c:\Program Files\s57compiler\s57compiler.exe")) {
+                                if (IO.File.Exists(@"c:\Program Files\s100mapper\s100mapper.exe")) {
+                                    var filename_s101 = IO.Path.Combine(output, $"{datasetName}.yaml");
+                                    var filename_s57 = fileReferenceRegex.Replace(datasetName, datasetName.Substring(3, 2));
+                                    filename_s57 = IO.Path.Combine(output, $"{filename_s57}.yaml");
 
-                                Log.Information("s100mapper.exe {s101}.yaml {s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(s57), IO.Path.GetFileName(featureCataloguePath));
+                                    var pipeline = IO.Path.Combine(IO.Path.GetDirectoryName(featureCataloguePath!)!, "pipeline-S101-S57.yaml");
+                                    var s100mapper = $"\"{filename_s101}\" \"{filename_s57}\" --fc \"{IO.Path.GetFullPath(featureCataloguePath!)}\" --pipeline \"{pipeline}\"";
 
-                                var p = new Process();
-                                p.StartInfo.CreateNoWindow = true;
-                                p.StartInfo.UseShellExecute = false;
-                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                p.StartInfo.FileName = @"C:\Program Files\s100mapper\s100mapper.exe";
-                                p.StartInfo.Arguments = s100mapper;
-                                p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(pipeline);
-                                p.StartInfo.RedirectStandardOutput = false;
-                                p.StartInfo.RedirectStandardError = true;
-                                p.EnableRaisingEvents = true;                                
-                                p.Exited += (s, e) => {
-                                    ;
-                                };                                
+                                    Log.Information("s100mapper.exe {s101}.yaml {filename_s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(filename_s57), IO.Path.GetFileName(featureCataloguePath));
 
-                                p.Start();
-                                p.WaitForExit();
+                                    var p = new Process();
+                                    p.StartInfo.CreateNoWindow = true;
+                                    p.StartInfo.UseShellExecute = false;
+                                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                    p.StartInfo.FileName = @"C:\Program Files\s100mapper\s100mapper.exe";
+                                    p.StartInfo.Arguments = s100mapper;
+                                    p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(pipeline);
+                                    p.StartInfo.RedirectStandardOutput = false;
+                                    p.StartInfo.RedirectStandardError = true;
+                                    p.EnableRaisingEvents = true;
+                                    p.Exited += (s, e) => {
+                                        ;
+                                    };
 
-                                if (p.ExitCode != 0) {
-                                    var error = p.StandardError.ReadToEnd();
+                                    p.Start();
+                                    p.WaitForExit();
 
-                                    Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
-                                    Log.Verbose(error);
-                                    return p.ExitCode;
-                                }
+                                    if (p.ExitCode != 0) {
+                                        var error = p.StandardError.ReadToEnd();
 
-                                var s57Compiler = $"\"{s57}\" s57";
-                                p.StartInfo.FileName = @"C:\Program Files\s57Compiler\s57Compiler.exe";
-                                p.StartInfo.Arguments = s57Compiler;
-                                p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(output);
+                                        Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                        Log.Verbose(error);
+                                        return p.ExitCode;
+                                    }
 
-                                p.Start();
-                                p.WaitForExit();
+                                    var s57Compiler = $"\"{s57}\" s57";
+                                    p.StartInfo.FileName = @"C:\Program Files\s57Compiler\s57Compiler.exe";
+                                    p.StartInfo.Arguments = s57Compiler;
+                                    p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(output);
 
-                                if (p.ExitCode != 0) {
-                                    //var console = p.StandardOutput.ReadToEnd();
-                                    var error = p.StandardError.ReadToEnd();
+                                    p.Start();
+                                    p.WaitForExit();
 
-                                    Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
-                                    Log.Verbose(error);
-                                    return p.ExitCode;
+                                    if (p.ExitCode != 0) {
+                                        //var console = p.StandardOutput.ReadToEnd();
+                                        var error = p.StandardError.ReadToEnd();
+
+                                        Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                        Log.Verbose(error);
+                                        return p.ExitCode;
+                                    }
                                 }
                             }
                         }
