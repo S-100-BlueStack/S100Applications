@@ -53,7 +53,6 @@ namespace S100Framework.Applications.Singletons
                 "surface",
                 "pointset"
             };
-            int recordCount = 0;
 
             //foreach (var featureclassName in featureClasses) {
             //    int tableErrorCount = 0;

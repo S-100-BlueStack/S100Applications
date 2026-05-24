@@ -3,7 +3,6 @@ using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
-using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications.Singletons
@@ -214,7 +213,7 @@ namespace S100Framework.Applications.Singletons
                                 _ => throw new NotSupportedException($"Illegal file extension for support files: {Path.GetExtension(filePath).ToLower()}")
                             };
 
-                            rowBuffer["ps"] = "S-100.Horizon";
+                            rowBuffer["ps"] = "S-100";
                             rowBuffer["code"] = "supportfile";
                             rowBuffer["json"] = System.Text.Json.JsonSerializer.Serialize(supportFile, ImporterNIS.jsonSerializerOptions);
                             rowBuffer["data_size"] = new FileInfo(filePath).Length;

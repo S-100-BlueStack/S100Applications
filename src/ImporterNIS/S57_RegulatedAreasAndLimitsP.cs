@@ -389,7 +389,7 @@ namespace S100Framework.Applications
                                     instance.height = null;
                                 }
                                 else
-                                    instance.valueOfSounding = null;                                
+                                    instance.valueOfSounding = null;
                             }
 
                             if (current.VERLEN.HasValue) {

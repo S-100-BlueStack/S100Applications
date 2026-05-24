@@ -13,7 +13,6 @@
   <Project Path="src/ImporterYAML/ImporterYAML.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
-  <Project Path="tests/LicenseChecker/LicenseChecker.csproj" Id="0cfcf525-f49d-43bd-b05e-0f9314f2dd92" />
   <Project Path="tests/TestNisImporter/TestNisImporter.csproj">
     <Platform Project="x64" />
   </Project>

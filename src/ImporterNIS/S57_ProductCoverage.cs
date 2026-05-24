@@ -35,8 +35,6 @@ namespace S100Framework.Applications
 
             var allM_CSCL = Geometries.Features<MetaDataA>(metadataAFeatureClass, new() { WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20" });
 
-            ProductRecord m_csclProduct = null;
-
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
 
@@ -96,7 +94,7 @@ namespace S100Framework.Applications
 
             while (cursor.MoveNext()) {
                 recordCount += 1;
-                var row = (Row)cursor.Current;
+                var row = cursor.Current;
                 var current = new ProductDefinitions(row); // (Row)cursor.Current;
 
                 var objectid = current.OBJECTID ?? default;
@@ -224,9 +222,8 @@ namespace S100Framework.Applications
                             // VERTICAL DATUM OF DATA
                             {
                                 var vdat = new VerticalDatumOfData {
+                                    verticalDatum = GetVerticalDatum(current.VDAT ?? 3)?.value
                                 };
-
-                                vdat.verticalDatum = GetVerticalDatum(current.VDAT ?? 3)?.value;
 
                                 buffer["ps"] = ps101;
                                 buffer["code"] = vdat.GetType().Name;
@@ -323,7 +320,7 @@ namespace S100Framework.Applications
 
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
-                var row = (Row)productDefinitions.Current;
+                var row = productDefinitions.Current;
                 var current = new ProductDefinitions(row); // (Row)cursor.Current;
 
                 var objectid = current.OBJECTID ?? default;

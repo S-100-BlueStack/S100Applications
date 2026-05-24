@@ -164,7 +164,7 @@ namespace S100Framework.Applications
 
 
                             bufferTopo["attributebindings"] = instance.Flatten();
-                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance!.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(bufferTopo, current.SHAPE);
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
@@ -229,7 +229,7 @@ namespace S100Framework.Applications
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance!.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.Shape);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -281,7 +281,7 @@ namespace S100Framework.Applications
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance!.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -346,7 +346,7 @@ namespace S100Framework.Applications
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance!.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -490,7 +490,7 @@ namespace S100Framework.Applications
 
 
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance!.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE);
                             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);

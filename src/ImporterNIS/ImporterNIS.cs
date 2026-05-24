@@ -63,7 +63,6 @@ namespace S100Framework.Applications
 
             // default value - overwritten by args
             var skinOfEarthOnly = false;
-            var append = false;
             string status = null!;
 
             int maximumDisplayScale = 0;
@@ -676,7 +675,6 @@ namespace S100Framework.Applications
                         //}
                     }
                 }
-                append = true;
             }
 
             //  Bridges
@@ -979,12 +977,12 @@ namespace S100Framework.Applications
                     (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
 
                     using (var cursor = surface.Search(new QueryFilter {
-                            WhereClause = whereClause + $" AND specificUsage = {usage}",
-                        }, true)) {
+                        WhereClause = whereClause + $" AND specificUsage = {usage}",
+                    }, true)) {
                         while (cursor.MoveNext()) {
                             var current = (Feature)cursor.Current;
 
-                            var uid = Convert.ToString(current["UID"])!;                            
+                            var uid = Convert.ToString(current["UID"])!;
                             var json = Convert.ToString(current["attributeBindings"]);
                             if (string.IsNullOrEmpty(json)) json = "{}";
 
@@ -1005,15 +1003,15 @@ namespace S100Framework.Applications
                             if (string.IsNullOrEmpty(json)) json = "{}";
 
                             var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json, typeof(LocalDirectionOfBuoyage));
-                            
-                            foreach(var e in navigationalSystemOfMarks) {
-                                
+
+                            foreach (var e in navigationalSystemOfMarks) {
+
 
                                 if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
                                 ;
-                                if(GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
+                                if (GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
                                     if (e.marksNavigationalSystemOf.HasValue) {
-                                        if(e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
+                                        if (e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
                                             localDirectionOfBuoyage.marksNavigationalSystemOf = e.marksNavigationalSystemOf;
 
                                             current["attributeBindings"] = localDirectionOfBuoyage.Flatten();

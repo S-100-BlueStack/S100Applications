@@ -2,12 +2,10 @@
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
-using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace S100Framework.Applications
 {

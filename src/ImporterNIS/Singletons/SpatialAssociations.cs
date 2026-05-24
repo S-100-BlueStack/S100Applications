@@ -82,15 +82,15 @@ namespace S100Framework.Applications.Singletons
         }
 
         internal Polyline[] GetSpatialAttributeL(Geometry geometry) {
-            if(geometry is Polyline polyline) {
+            if (geometry is Polyline polyline) {
                 Polyline[] approximate = [];
-                foreach(var e in _spatialAttributesL) {
+                foreach (var e in _spatialAttributesL) {
                     if (GeometryEngine.Instance.Disjoint(e.Shape, polyline)) continue;
 
                     var intersection = GeometryEngine.Instance.Intersection(e.Shape, polyline);
 
-                    if(intersection is Polyline i) {
-                        foreach(var p in i.Parts) {
+                    if (intersection is Polyline i) {
+                        foreach (var p in i.Parts) {
                             approximate = [.. approximate, PolylineBuilderEx.CreatePolyline(p)];
                         }
                     }
