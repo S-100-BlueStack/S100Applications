@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -15,6 +16,8 @@ namespace S100Framework.WPF.ViewModel
 {
     public class S100AttributeEditorViewModel : INotifyPropertyChanged, IAttributeBindingContainer, INotifyDataErrorInfo
     {
+        private static readonly string[] _spatialQualityByPrimites = ["curve", "point", "pointSet"];
+
         #region Delegates
         public class RequestInformationsEventArgs(string? informationType) : EventArgs
         {
@@ -436,7 +439,7 @@ namespace S100Framework.WPF.ViewModel
             this.Validate();
 
             //note: Must be added right by the end!
-            this.featureBindings.CollectionChanged += (s, e) => {                
+            this.featureBindings.CollectionChanged += (s, e) => {
                 this.OnPropertyChanged("featureBindings");
                 this.Validate();
             };
@@ -689,7 +692,7 @@ namespace S100Framework.WPF.ViewModel
                 }
 
                 return attributeBindingDefinitions;
-            }
+            }            
 
             public static informationBindingDefinition[] InformationBindings(XDocument featureCatalogue, string code) {
                 var navigator = featureCatalogue.CreateNavigator();
@@ -710,6 +713,8 @@ namespace S100Framework.WPF.ViewModel
                 }
                 else
                     throw new InvalidOperationException($"Unsupported object type ({code})!");
+
+                var permittedPrimitives = element.Elements(XName.Get("permittedPrimitives", scopes["S100FC"])).ToArray();
 
                 informationBindingDefinition[] informationBindingDefinitions = [];
 
@@ -745,6 +750,24 @@ namespace S100Framework.WPF.ViewModel
                         },
                     };
                     informationBindingDefinitions = [.. informationBindingDefinitions, informationBindingDefinition];
+                }
+
+                if (featureCatalogue.Descendants(XName.Get("S100_FC_InformationType", scopes["S100FC"])).Any(e => e.Element(XName.Get("code", scopes["S100FC"]))!.Value.Equals("SpatialQuality"))) {
+                    if (permittedPrimitives.Any(e => _spatialQualityByPrimites.Contains(e.Value))) {
+                        var spacialAssociation = new informationBindingDefinition {
+                            association = "SpatialAssociation",
+                            role = "theQualityInformation",
+                            roleType = "association",
+                            lower = 0,
+                            upper = 1,
+                            informationTypes = ["SpatialQuality"],
+                            CreateInstance = () => new informationBinding() {
+                                role = "theQualityInformation",
+                                roleType = "association",
+                            }
+                        };
+                        informationBindingDefinitions = [.. informationBindingDefinitions, spacialAssociation];
+                    }
                 }
 
                 return informationBindingDefinitions;
@@ -1030,8 +1053,8 @@ namespace S100Framework.WPF.ViewModel
                                                 "closedInterval" => !(_ >= _lowerBound && _ <= _upperBound),    // The closed interval, lower ≤ x ≤ upper
                                                 "gtSemiInterval" => !(_lowerBound < _),                         // The left half-open ray, lower < x
                                                 "geSemiInterval" => !(_lowerBound <= _),                        // The left closed ray, lower ≤ x
-                                                "ltSemiInterval" => !(_<_upperBound),                           // The right half-open ray, x < upper
-                                                "leSemiInterval" => !(_<=_upperBound),                          // The right closed ray, x ≤ upper
+                                                "ltSemiInterval" => !(_ < _upperBound),                           // The right half-open ray, x < upper
+                                                "leSemiInterval" => !(_ <= _upperBound),                          // The right closed ray, x ≤ upper
                                                 _ => throw new NotImplementedException(),
                                             };
                                             if (error)
