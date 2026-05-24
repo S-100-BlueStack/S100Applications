@@ -18,7 +18,7 @@ namespace S100Framework.Applications
     internal class VortexExporter
     {
         private const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff}| [{Level:u3}] {Message:lj} {NewLine}{Exception}";
-        
+
         const string fileReferencePattern = @"^101[A-Z]{2}\d{2}";
         static Regex fileReferenceRegex = new Regex(fileReferencePattern);
 
@@ -42,8 +42,8 @@ namespace S100Framework.Applications
             [Option('o', "outputpath", Required = false, HelpText = "OutputPath")]
             public string OutputPath { get; set; } = Directory.GetCurrentDirectory();
 
-            [Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
-            public string? NotesPath { get; set; }
+            //[Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
+            //public string? NotesPath { get; set; }
 
             [Option('f', "featurecatalogue", Required = false, Default = @"c:\Users\Public\Documents\NuvionPro\Product Files\101_FC_2.0.0.xml", HelpText = "Path to feature catalogue.")]
             public string? FeatureCatalogue { get; set; }
@@ -111,7 +111,7 @@ namespace S100Framework.Applications
                 string[] datasetNames = [];
                 string? wildcard = default;
 
-                IO.DirectoryInfo? directoryNotes = default;
+                //IO.DirectoryInfo? directoryNotes = default;
 
                 Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
 
@@ -144,7 +144,7 @@ namespace S100Framework.Applications
 
                     exchangeset = o.ExchangeSet;
 
-                    directoryNotes = new IO.DirectoryInfo(o.NotesPath!);
+                    //directoryNotes = new IO.DirectoryInfo(o.NotesPath!);
 
                     output = o.OutputPath;
                     featureCataloguePath = o.FeatureCatalogue;
@@ -209,10 +209,10 @@ namespace S100Framework.Applications
                                 FCVer = "2.0",
                                 verticalDatum = "Baltic Sea Chart Datum 2000,44",
                             }, new SpatialQueryFilter {
-                                    FilterGeometry = shape,
-                                    SpatialRelationship = SpatialRelationship.Relation,
-                                    SpatialRelationshipDescription = DE9IM_Contains,
-                                    WhereClause = whereClause
+                                FilterGeometry = shape,
+                                SpatialRelationship = SpatialRelationship.Relation,
+                                SpatialRelationshipDescription = DE9IM_Contains,
+                                WhereClause = whereClause
                             }));
                         }
                     }
@@ -274,13 +274,22 @@ namespace S100Framework.Applications
 
                                 foreach (var filename in filenames) {
                                     if (!supportFiles.Contains(filename)) {
-                                        supportFiles.Add(filename);
-                                        var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                        var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
-                                        if (file != null) {
-                                            var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                        supportFiles.Add(filename);                                        
+
+                                        var attachment = source.GetAttachment(filename);
+                                        if(attachment is not null) {
+                                            var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
                                             dataset?.Metadata.AddSupportFile(filename, base64);
                                         }
+                                        else
+                                            System.Diagnostics.Debugger.Break();
+
+                                        //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                        //var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
+                                        //if (file != null) {
+                                        //    var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                        //    dataset?.Metadata.AddSupportFile(filename, base64);
+                                        //}
                                     }
                                 }
                             }
@@ -328,10 +337,18 @@ namespace S100Framework.Applications
                                     if (!supportFiles.Contains(filename)) {
                                         supportFiles.Add(filename);
 
-                                        var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                        var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
-                                        var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                        dataset?.Metadata.AddSupportFile(filename, base64);
+                                        var attachment = source.GetAttachment(filename);
+                                        if (attachment is not null) {
+                                            var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
+                                            dataset?.Metadata.AddSupportFile(filename, base64);
+                                        }
+                                        else
+                                            System.Diagnostics.Debugger.Break();
+
+                                        //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                        //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
+                                        //var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                        //dataset?.Metadata.AddSupportFile(filename, base64);
                                     }
                                 }
                             }
@@ -443,10 +460,19 @@ namespace S100Framework.Applications
                                         foreach (var filename in filenames) {
                                             if (!supportFiles.Contains(filename)) {
                                                 supportFiles.Add(filename);
-                                                var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                                var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
-                                                var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                                dataset?.Metadata.AddSupportFile(filename, base64);
+
+                                                var attachment = source.GetAttachment(filename);
+                                                if (attachment is not null) {
+                                                    var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
+                                                    dataset?.Metadata.AddSupportFile(filename, base64);
+                                                }
+                                                else
+                                                    System.Diagnostics.Debugger.Break();
+
+                                                //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
+                                                //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
+                                                //var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
+                                                //dataset?.Metadata.AddSupportFile(filename, base64);
                                             }
                                         }
 
@@ -624,7 +650,7 @@ namespace S100Framework.Applications
                             }
                         }
                     }
-                    catch(System.Exception ex) {
+                    catch (System.Exception ex) {
                         Log.Fatal("error: {database}", e.Dataset);
                     }
                     Log.Information("------------------------------------------------------------");
@@ -638,6 +664,37 @@ namespace S100Framework.Applications
                 Log.Error(ex, ex.Message);
                 return -1;
             }
+        }
+    }
+}
+
+namespace ArcGIS.Core.Data
+{
+    public static partial class Extension
+    {
+        public static (S100BlueStack.Settings.SupportFile supportFile, MemoryStream stream)? GetAttachment(this Geodatabase geodatabase, string filename) {
+            var sqlsystanx = geodatabase.GetSQLSyntax();
+
+            var definitions = geodatabase.GetDefinitions<TableDefinition>();
+
+            var _ = definitions.Single(e => sqlsystanx.ParseTableName(e.GetName()).Item3.Equals("attachment"));
+            using var attachment = geodatabase.OpenDataset<Table>(_.GetName());
+
+            filename = filename.Trim().ToUpper();
+            if (string.IsNullOrEmpty(filename)) return default;
+
+            using var cursor = attachment.Search(new QueryFilter {
+                WhereClause = $"UPPER(json) LIKE '%\"{filename}\"%'",
+            }, true);
+
+            if (!cursor.MoveNext()) return default;
+
+            var json = Convert.ToString(cursor.Current["json"]);
+            var blob = cursor.Current["data"] as MemoryStream;
+
+            var instance = AttributeFlattenExtensions.Unflatten<S100BlueStack.Settings.SupportFile>(json, typeof(S100BlueStack.Settings.SupportFile));
+
+            return (instance!, blob!);
         }
     }
 }
