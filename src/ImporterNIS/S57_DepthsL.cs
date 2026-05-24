@@ -131,7 +131,9 @@ namespace S100Framework.Applications
                                     var difference = GeometryEngine.Instance.Difference(g, p);
 
                                     if (difference is Polyline polyline) {
-                                        geometry = [.. geometry, (polyline, default)];
+                                        foreach (var part in polyline.Parts) {
+                                            geometry = [.. geometry, (PolylineBuilderEx.CreatePolyline(part), default)];
+                                        }
                                     }
                                     else
                                         throw new NotImplementedException();
