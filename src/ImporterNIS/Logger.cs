@@ -33,7 +33,7 @@ namespace S100Framework.Applications
                 ? logEvent.Properties["TableName"].ToString().Trim('"')
                 : throw new Exception("TableName not supplied");
 
-            var filePath = Path.Combine(this._logDirectory, $"Loader_DataObject_{logFileName}.log");
+            var filePath = Path.Combine(this._logDirectory, $"ImporterNIS_DataObject_{logFileName}.log");
 
             using (var writer = new StreamWriter(filePath, true, System.Text.Encoding.GetEncoding("ISO-8859-1"))) {
                 writer.WriteLine($"{logEvent.RenderMessage()}");
@@ -90,7 +90,7 @@ namespace S100Framework.Applications
 
         internal static ILogger Current => _logger;
 
-        internal static string LogDir { get => System.IO.Path.Combine(_logDir, @"Vortex", "Loader", $"{_dateTimeString}"); }
+        internal static string LogDir { get => System.IO.Path.Combine(_logDir, @"S-100 BlueStack", "ImporterNIS", $"{_dateTimeString}"); }
 
         static Logger() {
             _logger = new LoggerConfiguration()
@@ -99,7 +99,7 @@ namespace S100Framework.Applications
                     .WriteTo.Console()
                     .Filter.ByIncludingOnly(e => e.Level < (LogEventLevel)6)
                     .Enrich.WithExceptionData()
-                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"Vortex", "Loader", $"{_dateTimeString}", "Loader_System.log"),
+                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"S-100 BlueStack", "ImporterNIS", $"{_dateTimeString}", "ImporterNIS_System.log"),
                     rollingInterval: RollingInterval.Infinite,
                     shared: true,
                     encoding: System.Text.Encoding.GetEncoding("ISO-8859-1"),
@@ -107,12 +107,12 @@ namespace S100Framework.Applications
 
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly(e => e.Level == (LogEventLevel)6)
-                    .WriteTo.Sink(new DynamicFileSink(System.IO.Path.Combine(_logDir, @"Vortex", "Loader", $"{_dateTimeString}"))))
+                    .WriteTo.Sink(new DynamicFileSink(System.IO.Path.Combine(_logDir, @"S-100 BlueStack", "ImporterNIS", $"{_dateTimeString}"))))
 
                 .WriteTo.Logger(lc => lc
                     .WriteTo.Console()
                     .Filter.ByIncludingOnly(e => e.Level == (LogEventLevel)7)
-                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"Vortex", "Loader", $"{_dateTimeString}", $"Loader_DataTotalCount.log"),
+                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"S-100 BlueStack", "ImporterNIS", $"{_dateTimeString}", $"ImporterNIS_DataTotalCount.log"),
                     rollingInterval: RollingInterval.Infinite,
                     shared: true,
                     encoding: System.Text.Encoding.GetEncoding("ISO-8859-1"),
@@ -120,7 +120,7 @@ namespace S100Framework.Applications
 
                 .WriteTo.Logger(lc => lc
                     .Filter.ByIncludingOnly(e => e.Level == (LogEventLevel)8)
-                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"Vortex", "Loader", $"{_dateTimeString}", "Loader_DataError.log"),
+                    .WriteTo.File(System.IO.Path.Combine(_logDir, @"S-100 BlueStack", "ImporterNIS", $"{_dateTimeString}", "ImporterNIS_DataError.log"),
                     rollingInterval: RollingInterval.Infinite,
                     shared: true,
                     encoding: System.Text.Encoding.GetEncoding("ISO-8859-1"),

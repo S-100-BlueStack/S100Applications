@@ -52,8 +52,9 @@ namespace S100Framework.Applications
             public bool Verbose { get; set; }
         }
 
+        [STAThread]
         static int Main(string[] args) {
-            var logpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Geodatastyrelsen", "VortexExporter", "YAML-developer.log");
+            var logpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"S-100 BlueStack", "ExporterYAML", "ExporterYAML-developer.log");
 
             // Clears log between each run
             if (File.Exists(logpath))
@@ -83,7 +84,7 @@ namespace S100Framework.Applications
                     Logger.Current.Fatal((Exception)e.ExceptionObject, "UnhandledException");
                 };
 
-                Logger.Current.Information("VortexExporter.exe {args}", string.Join(" ", args));
+                Logger.Current.Information("ExporterYAML.exe {args}", string.Join(" ", args));
 
                 if (arguments.Errors.Any())
                     return -1;
