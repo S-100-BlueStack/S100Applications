@@ -3,6 +3,7 @@ using ArcGIS.Core.Geometry;
 using CommandLine;
 using S100FC;
 using S100FC.S101;
+using S100FC.S128.SimpleAttributes;
 using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
@@ -274,10 +275,10 @@ namespace S100Framework.Applications
 
                                 foreach (var filename in filenames) {
                                     if (!supportFiles.Contains(filename)) {
-                                        supportFiles.Add(filename);                                        
+                                        supportFiles.Add(filename);
 
                                         var attachment = source.GetAttachment(filename);
-                                        if(attachment is not null) {
+                                        if (attachment is not null) {
                                             var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
                                             dataset?.Metadata.AddSupportFile(filename, base64);
                                         }
@@ -602,15 +603,17 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -c {fc}", datasetName, IO.Path.GetFileName(featureCataloguePath));
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
-                                p.StartInfo.UseShellExecute = true;
+                                p.StartInfo.UseShellExecute = false;
                                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                 p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
                                 p.StartInfo.Arguments = commandline;
                                 p.StartInfo.WorkingDirectory = output;
+                                p.StartInfo.RedirectStandardOutput = false;
+                                p.StartInfo.RedirectStandardError = true;
                                 p.EnableRaisingEvents = true;
                                 p.Exited += (s, e) => {
                                 };
@@ -619,21 +622,26 @@ namespace S100Framework.Applications
                                 p.WaitForExit();
 
                                 if (p.ExitCode != 0) {
+                                    var error = p.StandardError.ReadToEnd();
+
                                     Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    Log.Verbose(error);
                                     return p.ExitCode;
                                 }
                             }
                             else {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -C {dataset} -c 101_Feature_Catalogue_2.0.0.xml", datasetName);
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -C {dataset} -c {fc}", datasetName, IO.Path.GetFileName(featureCataloguePath));
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
-                                p.StartInfo.UseShellExecute = true;
+                                p.StartInfo.UseShellExecute = false;
                                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                 p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
                                 p.StartInfo.Arguments = commandline;
                                 p.StartInfo.WorkingDirectory = output;
+                                p.StartInfo.RedirectStandardOutput = false;
+                                p.StartInfo.RedirectStandardError = true;
                                 p.EnableRaisingEvents = true;
                                 p.Exited += (s, e) => {
                                 };
@@ -642,11 +650,68 @@ namespace S100Framework.Applications
                                 p.WaitForExit();
 
                                 if (p.ExitCode != 0) {
+                                    var error = p.StandardError.ReadToEnd();
+
                                     Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    Log.Verbose(error);
                                     return p.ExitCode;
                                 }
 
                                 IO.Directory.Move(IO.Path.Combine(output, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
+                            }
+                        }
+                        if (IO.File.Exists(@"c:\Program Files\s57compiler\s57compiler.exe")) {
+                            if (IO.File.Exists(@"c:\Program Files\s100mapper\s100mapper.exe")) {
+                                var s101 = IO.Path.Combine(output, $"{datasetName}.yaml");
+                                var s57 = fileReferenceRegex.Replace(datasetName, datasetName.Substring(3, 2));
+                                s57 = IO.Path.Combine(output, $"{s57}.yaml");
+
+                                var pipeline = IO.Path.Combine(IO.Path.GetDirectoryName(featureCataloguePath!)!, "pipeline-S101-S57.yaml");
+                                var s100mapper = $"\"{s101}\" \"{s57}\" --fc \"{IO.Path.GetFullPath(featureCataloguePath!)}\" --pipeline \"{pipeline}\"";
+
+                                Log.Information("s100mapper.exe {s101}.yaml {s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(s57), IO.Path.GetFileName(featureCataloguePath));
+
+                                var p = new Process();
+                                p.StartInfo.CreateNoWindow = true;
+                                p.StartInfo.UseShellExecute = false;
+                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                p.StartInfo.FileName = @"C:\Program Files\s100mapper\s100mapper.exe";
+                                p.StartInfo.Arguments = s100mapper;
+                                p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(pipeline);
+                                p.StartInfo.RedirectStandardOutput = false;
+                                p.StartInfo.RedirectStandardError = true;
+                                p.EnableRaisingEvents = true;                                
+                                p.Exited += (s, e) => {
+                                    ;
+                                };                                
+
+                                p.Start();
+                                p.WaitForExit();
+
+                                if (p.ExitCode != 0) {
+                                    var error = p.StandardError.ReadToEnd();
+
+                                    Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                    Log.Verbose(error);
+                                    return p.ExitCode;
+                                }
+
+                                var s57Compiler = $"\"{s57}\" s57";
+                                p.StartInfo.FileName = @"C:\Program Files\s57Compiler\s57Compiler.exe";
+                                p.StartInfo.Arguments = s57Compiler;
+                                p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(output);
+
+                                p.Start();
+                                p.WaitForExit();
+
+                                if (p.ExitCode != 0) {
+                                    //var console = p.StandardOutput.ReadToEnd();
+                                    var error = p.StandardError.ReadToEnd();
+
+                                    Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                    Log.Verbose(error);
+                                    return p.ExitCode;
+                                }
                             }
                         }
                     }
