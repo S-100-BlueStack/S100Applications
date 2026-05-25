@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using CommandLine;
+using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
 using S100FC.S128.SimpleAttributes;
@@ -8,6 +9,7 @@ using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Dataset = S100FC.YAML.Dataset;
@@ -231,6 +233,13 @@ namespace S100Framework.Applications
                 S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 foreach (var e in datasets) {
+
+                    //  DEBUG
+                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
+                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
+                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                    }
+
                     try {
                         var supportFiles = new List<string>();
 
@@ -245,7 +254,34 @@ namespace S100Framework.Applications
 
                         // Build Topology
                         Log.Information("Building topology..");
-                        S100FC.Topology.IMatrix topology = source.BuildTopology(filter)!;
+                        int index = 0;
+                        S100FC.Topology.IMatrix topology = source.BuildTopology(filter, interceptor: (e) => {
+                            if (IO.File.Exists("topology.geodatabase")) {
+                                index += 1;
+
+                                using var debugInstance = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+
+                                var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
+
+                                using var polyline = debugInstance.OpenDataset<FeatureClass>("main.linestring");
+
+                                if (index == 1) {
+                                    polyline.DeleteRows(new QueryFilter {
+                                        WhereClause = "1=1",
+                                    });
+                                }
+
+                                using var buffer = polyline.CreateRowBuffer();
+
+                                var array = e.ToArray();
+                                for (int i = 0; i < array.Length; i++) {
+                                    buffer["message"] = $"{index}";
+                                    buffer["shape"] = ConvertToArcGISPolyline(array[i], spatialReference);
+                                    using var f = polyline.CreateRow(buffer);
+                                }
+                            }
+
+                        })!;
 
                         Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
 
@@ -739,6 +775,22 @@ namespace S100Framework.Applications
                 return -1;
             }
         }
+
+        public static ArcGIS.Core.Geometry.Polyline ConvertToArcGISPolyline(NetTopologySuite.Geometries.LineString ntsLineString, SpatialReference? spatialReference = null) {
+            // Build a collection of MapPoints from NTS coordinates
+            var points = ntsLineString.Coordinates
+                .Select(coord => {
+                    // NTS uses Z if it's not NaN
+                    if (!double.IsNaN(coord.Z))
+                        return MapPointBuilderEx.CreateMapPoint(coord.X, coord.Y, coord.Z, spatialReference);
+                    else
+                        return MapPointBuilderEx.CreateMapPoint(coord.X, coord.Y, spatialReference);
+                })
+                .ToList();
+
+            // Create the ArcGIS Polyline from the point collection
+            return PolylineBuilderEx.CreatePolyline(points, spatialReference);
+        }
     }
 }
 
@@ -770,5 +822,8 @@ namespace ArcGIS.Core.Data
 
             return (instance!, blob!);
         }
+
+
     }
+
 }
