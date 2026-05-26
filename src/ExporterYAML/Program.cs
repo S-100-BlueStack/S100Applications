@@ -220,7 +220,7 @@ namespace S100Framework.Applications
                             }, new SpatialQueryFilter {
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Relation,
-                                SpatialRelationshipDescription = DE9IM_Contains,
+                                SpatialRelationshipDescription = "UNKNOWN",
                                 WhereClause = whereClause
                             }));
                         }
