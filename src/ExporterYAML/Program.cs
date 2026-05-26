@@ -25,8 +25,8 @@ namespace S100Framework.Applications
         const string fileReferencePattern = @"^101[A-Z]{2}\d{2}";
         static Regex fileReferenceRegex = new Regex(fileReferencePattern);
 
-        const string DE9IM_Contains = S100FC.Topology.Matrix.DE9IM;
-        const string DE9IM_Crosses = "T*T***T**";
+        const string DE9IM_Contains = S100FC.Topology.Matrix.DE9IM_Contains;
+        const string DE9IM_Crosses = S100FC.Topology.Matrix.DE9IM_Crosses;
 
         public class Options
         {
