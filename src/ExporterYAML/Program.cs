@@ -233,6 +233,23 @@ namespace S100Framework.Applications
                 S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 foreach (var e in datasets) {
+                    //{
+                    //    using var fc = source.OpenDataset<FeatureClass>("main.surface");
+
+                    //    using var cursor = fc.Search(new SpatialQueryFilter {
+                    //        WhereClause = $"({e.Filters.WhereClause}) AND CODE = 'DataCoverage'",
+                    //        FilterGeometry = e.Filters.FilterGeometry,
+                    //        SpatialRelationship = SpatialRelationship.Relation,
+                    //        SpatialRelationshipDescription = DE9IM_Contains,
+                    //    }, true);
+
+                    //    ;
+                    //    while (cursor.MoveNext()) {
+                    //        var c = (ArcGIS.Core.Data.Feature)cursor.Current;
+                    //    }
+                    //}
+
+
 
                     //  DEBUG
                     foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
@@ -444,7 +461,7 @@ namespace S100Framework.Applications
                                     var name = Convert.ToString(current["UID"])!;
 
                                     //if ("SoundingDatum".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
-                                    //if (name.Equals("F10400001035")) System.Diagnostics.Debugger.Break();
+                                    if (name.Equals("F10400000226")) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10800000092")) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10400001041")) System.Diagnostics.Debugger.Break();
 

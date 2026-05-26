@@ -215,7 +215,7 @@ namespace S100Framework.Applications
 
                 using (Geodatabase source = createGeodatabase()) {
                     Logger.Current.Information($"Converting Product Coverages");
-                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages, filter), destination);
+                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, s128, ref s101ProductCoverages, filter), destination);
                 }
             }
 
@@ -511,11 +511,6 @@ namespace S100Framework.Applications
 
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40)";
                             Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
-
-                            QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1)";
-                            Store((destination) => S57_ProductCoverage(source, destination, QueryFilter, s128), destination);
-                            //Store(() => FeatureRelations.Instance.CreateRelations(destination));
-
                         }
                         else {
                             /*var whereClause = QueryFilter.WhereClause.Clone();
@@ -524,10 +519,6 @@ namespace S100Framework.Applications
                             */
 
                             Logger.Current.Information($"Converting all tables: {QueryFilter.WhereClause}");
-
-                            Logger.Current.Information($"Converting Product Coverages");
-                            Store((destination) => S57_ProductCoverage(source, destination, QueryFilter, s128), destination);
-
 
                             //Logger.Current.Information($"Converting Sounding Datums");
                             //var coverages = s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE == scale);
@@ -1518,24 +1509,17 @@ namespace S100Framework.Applications
 
         internal static verticalDatum? GetVerticalDatum(int? value) {
             if (!value.HasValue) return default(verticalDatum?);
-            /*
-            if (current.VERDAT.HasValue) {
-                instance.verticalDatum = EnumHelper.GetEnumValue<verticalDatum>(current.VERDAT.Value);
-            }
-            */
 
             if (VerticalDatumConverter.ContainsKey(value.Value)) {
                 return EnumHelper.GetEnumValue(VerticalDatumConverter[value.Value]);
             }
             return EnumHelper.GetEnumValue(value);
-
-            //if (value != 3) {
-            //    return EnumHelper.GetEnumValue(value);
-            //}
-
-            //return verticalDatum.BalticSeaChartDatum2000;
         }
-        internal static verticalDatum? GetSoundingDatum(int value) {
+
+        internal static verticalDatum? GetSoundingDatum(int value) {           
+            if (VerticalDatumConverter.ContainsKey(value)) {
+                return EnumHelper.GetEnumValue(VerticalDatumConverter[value]);
+            }
             return EnumHelper.GetEnumValue(value);
         }
 

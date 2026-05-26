@@ -126,6 +126,16 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        public int[] StandardRadarScale(Geometry geometry) {
+            //var geometry = feature.Shape!;
+            var touched = GetTouchedPolygonNames(geometry);
+            if (touched.Count != 1) {
+                throw new ArgumentException("Cannot determine scamin");
+                //return null;
+            }
+            return _scaminFiles[touched[0]].StandardRadarScale;
+        }
+
         internal List<NamedPolygon> Polygons {
             get => _polygons;
         }
@@ -222,6 +232,8 @@ namespace S100Framework.Applications.Singletons
         private List<ObjectData> _objects = [];
         private List<int> _radarScales = [];
         private List<int> _scaminValues = [];
+
+        public int[] StandardRadarScale => [.. _radarScales];
 
         internal ScaminFile(string filePath) {
             var xmlData = File.ReadAllText(filePath);

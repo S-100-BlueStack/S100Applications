@@ -48,7 +48,7 @@ namespace S100Framework.Applications
             foreach (var c in coverages) {
                 if (GeometryEngine.Instance.Disjoint(c.Coverage, combined)) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
-                        verticalDatum = c.VDAT!.value,
+                        verticalDatum = c.SDAT!.value,
                     }, c.Coverage, c.PLTS_COMP_SCALE)];
                     continue;
                 }
@@ -88,7 +88,7 @@ namespace S100Framework.Applications
 
                 foreach (var p in multipart.Split()) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
-                        verticalDatum = c.VDAT!.value,
+                        verticalDatum = c.SDAT!.value,
                     }, p, c.PLTS_COMP_SCALE)];
                 }
             }
