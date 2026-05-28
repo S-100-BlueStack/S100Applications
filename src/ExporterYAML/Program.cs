@@ -461,7 +461,7 @@ namespace S100Framework.Applications
                                     var name = Convert.ToString(current["UID"])!;
 
                                     //if ("SoundingDatum".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
-                                    if (name.Equals("F10400000226")) System.Diagnostics.Debugger.Break();
+                                    //if (name.Equals("F10400000226")) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10800000092")) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10400001041")) System.Diagnostics.Debugger.Break();
 

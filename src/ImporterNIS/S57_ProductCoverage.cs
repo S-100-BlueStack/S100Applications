@@ -20,25 +20,26 @@ namespace S100Framework.Applications
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
         private static int? OptimimDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
-            >= 10000000 => default,
-            >= 3500000 => 10000000,
-            >= 1500000 => 3500000,
-            >= 700000 => 1500000,
-            >= 350000 => 700000,
-            >= 180000 => 350000,
-            >= 90000 => 180000,
-            >= 45000 => 90000,
-            >= 22000 => 45000,
-            >= 12000 => 22000,
-            >= 9000 => 12000,
-            >= 4000 => 8000,
-            >= 3000 => 4000,
-            >= 2000 => 3000,
-            >= 1000 => 2000,
-            _ => throw new NotImplementedException(),
+            _ => default,
+            //>= 10000000 => default,
+            //>= 3500000 => 10000000,
+            //>= 1500000 => 3500000,
+            //>= 700000 => 1500000,
+            //>= 350000 => 700000,
+            //>= 180000 => 350000,
+            //>= 90000 => 180000,
+            //>= 45000 => 90000,
+            //>= 22000 => 45000,
+            //>= 12000 => 22000,
+            //>= 9000 => 12000,
+            //>= 4000 => 8000,
+            //>= 3000 => 4000,
+            //>= 2000 => 3000,
+            //>= 1000 => 2000,
+            //_ => throw new NotImplementedException(),
         };
 
-        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
+        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale2, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -106,7 +107,7 @@ namespace S100Framework.Applications
                 ////    '1' => 1,   //S100FC.S128.specificUsage.NavigationalPurposeOverview,
                 ////    _ => throw new InvalidDataException(),
                 ////};
-                
+
                 var specificUsage = SpecificUsage(current.CSCL!.Value);
 
                 var electronicProduct = new S100FC.S128.FeatureTypes.ElectronicProduct {
@@ -148,12 +149,12 @@ namespace S100Framework.Applications
                 //    optimumScaleIndex -= 2;
                 // var minimumDisplayScale = radarScales[optimumScaleIndex];
 
-                var minimumDisplayScale = OptimimDisplayScaleConverter(current.CSCL!.Value);
+                var _minimumDisplayScale = OptimimDisplayScaleConverter(current.CSCL!.Value);
 
                 var dataCoverage = new DataCoverage {
                     maximumDisplayScale = Convert.ToInt32(current.CSCL!.Value / 2),
                     optimumDisplayScale = current.CSCL!.Value,
-                    minimumDisplayScale = minimumDisplayScale,
+                    minimumDisplayScale = _minimumDisplayScale,
                 };
 
                 var vdat = GetVerticalDatum(current.VDAT ?? 3);
@@ -193,14 +194,19 @@ namespace S100Framework.Applications
 
             S101ProductCoverage[] products = [];
 
+            int[] _cscl = [];
 
             for (int i = 0; i < scales.Length; i++) {
                 foreach (var coverage in coverages.Where(e => e.PLTS_COMP_SCALE == scales[i])) {
                     Polygon[] polygons = [];
 
+                    var _minimum = i == 0 ? minimumDisplayScale2 : scales[i - 1];
+
                     foreach (var c in coverage.Coverage) {
+                        //  PLTS_COMP_SCALE >= 0 AND PLTS_COMP_SCALE < 19999999
+
                         var m_cscl = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
-                            WhereClause = $"({filter.WhereClause}) AND fcsubtype = 20",
+                            WhereClause = $"(PLTS_COMP_SCALE >= {scales[i]} AND PLTS_COMP_SCALE < {_minimum}) AND fcsubtype = 20",
                             SpatialRelationship = SpatialRelationship.Contains,
                             FilterGeometry = c,
                         });
@@ -209,6 +215,9 @@ namespace S100Framework.Applications
 
                         if (m_cscl.Any()) {
                             foreach (var e in m_cscl) {
+                                if (Array.IndexOf(_cscl, e.OBJECTID!.Value)>=0) System.Diagnostics.Debugger.Break();
+                                _cscl = [.. _cscl, e.OBJECTID!.Value];
+
                                 products = [.. products, new S101ProductCoverage(coverage.Name, e.CSCALE!.Value, new DataCoverage {
                                     maximumDisplayScale = Convert.ToInt32(e.CSCALE!.Value / 2),
                                     optimumDisplayScale = e.CSCALE!.Value,
@@ -318,137 +327,6 @@ namespace S100Framework.Applications
                     }
                 }
             }
-
-            //System.Diagnostics.Debugger.Break();
-            ;
-
-#if null
-            while (cursorCoverage.MoveNext()) {
-                    var productCoverage = new ProductCoverage((Feature)cursorCoverage.Current);
-                    var catcov = productCoverage.CATCOV ?? default;
-                    var plts_comp_scale = productCoverage.PLTS_COMP_SCALE ?? default;
-
-                    if (catcov != 1)
-                        continue;
-
-                    //var displayScale = DisplayScale.GetNearestBelowKey(plts_comp_scale) ?? default;
-                    //var displayScale = DisplayScale.GetDisplayScale(serie!)!;
-                    var dataCoverage_m_scl = new DataCoverage {
-                        maximumDisplayScale = Convert.ToInt32(plts_comp_scale / 2),
-                        optimumDisplayScale = plts_comp_scale, //displayScale.OptimumDisplayScale,
-                        minimumDisplayScale = plts_comp_scale //displayScale.MinimumDisplayScale
-                    };
-
-                    var coverageShape = productCoverage.SHAPE!;
-
-
-
-
-                    //(coverageShape as ArcGIS.Core.Geometry.Polygon).Area != (cutOutM_SCL[0] as ArcGIS.Core.Geometry.Polygon).Area
-                    var cutOutM_SCL = Geometries.EraseTouchingParts([coverageShape], allM_CSCL.Select(e => e.SHAPE!).ToList());
-
-                    //if ((coverageShape as ArcGIS.Core.Geometry.Polygon).Area != (cutOutM_SCL[0] as ArcGIS.Core.Geometry.Polygon).Area) {
-                    //    ;
-                    //}
-
-                    if (cutOutM_SCL.Count == 0) {
-                        throw new NotSupportedException("meta sea scale replaces coverage completely");
-                    }
-                    if (cutOutM_SCL.Count > 1) {
-                        throw new NotSupportedException("Multiple coverages after M_SCL cut");
-                    }
-
-                    polygonsCompScale = productCoverage.PLTS_COMP_SCALE!.Value;
-                    polygons.Add((ArcGIS.Core.Geometry.Polygon)productCoverage.SHAPE!);
-
-                    {
-                        //buffer["ps"] = ps128;
-                        //buffer["code"] = instance.GetType().Name;
-                        //buffer["version"] = ImporterNIS.s101version;
-                        //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, jsonTestSerializerOptions);
-                        //SetShape(buffer, productCoverage.SHAPE);
-                        //SetUsageBand(buffer, productCoverage!.PLTS_COMP_SCALE!.Value);
-                        //using var featureN = featureClass.CreateRow(buffer);
-                        //var name = featureN.Crc32();
-                        //// TODO: Create relations
-                        //ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-                    }
-
-                    // DATACOVERAGE
-                    var dataCoverage = new DataCoverage {
-                        maximumDisplayScale = Convert.ToInt32(plts_comp_scale / 2),
-                        optimumDisplayScale = plts_comp_scale, //displayScale.OptimumDisplayScale,
-                        minimumDisplayScale = plts_comp_scale //displayScale.MinimumDisplayScale
-                    };
-                    {
-                        buffer["ps"] = ps101;
-                        buffer["code"] = dataCoverage.GetType().Name;
-
-                        buffer["attributebindings"] = dataCoverage.Flatten();
-                        buffer["informationbindings"] = "[]";
-
-                        SetShape(buffer, cutOutM_SCL[0]); // productCoverage.SHAPE);
-                        SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE!.Value);
-
-                        using var featureN = featureClass.CreateRow(buffer);
-                        var name = featureN.UID();
-
-                        // TODO: Create relations
-                        ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-                    }
-
-                    // VERTICAL DATUM OF DATA
-                    {
-                        var vdat = new VerticalDatumOfData {
-                            verticalDatum = default,
-                        };
-
-                        vdat.verticalDatum = GetVerticalDatum(current.VDAT ?? 3)?.value;
-
-                        buffer["ps"] = ps101;
-                        buffer["code"] = vdat.GetType().Name;
-
-                        buffer["attributebindings"] = vdat.Flatten();
-                        buffer["informationbindings"] = "[]";
-
-                        SetShape(buffer, productCoverage.SHAPE);
-                        SetUsageBand(buffer, productCoverage.PLTS_COMP_SCALE.Value);
-
-                        using var featureN = featureClass.CreateRow(buffer);
-                        var name = featureN.UID();
-
-                        // Registering vertical datum information for all areas
-                        VerticalDatums.Instance.Add(productCoverage!.SHAPE!, vdat.verticalDatum);
-
-                        SoundingDatums.Instance.Add(productCoverage!.SHAPE!, GetSoundingDatum(current.SDAT!.Value)!);
-
-                        // TODO: Create relations
-                        ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                        VerticalDatums.Instance.Add(productCoverage.SHAPE!.Clone(), vdat.verticalDatum);
-
-                    }
-                }
-
-                if (s128) {
-                    //Store S-128 polygons
-                    buffer["ps"] = ps128;
-                    buffer["code"] = instance.GetType().Name;
-
-                    buffer["attributebindings"] = instance.Flatten();
-                    buffer["informationbindings"] = "[]";
-
-                    SetShape(buffer, (ArcGIS.Core.Geometry.Polygon)GeometryEngine.Instance.Union(polygons));
-                    SetUsageBand(buffer, polygonsCompScale);
-                    using var featureN = featureClass.CreateRow(buffer);
-                    var name = featureN.UID();
-                    // TODO: Create relations
-                    ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-                }
-
-                Logger.Current.DataObject(objectid, tableName, dsnm, System.Text.Json.JsonSerializer.Serialize(instance, jsonSerializerOptions128));
-            }
-#endif
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }
 

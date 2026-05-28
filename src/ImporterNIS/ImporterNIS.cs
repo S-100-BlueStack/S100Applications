@@ -215,7 +215,7 @@ namespace S100Framework.Applications
 
                 using (Geodatabase source = createGeodatabase()) {
                     Logger.Current.Information($"Converting Product Coverages");
-                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, s128, ref s101ProductCoverages, filter), destination);
+                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages, filter), destination);
                 }
             }
 
