@@ -126,7 +126,7 @@ namespace S100Framework.Applications
                     },
                     maximumDisplayScale = null,
                     optimumDisplayScale = current.CSCL!.Value,
-                    minimumDisplayScale = OptimimDisplayScaleConverter(current.CSCL!.Value)
+                    minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
                 };
 
                 using var cursorCoverage = productCoverageFeatureClass.Search(new QueryFilter {
