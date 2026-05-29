@@ -124,22 +124,26 @@ namespace S100Framework.Applications
                         name = S100FC.S101.Summary.ProductId,
                         version = S100FC.S101.Summary.Version.ToString(),
                     },
+                    maximumDisplayScale = null,
+                    optimumDisplayScale = current.CSCL!.Value,
+                    minimumDisplayScale = OptimimDisplayScaleConverter(current.CSCL!.Value)
                 };
 
                 using var cursorCoverage = productCoverageFeatureClass.Search(new QueryFilter {
                     WhereClause = $"Product_GUID = '{globalid:B}' AND CATCOV = 1",
                 }, true);
 
-                Polygon[] polygons = [];
+                (int catcov, Polygon shape)[] polygons = [];
 
                 //int polygonsCompScale = 0;                
 
                 while (cursorCoverage.MoveNext()) {
-                    polygons = [.. polygons, (Polygon)((Feature)cursorCoverage.Current).GetShape().Clone()];
+                    var catvoc = Convert.ToInt32(cursorCoverage.Current["CATCOV"]);
+                    polygons = [.. polygons, (catvoc, (Polygon)((Feature)cursorCoverage.Current).GetShape().Clone())];
                 }
                 if (!polygons.Any()) System.Diagnostics.Debugger.Break();
 
-                var radarScales = scamin.StandardRadarScale((Polygon)(GeometryEngine.Instance.Union(polygons)));
+                //var radarScales = scamin.StandardRadarScale((Polygon)(GeometryEngine.Instance.Union(polygons)));
 
                 //var optimumScaleIndex = Array.IndexOf(radarScales, current.CSCL!.Value);
 
@@ -152,7 +156,7 @@ namespace S100Framework.Applications
                 var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
 
                 var dataCoverage = new DataCoverage {
-                    maximumDisplayScale = Convert.ToInt32(current.CSCL!.Value / 2),
+                    maximumDisplayScale = null, //current.CSCL!.Value / 2,
                     optimumDisplayScale = current.CSCL!.Value,
                     minimumDisplayScale = _minimumDisplayScale,
                 };
@@ -160,7 +164,7 @@ namespace S100Framework.Applications
                 var vdat = GetVerticalDatum(current.VDAT ?? 3);
                 var sdat = GetSoundingDatum(current.SDAT!.Value);
 
-                coverages = [.. coverages, (dsnm, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons)];
+                coverages = [.. coverages, (dsnm, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
 
                 if (s128) {
                     using var _ = productCoverageFeatureClass.Search(new QueryFilter {
@@ -182,8 +186,9 @@ namespace S100Framework.Applications
                         buffer["informationbindings"] = "[]";
                         buffer["featurebindings"] = "[]";
                         buffer["specificusage"] = electronicProduct.specificUsage.Value;
-
+                        
                         SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
+                        //SetShape(buffer, (Polygon)(PolygonBuilderEx.CreatePolygon(productCoverages)));
                         using var featureN = featureClass.CreateRow(buffer);
                         var name = featureN.UID();
                     }
@@ -203,10 +208,12 @@ namespace S100Framework.Applications
                     var _minimum = i == 0 ? minimumDisplayScale2 : scales[i - 1];
 
                     foreach (var c in coverage.Coverage) {
+                        continue;
                         //  PLTS_COMP_SCALE >= 0 AND PLTS_COMP_SCALE < 19999999
 
                         var m_cscl = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
-                            WhereClause = $"(PLTS_COMP_SCALE >= {scales[i]} AND PLTS_COMP_SCALE < {_minimum}) AND fcsubtype = 20",
+                            //WhereClause = $"(PLTS_COMP_SCALE >= {scales[i]} AND PLTS_COMP_SCALE < {_minimum}) AND fcsubtype = 20",
+                            WhereClause = $"(PLTS_COMP_SCALE = {coverage.PLTS_COMP_SCALE}) AND fcsubtype = 20",
                             SpatialRelationship = SpatialRelationship.Contains,
                             FilterGeometry = c,
                         });
@@ -215,7 +222,7 @@ namespace S100Framework.Applications
 
                         if (m_cscl.Any()) {
                             foreach (var e in m_cscl) {
-                                if (Array.IndexOf(_cscl, e.OBJECTID!.Value)>=0) System.Diagnostics.Debugger.Break();
+                                if (Array.IndexOf(_cscl, e.OBJECTID!.Value) >= 0) System.Diagnostics.Debugger.Break();
                                 _cscl = [.. _cscl, e.OBJECTID!.Value];
 
                                 products = [.. products, new S101ProductCoverage(coverage.Name, e.CSCALE!.Value, new DataCoverage {
