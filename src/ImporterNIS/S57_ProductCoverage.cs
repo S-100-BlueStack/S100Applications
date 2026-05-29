@@ -19,7 +19,7 @@ namespace S100Framework.Applications
     {
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
-        private static int? OptimimDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
+        private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
             _ => default,
             //>= 10000000 => default,
             //>= 3500000 => 10000000,
@@ -149,7 +149,7 @@ namespace S100Framework.Applications
                 //    optimumScaleIndex -= 2;
                 // var minimumDisplayScale = radarScales[optimumScaleIndex];
 
-                var _minimumDisplayScale = OptimimDisplayScaleConverter(current.CSCL!.Value);
+                var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
 
                 var dataCoverage = new DataCoverage {
                     maximumDisplayScale = Convert.ToInt32(current.CSCL!.Value / 2),
