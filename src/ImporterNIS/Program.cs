@@ -127,7 +127,7 @@ namespace S100Framework.Applications
 
                             //IO.Directory.Delete(target, true);
 
-                            fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed12.gdb.zip"), IO.Path.GetFullPath(target), null);
+                            fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed14.gdb.zip"), IO.Path.GetFullPath(target), null);
                         }
                     };
 
@@ -144,7 +144,7 @@ namespace S100Framework.Applications
                             foreach (var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
                                 IO.File.Delete(IO.Path.GetFullPath(f));
                             }
-                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed13.geodatabase"), IO.Path.GetFullPath(target), true);
+                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed14.geodatabase"), IO.Path.GetFullPath(target), true);
                         }
                     };
 

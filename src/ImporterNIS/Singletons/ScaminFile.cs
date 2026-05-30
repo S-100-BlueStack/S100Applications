@@ -233,7 +233,7 @@ namespace S100Framework.Applications.Singletons
         private List<int> _radarScales = [];
         private List<int> _scaminValues = [];
 
-        public int[] StandardRadarScale => [.. _radarScales];
+        public int[] StandardRadarScale => [.. this._radarScales];
 
         internal ScaminFile(string filePath) {
             var xmlData = File.ReadAllText(filePath);

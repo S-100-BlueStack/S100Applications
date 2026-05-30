@@ -104,7 +104,7 @@ namespace S100Framework.Applications
                 buffer["code"] = e.SoundingDatum.GetType().Name;
                 buffer["attributebindings"] = e.SoundingDatum.Flatten();
                 SetShape(buffer, e.Coverage);
-                SetUsageBand(buffer, e.PLTS_COMP_SCALE);
+                SetUsageBand(buffer, e.PLTS_COMP_SCALE); buffer["sourceIdentifier"] = e.SoundingDatum.sourceIdentifier;
                 using var featureN = featureClass.CreateRow(buffer);
                 var name = featureN.UID();
             }

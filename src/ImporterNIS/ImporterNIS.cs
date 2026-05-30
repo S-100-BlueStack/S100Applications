@@ -1516,7 +1516,7 @@ namespace S100Framework.Applications
             return EnumHelper.GetEnumValue(value);
         }
 
-        internal static verticalDatum? GetSoundingDatum(int value) {           
+        internal static verticalDatum? GetSoundingDatum(int value) {
             if (VerticalDatumConverter.ContainsKey(value)) {
                 return EnumHelper.GetEnumValue(VerticalDatumConverter[value]);
             }

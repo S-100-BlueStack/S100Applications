@@ -78,7 +78,7 @@ namespace S100Framework.Applications
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
+                            SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
@@ -167,7 +167,7 @@ namespace S100Framework.Applications
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
+                            SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
@@ -205,7 +205,7 @@ namespace S100Framework.Applications
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(bufferTopo, current.SHAPE);
+                            SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);

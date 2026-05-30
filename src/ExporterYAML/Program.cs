@@ -221,7 +221,8 @@ namespace S100Framework.Applications
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Relation,
                                 SpatialRelationshipDescription = "UNKNOWN",
-                                WhereClause = whereClause
+                                WhereClause = whereClause,
+                                SubFields = "OBJECTID,UID,GLOBALID,SHAPE",
                             }));
                         }
                     }
