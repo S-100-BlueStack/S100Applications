@@ -945,76 +945,78 @@ namespace S100Framework.Applications
             using (var destination = createTargetGeodatabase()) {
                 Logger.Current.Information($"Fixing Navigational System of Marks");
 
-                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+                Store((d) => {
+                    using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 
-                var whereClause = $"ps = '{ps101}' AND code IN ('NavigationalSystemOfMarks')";
+                    var whereClause = $"ps = '{ps101}' AND code IN ('NavigationalSystemOfMarks')";
 
-                int[] specificUsage = [];
-                {
-                    using var cursor = surface.Search(new QueryFilter {
-                        PrefixClause = "Distinct",
-                        WhereClause = whereClause,
-                        SubFields = "specificusage",
-                        PostfixClause = "ORDER BY specificusage DESC",
-                    }, true);
+                    int[] specificUsage = [];
+                    {
+                        using var cursor = surface.Search(new QueryFilter {
+                            PrefixClause = "Distinct",
+                            WhereClause = whereClause,
+                            SubFields = "specificusage",
+                            PostfixClause = "ORDER BY specificusage DESC",
+                        }, true);
 
-                    while (cursor.MoveNext()) {
-                        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
-                        specificUsage = [.. specificUsage, _];
-                    }
-                }
-
-                foreach (var usage in specificUsage.OrderDescending()) {
-                    (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
-
-                    using (var cursor = surface.Search(new QueryFilter {
-                        WhereClause = whereClause + $" AND specificUsage = {usage}",
-                    }, true)) {
                         while (cursor.MoveNext()) {
-                            var current = (Feature)cursor.Current;
-
-                            var uid = Convert.ToString(current["UID"])!;
-                            var json = Convert.ToString(current["attributeBindings"]);
-                            if (string.IsNullOrEmpty(json)) json = "{}";
-
-                            var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json, typeof(NavigationalSystemOfMarks));
-
-                            navigationalSystemOfMarks = [.. navigationalSystemOfMarks, (uid, navigationalSystemOfMark.marksNavigationalSystemOf, (Polygon)current.GetShape().Clone())];
+                            var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
+                            specificUsage = [.. specificUsage, _];
                         }
                     }
 
-                    using (var cursor = surface.Search(new QueryFilter {
-                        WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND specificUsage = {usage}",
-                    }, true)) {
-                        while (cursor.MoveNext()) {
-                            var current = (Feature)cursor.Current;
+                    foreach (var usage in specificUsage.OrderDescending()) {
+                        (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
 
-                            var uid = Convert.ToString(current["UID"])!;
-                            var json = Convert.ToString(current["attributeBindings"]);
-                            if (string.IsNullOrEmpty(json)) json = "{}";
+                        using (var cursor = surface.Search(new QueryFilter {
+                            WhereClause = whereClause + $" AND specificUsage = {usage}",
+                        }, true)) {
+                            while (cursor.MoveNext()) {
+                                var current = (Feature)cursor.Current;
 
-                            var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json, typeof(LocalDirectionOfBuoyage));
+                                var uid = Convert.ToString(current["UID"])!;
+                                var json = Convert.ToString(current["attributeBindings"]);
+                                if (string.IsNullOrEmpty(json)) json = "{}";
 
-                            foreach (var e in navigationalSystemOfMarks) {
+                                var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json, typeof(NavigationalSystemOfMarks));
+
+                                navigationalSystemOfMarks = [.. navigationalSystemOfMarks, (uid, navigationalSystemOfMark.marksNavigationalSystemOf, (Polygon)current.GetShape().Clone())];
+                            }
+                        }
+
+                        using (var cursor = surface.Search(new QueryFilter {
+                            WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND specificUsage = {usage}",
+                        }, true)) {
+                            while (cursor.MoveNext()) {
+                                var current = (Feature)cursor.Current;
+
+                                var uid = Convert.ToString(current["UID"])!;
+                                var json = Convert.ToString(current["attributeBindings"]);
+                                if (string.IsNullOrEmpty(json)) json = "{}";
+
+                                var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json, typeof(LocalDirectionOfBuoyage));
+
+                                foreach (var e in navigationalSystemOfMarks) {
 
 
-                                if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
-                                ;
-                                if (GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
-                                    if (e.marksNavigationalSystemOf.HasValue) {
-                                        if (e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
-                                            localDirectionOfBuoyage.marksNavigationalSystemOf = e.marksNavigationalSystemOf;
+                                    if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
+                                    ;
+                                    if (GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
+                                        if (e.marksNavigationalSystemOf.HasValue) {
+                                            if (e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
+                                                localDirectionOfBuoyage.marksNavigationalSystemOf = e.marksNavigationalSystemOf;
 
-                                            current["attributeBindings"] = localDirectionOfBuoyage.Flatten();
-                                            current.Store();
+                                                current["attributeBindings"] = localDirectionOfBuoyage.Flatten();
+                                                current.Store();
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
 
-                }
+                    }
+                }, destination);
             }
 
 
