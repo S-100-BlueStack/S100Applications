@@ -222,7 +222,7 @@ namespace S100Framework.Applications
                                 SpatialRelationship = SpatialRelationship.Relation,
                                 SpatialRelationshipDescription = "UNKNOWN",
                                 WhereClause = whereClause,
-                                SubFields = "OBJECTID,UID,GLOBALID,SHAPE",
+                                SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
                             }));
                         }
                     }
@@ -274,6 +274,7 @@ namespace S100Framework.Applications
                         Log.Information("Building topology..");
                         int index = 0;
                         S100FC.Topology.IMatrix topology = source.BuildTopology(filter, interceptor: (e) => {
+                            return;
                             if (IO.File.Exists("topology.geodatabase")) {
                                 index += 1;
 
@@ -283,11 +284,10 @@ namespace S100Framework.Applications
 
                                 using var polyline = debugInstance.OpenDataset<FeatureClass>("main.linestring");
 
-                                if (index == 1) {
-                                    polyline.DeleteRows(new QueryFilter {
-                                        WhereClause = "1=1",
-                                    });
-                                }
+                                polyline.DeleteRows(new QueryFilter {
+                                    WhereClause = "1=1",
+                                });
+
 
                                 using var buffer = polyline.CreateRowBuffer();
 
@@ -302,6 +302,8 @@ namespace S100Framework.Applications
                         })!;
 
                         Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
+
+                        filter.SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings";
 
                         // InformationTypes
                         var informationTypes = new List<S100FC.YAML.Information>();
@@ -475,6 +477,8 @@ namespace S100Framework.Applications
                                     var shapetype = def.GetShapeType();
 
                                     var code = Convert.ToString(current["code"]);
+
+                                    //if (code.Equals("DataCoverage")) System.Diagnostics.Debugger.Break();
 
                                     var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
 
@@ -663,7 +667,7 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -c {fc}", datasetName, IO.Path.GetFileName(featureCataloguePath));
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
@@ -690,7 +694,7 @@ namespace S100Framework.Applications
                                 }
                             }
                             else {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {dataset}.000 -C {dataset} -c {fc}", datasetName, IO.Path.GetFileName(featureCataloguePath));
+                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
