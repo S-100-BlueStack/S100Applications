@@ -207,7 +207,6 @@ namespace S100Framework.Applications
                     var _minimum = i == 0 ? minimumDisplayScale2 : scales[i - 1];
 
                     foreach (var c in coverage.Coverage) {
-                        continue;
                         //  PLTS_COMP_SCALE >= 0 AND PLTS_COMP_SCALE < 19999999
 
                         var m_cscl = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
