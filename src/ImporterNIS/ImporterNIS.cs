@@ -984,9 +984,9 @@ namespace S100Framework.Applications
                             }
                         }
 
-                        using (var cursor = surface.Search(new QueryFilter {
+                        using (var cursor = surface.CreateUpdateCursor(new QueryFilter {
                             WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND specificUsage = {usage}",
-                        }, true)) {
+                        }, false)) {
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
 
@@ -1000,7 +1000,7 @@ namespace S100Framework.Applications
 
 
                                     if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
-                                    ;
+                                    
                                     if (GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
                                         if (e.marksNavigationalSystemOf.HasValue) {
                                             if (e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
