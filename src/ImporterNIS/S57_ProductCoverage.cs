@@ -154,7 +154,7 @@ namespace S100Framework.Applications
                 var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
 
                 var dataCoverage = new DataCoverage {
-                    maximumDisplayScale = null, //current.CSCL!.Value / 2,
+                    maximumDisplayScale = current.CSCL!.Value / 2,
                     optimumDisplayScale = current.CSCL!.Value,
                     minimumDisplayScale = _minimumDisplayScale,
                 };
