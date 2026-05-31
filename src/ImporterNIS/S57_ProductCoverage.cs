@@ -85,7 +85,7 @@ namespace S100Framework.Applications
                 var dsnm = current.DSNM ?? default;
                 var edtn = current.EDTN ?? default;
                 var updn = current.UPDN ?? default;
-                var isdt = current.ISDT ?? default;
+                var isdt = current.ISDT ?? DateTime.Now;
                 var serie = current.SERIES ?? default;
 
                 if (dsnm is null || !regex.IsMatch(dsnm))
