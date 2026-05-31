@@ -186,12 +186,14 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
-
-                            datasetNames = [.. datasetNames, electricProduct.datasetName!];
-                        }
-
-                        ;
+                            try {
+                                var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                                datasetNames = [.. datasetNames, electricProduct.datasetName!];
+                            }
+                            catch (System.Exception ex) {
+                                Logger.Current.Error(ex, "Can't deserialize {UID}!", current["UID"]);
+                            }                            
+                        }                        
                     }
 
                     foreach (var ds in datasetNames) {
@@ -532,7 +534,7 @@ namespace S100Framework.Applications
                                                     dataset?.Metadata.AddSupportFile(filename, base64);
                                                 }
                                                 else
-                                                    System.Diagnostics.Debugger.Break();
+                                                     System.Diagnostics.Debugger.Break();
 
                                                 //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
                                                 //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
