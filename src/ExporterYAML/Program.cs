@@ -1,15 +1,12 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using CommandLine;
-using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
-using S100FC.S128.SimpleAttributes;
 using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
 using System.Diagnostics;
-using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Dataset = S100FC.YAML.Dataset;
@@ -192,8 +189,8 @@ namespace S100Framework.Applications
                             }
                             catch (System.Exception ex) {
                                 Logger.Current.Error(ex, "Can't deserialize {UID}!", current["UID"]);
-                            }                            
-                        }                        
+                            }
+                        }
                     }
 
                     foreach (var ds in datasetNames) {
@@ -275,8 +272,14 @@ namespace S100Framework.Applications
                         // Build Topology
                         Log.Information("Building topology..");
                         int index = 0;
-                        S100FC.Topology.IMatrix topology = source.BuildTopology(filter, interceptor: (e) => {
-                            return;
+                        var topology = source.BuildTopology(filter, interceptor: (code, e) => {
+                            var persist = code switch {
+                                9000 => true,
+                                _ => false,
+                            };
+
+                            if (!persist) return;
+
                             if (IO.File.Exists("topology.geodatabase")) {
                                 index += 1;
 
@@ -374,7 +377,7 @@ namespace S100Framework.Applications
                             while (featureCursor.MoveNext()) {
                                 var current = featureCursor.Current;
 
-                                var name = Convert.ToString(current["UID"]);
+                                var name = Convert.ToString(current["UID"])!;
                                 var code = current["code"].ToString()!;
                                 //var json = current["json"].ToString()!;
 
@@ -463,7 +466,7 @@ namespace S100Framework.Applications
                                     if (hashSet.Contains(oid)) continue;
                                     hashSet.Add(oid);
 
-                                    var name = Convert.ToString(current["UID"])!;
+                                    var uid = Convert.ToString(current["UID"])!;
 
                                     //if ("SoundingDatum".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
                                     //if (name.Equals("F10400000226")) System.Diagnostics.Debugger.Break();
@@ -471,9 +474,9 @@ namespace S100Framework.Applications
                                     //if (name.Equals("F10400001041")) System.Diagnostics.Debugger.Break();
 
                                     // Only map geometry, and keep name seperate so foids remain unique
-                                    var geometry = name;
+                                    var geometry = uid;
 
-                                    if (topology.Mapping.TryGetValue(name!, out var value))
+                                    if (topology.MappingFOID.TryGetValue(uid!, out var value))
                                         geometry = value;
 
                                     var shapetype = def.GetShapeType();
@@ -482,7 +485,8 @@ namespace S100Framework.Applications
 
                                     //if (code.Equals("DataCoverage")) System.Diagnostics.Debugger.Break();
 
-                                    var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
+                                    //var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";       // Geodatastyrelsen: 110 
+                                    var foid = $"110:{uid.Substring(1)}:1";
 
                                     var prim = shapetype switch {
                                         GeometryType.Point => Primitive.Point,
@@ -492,35 +496,17 @@ namespace S100Framework.Applications
                                         _ => throw new InvalidOperationException(),
                                     };
 
-                                    Action geometryConverter = tableName switch {
-                                        "pointset" => () => {
-                                            var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
-                                            geometries.Add(new(_, name!));
-                                        }
-                                        ,
-                                        _ => () => {
-                                            geometries.Add(new(current.GetShape(), name!));
-                                        }
-                                        ,
-                                    };
-
                                     try {
                                         var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
 
                                         if (type == default) {
-                                            Log.Error("Could not get type: {type} for feature: {name}", code, name);
+                                            Log.Error("Could not get type: {type} for feature: {name}", code, uid);
                                             continue;
                                         }
 
                                         var json = Convert.ToString(current["attributebindings"])!;
 
-                                        //var structuredObject = JsonUnflattener.Unflatten(json)!;
-
-                                        //var __ = structuredObject.ToJsonString();
-
                                         var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                                        //var instance = current.IsNull("json") ? null : System.Text.Json.JsonSerializer.Deserialize(json, type, jsonSerializerOptionsS101) as S100FC.FeatureType;
-
 
                                         var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
@@ -534,7 +520,7 @@ namespace S100Framework.Applications
                                                     dataset?.Metadata.AddSupportFile(filename, base64);
                                                 }
                                                 else
-                                                     System.Diagnostics.Debugger.Break();
+                                                    System.Diagnostics.Debugger.Break();
 
                                                 //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
                                                 //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
@@ -544,7 +530,7 @@ namespace S100Framework.Applications
                                         }
 
                                         // Surface Masks
-                                        var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                                        var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(uid, StringComparison.InvariantCultureIgnoreCase));
 
                                         // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
                                         var masks = new[] {
@@ -618,10 +604,37 @@ namespace S100Framework.Applications
                                             }
                                         }
 
+                                        //if ("F10500070853".Equals(name)) System.Diagnostics.Debugger.Break();
+
+                                        //var lookup = topology.MappingFeature(name);
+
+                                        //if (!lookup.Any())
                                         dataset?.AddFeature(feature!);
+                                        //else {
+                                        //    int _ = 1;
+                                        //    foreach (var c in lookup) {
+                                        //        feature!.Foid = $"110:{name.Substring(1)}:{_++}";
+                                        //        feature!.Geometry = c;
+                                        //        dataset?.AddFeature(feature!);
+                                        //    }
+                                        //}
+
+                                        Action geometryConverter = tableName.Split('.', StringSplitOptions.RemoveEmptyEntries)[^1] switch {
+                                            "pointset" or "topo_pointset" => () => {
+                                                var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
+                                                geometries.Add(new(_, uid!));
+                                            }
+                                            ,
+                                            "point" or "topo_point" => () => {
+                                                geometries.Add(new(current.GetShape(), uid!));
+                                            }
+                                            ,
+                                            _ => () => { }
+                                            ,
+                                        };
 
                                         geometryConverter();
-                                        //geometries.Add(new(current.GetShape(), name!));
+                                        //geometries.Add(new(current.GetShape(), name!));                                        
                                     }
                                     catch (Exception ex) {
                                         Log.Information(ex.Message);
@@ -683,6 +696,8 @@ namespace S100Framework.Applications
                                 p.EnableRaisingEvents = true;
                                 p.Exited += (s, e) => {
                                 };
+
+                                Log.Verbose("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                 p.Start();
                                 p.WaitForExit();

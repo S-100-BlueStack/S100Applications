@@ -130,7 +130,7 @@ namespace S100Framework.Applications
 
                             if (current.CATNAV.HasValue) {
                                 instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
-                            }
+                            }                            
 
                             DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
                             if (dateRange != default) {
@@ -143,7 +143,7 @@ namespace S100Framework.Applications
 
                             if (current.ORIENT.HasValue) {
                                 instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
-                                    orientationValue = current.ORIENT.Value,
+                                    orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value,
                                     // TODO: oriantationUncertainty
                                     //orientationUncertainty = ,
                                 };

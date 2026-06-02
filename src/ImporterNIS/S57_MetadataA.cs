@@ -443,7 +443,8 @@ namespace S100Framework.Applications
                                 instance.surveyDateRange = surveyDateRange;
                             }
 
-                            var informationBindings = instance.GetInformationBindings();
+                            //var informationBindings = instance.GetInformationBindings();
+                            informationBinding[] informationBindings = [];
 
                             if (spatialQuality is not null) {
                                 var informationBinding = target.CreateInformationType(spatialQuality);

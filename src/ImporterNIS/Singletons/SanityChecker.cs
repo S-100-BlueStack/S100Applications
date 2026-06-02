@@ -94,22 +94,33 @@ namespace S100Framework.Applications.Singletons
                 "curve",
                 "point",
                 "surface",
-                "pointset"
+                "pointset",
+                "topo_curve",
+                "topo_point",
+                "topo_surface",
+                "topo_pointset",
+                "featuretype",
+                "informationtype",
             };
             int recordCount = 0;
 
             foreach (var featureclassName in featureClasses) {
-                using var featureClass = _geodatabase!.OpenDataset<FeatureClass>(_geodatabase.GetName(featureclassName));
+                using var table = _geodatabase!.OpenDataset<Table>(_geodatabase.GetName(featureclassName));
 
-                using var cursor = featureClass.Search(new QueryFilter() { WhereClause = "1=1" }, true);
+                using var cursor = table.Search(new QueryFilter() { 
+                    WhereClause = "1=1",
+                    SubFields = "OBJECTID,UID,attributebindings"
+                }, true);
 
                 while (cursor.MoveNext()) {
                     recordCount++;
-                    var feature = cursor.Current;
-                    string? jsonValue = feature["attributebindings"]?.ToString();
+                    var row = cursor.Current;
+                    string? jsonValue = row["attributebindings"]?.ToString();
 
                     if (jsonValue != default && jsonValue.Contains("-32767")) {
                         errorCount++;
+
+                        Logger.Current.Error("{tablename} #{objectid}", featureclassName, row.GetObjectID());
                     }
                 }
             }
@@ -124,6 +135,10 @@ namespace S100Framework.Applications.Singletons
                 "point",
                 "surface",
                 "pointset",
+                "topo_curve",
+                "topo_point",
+                "topo_surface",
+                "topo_pointset",
                 "attachment",
                 "configuration",
                 "featuretype",
@@ -132,21 +147,24 @@ namespace S100Framework.Applications.Singletons
             };
             int recordCount = 0;
 
-            foreach (var tableName in tables) {
-                var tableErrorCount = 0;
-                using var featureClass = _geodatabase!.OpenDataset<Table>(_geodatabase.GetName(tableName));
+            //foreach (var tableName in tables) {
+            //    var tableErrorCount = 0;
+            //    using var featureClass = _geodatabase!.OpenDataset<Table>(_geodatabase.GetName(tableName));
 
-                using var cursor = featureClass.Search(new QueryFilter() { WhereClause = "1=1" }, true);
+            //    using var cursor = featureClass.Search(new QueryFilter() { 
+            //        WhereClause = "1=1",
+            //        SubFields = "OBJECTID,UID,attributebindings"
+            //    }, true);
 
-                while (cursor.MoveNext()) {
-                    recordCount++;
-                    var feature = cursor.Current;
-                }
+            //    while (cursor.MoveNext()) {
+            //        recordCount++;
+            //        var feature = cursor.Current;
+            //    }
 
-                if (tableErrorCount > 0) {
-                    Logger.Current.Information($"{tableErrorCount} errors in {tableName}");
-                }
-            }
+            //    if (tableErrorCount > 0) {
+            //        Logger.Current.Information($"{tableErrorCount} errors in {tableName}");
+            //    }
+            //}
             return errorCount;
         }
 
