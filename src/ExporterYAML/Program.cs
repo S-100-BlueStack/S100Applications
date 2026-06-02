@@ -275,6 +275,7 @@ namespace S100Framework.Applications
                         var topology = source.BuildTopology(filter, interceptor: (code, e) => {
                             var persist = code switch {
                                 9000 => true,
+                                9002 => true,
                                 _ => false,
                             };
 
@@ -298,7 +299,7 @@ namespace S100Framework.Applications
 
                                 var array = e.ToArray();
                                 for (int i = 0; i < array.Length; i++) {
-                                    buffer["message"] = $"{index}";
+                                    buffer["message"] = $"{i}";
                                     buffer["shape"] = ConvertToArcGISPolyline(array[i], spatialReference);
                                     using var f = polyline.CreateRow(buffer);
                                 }
