@@ -68,6 +68,22 @@ namespace NuvionPro
 
                 if (inspector != default) {
                     await QueuedTask.Run(() => {
+                        var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
+
+                        if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
+                            if (inspector.SubtypeAttribute is null)
+                                inspector["sourceidentifier"] = sourceidentifier.Value;
+                            else {
+                                var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                            }
+                        }
+                        else if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
+                            if (inspector.SubtypeAttribute is null)
+                                inspector["sourceidentifier"] = sourceidentifier.Value;
+                            else {
+                                var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                            }
+                        }
                         inspector["ps"] = this.PS.ID;
                         inspector["code"] = this.Code;
                         inspector["attributebindings"] = "{}";
