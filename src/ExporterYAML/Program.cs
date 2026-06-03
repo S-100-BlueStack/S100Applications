@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using CommandLine;
+using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
 using S100FC.Topology;
@@ -272,16 +273,17 @@ namespace S100Framework.Applications
                         // Build Topology
                         Log.Information("Building topology..");
                         int index = 0;
-                        var topology = source.BuildTopology(filter, interceptor: (code, e) => {
+                        var topology = source.BuildTopology(filter, interceptor: (code, arg) => {
                             var persist = code switch {
                                 9000 => false,
                                 9002 => false,
                                 6000 => true,
+                                6001 => true,
                                 _ => false,
                             };
 
                             if (!persist) return;
-
+                            
                             if (IO.File.Exists("topology.geodatabase")) {
                                 index += 1;
 
@@ -298,11 +300,14 @@ namespace S100Framework.Applications
 
                                 using var buffer = polyline.CreateRowBuffer();
 
-                                var array = e.ToArray();
+                                var array = arg.ToArray();
+
                                 for (int i = 0; i < array.Length; i++) {
-                                    buffer["message"] = $"{i}";
-                                    buffer["shape"] = ConvertToArcGISPolyline(array[i], spatialReference);
-                                    using var f = polyline.CreateRow(buffer);
+                                    foreach (var segment in Enumerable.Range(0, array[i].lineString.NumPoints - 1).Select(j => new NetTopologySuite.Geometries.LineSegment(array[i].lineString.GetCoordinateN(j), array[i].lineString.GetCoordinateN(j + 1)))) {
+                                        buffer["message"] = $"{i}: {segment.ToString()}, {array[i].message}";
+                                        buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString.Factory.CreateLineString([segment.GetCoordinate(0), segment.GetCoordinate(1)]), spatialReference);
+                                        using var f = polyline.CreateRow(buffer);
+                                    }
                                 }
                             }
 
