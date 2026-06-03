@@ -274,8 +274,9 @@ namespace S100Framework.Applications
                         int index = 0;
                         var topology = source.BuildTopology(filter, interceptor: (code, e) => {
                             var persist = code switch {
-                                9000 => true,
-                                9002 => true,
+                                9000 => false,
+                                9002 => false,
+                                6000 => true,
                                 _ => false,
                             };
 
