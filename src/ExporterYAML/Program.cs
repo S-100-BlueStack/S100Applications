@@ -277,8 +277,8 @@ namespace S100Framework.Applications
                             var persist = code switch {
                                 9000 => false,
                                 9002 => false,
-                                6000 => true,
-                                6001 => true,
+                                6000 => false,
+                                6001 => false,
                                 _ => false,
                             };
 
