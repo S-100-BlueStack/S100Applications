@@ -276,14 +276,19 @@ namespace S100Framework.Applications
                         var topology = source.BuildTopology(filter, interceptor: (code, arg) => {
                             var persist = code switch {
                                 9000 => false,
+                                9001 => false,
                                 9002 => false,
-                                6000 => false,
+                                6000 => true,
                                 6001 => false,
+                                7000 => true,
+                                8001 => false,
+                                8002 => false,
+                                1000 => false,
                                 _ => false,
                             };
 
                             if (!persist) return;
-                            
+
                             if (IO.File.Exists("topology.geodatabase")) {
                                 index += 1;
 
@@ -291,29 +296,154 @@ namespace S100Framework.Applications
 
                                 var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
 
+
+                                using var point = debugInstance.OpenDataset<FeatureClass>("main.point");
                                 using var polyline = debugInstance.OpenDataset<FeatureClass>("main.linestring");
-
-                                polyline.DeleteRows(new QueryFilter {
-                                    WhereClause = "1=1",
-                                });
-
-
-                                using var buffer = polyline.CreateRowBuffer();
+                                using var polygon = debugInstance.OpenDataset<FeatureClass>("main.polygon");
+                                if (index == 1) {
+                                    point.DeleteRows(new QueryFilter {
+                                        WhereClause = "1=1",
+                                    });
+                                    polyline.DeleteRows(new QueryFilter {
+                                        WhereClause = "1=1",
+                                    });
+                                    polygon.DeleteRows(new QueryFilter {
+                                        WhereClause = "1=1",
+                                    });
+                                }
 
                                 var array = arg.ToArray();
 
-                                for (int i = 0; i < array.Length; i++) {
-                                    foreach (var segment in Enumerable.Range(0, array[i].lineString.NumPoints - 1).Select(j => new NetTopologySuite.Geometries.LineSegment(array[i].lineString.GetCoordinateN(j), array[i].lineString.GetCoordinateN(j + 1)))) {
-                                        buffer["message"] = $"{i}: {segment.ToString()}, {array[i].message}";
-                                        buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString.Factory.CreateLineString([segment.GetCoordinate(0), segment.GetCoordinate(1)]), spatialReference);
-                                        using var f = polyline.CreateRow(buffer);
+                                Action build = code switch {
+                                    >= 8000 => () => {
+                                        using var buffer = polyline.CreateRowBuffer();
+                                        for (int i = 0; i < array.Length; i++) {
+                                            buffer["message"] = $"{i}: {array[i].message}";
+                                            buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
+                                            using var f = polyline.CreateRow(buffer);
+                                        }
                                     }
+                                    ,
+
+                                    >= 7000 => () => {
+                                        using var buffer = polyline.CreateRowBuffer();
+                                        for (int i = 0; i < array.Length; i++) {
+                                            buffer["message"] = $"{array[i].message}";
+                                            buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
+                                            using var f = polyline.CreateRow(buffer);
+                                        }
+                                    }
+                                    ,
+
+                                    >= 6000 => () => {
+                                        using (var buffer = polyline.CreateRowBuffer()) {
+                                            for (int i = 0; i < array.Length; i++) {
+                                                foreach (var segment in Enumerable.Range(0, array[i].lineString.NumPoints - 1).Select(j => new NetTopologySuite.Geometries.LineSegment(array[i].lineString.GetCoordinateN(j), array[i].lineString.GetCoordinateN(j + 1)))) {
+                                                    buffer["message"] = $"{i}: {segment.ToString()}, {array[i].message}";
+                                                    buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString.Factory.CreateLineString([segment.GetCoordinate(0), segment.GetCoordinate(1)]), spatialReference);
+                                                    using var f = polyline.CreateRow(buffer);
+                                                }
+                                            }
+                                        }
+                                        using (var buffer = point.CreateRowBuffer()) {
+                                            for (int i = 0; i < array.Length; i++) {
+                                                var linestring = array[i];
+                                                for (int j = 0; j < linestring.lineString.NumPoints; j++) {
+                                                    var coord = linestring.lineString.GetPointN(j);
+                                                    buffer["message"] = $"{i}: {j} ({coord.ToText()}";
+                                                    buffer["shape"] = MapPointBuilderEx.CreateMapPoint(coord.X, coord.Y, spatialReference);
+                                                    using var f = point.CreateRow(buffer);
+                                                }
+                                            }
+                                        }
+                                        using (var buffer = polygon.CreateRowBuffer()) {
+                                            for (int i = 0; i < array.Length; i++) {
+                                                var p = PolygonBuilderEx.CreatePolygon(array[i].lineString.Coordinates.Select(e => MapPointBuilderEx.CreateMapPoint(e.X, e.Y, spatialReference)));
+                                                buffer["message"] = $"{i}: {array[i].message}";
+                                                buffer["shape"] = p;
+                                                using var f = polygon.CreateRow(buffer);
+                                            }
+                                        }
+                                    }
+                                    ,
+
+                                    >= 1000 => () => {
+                                        var coords = array.SelectMany(e => e.lineString.Coordinates).Select(e => MapPointBuilderEx.CreateMapPoint(e.X, e.Y, spatialReference));
+
+                                        var p = PolygonBuilderEx.CreatePolygon(coords);
+
+                                        using var buffer = polygon.CreateRowBuffer();
+                                        buffer["message"] = $"{index}";
+                                        buffer["shape"] = p;
+                                        using var f = polygon.CreateRow(buffer);
+                                    }
+                                    ,
+                                    _ => () => {
+                                        using var buffer = polyline.CreateRowBuffer();
+                                        for (int i = 0; i < array.Length; i++) {
+                                            buffer["message"] = $"{i}: {array[i].message}";
+                                            buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
+                                            using var f = polyline.CreateRow(buffer);
+                                        }
+                                    }
+                                    ,
                                 }
+                            ;
+
+                                build();
                             }
 
                         })!;
 
                         Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
+
+                        //  Selector
+                        {
+                            var uid = topology.MappingFOID.Keys.Select(e => $"'{e}'");
+                            var select = $"UID IN ({string.Join(',', uid)})";
+                            ;
+                        }
+
+                        //  Debug
+                        {
+                            //using var debugInstance = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+
+                            //var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
+
+                            //using var polyline = debugInstance.OpenDataset<FeatureClass>("main.curve");
+                            //{
+                            //    using var buffer = polyline.CreateRowBuffer();
+                            //    foreach (CurveFeature curf in topology.Curves) {
+                            //        var shape = ConvertToArcGISPolyline(curf.LineString, spatialReference);
+
+                            //        buffer["id"] = $"C{curf.Id}";
+                            //        buffer["shape"] = shape;
+                            //        using var f = polyline.CreateRow(buffer);
+                            //    }
+                            //}
+
+                            //using var compositecurve = debugInstance.OpenDataset<Table>("main.compositecurve");
+                            //{
+                            //    using var buffer = compositecurve.CreateRowBuffer();
+                            //    foreach (var curve in topology.CompositeCurves) {
+                            //        buffer["id"] = $"C{curve.Id}";
+                            //        buffer["CurveIds"] = string.Join(',', curve.Curves.Select(e => e.Reverse ? $"RC{e.Id}" : $"C{e.Id}"));
+                            //        using var f = compositecurve.CreateRow(buffer);
+                            //    }
+                            //}
+
+                            //using var surface = debugInstance.OpenDataset<FeatureClass>("main.surface");
+                            //{
+                            //    using var buffer = surface.CreateRowBuffer();
+                            //    foreach (var s in topology.Surfaces) {
+                            //        buffer["id"] = $"S{s.Id}";
+                            //        buffer["CompositeCurveId"] = $"S{s.Exterior.Id}";
+                            //        using var f = surface.CreateRow(buffer);
+                            //    }
+                            //}
+                        }
+
+
 
                         filter.SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings";
 
@@ -483,8 +613,11 @@ namespace S100Framework.Applications
                                     // Only map geometry, and keep name seperate so foids remain unique
                                     var geometry = uid;
 
-                                    if (topology.MappingFOID.TryGetValue(uid!, out var value))
+                                    if (topology.MappingFOID.TryGetValue(uid!, out var value)) {
                                         geometry = value;
+                                    }
+                                    //else
+                                    //    continue;   //TEST,TEST,TEST
 
                                     var shapetype = def.GetShapeType();
 
@@ -526,8 +659,8 @@ namespace S100Framework.Applications
                                                     var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
                                                     dataset?.Metadata.AddSupportFile(filename, base64);
                                                 }
-                                                else
-                                                    System.Diagnostics.Debugger.Break();
+                                                //else
+                                                //    System.Diagnostics.Debugger.Break();
 
                                                 //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
                                                 //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
