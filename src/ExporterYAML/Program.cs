@@ -607,12 +607,6 @@ namespace S100Framework.Applications
 
                                     var _uid = Convert.ToString(current["UID"])!;
 
-                                    //if ("SoundingDatum".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
-                                    //if (name.Equals("F10400000226")) System.Diagnostics.Debugger.Break();
-                                    //if (name.Equals("F10800000092")) System.Diagnostics.Debugger.Break();
-                                    //if (name.Equals("F10400001041")) System.Diagnostics.Debugger.Break();
-
-
                                     string[] features = [_uid];
 
                                     if (result.mapper.Values.Contains(_uid)) {
@@ -632,8 +626,6 @@ namespace S100Framework.Applications
                                         var shapetype = def.GetShapeType();
 
                                         var code = Convert.ToString(current["code"]);
-
-                                        //if (code.Equals("DataCoverage")) System.Diagnostics.Debugger.Break();
 
                                         var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";       // Geodatastyrelsen: 110 
                                         //var foid = $"110:{uid.Substring(1)}:1";
