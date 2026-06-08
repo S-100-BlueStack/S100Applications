@@ -57,14 +57,17 @@ namespace S100Framework.Applications
         }
 
         [STAThread]
-        static int Main(string[] args) {
+        public static int Main(string[] args) {
             var logpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"S-100 BlueStack", "ExporterYAML", "ExporterYAML-developer.log");
 
             // Clears log between each run
             if (File.Exists(logpath))
                 File.Delete(logpath);
 
+            Console.Clear();
+
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
                 .WriteTo.Console()
                 .WriteTo.File(
                     path: logpath,
@@ -74,7 +77,7 @@ namespace S100Framework.Applications
                     outputTemplate: outputTemplate)
                 .CreateLogger();
 
-            Log.Information("exporter.exe {args}", string.Join(' ', args));
+            //Log.Information("exporter.exe {args}", string.Join(' ', args));
 
 
             try {
@@ -85,10 +88,10 @@ namespace S100Framework.Applications
                                    });
 
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
-                    Logger.Current.Fatal((Exception)e.ExceptionObject, "UnhandledException");
+                    Log.Fatal((Exception)e.ExceptionObject, "UnhandledException");
                 };
 
-                Logger.Current.Information("ExporterYAML.exe {args}", string.Join(" ", args));
+                Log.Information("ExporterYAML.exe {args}", string.Join(" ", args));
 
                 if (arguments.Errors.Any())
                     return -1;
@@ -189,7 +192,7 @@ namespace S100Framework.Applications
                                 datasetNames = [.. datasetNames, electricProduct.datasetName!];
                             }
                             catch (System.Exception ex) {
-                                Logger.Current.Error(ex, "Can't deserialize {UID}!", current["UID"]);
+                                Log.Error(ex, "Can't deserialize {UID}!", current["UID"]);
                             }
                         }
                     }
@@ -502,8 +505,7 @@ namespace S100Framework.Applications
                             }
                         }
                         catch (Exception ex) {
-                            Log.Information("Table: informationtype: {message} ", ex.Message);
-                            Logger.Current.Error("Exception: {ex}", ex);
+                            Log.Error("Exception: {ex}", ex);
                         }
 
                         // FeatureTypes
@@ -561,8 +563,7 @@ namespace S100Framework.Applications
                             }
                         }
                         catch (Exception ex) {
-                            Log.Information("Table: featuretype: {message} ", ex.Message);
-                            Logger.Current.Error("Exception: {ex}", ex);
+                            Log.Error("Exception: {ex}", ex);
                         }
 
 
@@ -779,8 +780,7 @@ namespace S100Framework.Applications
                                             //geometries.Add(new(current.GetShape(), name!));                                        
                                         }
                                         catch (Exception ex) {
-                                            Log.Information(ex.Message);
-                                            Logger.Current.Error("Exception: {ex}", ex);
+                                            Log.Error("Exception: {ex}", ex);
                                             continue;
                                         }
                                     }
@@ -825,7 +825,9 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
+                                //Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
+
+                                Log.Information("s100compiler.exe {arguments}", commandline);
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
