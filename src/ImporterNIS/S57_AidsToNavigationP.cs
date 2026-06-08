@@ -2081,7 +2081,7 @@ namespace S100Framework.Applications
                             };
                             if (light.ORIENT.HasValue)
                                 lightSector.directionalCharacter.orientation = new orientation {
-                                    orientationValue = light.ORIENT.Value == -32767m ? null : light.ORIENT.Value,
+                                    orientationValue = light.ORIENT.Value == -32767m ? default : light.ORIENT.Value,
                                 };
                         }
                         lightSector.colour = colours;

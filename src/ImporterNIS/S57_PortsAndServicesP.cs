@@ -270,7 +270,7 @@ namespace S100Framework.Applications
 
                             if (current.ORIENT.HasValue) {
                                 instance.orientation = new() {
-                                    orientationValue = current.ORIENT.HasValue && current.ORIENT.Value != -32767m ? current.ORIENT : default(decimal?),
+                                    orientationValue = current.ORIENT.Value != -32767m ? current.ORIENT : default(decimal?),
                                 };
                             }
 

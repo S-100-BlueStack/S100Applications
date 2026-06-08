@@ -152,7 +152,7 @@ namespace S100Framework.Applications
                                 //else {
                                 //    Logger.Current.DataError(current.OBJECTID ?? default, current.TableName ?? "Unknown tablename", current.LNAM ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
                                 //}
-                                localDirectionOfBuoyage.orientationValue = current.ORIENT.Value;
+                                localDirectionOfBuoyage.orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value;
 
                                 if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
                                     string subtype = "";
