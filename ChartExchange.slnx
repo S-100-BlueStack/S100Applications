@@ -8,6 +8,7 @@
     <Platform Project="x64" />
   </Project>
   <Project Path="../S100Framework/src/S100Framework.Topology/S100Framework.Topology.csproj" />
+  <Project Path="../S100Framework/tests/TestTopology/TestTopology.csproj" />
   <Project Path="src/ExporterYAML/ExporterYAML.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
