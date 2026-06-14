@@ -286,11 +286,13 @@ namespace S100Framework.Applications
                                 7000 => true,
                                 8001 => false,
                                 8002 => false,
-                                1000 => false,
-                                _ => false,
+                                1000 => true,
+                                _ => true,
                             };
 
                             if (!persist) return;
+
+                            //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
 
                             if (IO.File.Exists("topology.geodatabase")) {
                                 index += 1;
