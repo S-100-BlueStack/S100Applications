@@ -14,7 +14,8 @@ namespace S100Framework.Applications
             using var depthsA = source.OpenDataset<FeatureClass>(source.GetName("DepthsA"));
             var subtypes = depthsA.GetSubtypes();
 
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = depthsA.Search(filter, true);

@@ -1,4 +1,7 @@
-﻿using ArcGIS.Core.Data;
+﻿#define CREATE_SUBTYPES
+
+using ArcGIS.Core.Data;
+using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 
 //using ArcGIS.Desktop.Internal.Mapping;

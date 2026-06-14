@@ -16,7 +16,8 @@ namespace S100Framework.Applications
             using var coastlinel = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(coastlinel); ;
 
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_curve"));
+            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_curve"));
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("curve"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = coastlinel.Search(filter, true);
