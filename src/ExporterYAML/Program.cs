@@ -253,14 +253,6 @@ namespace S100Framework.Applications
                     //    }
                     //}
 
-
-
-                    //  DEBUG
-                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
-                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
-                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
-                    }
-
                     try {
                         var supportFiles = new List<string>();
 
@@ -294,17 +286,35 @@ namespace S100Framework.Applications
 
                             //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
 
-                            if (IO.File.Exists("topology.geodatabase")) {
+                            Func<Geodatabase> debugInstanceCreator = () => {
+                                if (index == 0) {
+                                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
+                                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
+                                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                                    }
+                                }
+
+                                return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+                            };
+
+                            if (IO.File.Exists(@"L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde")) {
+                                debugInstanceCreator = () => {
+                                    return new Geodatabase(new DatabaseConnectionFile(new Uri(IO.Path.GetFullPath(@"L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde"))));
+                                };
+                            }
+
+                            {
                                 index += 1;
 
-                                using var debugInstance = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+                                using var debugInstance = debugInstanceCreator();
 
                                 var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
 
+                                var defnitions = debugInstance.GetDefinitions<FeatureClassDefinition>().ToDictionary(e => e.GetName().ToLowerInvariant().Split('.')[^1], e => e.GetName());
 
-                                using var point = debugInstance.OpenDataset<FeatureClass>("main.point");
-                                using var polyline = debugInstance.OpenDataset<FeatureClass>("main.linestring");
-                                using var polygon = debugInstance.OpenDataset<FeatureClass>("main.polygon");
+                                using var point = debugInstance.OpenDataset<FeatureClass>(defnitions["point"]);
+                                using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
+                                using var polygon = debugInstance.OpenDataset<FeatureClass>(defnitions["polygon"]);
                                 if (index == 1) {
                                     point.DeleteRows(new QueryFilter {
                                         WhereClause = "1=1",
