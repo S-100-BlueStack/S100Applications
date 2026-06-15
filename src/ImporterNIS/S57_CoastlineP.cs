@@ -13,7 +13,8 @@ namespace S100Framework.Applications
 
             using var coastlinep = source.OpenDataset<FeatureClass>(source.GetName(tableName));
 
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_point"));
+            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_point"));
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("point"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = coastlinep.Search(filter, true);

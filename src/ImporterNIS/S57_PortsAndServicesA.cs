@@ -23,7 +23,8 @@ namespace S100Framework.Applications
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var buffer = featureClass.CreateRowBuffer();
 
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
             using var cursor = portsAndServicesA.Search(filter, true);
