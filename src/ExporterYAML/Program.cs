@@ -630,18 +630,7 @@ namespace S100Framework.Applications
                                         // Only map geometry, and keep name seperate so foids remain unique
                                         var geometry = uid;
 
-                                        if (topology.MappingFOID.TryGetValue(uid!, out var value)) {
-                                            geometry = value;
-                                        }
-                                        //else
-                                        //    continue;   //TEST,TEST,TEST
-
                                         var shapetype = def.GetShapeType();
-
-                                        var code = Convert.ToString(current["code"]);
-
-                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";       // Geodatastyrelsen: 110 
-                                        //var foid = $"110:{uid.Substring(1)}:1";
 
                                         var prim = shapetype switch {
                                             GeometryType.Point => Primitive.Point,
@@ -650,6 +639,19 @@ namespace S100Framework.Applications
                                             GeometryType.Polygon => Primitive.Surface,
                                             _ => throw new InvalidOperationException(),
                                         };
+
+
+                                        if (topology.MappingFOID.TryGetValue(uid!, out var value)) {
+                                            geometry = value;
+                                        }
+                                        else if (prim == Primitive.Surface || prim == Primitive.Curve)
+                                            continue;
+
+                                        var code = Convert.ToString(current["code"]);
+
+                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";       // Geodatastyrelsen: 110 
+                                                                                                                                      //var foid = $"110:{uid.Substring(1)}:1";
+
 
                                         try {
                                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
