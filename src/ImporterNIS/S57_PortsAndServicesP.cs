@@ -63,81 +63,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // BERTHS_Berth
-                            var instance = new Berth {
-                                // TODO: Category of Berth
-                                /* S-57 ENC to S-101 Conversion Guidance ed 1.2.0
-
-                                    The attribute category of cargo has been introduced in S-101 to encode the type of vessel cargo
-                                    allowed at the berth, in particular the fact that a berth is a berth for dangerous or hazardous cargo
-                                    (category of cargo = 7). This information is encoded in S-57 on BERTHS using the attribute
-                                    INFORM (see clause 2.3). In order for this information to be converted across to S-101, the text
-                                    string encoded in INFORM on the BERTHS should be in a standardised format, such as Dangerous
-                                    or hazardous cargo.
-                                */
-
-                                featureName = GetFeatureName(current.OBJNAM, current.NOBJNM)
-                            };
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: horizontalClearanceLength
-
-                            if (current.HORCLR.HasValue) {
-                                instance.horizontalClearanceWidth = current.HORCLR.Value;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            // TODO: maximumPermittedDraught - From INFORM - No instances in GST - Not converted
-
-                            // TODO: minimumBerthDepth
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.QUASOU != default) {
-                                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
-                                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
-                                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.SOUACC.HasValue) {
-                                instance.verticalUncertainty = new() {
-                                    uncertaintyFixed = current.SOUACC.Value
-                                };
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (Berth)ImporterNIS.Build("BERTHS", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -149,9 +75,9 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
+
                     case 5: { // CGUSTA_CoastguardStation
 
                             var instance = new CoastGuardStation();
@@ -364,71 +290,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 20: { // DISMAR_DistanceMark
-                            var instance = new DistanceMark();
-
-                            /*
-                                The S-57 attribute CATDIS has been replaced in S-101 by the mandatory Boolean type attribute
-                                distance mark visible. Where CATDIS has not been populated, or has been populated with value
-                                1 (distance mark not physically installed) or an empty (null) value, distance mark visible will be set
-                                to False. Where CATDIS has been populated with a value other than 1, distance mark visible will
-                                be set to True.                             
-                            */
-                            if (!current.CATDIS.HasValue || (current.CATDIS.HasValue && current.CATDIS.Value == 1) || (current.CATDIS.HasValue && current.CATDIS.Value == -32767)) {
-                                instance.distanceMarkVisible = false;
-                            }
-                            else if (current.CATDIS.HasValue) {
-                                instance.distanceMarkVisible = true;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-
-                            decimal? dist = default;
-
-                            if (decimal.TryParse(current.INFORM, out decimal value)) {
-                                dist = value;
-                            }
-
-                            // TODO: INFORM measured distance value
-                            instance.measuredDistanceValue = new() {
-                                waterwayDistance = dist.HasValue ? dist.Value : default,
-                                distanceUnitOfMeasurement = 4 // TODO: dismark Is Nautical Miles the correct unit of measurement
-
-                            };
-
-
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (DistanceMark)ImporterNIS.Build("DISMAR", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

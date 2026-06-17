@@ -11803,7 +11803,7 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
-    internal class PortsAndServicesP : S100Framework.Applications.S57.esri.S57Object
+    internal class PortsAndServices : S100Framework.Applications.S57.esri.S57Object
     {
 
         /// <summary>
@@ -12285,7 +12285,7 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
-        public PortsAndServicesP(Feature feature) {
+        public PortsAndServices(Feature feature) {
             base.TableName = "PortsAndServicesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
@@ -12571,6 +12571,11 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
+
+    internal class PortsAndServicesP : PortsAndServices {
+        public PortsAndServicesP(Feature feature) : base(feature) { }
+    }
+
     internal class PortsAndServicesL : S100Framework.Applications.S57.esri.S57Object
     {
 

@@ -1063,16 +1063,16 @@ namespace S100Framework.Applications
                     FeatureClassDefinition fcDefinition = destination.GetDefinition<FeatureClassDefinition>(featureClassName);
 
                     FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
-
+                    
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
+                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(fcDescription);
                     schemaBuilder.Build();
 
                     foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
-                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription(fcDefinition.GetSubtypeField(), definitionReferences);
+                    fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(fcDescription);
                     schemaBuilder.Build();
                 }
@@ -1084,14 +1084,14 @@ namespace S100Framework.Applications
                     var tableDescription = new TableDescription(tableDefinition);
 
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(tableDescription);
                     schemaBuilder.Build();
 
                     foreach (var e in Summary.definitionReferenceFeatureTypes.Where(e => features.Contains(e.code)).OrderBy(e => e.code)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(tableDescription);
                     schemaBuilder.Build();
                 }
@@ -1107,11 +1107,10 @@ namespace S100Framework.Applications
                     foreach (var e in Summary.definitionReferenceInformationTypes.OrderBy(e => e.sourceIdentifier)) {
                         definitionReferences.Add(e.sourceIdentifier, e.code);
                     }
-                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription(tableDefinition.GetSubtypeField(), definitionReferences);
+                    tableDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(tableDescription);
                     schemaBuilder.Build();
                 }
-                //schemaBuilder.Build();
             }
 #endif
 
