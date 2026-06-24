@@ -269,6 +269,7 @@ namespace S100Framework.Applications
                         Log.Information("Building topology..");
                         int index = 0;
                         var result = source.BuildTopology(filter, interceptor: (code, arg) => {
+                            return;
                             var persist = code switch {
                                 9000 => false,
                                 9001 => false,
