@@ -371,14 +371,14 @@ namespace S100Framework.Applications
                                                 }
                                             }
                                         }
-                                        using (var buffer = polygon.CreateRowBuffer()) {
-                                            for (int i = 0; i < array.Length; i++) {
-                                                var p = PolygonBuilderEx.CreatePolygon(array[i].lineString.Coordinates.Select(e => MapPointBuilderEx.CreateMapPoint(e.X, e.Y, spatialReference)));
-                                                buffer["message"] = $"{i}: {array[i].message}";
-                                                buffer["shape"] = p;
-                                                using var f = polygon.CreateRow(buffer);
-                                            }
-                                        }
+                                        //using (var buffer = polygon.CreateRowBuffer()) {
+                                        //    for (int i = 0; i < array.Length; i++) {
+                                        //        var p = PolygonBuilderEx.CreatePolygon(array[i].lineString.Coordinates.Select(e => MapPointBuilderEx.CreateMapPoint(e.X, e.Y, spatialReference)));
+                                        //        buffer["message"] = $"{i}: {array[i].message}";
+                                        //        buffer["shape"] = p;
+                                        //        using var f = polygon.CreateRow(buffer);
+                                        //    }
+                                        //}
                                     }
                                     ,
 
