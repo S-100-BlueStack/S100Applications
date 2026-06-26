@@ -6991,7 +6991,7 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
-    internal class TracksAndRoutesP : S100Framework.Applications.S57.esri.S57Object
+    internal class TracksAndRoutes : S100Framework.Applications.S57.esri.S57Object
     {
 
         /// <summary>
@@ -7187,6 +7187,66 @@ namespace S100Framework.Applications.S57.esri
         internal int? TRAFIC = default;
 
         /// <summary>
+        /// Category of ferry
+        /// </summary>
+        [Description("Category of ferry")]
+        internal int? CATFRY = default;
+
+        /// <summary>
+        /// Category of navigation line
+        /// </summary>
+        [Description("Category of navigation line")]
+        internal int? CATNAV = default;
+
+        /// <summary>
+        /// Category of recommended track
+        /// </summary>
+        [Description("Category of recommended track")]
+        internal int? CATTRK = default;
+
+        /// <summary>
+        /// Category of Traffic Separation Scheme
+        /// </summary>
+        [Description("Category of Traffic Separation Scheme")]
+        internal int? CATTSS = default;
+
+        /// <summary>
+        /// Depth range value 1
+        /// </summary>
+        [Description("Depth range value 1")]
+        internal decimal? DRVAL1 = default;
+
+        /// <summary>
+        /// Depth range value 2
+        /// </summary>
+        [Description("Depth range value 2")]
+        internal decimal? DRVAL2 = default;
+
+        /// <summary>
+        /// Quality of sounding measurement
+        /// </summary>
+        [Description("Quality of sounding measurement")]
+        internal string? QUASOU = default;
+
+        /// <summary>
+        /// Sounding accuracy
+        /// </summary>
+        [Description("Sounding accuracy")]
+        internal decimal? SOUACC = default;
+
+        /// <summary>
+        /// Technique of sounding measurement
+        /// </summary>
+        [Description("Technique of sounding measurement")]
+        internal string? TECSOU = default;
+
+        /// <summary>
+        /// Vertical datum
+        /// </summary>
+        [Description("Vertical datum")]
+        internal int? VERDAT = default;
+
+        /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
@@ -7263,8 +7323,8 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
-        public TracksAndRoutesP(Feature feature) {
-            base.TableName = "TracksAndRoutesP";
+        public TracksAndRoutes(Feature feature) {
+            base.TableName = feature.GetTable().GetName().Split('.')[^1];// "TracksAndRoutesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
@@ -7385,6 +7445,38 @@ namespace S100Framework.Applications.S57.esri
             if (DBNull.Value != feature["TRAFIC"] && feature["TRAFIC"] is not null) {
                 this.TRAFIC = Convert.ToInt32(feature["TRAFIC"]);
             }
+            if (DBNull.Value != feature["CATFRY"] && feature["CATFRY"] is not null) {
+                this.CATFRY = Convert.ToInt32(feature["CATFRY"]);
+            }
+            if (DBNull.Value != feature["CATNAV"] && feature["CATNAV"] is not null) {
+                this.CATNAV = Convert.ToInt32(feature["CATNAV"]);
+            }
+            if (DBNull.Value != feature["CATTRK"] && feature["CATTRK"] is not null) {
+                this.CATTRK = Convert.ToInt32(feature["CATTRK"]);
+            }
+            if (DBNull.Value != feature["CATTSS"] && feature["CATTSS"] is not null) {
+                this.CATTSS = Convert.ToInt32(feature["CATTSS"]);
+            }
+            if (DBNull.Value != feature["DRVAL1"] && feature["DRVAL1"] is not null) {
+                this.DRVAL1 = Convert.ToDecimal(feature["DRVAL1"]);
+            }
+            if (DBNull.Value != feature["DRVAL2"] && feature["DRVAL2"] is not null) {
+                this.DRVAL2 = Convert.ToDecimal(feature["DRVAL2"]);
+            }
+            if (DBNull.Value != feature["QUASOU"] && feature["QUASOU"] is not null) {
+                var text = Convert.ToString(feature["QUASOU"]);
+                this.QUASOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["SOUACC"] && feature["SOUACC"] is not null) {
+                this.SOUACC = Convert.ToDecimal(feature["SOUACC"]);
+            }
+            if (DBNull.Value != feature["TECSOU"] && feature["TECSOU"] is not null) {
+                var text = Convert.ToString(feature["TECSOU"]);
+                this.TECSOU = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["VERDAT"] && feature["VERDAT"] is not null) {
+                this.VERDAT = Convert.ToInt32(feature["VERDAT"]);
+            }
             if (DBNull.Value != feature["FCSUBTYPE"] && feature["FCSUBTYPE"] is not null) {
                 this.FCSUBTYPE = Convert.ToInt32(feature["FCSUBTYPE"]);
                 base.FcSubtype = this.FCSUBTYPE.Value;
@@ -7433,6 +7525,12 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
+
+    internal class TracksAndRoutesP : TracksAndRoutes
+    {
+        public TracksAndRoutesP(Feature feature) : base(feature) { }
+    }
+
     internal class AidsToNavigationP : S100Framework.Applications.S57.esri.S57Object
     {
 
@@ -12286,7 +12384,7 @@ namespace S100Framework.Applications.S57.esri
         [Description("Shape")]
         internal Geometry? SHAPE = default;
         public PortsAndServices(Feature feature) {
-            base.TableName = "PortsAndServicesP";
+            base.TableName = feature.GetTable().GetName().Split('.')[^1];//"PortsAndServicesP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
@@ -19480,7 +19578,7 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
-    internal class RegulatedAreasAndLimitsP : S100Framework.Applications.S57.esri.S57Object
+    internal class RegulatedAreasAndLimits : S100Framework.Applications.S57.esri.S57Object
     {
 
         /// <summary>
@@ -19742,6 +19840,19 @@ namespace S100Framework.Applications.S57.esri
         internal string? CATDPG = default;
 
         /// <summary>
+        /// Category of restricted area
+        /// </summary>
+        [Description("Category of restricted area")]
+        internal string? CATREA = default;
+
+
+        /// <summary>
+        /// Jurisdiction
+        /// </summary>
+        [Description("Jurisdiction")]
+        internal int? JRSDTN = default;
+
+        /// <summary>
         /// Radius
         /// </summary>
         [Description("Radius")]
@@ -19812,8 +19923,8 @@ namespace S100Framework.Applications.S57.esri
         /// </summary>
         [Description("Shape")]
         internal Geometry? SHAPE = default;
-        public RegulatedAreasAndLimitsP(Feature feature) {
-            base.TableName = "RegulatedAreasAndLimitsP";
+        public RegulatedAreasAndLimits(Feature feature) {
+            base.TableName = feature.GetTable().GetName().Split('.')[^1];// "RegulatedAreasAndLimitsP";
             if (DBNull.Value != feature["OBJECTID"] && feature["OBJECTID"] is not null) {
                 this.OBJECTID = Convert.ToInt32(feature["OBJECTID"]);
             }
@@ -19972,6 +20083,13 @@ namespace S100Framework.Applications.S57.esri
                 var text = Convert.ToString(feature["CATDPG"]);
                 this.CATDPG = string.IsNullOrEmpty(text) ? default : text;
             }
+            if (DBNull.Value != feature["CATREA"] && feature["CATREA"] is not null) {
+                var text = Convert.ToString(feature["CATREA"]);
+                this.CATREA = string.IsNullOrEmpty(text) ? default : text;
+            }
+            if (DBNull.Value != feature["JRSDTN"] && feature["JRSDTN"] is not null) {
+                this.JRSDTN = Convert.ToInt32(feature["JRSDTN"]);
+            }
             if (DBNull.Value != feature["RADIUS"] && feature["RADIUS"] is not null) {
                 this.RADIUS = Convert.ToDecimal(feature["RADIUS"]);
             }
@@ -20015,6 +20133,12 @@ namespace S100Framework.Applications.S57.esri
             }
         }
     }
+
+    internal class RegulatedAreasAndLimitsP : RegulatedAreasAndLimits
+    {
+        public RegulatedAreasAndLimitsP(Feature feature) : base(feature) { }
+    }
+
     internal class RegulatedAreasAndLimitsA : S100Framework.Applications.S57.esri.S57Object
     {
 

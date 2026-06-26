@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using Microsoft.AspNetCore.Components.Routing;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications;
@@ -18,11 +19,15 @@ namespace S100Framework.Applications
         private static Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> _builders = new Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> {
             { "DISMAR", (current, buffer) => { return DistanceMark((PortsAndServices)current, buffer); } },
             { "BERTHS", (current, buffer) => { return Berth((PortsAndServices)current, buffer); } },
+            { "NAVLNE", (current, buffer) => { return NavigationLine((TracksAndRoutes)current, buffer); } },
+            { "ADMARE", (current, buffer) => { return AdministrationArea((RegulatedAreasAndLimits)current, buffer); } },
         };
 
         private static Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);
 
         private static Regex regexMaximumDraughtPermitted = new Regex(@"(Maximum draught permitted =)\s(?<value>\d+\.?\d*)", RegexOptions.IgnoreCase);
+
+        private static Regex regexVesselTrafficServiceArea = new Regex(@"(Vessel Traffic Service Area)", RegexOptions.IgnoreCase);
 
         private static FeatureType Build(string code, S57Object feature, RowBuffer buffer) => _builders[code]?.Invoke(feature, buffer)!;
 
@@ -188,6 +193,144 @@ namespace S100Framework.Applications
             SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
 
             return instance;
+        }
+
+        private static NavigationLine NavigationLine(TracksAndRoutes current, RowBuffer buffer) {
+            var instance = new NavigationLine();
+
+            if (current.CATNAV.HasValue) {
+                instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
+            }
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            // TODO: interoperabilityIdentifier
+
+            // TODO: measured distance
+
+            if (current.ORIENT.HasValue) {
+                instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
+                    orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value,
+                    // TODO: oriantationUncertainty
+                    //orientationUncertainty = ,
+                };
+            }
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.STATUS != default) {
+                instance.status = GetStatus(current.STATUS);
+            }
+
+            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                string subtype = "";
+                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (scaleMinimum.HasValue)
+                    instance.scaleMinimum = scaleMinimum.Value;
+            }
+
+            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            instance.information = result.information.ToArray();
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+
+
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+
+            return instance;
+        }
+
+        private static FeatureType AdministrationArea(RegulatedAreasAndLimits current, RowBuffer buffer) {
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselTrafficServiceArea.IsMatch(current.INFORM)) {
+                var instance = new VesselTrafficServiceArea {
+                };
+
+                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                if (featureName is not null)
+                    instance.featureName = featureName;
+
+                // TODO: interoperabilityIdentifier
+
+                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                    string subtype = "";
+                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                    if (scamin.HasValue)
+                        instance.scaleMinimum = scamin.Value;
+                }
+
+                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                instance.information = result.information.ToArray();
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                return instance;
+            }
+            else {
+                var instance = new AdministrationArea {
+                };
+
+                if (current.JRSDTN.HasValue) {
+                    instance.jurisdiction = EnumHelper.GetEnumValue(current.JRSDTN.Value);
+                }
+
+                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                if (featureName is not null)
+                    instance.featureName = featureName;
+
+                // TODO: interoperabilityIdentifier
+
+                if (current.NATION != default) {
+                    instance.nationality = [GetNation(current.NATION)];
+                }
+
+                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                    string subtype = "";
+                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                    if (scamin.HasValue)
+                        instance.scaleMinimum = scamin.Value;
+                }
+
+                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                instance.information = result.information.ToArray();
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                if (current.PICREP != default) {
+                    instance.pictorialRepresentation = FixFilename(current.PICREP);
+                }
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                return instance;
+            }
         }
     }
 }

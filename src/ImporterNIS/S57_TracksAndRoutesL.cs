@@ -126,60 +126,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // NAVLNE_NavigationLine
-                            var instance = new NavigationLine();
-
-                            if (current.CATNAV.HasValue) {
-                                instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
-                            }                            
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            // TODO: measured distance
-
-                            if (current.ORIENT.HasValue) {
-                                instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
-                                    orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value,
-                                    // TODO: oriantationUncertainty
-                                    //orientationUncertainty = ,
-                                };
-                            }
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (NavigationLine)ImporterNIS.Build("NAVLNE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -188,9 +135,7 @@ namespace S100Framework.Applications
                                 relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
                             }
 
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                         }

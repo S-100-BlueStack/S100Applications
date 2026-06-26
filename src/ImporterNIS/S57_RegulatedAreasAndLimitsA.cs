@@ -340,57 +340,19 @@ namespace S100Framework.Applications
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
                             else {
-                                var instance = new AdministrationArea {
-                                };
-
-                                if (current.JRSDTN.HasValue) {
-                                    instance.jurisdiction = EnumHelper.GetEnumValue(current.JRSDTN.Value);
-                                }
-
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    instance.featureName = featureName;
-
-                                // TODO: interoperabilityIdentifier
-
-                                if (current.NATION != default) {
-                                    instance.nationality = [GetNation(current.NATION)];
-                                }
-
-                                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                    string subtype = "";
-                                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                    if (scamin.HasValue)
-                                        instance.scaleMinimum = scamin.Value;
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                                instance.information = result.information.ToArray();
-                                instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                if (current.PICREP != default) {
-                                    instance.pictorialRepresentation = FixFilename(current.PICREP);
-                                }
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                var instance = ImporterNIS.Build("ADMARE", current, buffer);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                    if (instance is AdministrationArea administrationArea)
+                                        relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, administrationArea.scaleMinimum);
+                                    if (instance is VesselTrafficServiceArea vesselTrafficServiceArea)
+                                        relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, vesselTrafficServiceArea.scaleMinimum);
                                 }
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
                         }
