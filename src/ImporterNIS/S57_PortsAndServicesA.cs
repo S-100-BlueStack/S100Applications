@@ -888,86 +888,7 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No GRIDRN_Gridiron in DK or GL. {tableName}");
                         }
                     case 55: { // HRBFAC_HarbourFacility
-                            var instance = new HarbourFacility();
-
-                            if (current.CATHAF != default) {
-                                var categoryOfHarbourFacility = EnumHelper.GetEnumValues(current.CATHAF);
-                                if (categoryOfHarbourFacility is not null)
-                                    instance.categoryOfHarbourFacility = categoryOfHarbourFacility;
-                            }
-
-                            if (current.COMCHA != default) {
-                                instance.communicationChannel = GetCommunicationChannel(current.COMCHA);
-                            }
-
-                            if (current.CONDTN.HasValue) {
-                                instance.condition = GetCondition(current.CONDTN.Value)?.value;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            if (current.NATCON != default) {
-                                var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON);
-                                if (natureOfConstruction is not null && natureOfConstruction.Any())
-                                    instance.natureOfConstruction = natureOfConstruction;
-                            }
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            // TODO: product
-
-                            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
-                                    instance.reportedDate = reportedDate;
-                                }
-                                else {
-                                    Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
-                                }
-                            }
-
-                            // TODO: restriction
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.INFORM is not null) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -975,12 +896,8 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 60: { // HULKES_Hulk // SKIN OF EARTH

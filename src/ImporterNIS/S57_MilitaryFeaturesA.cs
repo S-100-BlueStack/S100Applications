@@ -54,65 +54,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 60: { // MIPARE_MilitaryPracticeArea
-                            var instance = new MilitaryPracticeArea();
-
-                            if (current.CATMPA != default) {
-                                var categoryOfMilitaryPracticeArea = EnumHelper.GetEnumValues(current.CATMPA);
-                                if (categoryOfMilitaryPracticeArea is not null && categoryOfMilitaryPracticeArea.Any())
-                                    instance.categoryOfMilitaryPracticeArea = categoryOfMilitaryPracticeArea;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            // TODO: nationality
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -120,12 +62,8 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     default:

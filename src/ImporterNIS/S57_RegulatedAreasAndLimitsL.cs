@@ -57,116 +57,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No ASLXIS_ArchipelagicSeaLaneAxis in DK or GL. {tableName}");
                         }
                     case 25: { // MARCUL_MarineFarmCulture
-                            var instance = new MarineFarmCulture {
-                            };
-
-                            if (current.CATMFA != null) {
-                                instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA);
-                            }
-
-                            if (current.EXPSOU.HasValue) {
-                                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU.Value);
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: HEIGHT
-
-                            // TODO: interoperability identifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.QUASOU != default) {
-                                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
-                                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
-                                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.VALSOU.HasValue) {
-                                instance.valueOfSounding = current.VALSOU.Value != -32767m ? current.VALSOU.Value : null;
-                            }
-                            else {
-                                // Exactly one of the attributes height or value of sounding must be populated
-                                if (current.WATLEV.HasValue && new int[] { 1, 2, -32767 }.Contains(current.WATLEV.Value)) {
-                                    instance.height = null;
-                                }
-                                else
-                                    instance.valueOfSounding = null;
-                            }
-
-                            if (current.VERLEN.HasValue) {
-                                instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
-                            }
-                            else if (current.VERLEN.HasValue && current.VERLEN.Value == -32767m) {
-                                //instance.verticalLength = default(decimal?);
-                            }
-
-                            // TODO: VerticalUncertainty
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.WATLEV.HasValue) {
-                                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 30: { // STSLNE_StraightTerritorialSeaBaseline
