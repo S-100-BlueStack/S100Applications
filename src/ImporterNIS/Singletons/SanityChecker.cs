@@ -107,7 +107,7 @@ namespace S100Framework.Applications.Singletons
             foreach (var featureclassName in featureClasses) {
                 using var table = _geodatabase!.OpenDataset<Table>(_geodatabase.GetName(featureclassName));
 
-                using var cursor = table.Search(new QueryFilter() { 
+                using var cursor = table.Search(new QueryFilter() {
                     WhereClause = "1=1",
                     SubFields = "OBJECTID,UID,attributebindings"
                 }, true);
@@ -145,7 +145,6 @@ namespace S100Framework.Applications.Singletons
                 "informationtype",
                 //"messages"
             };
-            int recordCount = 0;
 
             //foreach (var tableName in tables) {
             //    var tableErrorCount = 0;

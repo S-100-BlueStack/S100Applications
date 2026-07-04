@@ -48,8 +48,18 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // PRCARE_PrecautionaryArea
-                            throw new NotImplementedException($"No PRCARE_PrecautionaryArea in DK or GL. {tableName}");
+                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", current, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
                     case 5: { // RCTLPT_RecommendedTrafficLanePart
                             var instance = new RecommendedTrafficLanePart {
                             };

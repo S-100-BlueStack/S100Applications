@@ -55,134 +55,19 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // ACHARE_AnchorageArea
-                            FeatureType? instance = default;
-
-                            int? scaleMinimum = default;
-
-
-                            if (current.CATACH == "8") {
-                                //throw new NotSupportedException("Anchorage area category 8 not implemented. Create mooring area.");
-
-                                var mooringArea = new MooringArea();
-
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    mooringArea.featureName = featureName;
-
-                                DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                                if (dateRange != default) {
-                                    mooringArea.fixedDateRange = dateRange;
-                                }
-
-                                if (current.RESTRN != default) {
-                                    var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                    if (restriction is not null && restriction.Any())
-                                        mooringArea.restriction = restriction;
-                                }
-
-                                if (current.STATUS != default) {
-                                    mooringArea.status = GetStatus(current.STATUS);
-                                }
-
-                                if (current.INFORM is not null && mooringArea.restriction is not null && mooringArea.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                    mooringArea.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                                }
-
-                                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                    string subtype = "";
-                                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                    if (scamin.HasValue) {
-                                        mooringArea.scaleMinimum = scaleMinimum = scamin.Value;
-                                    }
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                                mooringArea.information = result.information.ToArray();
-                                mooringArea.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                instance = mooringArea;
-                            }
-                            else {
-                                var anchorageArea = new AnchorageArea();
-
-                                if (current.CATACH != default) {
-                                    var categoryOfAnchorage = EnumHelper.GetEnumValues(current.CATACH);
-                                    if (categoryOfAnchorage is not null && categoryOfAnchorage.Any())
-                                        anchorageArea.categoryOfAnchorage = categoryOfAnchorage;
-                                }
-
-                                // new S-101
-                                //instance.categoryOfCargo
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    anchorageArea.featureName = featureName;
-
-                                DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                                if (dateRange != default) {
-                                    anchorageArea.fixedDateRange = dateRange;
-                                }
-
-                                // TODO: interoperabilityIdentifier
-
-                                DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                                if (periodicDateRange != default) {
-                                    anchorageArea.periodicDateRange = periodicDateRange;
-                                }
-
-                                if (current.RESTRN != default) {
-                                    var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                    if (restriction is not null && restriction.Any())
-                                        anchorageArea.restriction = restriction;
-                                }
-
-                                if (current.STATUS != default) {
-                                    anchorageArea.status = GetStatus(current.STATUS);
-                                }
-
-                                if (current.INFORM is not null && anchorageArea.restriction is not null && anchorageArea.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                    anchorageArea.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                                }
-
-                                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                    string subtype = "";
-                                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                    if (scamin.HasValue)
-                                        anchorageArea.scaleMinimum = scaleMinimum = scamin.Value;
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                                anchorageArea.information = result.information.ToArray();
-                                anchorageArea.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                instance = anchorageArea;
-                            }
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = ImporterNIS.Build("ACHARE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, scaleMinimum);
+                                if (instance is MooringArea mooringArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, mooringArea.scaleMinimum);
+                                if (instance is AnchorageArea anchorageArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, anchorageArea.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 5: { // ACHBRT_AnchorBerth
@@ -257,104 +142,27 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
-                    case 10: { // ADMARE_AdministrationAreaNamed
-                            if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("pilotage district")) {
-                                var instance = new PilotageDistrict();
+                    case 10: { // ADMARE_AdministrationAreaNamed                            
+                            var instance = ImporterNIS.Build("ADMARE", current, buffer);
 
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    instance.featureName = featureName;
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
 
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                using var featureN = featureClass.CreateRow(buffer);
-                                var name = featureN.UID();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                if (instance is AdministrationArea administrationArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, administrationArea.scaleMinimum);
+                                if (instance is PilotageDistrict pilotageDistrict)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, pilotageDistrict.scaleMinimum);
+                                if (instance is MarinePollutionRegulationsArea marinePollutionRegulationsArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, marinePollutionRegulationsArea.scaleMinimum);
+                                if (instance is VesselTrafficServiceArea vesselTrafficServiceArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, vesselTrafficServiceArea.scaleMinimum);
                             }
-                            else if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("marine pollution regulations area")) {
-                                var instance = new MarinePollutionRegulationsArea();
 
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    instance.featureName = featureName;
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                using var featureN = featureClass.CreateRow(buffer);
-                                var name = featureN.UID();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                            }
-                            else if (!string.IsNullOrEmpty(current.INFORM) && current.INFORM!.ToLower().Contains("vessel traffic service area")) {
-                                var instance = new VesselTrafficServiceArea();
-
-                                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                                if (featureName is not null)
-                                    instance.featureName = featureName;
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                using var featureN = featureClass.CreateRow(buffer);
-                                var name = featureN.UID();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                            }
-                            else {
-                                var instance = ImporterNIS.Build("ADMARE", current, buffer);
-
-                                using var featureN = featureClass.CreateRow(buffer);
-                                var name = featureN.UID();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    if (instance is AdministrationArea administrationArea)
-                                        relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, administrationArea.scaleMinimum);
-                                    if (instance is VesselTrafficServiceArea vesselTrafficServiceArea)
-                                        relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, vesselTrafficServiceArea.scaleMinimum);
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
                     case 15: { // ARCSLN_ArchipelagicSeaLane
@@ -458,54 +266,10 @@ namespace S100Framework.Applications
                         break;
 
                     case 30: { // CTSARE_CargoTranshipmentArea
-                            var instance = new CargoTranshipmentArea {
-                            };
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
+                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", current, buffer);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
-
-
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
@@ -518,9 +282,7 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -528,60 +290,7 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No CUSZNE_CustomZone in DK or GL. {tableName}");
                         }
                     case 40: { // DMPGRD_DumpingGround
-                            var instance = new DumpingGround();
-
-                            if (current.CATDPG != default) {
-                                var categoryOfDumpingGround = EnumHelper.GetEnumValues(current.CATDPG);
-                                if (categoryOfDumpingGround is not null && categoryOfDumpingGround.Any())
-                                    instance.categoryOfDumpingGround = categoryOfDumpingGround;
-                            }
-
-                            // TODO: DateDisused
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            // TODO: interoperabilityIdentifier
-
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -589,11 +298,8 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 50: { // EXEZNE_ExclusiveEconomicZone
@@ -767,112 +473,7 @@ namespace S100Framework.Applications
                         }
 
                     case 95: { // MARCUL_MarineFarmCulture
-                            var instance = new MarineFarmCulture {
-                            };
-
-                            if (current.CATMFA != null) {
-                                instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA);
-                            }
-
-                            if (current.EXPSOU.HasValue) {
-                                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU.Value);
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperability identifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.QUASOU != default) {
-                                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
-                                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
-                                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.VALSOU.HasValue) {
-                                instance.valueOfSounding = current.VALSOU.Value != -32767m ? current.VALSOU.Value : null;
-                            }
-                            else {
-                                // Exactly one of the attributes height or value of sounding must be populated
-                                if (current.WATLEV.HasValue && new int[] { 1, 2, -32767 }.Contains(current.WATLEV.Value)) {
-                                    instance.height = null;
-                                }
-                                else
-                                    instance.valueOfSounding = null;
-                            }
-
-
-                            if (current.VERLEN.HasValue) {
-                                instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
-                            }
-                            else if (current.VERLEN.HasValue && current.VERLEN.Value == -32767m) {
-                                //instance.verticalLength = default(decimal?);
-                            }
-
-                            // TODO: VerticalUncertainty
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.WATLEV.HasValue) {
-                                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV);
-                            }
-
-                            // TODO: HEIGHT                            
-                            if (instance.waterLevelEffect == 1 || instance.waterLevelEffect == 2) {
-                                /* The attribute height must be populated for Marine Farm/Culture features having attribute water level
-                                   effect = 1 (partly submerged at high water) or 2 (always dry). */
-
-
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -880,85 +481,12 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 105: { // RESARE_RestrictedArea
-                            var instance = new RestrictedArea();
-
-                            if (current.CATREA != default) {
-                                if (current.CATREA != "26") { // Water Skiing Area
-                                                              // CATREA
-                                    var categoryOfRestrictedArea = EnumHelper.GetEnumValues(current.CATREA);
-                                    if (categoryOfRestrictedArea is not null && categoryOfRestrictedArea.Any())
-                                        instance.categoryOfRestrictedArea = categoryOfRestrictedArea;
-                                }
-                                else {
-                                    //S-57 Restricted Area – Water Skiing becomes S-101 RestrictedArea – Recreation Area according to S-65 Annex B Attribute tables
-                                    var categoryOfRestrictedArea = EnumHelper.GetEnumValues(32);
-                                    if (categoryOfRestrictedArea is not null && categoryOfRestrictedArea.Any())
-                                        instance.categoryOfRestrictedArea = categoryOfRestrictedArea;
-                                }
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: InteroperabilityIdentifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (RestrictedArea)ImporterNIS.Build("RESARE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -966,64 +494,12 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
-                    case 110: { // SPLARE_SeaPlaneLandingArea
-                            var instance = new SeaplaneLandingArea {
-                            };
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-
-                            // TODO: interoperabilityIdentifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                    case 110: { // SPLARE_SeaplaneLandingArea
+                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1031,56 +507,12 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 115: { // TESARE_TerritorialSeaArea
-                            var instance = new TerritorialSeaArea();
-
-                            // TODO: inDispute
-
-                            // TODO: interoperabilityIdentifier
-
-                            if (current.NATION != default) {
-                                instance.nationality = [GetNation(current.NATION)];
-                            }
-
-                            if (current.RESTRN != default) {
-                                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
-                                if (restriction is not null && restriction.Any())
-                                    instance.restriction = restriction;
-                            }
-
-                            if (current.INFORM is not null && instance.restriction is not null && instance.restriction.Contains(27 /*restriction.SpeedRestricted*/)) {
-                                instance.vesselSpeedLimit = ImporterNIS.GetVesselSpeedLimit(current.INFORM);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (TerritorialSeaArea)ImporterNIS.Build("TESARE", current, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1088,10 +520,7 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
