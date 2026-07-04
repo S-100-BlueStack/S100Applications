@@ -80,7 +80,7 @@ namespace S100Framework.Applications
 
                     case 5: { // CGUSTA_CoastguardStation
                             var instance = (CoastGuardStation)ImporterNIS.Build("CGUSTA", current, buffer);
-                            
+
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 

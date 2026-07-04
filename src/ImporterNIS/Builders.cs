@@ -10,7 +10,7 @@ namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
-        private static Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> _builders = new Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> {
+        private static readonly Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> _builders = new Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> {
             { "DISMAR", (current, buffer) => { return DISMAR((PortsAndServices)current, buffer); } },
             { "BERTHS", (current, buffer) => { return BERTHS((PortsAndServices)current, buffer); } },
             { "NAVLNE", (current, buffer) => { return NAVLNE((TracksAndRoutes)current, buffer); } },
@@ -38,21 +38,21 @@ namespace S100Framework.Applications
             { "RSCSTA", (current, buffer) => { return RSCSTA((PortsAndServices)current, buffer); } },
         };
 
-        private static Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);
 
-        private static Regex regexMaximumDraughtPermitted = new Regex(@"(Maximum draught permitted =)\s(?<value>\d+\.?\d*)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexMaximumDraughtPermitted = new Regex(@"(Maximum draught permitted =)\s(?<value>\d+\.?\d*)", RegexOptions.IgnoreCase);
 
-        private static Regex regexVesselTrafficServiceArea = new Regex(@"(Vessel Traffic Service Area)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexVesselTrafficServiceArea = new Regex(@"(Vessel Traffic Service Area)", RegexOptions.IgnoreCase);
 
-        private static Regex regexPilotageDistrict = new Regex(@"(Pilotage District)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexPilotageDistrict = new Regex(@"(Pilotage District)", RegexOptions.IgnoreCase);
 
-        private static Regex regexMaritimeRescue = new Regex(@"(Maritime Rescue)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexMaritimeRescue = new Regex(@"(Maritime Rescue)", RegexOptions.IgnoreCase);
 
-        private static Regex regexCoordinationCentre = new Regex(@"(Coordination Centre)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexCoordinationCentre = new Regex(@"(Coordination Centre)", RegexOptions.IgnoreCase);
 
-        private static Regex regexMarinePollutionRegulationsArea = new Regex(@"(Marine Pollution Regulations Area)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexMarinePollutionRegulationsArea = new Regex(@"(Marine Pollution Regulations Area)", RegexOptions.IgnoreCase);
 
-        private static Regex regexVesselSpeedLimit = new Regex(@"(Speed limit is)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);   //  Speed limit is 5 knots
+        private static readonly Regex regexVesselSpeedLimit = new Regex(@"(Speed limit is)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);   //  Speed limit is 5 knots
 
         private static FeatureType Build(string code, S57Object feature, RowBuffer buffer) => _builders[code]?.Invoke(feature, buffer)!;
 

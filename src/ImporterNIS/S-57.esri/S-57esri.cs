@@ -9604,7 +9604,8 @@ namespace S100Framework.Applications.S57.esri
         }
     }
 
-    internal class MilitaryFeaturesP : MilitaryFeatures {
+    internal class MilitaryFeaturesP : MilitaryFeatures
+    {
         public MilitaryFeaturesP(Feature feature) : base(feature) { }
     }
 
@@ -22263,7 +22264,8 @@ namespace S100Framework.Applications.S57.esri
         }
     }
 
-    internal class OffshoreInstallationsP : OffshoreInstallations {
+    internal class OffshoreInstallationsP : OffshoreInstallations
+    {
         public OffshoreInstallationsP(Feature feature) : base(feature) { }
     }
 

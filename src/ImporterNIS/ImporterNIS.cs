@@ -1003,7 +1003,7 @@ namespace S100Framework.Applications
 
 
                                     if (GeometryEngine.Instance.Disjoint(current.GetShape(), e.shape)) continue;
-                                    
+
                                     if (GeometryEngine.Instance.Within(current.GetShape(), e.shape)) {
                                         if (e.marksNavigationalSystemOf.HasValue) {
                                             if (e.marksNavigationalSystemOf != localDirectionOfBuoyage.marksNavigationalSystemOf) {
@@ -1063,7 +1063,7 @@ namespace S100Framework.Applications
                     FeatureClassDefinition fcDefinition = destination.GetDefinition<FeatureClassDefinition>(featureClassName);
 
                     FeatureClassDescription fcDescription = new FeatureClassDescription(fcDefinition);
-                    
+
                     var definitionReferences = new Dictionary<int, string> { { 0, "UNKNOWN" } };
                     fcDescription.SubtypeFieldDescription = new SubtypeFieldDescription("sourceIdentifier", definitionReferences);
                     schemaBuilder.Modify(fcDescription);
