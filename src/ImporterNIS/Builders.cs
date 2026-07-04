@@ -35,6 +35,7 @@ namespace S100Framework.Applications
             { "TSSRON", (current, buffer) => { return TSSRON((TracksAndRoutes)current, buffer); } },
             { "PIPARE", (current, buffer) => { return PIPARE((OffshoreInstallations)current, buffer); } },
             { "TESARE", (current, buffer) => { return TESARE((RegulatedAreasAndLimits)current, buffer); } },
+            { "RSCSTA", (current, buffer) => { return RSCSTA((PortsAndServices)current, buffer); } },
         };
 
         private static Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);
@@ -327,8 +328,7 @@ namespace S100Framework.Applications
                 return instance;
             }
             else if (!string.IsNullOrEmpty(current.INFORM) && regexVesselTrafficServiceArea.IsMatch(current.INFORM)) {
-                var instance = new VesselTrafficServiceArea {
-                };
+                var instance = new VesselTrafficServiceArea();
 
                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
                 if (featureName is not null)
@@ -1658,13 +1658,14 @@ namespace S100Framework.Applications
                 CGUSTA should be in a standardised format, such as Maritime Rescue and Coordination Centre.
             */
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexMaritimeRescue.IsMatch(current.INFORM)) {
+            var instance = new CoastGuardStation();
 
+            if (!string.IsNullOrEmpty(current.INFORM) && regexMaritimeRescue.IsMatch(current.INFORM)) {
+                instance.isMRCC = true;
             }
             else if (!string.IsNullOrEmpty(current.INFORM) && regexCoordinationCentre.IsMatch(current.INFORM)) {
-
+                instance.isMRCC = true;
             }
-            var instance = new CoastGuardStation();
 
             if (current.COMCHA != default) {
                 instance.communicationChannel = current.COMCHA.Split(',').ToArray();
@@ -2106,6 +2107,62 @@ namespace S100Framework.Applications
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin.Value;
+            }
+
+            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            instance.information = result.information.ToArray();
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            return instance;
+        }
+
+        private static RescueStation RSCSTA(PortsAndServices current, RowBuffer buffer) {
+            var instance = new RescueStation();
+
+            if (current.CATRSC != null) {
+                var categoryOfRescueStation = EnumHelper.GetEnumValues(current.CATRSC);
+                if (categoryOfRescueStation is not null && categoryOfRescueStation.Any())
+                    instance.categoryOfRescueStation = categoryOfRescueStation;
+            }
+
+            if (current.COMCHA != default) {
+                instance.communicationChannel = current.COMCHA.Split(',').ToArray();
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            // TODO: interoperabilityIdentifier            
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.STATUS != default) {
+                instance.status = GetStatus(current.STATUS);
+            }
+
+            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                string subtype = "";
+                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (scaleMinimum.HasValue)
+                    instance.scaleMinimum = scaleMinimum.Value;
             }
 
             var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
