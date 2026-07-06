@@ -449,6 +449,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -521,6 +522,7 @@ namespace S100Framework.Applications
                 }
 
                 if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                     var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                     var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -601,6 +603,7 @@ namespace S100Framework.Applications
                 }
 
                 if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                     var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                     var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -675,6 +678,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -778,6 +782,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -889,6 +894,7 @@ namespace S100Framework.Applications
             //
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -953,6 +959,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1046,6 +1053,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1145,6 +1153,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1208,6 +1217,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1316,6 +1326,7 @@ namespace S100Framework.Applications
             // TODO: VerticalUncertainty
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1411,6 +1422,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1530,6 +1542,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1607,6 +1620,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1740,6 +1754,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1813,6 +1828,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1879,6 +1895,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1942,6 +1959,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -2021,6 +2039,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -2081,6 +2100,7 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
+                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
