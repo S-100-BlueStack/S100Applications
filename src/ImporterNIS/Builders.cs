@@ -38,7 +38,7 @@ namespace S100Framework.Applications
             { "RSCSTA", (current, buffer) => { return RSCSTA((PortsAndServices)current, buffer); } },
         };
 
-        private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);
+        private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
 
         private static readonly Regex regexMaximumDraughtPermitted = new Regex(@"(Maximum draught permitted =)\s(?<value>\d+\.?\d*)", RegexOptions.IgnoreCase);
 
@@ -52,7 +52,7 @@ namespace S100Framework.Applications
 
         private static readonly Regex regexMarinePollutionRegulationsArea = new Regex(@"(Marine Pollution Regulations Area)", RegexOptions.IgnoreCase);
 
-        private static readonly Regex regexVesselSpeedLimit = new Regex(@"(Speed limit is)\s(?<value>\d+)\s(?<unit>\.+)", RegexOptions.IgnoreCase);   //  Speed limit is 5 knots
+        private static readonly Regex regexVesselSpeedLimit = new Regex(@"(Speed limit is)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);   //  Speed limit is 5 knots
 
         private static FeatureType Build(string code, S57Object feature, RowBuffer buffer) => _builders[code]?.Invoke(feature, buffer)!;
 
