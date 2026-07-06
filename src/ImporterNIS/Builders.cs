@@ -1465,9 +1465,9 @@ namespace S100Framework.Applications
                     instance.categoryOfOffshoreProductionArea = 4;  // categoryOfOffshoreProductionArea.TankFarm;
                 }
                 else {
-                    //Logger.Current.DataError(current.OBJECTID!.Value, tableName, current.LNAM ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA.Value}");
+                    Logger.Current.DataError(current.OBJECTID!.Value, current.TableName!, current.LNAM ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA.Value}");
                     //continue;
-                    throw new NotSupportedException($"Cannot convert offshoreproductionarea with CATPRA {current.CATPRA.Value}");
+                    //throw new NotSupportedException($"Cannot convert offshoreproductionarea with CATPRA {current.CATPRA.Value}");
                     //instance.categoryOfOffshoreProductionArea = EnumHelper.GetEnumValue<categoryOfOffshoreProductionArea>(current.CATPRA.Value);
                 }
             }

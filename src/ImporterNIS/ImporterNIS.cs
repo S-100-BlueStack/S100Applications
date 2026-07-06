@@ -903,6 +903,7 @@ namespace S100Framework.Applications
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
                             bufferBridge["specificusage"] = usage;
+                            bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetShape(bufferBridge, polygon);
 

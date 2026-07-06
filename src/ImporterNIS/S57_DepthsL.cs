@@ -114,6 +114,7 @@ namespace S100Framework.Applications
 
                             bufferTopo["attributebindings"] = instance.Flatten();
                             bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
 
