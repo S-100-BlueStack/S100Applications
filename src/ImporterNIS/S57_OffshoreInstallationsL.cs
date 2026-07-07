@@ -60,7 +60,7 @@ namespace S100Framework.Applications
                             var instance = new CableSubmarine();
 
                             if (current.BURDEP.HasValue) {
-                                instance.buriedDepth = current.BURDEP.Value;
+                                instance.buriedDepth = current.BURDEP.Value != -32767m ? current.BURDEP.Value : null;
                             }
 
                             if (current.CATCBL.HasValue) {
@@ -141,7 +141,7 @@ namespace S100Framework.Applications
                             var instance = new PipelineSubmarineOnLand();
 
                             if (current.BURDEP.HasValue) {
-                                instance.buriedDepth = current.BURDEP.Value;
+                                instance.buriedDepth = current.BURDEP.Value != -32767m ? current.BURDEP.Value : null;
                             }
 
                             if (current.CATPIP != default) {
