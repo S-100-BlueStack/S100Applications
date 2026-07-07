@@ -448,8 +448,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -467,6 +466,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -522,7 +527,6 @@ namespace S100Framework.Applications
                 }
 
                 if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                     var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                     var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -540,6 +544,12 @@ namespace S100Framework.Applications
                             vesselSpeedLimit.speedUnits = 4;
                     }
                     instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                    var inform = $"Speed limit is {_value} {_unit}";
+                    if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                        current.INFORM = null;
+                    else
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 }
 
                 if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -602,8 +612,7 @@ namespace S100Framework.Applications
                     instance.status = GetStatus(current.STATUS);
                 }
 
-                if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                    
                     var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                     var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -621,6 +630,12 @@ namespace S100Framework.Applications
                             vesselSpeedLimit.speedUnits = 4;
                     }
                     instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                    var inform = $"Speed limit is {_value} {_unit}";
+                    if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                        current.INFORM = null;
+                    else
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
                 }
 
                 if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -677,8 +692,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -696,6 +710,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -781,8 +801,7 @@ namespace S100Framework.Applications
                 };
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -800,6 +819,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -893,8 +918,7 @@ namespace S100Framework.Applications
             //}
             //
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -912,6 +936,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
@@ -958,8 +988,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -977,6 +1006,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1052,8 +1087,7 @@ namespace S100Framework.Applications
                 };
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1071,6 +1105,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1152,8 +1192,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1171,6 +1210,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1216,8 +1261,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1235,6 +1279,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1325,8 +1375,7 @@ namespace S100Framework.Applications
 
             // TODO: VerticalUncertainty
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1344,6 +1393,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.WATLEV.HasValue) {
@@ -1421,8 +1476,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1440,6 +1494,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1541,8 +1601,7 @@ namespace S100Framework.Applications
                 //instance.verticalLength = default(decimal?);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1560,6 +1619,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.CONVIS.HasValue) {
@@ -1619,8 +1684,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1638,6 +1702,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1753,8 +1823,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1772,6 +1841,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1827,8 +1902,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1846,6 +1920,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1894,8 +1974,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1913,6 +1992,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -1958,8 +2043,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -1977,6 +2061,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -2038,8 +2128,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -2057,6 +2146,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
@@ -2099,8 +2194,7 @@ namespace S100Framework.Applications
                     instance.restriction = restriction;
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {                
                 var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
                 var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
 
@@ -2118,6 +2212,12 @@ namespace S100Framework.Applications
                         vesselSpeedLimit.speedUnits = 4;
                 }
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
+
+                var inform = $"Speed limit is {_value} {_unit}";
+                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
+                    current.INFORM = null;
+                else
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
             }
 
             if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
