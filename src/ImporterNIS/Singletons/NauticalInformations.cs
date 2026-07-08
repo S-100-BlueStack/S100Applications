@@ -184,7 +184,7 @@ namespace S100Framework.Applications.Singletons
                             }
 
                             if (filePath == default) {
-                                Logger.Current.Error($"Cannot find NauticalInformation fileref: {s57FileName} in {ImporterNIS._notesPath}");
+                                Logger.Current.Error($"{info.S100FC_name} Cannot find NauticalInformation fileref: {s57FileName} in {ImporterNIS._notesPath}");
                                 continue;
                             }
 
