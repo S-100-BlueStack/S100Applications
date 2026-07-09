@@ -833,7 +833,7 @@ namespace S100Framework.Applications
 
                         var s100compiler = @"C:\Program Files\s100compiler\s100compiler.exe";
 
-                        if (!IO.File.Exists(yaml)) {
+                        if (!IO.File.Exists(s100compiler)) {
                             var _output = new IO.DirectoryInfo(output);
                             var search = IO.Directory.GetFiles(_output.Parent!.FullName, "s100compiler.exe", SearchOption.AllDirectories);
                             if (search.Any())
