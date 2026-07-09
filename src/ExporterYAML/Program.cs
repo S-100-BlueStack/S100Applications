@@ -833,12 +833,14 @@ namespace S100Framework.Applications
 
                         var s100compiler = @"C:\Program Files\s100compiler\s100compiler.exe";
 
-                        if (!IO.File.Exists(s100compiler)) {
+                        {
                             var _output = new IO.DirectoryInfo(output);
                             var search = IO.Directory.GetFiles(_output.Parent!.FullName, "s100compiler.exe", SearchOption.AllDirectories);
                             if (search.Any())
                                 s100compiler = IO.Path.GetFullPath(search.First());
                         }
+
+                        Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
 
                         if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
                             var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{output}\"";
