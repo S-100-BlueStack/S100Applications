@@ -758,10 +758,16 @@ namespace TestNisImporter
             IO.DirectoryInfo[] roots = [new IO.DirectoryInfo(@"ENC")];
 
             roots = [
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK1"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK2"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK3"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK4"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL1"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL2"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL3"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL4")];
 
-            
+
             var python = new StringBuilder();
 
 
