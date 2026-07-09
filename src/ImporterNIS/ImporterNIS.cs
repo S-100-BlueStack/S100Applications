@@ -1451,13 +1451,13 @@ namespace S100Framework.Applications
         internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
             buffer["specificusage"] = _;
-            buffer["sourcescale"] = scale;
+            buffer["nominalscale"] = scale;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
             buffer["specificusage"] = _;
-            buffer["sourcescale"] = scale;
+            buffer["nominalscale"] = scale;
         }
 
         /// <summary>
