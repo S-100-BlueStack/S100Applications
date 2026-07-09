@@ -833,15 +833,17 @@ namespace S100Framework.Applications
 
                         var s100compiler = @"C:\Program Files\s100compiler\s100compiler.exe";
 
-                        if (!IO.File.Exists(yaml)) {
+                        {
                             var _output = new IO.DirectoryInfo(output);
                             var search = IO.Directory.GetFiles(_output.Parent!.FullName, "s100compiler.exe", SearchOption.AllDirectories);
                             if (search.Any())
                                 s100compiler = IO.Path.GetFullPath(search.First());
                         }
 
-                        if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
-                            var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{output}\"";
+                        Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
+
+                        if (IO.File.Exists(s100compiler)) {
+                            var commandline = $"-f \"{IO.Path.GetFullPath(IO.Path.Combine(output, $"{datasetName}.yaml"))}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{IO.Path.GetFullPath(output)}\"";
 
                             if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
                                 IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
@@ -850,13 +852,13 @@ namespace S100Framework.Applications
                             if (!exchangeset) {
                                 //Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
 
-                                Log.Information("s100compiler.exe {arguments}", commandline);
+                                Log.Information("{s100compiler} {arguments}", s100compiler, commandline);
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
                                 p.StartInfo.UseShellExecute = false;
                                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
+                                p.StartInfo.FileName = s100compiler;
                                 p.StartInfo.Arguments = commandline;
                                 p.StartInfo.WorkingDirectory = output;
                                 p.StartInfo.RedirectStandardOutput = false;
@@ -879,14 +881,14 @@ namespace S100Framework.Applications
                                 }
                             }
                             else {
-                                Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
+                                Log.Information("{s100compiler} -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", s100compiler, datasetName, output, IO.Path.GetFileName(featureCataloguePath));
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
                                 p.StartInfo.UseShellExecute = false;
                                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                p.StartInfo.FileName = @"C:\Program Files\s100compiler\s100compiler.exe";
+                                p.StartInfo.FileName = s100compiler;
                                 p.StartInfo.Arguments = commandline;
                                 p.StartInfo.WorkingDirectory = output;
                                 p.StartInfo.RedirectStandardOutput = false;
