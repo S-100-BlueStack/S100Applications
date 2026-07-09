@@ -831,6 +831,15 @@ namespace S100Framework.Applications
                         File.WriteAllText(IO.Path.Combine(output, $"{datasetName}.yaml"), yaml);
                         File.WriteAllText(IO.Path.Combine(@"c:\temp", $"{datasetName}.yaml"), yaml);
 
+                        var s100compiler = @"C:\Program Files\s100compiler\s100compiler.exe";
+
+                        if (!IO.File.Exists(yaml)) {
+                            var _output = new IO.DirectoryInfo(output);
+                            var search = IO.Directory.GetFiles(_output.Parent!.FullName, "s100compiler.exe", SearchOption.AllDirectories);
+                            if (search.Any())
+                                s100compiler = IO.Path.GetFullPath(search.First());
+                        }
+
                         if (IO.File.Exists(@"C:\Program Files\s100compiler\s100compiler.exe")) {
                             var commandline = $"-f \"{IO.Path.Combine(output, $"{datasetName}.yaml")}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{output}\"";
 
