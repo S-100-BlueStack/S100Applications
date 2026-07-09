@@ -503,8 +503,11 @@ namespace S100Framework.Applications
                                             var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
                                             dataset?.Metadata.AddSupportFile(filename, base64);
                                         }
-                                        else
-                                            System.Diagnostics.Debugger.Break();
+                                        else {
+                                            if (System.Diagnostics.Debugger.IsAttached)
+                                                System.Diagnostics.Debugger.Break();
+                                            Log.Error("File not found ({filename})!", filename);
+                                        }
 
                                         //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
                                         //var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
