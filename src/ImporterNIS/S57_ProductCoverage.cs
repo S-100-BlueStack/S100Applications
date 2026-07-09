@@ -17,25 +17,25 @@ namespace S100Framework.Applications
     {
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
-        private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
-            _ => default,
-            //>= 10000000 => default,
-            //>= 3500000 => 10000000,
-            //>= 1500000 => 3500000,
-            //>= 700000 => 1500000,
-            //>= 350000 => 700000,
-            //>= 180000 => 350000,
-            //>= 90000 => 180000,
-            //>= 45000 => 90000,
-            //>= 22000 => 45000,
-            //>= 12000 => 22000,
-            //>= 9000 => 12000,
-            //>= 4000 => 8000,
-            //>= 3000 => 4000,
-            //>= 2000 => 3000,
-            //>= 1000 => 2000,
-            //_ => throw new NotImplementedException(),
-        };
+        //private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
+        //    //_ => default,
+        //    //>= 10000000 => default,
+        //    >= 3500000 => 10000000,
+        //    >= 1500000 => 3500000,
+        //    >= 700000 => 1500000,
+        //    >= 350000 => 700000,
+        //    >= 180000 => 350000,
+        //    >= 90000 => 180000,
+        //    >= 45000 => 90000,
+        //    >= 22000 => 45000,
+        //    >= 12000 => 22000,
+        //    >= 9000 => 12000,
+        //    >= 4000 => 8000,
+        //    >= 3000 => 4000,
+        //    >= 2000 => 3000,
+        //    >= 1000 => 2000,
+        //    _ => throw new NotImplementedException(),
+        //};
 
         private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale2, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
@@ -64,12 +64,15 @@ namespace S100Framework.Applications
 
             using var productDefinitions = productDefinitionsTable.Search(new QueryFilter {
                 WhereClause = $"({whereclause}) AND (EXPORTTYPE IS NULL OR EXPORTTYPE <> 'Cancel')",
+                PostfixClause = "ORDER BY CSCL DESC",
             }, true);
 
             (string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon[] Coverage)[] coverages = [];
 
             var regex = string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
 
+            var dictionaryCoverage = new Dictionary<string, Polygon>();
+            
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
                 var row = productDefinitions.Current;
@@ -124,7 +127,7 @@ namespace S100Framework.Applications
                     },
                     maximumDisplayScale = null,
                     optimumDisplayScale = current.CSCL!.Value,
-                    minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
+                    //minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
                 };
 
                 using var cursorCoverage = productCoverageFeatureClass.Search(new QueryFilter {
@@ -141,6 +144,20 @@ namespace S100Framework.Applications
                 }
                 if (!polygons.Any()) System.Diagnostics.Debugger.Break();
 
+                var coverage = (Polygon)GeometryEngine.Instance.Union(polygons.Where(e => e.catcov == 1).Select(e=>e.shape));
+
+                var _minimumDisplayScale = 10000000;
+
+                var hit = coverages.Where(e => e.PLTS_COMP_SCALE > current.CSCL!.Value && GeometryEngine.Instance.Within(coverage, dictionaryCoverage[e.Name]));
+
+                if (hit.Any()) {
+                    _minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
+                }
+
+                dictionaryCoverage.Add(electronicProduct.datasetName, coverage);
+
+                electronicProduct.minimumDisplayScale = _minimumDisplayScale;
+
                 //var radarScales = scamin.StandardRadarScale((Polygon)(GeometryEngine.Instance.Union(polygons)));
 
                 //var optimumScaleIndex = Array.IndexOf(radarScales, current.CSCL!.Value);
@@ -151,7 +168,7 @@ namespace S100Framework.Applications
                 //    optimumScaleIndex -= 2;
                 // var minimumDisplayScale = radarScales[optimumScaleIndex];
 
-                var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
+                //var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
 
                 var dataCoverage = new DataCoverage {
                     maximumDisplayScale = current.CSCL!.Value / 2,
