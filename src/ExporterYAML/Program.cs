@@ -269,6 +269,8 @@ namespace S100Framework.Applications
                         Log.Information("Building topology..");
                         int index = 0;
                         var result = source.BuildTopology(filter, interceptor: (code, arg) => {
+                            if(!System.Diagnostics.Debugger.IsAttached) return;
+
                             var persist = code switch {
                                 9000 => false,
                                 9001 => false,
@@ -847,7 +849,7 @@ namespace S100Framework.Applications
                                 s100compiler = IO.Path.GetFullPath(search.First());
                         }
 
-                        Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
+                        //Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
 
                         if (IO.File.Exists(s100compiler)) {
                             var commandline = $"-f \"{IO.Path.GetFullPath(IO.Path.Combine(output, $"{datasetName}.yaml"))}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{IO.Path.GetFullPath(output)}\"";
@@ -857,9 +859,7 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                //Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
-
-                                Log.Information("{s100compiler} {arguments}", s100compiler, commandline);
+                                Log.Debug("{s100compiler} {arguments}", s100compiler, commandline);
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
