@@ -412,6 +412,8 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
+                        var collapse = topology.Collapse;
+
                         Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
 
                         //  Selector
@@ -533,7 +535,7 @@ namespace S100Framework.Applications
                             while (featureCursor.MoveNext()) {
                                 var current = featureCursor.Current;
 
-                                var name = Convert.ToString(current["UID"])!;
+                                var name = Convert.ToString(current["UID"])!;                                
                                 var code = current["code"].ToString()!;
                                 //var json = current["json"].ToString()!;
 
@@ -622,6 +624,8 @@ namespace S100Framework.Applications
                                     hashSet.Add(oid);
 
                                     var _uid = Convert.ToString(current["UID"])!;
+
+                                    if (collapse.Contains(_uid)) continue;
 
                                     string[] features = [_uid];
 
