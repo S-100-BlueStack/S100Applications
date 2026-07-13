@@ -17,7 +17,7 @@ namespace S100Framework.Applications
                 WhereClause = $"({filter.WhereClause} AND fcsubtype = 45)",
             }, true);
 
-            (S100FC.S101.FeatureTypes.SoundingDatum SDAT, int PLTS_COMP_SCALE, Polygon shape)[] verticalDatums = [];
+            (S100FC.S101.FeatureTypes.SoundingDatum SDAT, int PLTS_COMP_SCALE, Polygon shape)[] sdat = [];
 
             while (search.MoveNext()) {
                 var m_sdat = new MetaDataA((Feature)search.Current);
@@ -30,22 +30,25 @@ namespace S100Framework.Applications
                     //  TODO SORDAT ???
                 }
 
-                verticalDatums = [.. verticalDatums, (instance!, m_sdat.PLTS_COMP_SCALE!.Value, (Polygon)m_sdat.SHAPE!)];
+                sdat = [.. sdat, (instance!, m_sdat.PLTS_COMP_SCALE!.Value, (Polygon)m_sdat.SHAPE!)];
             }
 
 
 
-            if (verticalDatums.Any()) {
-                Logger.Current.Warning($"verticalDatums.Count() = #{verticalDatums.Count()}");
+            if (sdat.Any()) {
+                Logger.Current.Warning($"sdat.Count() = #{sdat.Count()}");
                 //if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
             }
 
             //  Clip DataCoverage geometries
-            var combined = PolygonBuilderEx.CreatePolygon(verticalDatums.Select(e => e.shape));
+            //var combined = PolygonBuilderEx.CreatePolygon(sdat.Select(e => e.shape));
 
-            (SoundingDatum SoundingDatum, Polygon Coverage, int PLTS_COMP_SCALE)[] soundingDatums = verticalDatums.Select(e => (e.SDAT, e.shape, e.PLTS_COMP_SCALE)).ToArray();
+            (SoundingDatum SoundingDatum, Polygon Coverage, int PLTS_COMP_SCALE)[] soundingDatums = sdat.Select(e => (e.SDAT, e.shape, e.PLTS_COMP_SCALE)).ToArray();
 
             foreach (var c in coverages) {
+
+                var combined = PolygonBuilderEx.CreatePolygon(sdat.Where(e=>e.PLTS_COMP_SCALE>= c.DataCoverage.maximumDisplayScale && e.PLTS_COMP_SCALE<c.DataCoverage.minimumDisplayScale).Select(e => e.shape));
+
                 if (GeometryEngine.Instance.Disjoint(c.Coverage, combined)) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
                         verticalDatum = c.SDAT!.value,
