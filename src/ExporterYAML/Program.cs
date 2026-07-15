@@ -424,7 +424,6 @@ namespace S100Framework.Applications
 
                         var collapse = topology.Collapse;
 
-                        Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
                         logger.LogInformation("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
 
                         //  Selector
@@ -519,7 +518,7 @@ namespace S100Framework.Applications
                                         else {
                                             if (System.Diagnostics.Debugger.IsAttached)
                                                 System.Diagnostics.Debugger.Break();
-                                            Log.Error("File not found ({filename})!", filename);
+                                            logger.LogError("File not found ({filename})!", filename);
                                         }
 
                                         //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
@@ -858,8 +857,6 @@ namespace S100Framework.Applications
                                 s100compiler = IO.Path.GetFullPath(search.First());
                         }
 
-                        //Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
-
                         if (IO.File.Exists(s100compiler)) {
                             var commandline = $"-f \"{IO.Path.GetFullPath(IO.Path.Combine(output, $"{datasetName}.yaml"))}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{IO.Path.GetFullPath(output)}\"";
 
@@ -868,7 +865,7 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                Log.Debug("{s100compiler} {arguments}", s100compiler, commandline);
+                                logger.LogDebug("{s100compiler} {arguments}", s100compiler, commandline);
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
