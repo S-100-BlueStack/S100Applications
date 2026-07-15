@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using CommandLine;
+using Microsoft.Extensions.Logging;
 using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
@@ -66,19 +67,26 @@ namespace S100Framework.Applications
 
             Console.Clear();
 
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.Console()
-                .WriteTo.File(
-                    path: logpath,
-                    rollingInterval: RollingInterval.Infinite,
-                    retainedFileCountLimit: 1,
-                    shared: true,
-                    outputTemplate: outputTemplate)
-                .CreateLogger();
+            //Log.Logger = new LoggerConfiguration()
+            //    .MinimumLevel.Information()
+            //    .WriteTo.Console()
+            //    .WriteTo.File(
+            //        path: logpath,
+            //        rollingInterval: RollingInterval.Infinite,
+            //        retainedFileCountLimit: 1,
+            //        shared: true,
+            //        outputTemplate: outputTemplate)
+            //    .CreateLogger();
 
             //Log.Information("exporter.exe {args}", string.Join(' ', args));
 
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.SetMinimumLevel(LogLevel.Trace);
+                builder.AddSerilog().AddConsole();
+            });
+
+            var logger = loggerFactory.CreateLogger("ExporterYAML");
 
             try {
                 var sw = new Stopwatch();
@@ -88,10 +96,10 @@ namespace S100Framework.Applications
                                    });
 
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
-                    Log.Fatal((Exception)e.ExceptionObject, "UnhandledException");
+                    logger.LogCritical((Exception)e.ExceptionObject, "UnhandledException");
                 };
 
-                Log.Information("ExporterYAML.exe {args}", string.Join(" ", args));
+                logger.LogInformation("ExporterYAML.exe {args}", string.Join(" ", args));
 
                 if (arguments.Errors.Any())
                     return -1;
@@ -164,7 +172,7 @@ namespace S100Framework.Applications
                     throw new ArgumentNullException("No datasets specified. Use -d or -b to specify dataset(s).");
 
                 Directory.CreateDirectory(output!);
-                Log.Information("Output path: {output}", output);
+                logger.LogInformation("Output path: {output}", output);
 
                 using Geodatabase source = createGeodatabase();
 
@@ -192,7 +200,7 @@ namespace S100Framework.Applications
                                 datasetNames = [.. datasetNames, electricProduct.datasetName!];
                             }
                             catch (System.Exception ex) {
-                                Log.Error(ex, "Can't deserialize {UID}!", current["UID"]);
+                                logger.LogError(ex, "Can't deserialize {UID}!", current["UID"]);
                             }
                         }
                     }
@@ -261,12 +269,12 @@ namespace S100Framework.Applications
 
                         var datasetName = dataset.CellName.Split('.')[0];
 
-                        Log.Information("{dataset}", datasetName);
+                        logger.LogInformation("{dataset}", datasetName);
                         var spatialAssociations = new Dictionary<string, S100FC.YAML.Association>();
                         var geometries = new List<(ArcGIS.Core.Geometry.Geometry geometry, string name)>();
 
                         // Build Topology
-                        Log.Information("Building topology..");
+                        logger.LogInformation("Building topology..");
                         int index = 0;
                         var result = source.BuildTopology(filter, interceptor: (code, arg) => {
                             var persist = code switch {
@@ -412,7 +420,7 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
-                        Log.Information("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
+                        logger.LogInformation("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
 
                         //  Selector
                         {
@@ -517,7 +525,7 @@ namespace S100Framework.Applications
                             }
                         }
                         catch (Exception ex) {
-                            Log.Error("Exception: {ex}", ex);
+                            logger.LogError("Exception: {ex}", ex);
                         }
 
                         // FeatureTypes
@@ -575,7 +583,7 @@ namespace S100Framework.Applications
                             }
                         }
                         catch (Exception ex) {
-                            Log.Error("Exception: {ex}", ex);
+                            logger.LogError("Exception: {ex}", ex);
                         }
 
 
@@ -597,7 +605,7 @@ namespace S100Framework.Applications
                             };
 
                             if (!supported) {
-                                Log.Information("Unsupported table detected: {tableName}", tableName);
+                                logger.LogInformation("Unsupported table detected: {tableName}", tableName);
                                 continue;
                             }
 
@@ -657,7 +665,7 @@ namespace S100Framework.Applications
                                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
 
                                             if (type == default) {
-                                                Log.Error("Could not get type: {type} for feature: {name}", code, uid);
+                                                logger.LogError("Could not get type: {type} for feature: {name}", code, uid);
                                                 continue;
                                             }
 
@@ -794,7 +802,7 @@ namespace S100Framework.Applications
                                             //geometries.Add(new(current.GetShape(), name!));                                        
                                         }
                                         catch (Exception ex) {
-                                            Log.Error("Exception: {ex}", ex);
+                                            logger.LogError("Exception: {ex}", ex);
                                             continue;
                                         }
                                     }
@@ -802,15 +810,15 @@ namespace S100Framework.Applications
                             }
                         }
 
-                        Log.Information("FeatureTypes (noGeometry) found: #{count}", featureTypesAdded.Count);
-                        Log.Information("InformationTypes found: #{count}", informationsTypesAdded.Count);
+                        logger.LogInformation("FeatureTypes (noGeometry) found: #{count}", featureTypesAdded.Count);
+                        logger.LogInformation("InformationTypes found: #{count}", informationsTypesAdded.Count);
 
                         // Geometries
                         foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
                             if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
                             if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
                             dataset?.AddGeometry(geometry, name!);
-                            Log.Verbose("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
+                            logger.LogTrace("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
                         }
 
                         // Add curves/surfaces after points
@@ -840,7 +848,7 @@ namespace S100Framework.Applications
                                 s100compiler = IO.Path.GetFullPath(search.First());
                         }
 
-                        Log.Information($"{IO.Path.GetFullPath(s100compiler)}");
+                        logger.LogInformation($"{IO.Path.GetFullPath(s100compiler)}");
 
                         if (IO.File.Exists(s100compiler)) {
                             var commandline = $"-f \"{IO.Path.GetFullPath(IO.Path.Combine(output, $"{datasetName}.yaml"))}\" -c \"{IO.Path.GetFullPath(featureCataloguePath!)}\" -d \"{IO.Path.GetFullPath(output)}\"";
@@ -852,7 +860,7 @@ namespace S100Framework.Applications
                             if (!exchangeset) {
                                 //Log.Information("s100compiler.exe -f {dataset}.yaml -d {output}.000 -c {fc}", datasetName, output, IO.Path.GetFileName(featureCataloguePath));
 
-                                Log.Information("{s100compiler} {arguments}", s100compiler, commandline);
+                                logger.LogInformation("{s100compiler} {arguments}", s100compiler, commandline);
 
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
@@ -867,7 +875,7 @@ namespace S100Framework.Applications
                                 p.Exited += (s, e) => {
                                 };
 
-                                Log.Verbose("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                logger.LogTrace("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                 p.Start();
                                 p.WaitForExit();
@@ -875,13 +883,13 @@ namespace S100Framework.Applications
                                 if (p.ExitCode != 0) {
                                     var error = p.StandardError.ReadToEnd();
 
-                                    Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
-                                    Log.Verbose(error);
+                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    logger.LogTrace(error);
                                     return p.ExitCode;
                                 }
                             }
                             else {
-                                Log.Information("{s100compiler} -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", s100compiler, datasetName, output, IO.Path.GetFileName(featureCataloguePath));
+                                logger.LogInformation("{s100compiler} -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", s100compiler, datasetName, output, IO.Path.GetFileName(featureCataloguePath));
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
@@ -903,8 +911,8 @@ namespace S100Framework.Applications
                                 if (p.ExitCode != 0) {
                                     var error = p.StandardError.ReadToEnd();
 
-                                    Log.Error("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
-                                    Log.Verbose(error);
+                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    logger.LogTrace(error);
                                     return p.ExitCode;
                                 }
 
@@ -922,7 +930,7 @@ namespace S100Framework.Applications
                                     var pipeline = IO.Path.Combine(IO.Path.GetDirectoryName(featureCataloguePath!)!, "pipeline-S101-S57.yaml");
                                     var s100mapper = $"\"{filename_s101}\" \"{filename_s57}\" --fc \"{IO.Path.GetFullPath(featureCataloguePath!)}\" --pipeline \"{pipeline}\"";
 
-                                    Log.Information("s100mapper.exe {s101}.yaml {filename_s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(filename_s57), IO.Path.GetFileName(featureCataloguePath));
+                                    logger.LogInformation("s100mapper.exe {s101}.yaml {filename_s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(filename_s57), IO.Path.GetFileName(featureCataloguePath));
 
                                     var p = new Process();
                                     p.StartInfo.CreateNoWindow = true;
@@ -944,8 +952,8 @@ namespace S100Framework.Applications
                                     if (p.ExitCode != 0) {
                                         var error = p.StandardError.ReadToEnd();
 
-                                        Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
-                                        Log.Verbose(error);
+                                        logger.LogError("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                        logger.LogTrace(error);
                                         return p.ExitCode;
                                     }
 
@@ -961,8 +969,8 @@ namespace S100Framework.Applications
                                         //var console = p.StandardOutput.ReadToEnd();
                                         var error = p.StandardError.ReadToEnd();
 
-                                        Log.Error("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
-                                        Log.Verbose(error);
+                                        logger.LogError("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
+                                        logger.LogTrace(error);
                                         return p.ExitCode;
                                     }
                                 }
@@ -970,17 +978,17 @@ namespace S100Framework.Applications
                         }
                     }
                     catch (System.Exception ex) {
-                        Log.Fatal("error: {database}", e.Dataset);
+                        logger.LogCritical("error: {database}", e.Dataset);
                     }
-                    Log.Information("------------------------------------------------------------");
+                    logger.LogInformation("------------------------------------------------------------");
                 }
                 sw.Stop();
-                Log.Information("Elapsed: {elapsed}", sw.Elapsed);
+                logger.LogInformation("Elapsed: {elapsed}", sw.Elapsed);
 
                 return 0;
             }
             catch (Exception ex) {
-                Log.Error(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
                 return -1;
             }
         }
