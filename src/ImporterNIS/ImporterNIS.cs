@@ -1815,9 +1815,9 @@ namespace S100Framework.Applications
             if (!string.IsNullOrEmpty(ntxtds)) {
                 // TODO: make information binding -> Nautical Information - binding.
                 if (!string.IsNullOrEmpty(ntxtds) && ntxtds.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
-                    var filePath = System.IO.Path.Combine(_notesPath, ntxtds);
 
-                    if (!IO.File.Exists(filePath))
+                    var file = IO.Directory.GetFiles(_notesPath, $"{ntxtds}", SearchOption.AllDirectories).FirstOrDefault();
+                    if (string.IsNullOrEmpty(file))
                         Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ntxtds] {ntxtds}");
 
                     string fileReference = ntxtds;
@@ -1840,9 +1840,8 @@ namespace S100Framework.Applications
             if (!string.IsNullOrEmpty(txtdsc)) {
                 // TODO: make information binding -> Nautical Information - binding.
                 if (!string.IsNullOrEmpty(txtdsc) && txtdsc.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
-                    var filePath = System.IO.Path.Combine(_notesPath, txtdsc);
-
-                    if (!IO.File.Exists(filePath))
+                    var file = IO.Directory.GetFiles(_notesPath, $"{txtdsc}", SearchOption.AllDirectories).FirstOrDefault();
+                    if (string.IsNullOrEmpty(file))
                         Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [txtdsc] {txtdsc}");
 
                     string fileReference = txtdsc;
@@ -1873,10 +1872,9 @@ namespace S100Framework.Applications
 
                 foreach (var value in informs) {
                     if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
-                        var filePath = System.IO.Path.Combine(_notesPath, value);
-
-                        if(!IO.File.Exists(filePath))
-                            Logger.Current.Information($"{sourceTableName}::{sourceObjectid} [inform] {inform}");
+                        var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
+                        if (string.IsNullOrEmpty(file))
+                            Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [inform] {inform}");
 
                         string fileReference = value;
                         string language = "eng";
@@ -1907,9 +1905,8 @@ namespace S100Framework.Applications
                     foreach (var value in ninfoms) {
 
                         if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
-                            var filePath = System.IO.Path.Combine(_notesPath, value);
-
-                            if (!IO.File.Exists(filePath))
+                            var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
+                            if (string.IsNullOrEmpty(file))
                                 Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ninform] {ninform}");
 
                             string fileReference = value;
