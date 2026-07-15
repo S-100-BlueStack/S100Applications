@@ -2,6 +2,7 @@
 using ArcGIS.Core.Geometry;
 using CommandLine;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
@@ -67,23 +68,26 @@ namespace S100Framework.Applications
 
             Console.Clear();
 
-            //Log.Logger = new LoggerConfiguration()
-            //    .MinimumLevel.Information()
-            //    .WriteTo.Console()
-            //    .WriteTo.File(
-            //        path: logpath,
-            //        rollingInterval: RollingInterval.Infinite,
-            //        retainedFileCountLimit: 1,
-            //        shared: true,
-            //        outputTemplate: outputTemplate)
-            //    .CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    path: logpath,
+                    rollingInterval: RollingInterval.Infinite,
+                    retainedFileCountLimit: 1,
+                    shared: true,
+                    outputTemplate: outputTemplate)
+                .CreateLogger();
 
             //Log.Information("exporter.exe {args}", string.Join(' ', args));
 
             using var loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.SetMinimumLevel(LogLevel.Trace);
-                builder.AddSerilog().AddConsole();
+                //builder.AddSimpleConsole(options => {
+                //    options.SingleLine = true;  // merges category+eventid+message onto one line                    
+                //});
+                builder.AddSerilog(Log.Logger);
             });
 
             var logger = loggerFactory.CreateLogger("ExporterYAML");
