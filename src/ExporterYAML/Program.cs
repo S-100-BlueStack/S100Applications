@@ -83,10 +83,11 @@ namespace S100Framework.Applications
             using var loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.SetMinimumLevel(LogLevel.Trace);
-                builder.AddSerilog().AddConsole();
+                builder.AddSerilog();
+                builder.AddConsole();
             });
 
-            var logger = loggerFactory.CreateLogger("ExporterYAML");
+            var logger = loggerFactory.CreateLogger<VortexExporter>();
 
             try {
                 var sw = new Stopwatch();
@@ -294,6 +295,9 @@ namespace S100Framework.Applications
 
                             if (!persist) return;
 
+
+                            return;
+
                             //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
 
                             Func<Geodatabase> debugInstanceCreator = () => {
@@ -418,13 +422,15 @@ namespace S100Framework.Applications
                                 build();
                             }
 
-                        })!;
+                        }, loggerFactory)!;
 
                         var topology = result.matrix;
 
                         var collapse = topology.Collapse;
 
-                        logger.LogInformation("Topology finished! Found {curves} Curves, {composites} CompositeCurves, {surfaces} Surfaces", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count());
+                        logger.LogInformation("Topology finished!");
+
+                        logger.LogDebug("Found #{curves} Curves, #{composites} CompositeCurves, #{surfaces} Surfaces, #{collapsed} Collapsed ", topology.Curves.Count(), topology.CompositeCurves.Count(), topology.Surfaces.Count(), collapse.Count());
 
                         //  Selector
                         {
@@ -891,6 +897,13 @@ namespace S100Framework.Applications
                                     logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
                                     logger.LogTrace(error);
                                     return p.ExitCode;
+                                }
+                                var fileinfo = new IO.FileInfo(IO.Path.Combine(IO.Path.GetFullPath(output), $"{datasetName}.000"));
+                                if (fileinfo.Length == 0) {
+                                    var error = p.StandardError.ReadToEnd();
+
+                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    logger.LogTrace(error);
                                 }
                             }
                             else {
