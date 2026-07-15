@@ -1786,10 +1786,10 @@ namespace S100Framework.Applications
         internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
             InformationResult result = new();
 
-            var createNauticalInformation = (string fileReference, string language) => {
+            var createNauticalInformation = (string fileReference, string language) => {                                
                 return new NauticalInformation {
                     information = [
-                        new information() {
+                    new information() {
                         fileReference = FixFilename(fileReference) ?? default,
                         language = language
                     }]
@@ -1816,6 +1816,10 @@ namespace S100Framework.Applications
                 // TODO: make information binding -> Nautical Information - binding.
                 if (!string.IsNullOrEmpty(ntxtds) && ntxtds.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
                     var filePath = System.IO.Path.Combine(_notesPath, ntxtds);
+
+                    if (!IO.File.Exists(filePath))
+                        Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ntxtds] {ntxtds}");
+
                     string fileReference = ntxtds;
                     string language = "eng";
 
@@ -1834,10 +1838,12 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(txtdsc)) {
-
                 // TODO: make information binding -> Nautical Information - binding.
                 if (!string.IsNullOrEmpty(txtdsc) && txtdsc.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
                     var filePath = System.IO.Path.Combine(_notesPath, txtdsc);
+
+                    if (!IO.File.Exists(filePath))
+                        Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [txtdsc] {txtdsc}");
 
                     string fileReference = txtdsc;
                     string language = "eng";
@@ -1860,7 +1866,6 @@ namespace S100Framework.Applications
             }
 
             if (!string.IsNullOrEmpty(inform)) {
-
                 //https://geodatastyrelsen.atlassian.net/wiki/spaces/SOEKORT/pages/4404478463/S-65+Annex+B+Appendix+A+-+Impact+analysis
                 // Separate discrete information populated in INFORM using a standard separator such as semicolon “;”.
 
@@ -1870,7 +1875,10 @@ namespace S100Framework.Applications
                     if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
                         var filePath = System.IO.Path.Combine(_notesPath, value);
 
-                        string fileReference = txtdsc;
+                        if(!IO.File.Exists(filePath))
+                            Logger.Current.Information($"{sourceTableName}::{sourceObjectid} [inform] {inform}");
+
+                        string fileReference = value;
                         string language = "eng";
 
                         var instance = createNauticalInformation(fileReference, language);
@@ -1900,6 +1908,9 @@ namespace S100Framework.Applications
 
                         if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
                             var filePath = System.IO.Path.Combine(_notesPath, value);
+
+                            if (!IO.File.Exists(filePath))
+                                Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ninform] {ninform}");
 
                             string fileReference = value;
                             string language = "dan";

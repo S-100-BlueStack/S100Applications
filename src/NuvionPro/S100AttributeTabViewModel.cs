@@ -571,7 +571,7 @@ namespace NuvionPro
 
         public bool _psSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("attributebindings")) ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
 
-        public bool _codeSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("ps")) ? true : this.Inspector.IsNull("attributebindings") ? false : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+        public bool _codeSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("ps")) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
 
         public bool _createButtonIsEnabled => (this.Inspector is null || (this.PS is null || string.IsNullOrEmpty(this.Code))) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
     }
