@@ -69,7 +69,7 @@ namespace S100Framework.Applications
             Console.Clear();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .WriteTo.File(
                     path: logpath,
@@ -297,9 +297,6 @@ namespace S100Framework.Applications
                             };
 
                             if (!persist) return;
-
-
-                            return;
 
                             //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
 

@@ -85,20 +85,20 @@ namespace S100Framework.Applications
                     continue;
                 }
 
-                var dsnm = current.DSNM ?? default;
+                var dsnm57 = current.DSNM ?? default;
                 var edtn = current.EDTN ?? default;
                 var updn = current.UPDN ?? default;
                 var isdt = current.ISDT ?? DateTime.Now;
                 var serie = current.SERIES ?? default;
 
-                if (dsnm is null || !regex.IsMatch(dsnm))
+                if (dsnm57 is null || !regex.IsMatch(dsnm57))
                     continue;
 
                 if (serie == default) {
-                    serie = dsnm!.Substring(0, 3);
+                    serie = dsnm57!.Substring(0, 3);
                 }
 
-                dsnm = $"101{dsnm!.Substring(0, 2)}00{dsnm!.Substring(2)}";
+                var dsnm101 = $"101{dsnm57!.Substring(0, 2)}00{dsnm57!.Substring(2)}";
 
                 ////var specificUsage = dsnm[7] switch {
                 ////    '5' => 5,   //S100FC.S128.specificUsage.NavigationalPurposeHarbour,
@@ -111,14 +111,33 @@ namespace S100Framework.Applications
 
                 var specificUsage = SpecificUsage(current.CSCL!.Value);
 
-                var electronicProduct = new S100FC.S128.FeatureTypes.ElectronicProduct {
+                var electronicProduct57 = new S100FC.S128.FeatureTypes.ElectronicProduct {
                     catalogueElementClassification = [1], // catalogueElementClassification.Enc
                     editionNumber = edtn,
                     updateNumber = updn,
                     issueDate = DateOnly.FromDateTime(isdt),
+                    notForNavigation = false,
+                    typeOfProductFormat = 2,    //typeOfProductFormat.IsoIec8211,
+                    datasetName = dsnm57,
+                    specificUsage = specificUsage,
+                    productSpecification = new productSpecification {
+                        editionDate = S100FC.S101.Summary.VersionDate,
+                        name = S100FC.S101.Summary.ProductId,
+                        version = S100FC.S101.Summary.Version.ToString(),
+                    },
+                    maximumDisplayScale = null,
+                    optimumDisplayScale = current.CSCL!.Value,
+                    //minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
+                };
+
+                var electronicProduct101 = new S100FC.S128.FeatureTypes.ElectronicProduct {
+                    catalogueElementClassification = [1], // catalogueElementClassification.Enc
+                    editionNumber = 0,
+                    updateNumber = 0,
+                    //issueDate = DateOnly.FromDateTime(isdt),
                     notForNavigation = true,
                     typeOfProductFormat = 2,    //typeOfProductFormat.IsoIec8211,
-                    datasetName = dsnm,
+                    datasetName = dsnm101,
                     specificUsage = specificUsage,
                     productSpecification = new productSpecification {
                         editionDate = S100FC.S101.Summary.VersionDate,
@@ -152,11 +171,11 @@ namespace S100Framework.Applications
 
                 if (hit.Any()) {
                     _minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
-                }
+                }                
 
-                dictionaryCoverage.Add(electronicProduct.datasetName, coverage);
+                electronicProduct57.minimumDisplayScale = electronicProduct101.minimumDisplayScale = _minimumDisplayScale;
 
-                electronicProduct.minimumDisplayScale = _minimumDisplayScale;
+                dictionaryCoverage.Add(electronicProduct101.datasetName, coverage);
 
                 //var radarScales = scamin.StandardRadarScale((Polygon)(GeometryEngine.Instance.Union(polygons)));
 
@@ -179,7 +198,7 @@ namespace S100Framework.Applications
                 var vdat = GetVerticalDatum(current.VDAT ?? 3);
                 var sdat = GetSoundingDatum(current.SDAT!.Value);
 
-                coverages = [.. coverages, (dsnm, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
+                coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
 
                 if (s128) {
                     using var _ = productCoverageFeatureClass.Search(new QueryFilter {
@@ -196,17 +215,33 @@ namespace S100Framework.Applications
                         using var buffer = featureClass.CreateRowBuffer();
                         buffer["ps"] = ps128;
 
-                        buffer["code"] = electronicProduct.S100FC_code;
-                        buffer["attributebindings"] = electronicProduct.Flatten();
-                        buffer["informationbindings"] = "[]";
-                        buffer["featurebindings"] = "[]";
-                        buffer["specificusage"] = electronicProduct.specificUsage.Value;
-                        buffer["sourceIdentifier"] = electronicProduct.sourceIdentifier;
+                        //  S-57
+                        {
+                            buffer["code"] = electronicProduct57.S100FC_code;
+                            buffer["attributebindings"] = electronicProduct57.Flatten();
+                            buffer["informationbindings"] = "[]";
+                            buffer["featurebindings"] = "[]";
+                            buffer["specificusage"] = electronicProduct57.specificUsage.Value;
+                            buffer["sourceIdentifier"] = electronicProduct57.sourceIdentifier;
 
-                        SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                        //SetShape(buffer, (Polygon)(PolygonBuilderEx.CreatePolygon(productCoverages)));
-                        using var featureN = featureClass.CreateRow(buffer);
-                        var name = featureN.UID();
+                            SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+                        }
+
+                        //  S-101
+                        {
+                            buffer["code"] = electronicProduct101.S100FC_code;
+                            buffer["attributebindings"] = electronicProduct101.Flatten();
+                            buffer["informationbindings"] = "[]";
+                            buffer["featurebindings"] = "[]";
+                            buffer["specificusage"] = electronicProduct101.specificUsage.Value;
+                            buffer["sourceIdentifier"] = electronicProduct101.sourceIdentifier;
+
+                            SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+                        }
                     }
                 }
             }
