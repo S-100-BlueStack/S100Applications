@@ -902,8 +902,10 @@ namespace S100Framework.Applications
                                 if (fileinfo.Length == 0) {
                                     var error = p.StandardError.ReadToEnd();
 
-                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
-                                    logger.LogTrace(error);
+                                    //logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    logger.LogError(error);
+                                    if (System.Diagnostics.Debugger.IsAttached)
+                                       System.Diagnostics.Debugger.Break();
                                 }
                             }
                             else {
