@@ -81,8 +81,7 @@ namespace S100Framework.Applications
 
             //Log.Information("exporter.exe {args}", string.Join(' ', args));
 
-            using var loggerFactory = LoggerFactory.Create(builder =>
-            {
+            using var loggerFactory = LoggerFactory.Create(builder => {
                 builder.SetMinimumLevel(LogLevel.Trace);
                 //builder.AddSimpleConsole(options => {
                 //    options.SingleLine = true;  // merges category+eventid+message onto one line                    
@@ -281,9 +280,10 @@ namespace S100Framework.Applications
                         logger.LogInformation("Building topology..");
                         int index = 0;
                         var result = source.BuildTopology(filter, interceptor: (code, arg) => {
-                            if(!System.Diagnostics.Debugger.IsAttached) return;
+                            if (!System.Diagnostics.Debugger.IsAttached) return;
 
                             var persist = code switch {
+                                9999 => false,
                                 9000 => false,
                                 9001 => false,
                                 9002 => false,
@@ -426,6 +426,11 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
+                        if (System.Diagnostics.Debugger.IsAttached) {
+                            IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
+                            IO.File.WriteAllLines($"{datasetName}_geometries.wkt", topology.Geometries);
+                        }
+
                         var collapse = topology.Collapse;
 
                         logger.LogInformation("Topology finished!");
@@ -551,7 +556,7 @@ namespace S100Framework.Applications
                             while (featureCursor.MoveNext()) {
                                 var current = featureCursor.Current;
 
-                                var name = Convert.ToString(current["UID"])!;                                
+                                var name = Convert.ToString(current["UID"])!;
                                 var code = current["code"].ToString()!;
                                 //var json = current["json"].ToString()!;
 
@@ -905,7 +910,7 @@ namespace S100Framework.Applications
                                     //logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
                                     logger.LogError(error);
                                     if (System.Diagnostics.Debugger.IsAttached)
-                                       System.Diagnostics.Debugger.Break();
+                                        System.Diagnostics.Debugger.Break();
                                 }
                             }
                             else {
