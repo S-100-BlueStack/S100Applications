@@ -279,7 +279,7 @@ namespace S100Framework.Applications
                         // Build Topology
                         logger.LogInformation("Building topology..");
                         int index = 0;
-                        var result = source.BuildTopology(filter, interceptor: (code, arg) => {
+                        var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
 
                             var persist = code switch {
@@ -301,7 +301,7 @@ namespace S100Framework.Applications
                             //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
 
                             Func<Geodatabase> debugInstanceCreator = () => {
-                                if (index == 0) {
+                                if (!append) {
                                     foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
                                         if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
                                         System.IO.File.Delete(System.IO.Path.GetFullPath(f));
