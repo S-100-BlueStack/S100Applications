@@ -365,11 +365,11 @@ namespace S100Framework.Applications
                             }
 
                             if (current.COLPAT != default) {
-                                instance.colourPattern = GetColourPattern(current.COLPAT)?.value;
+                                instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
-                                instance.condition = GetCondition(current.CONDTN.Value)?.value;
+                                instance.condition = current.CONDTN.Value == -32767 ? default : GetCondition(current.CONDTN.Value)!.value;
                             }
 
                             if (current.ELEVAT.HasValue) {
