@@ -120,25 +120,33 @@ namespace S100Framework.Applications
 
                             (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
 
+                            //if (objectid == 85) System.Diagnostics.Debugger.Break();
+
                             if (spatialQualityHits.Any()) {
                                 Geometry g = current.SHAPE!;
 
                                 geometry = [];
 
                                 foreach (var p in spatialQualityHits) {
-                                    geometry = [.. geometry, (p, () => {
-                                        bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
-                                    })];
-
-                                    var difference = GeometryEngine.Instance.Difference(g, p);
+                                    //  Remove extra part if spatialQuality is longer than geometry!
+                                    var difference = GeometryEngine.Instance.Difference(p, g);
 
                                     if (difference is Polyline polyline) {
-                                        foreach (var part in polyline.Parts) {
-                                            geometry = [.. geometry, (PolylineBuilderEx.CreatePolyline(part), default)];
-                                        }
+                                        geometry = [.. geometry, ((Polyline)polyline.Clone(), () => {
+                                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                            })];
                                     }
                                     else
                                         throw new NotImplementedException();
+
+                                    var _ = GeometryEngine.Instance.Difference(g, difference);
+                                    if (_ is Polyline)
+                                        g = (Polyline)_;
+                                    else
+                                        throw new NotImplementedException();
+                                }
+                                if (!g.IsEmpty) {
+                                    geometry = [.. geometry, ((Polyline)g, default)];
                                 }
                             }
 
