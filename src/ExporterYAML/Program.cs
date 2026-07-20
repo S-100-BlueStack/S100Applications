@@ -329,7 +329,7 @@ namespace S100Framework.Applications
                                 using var point = debugInstance.OpenDataset<FeatureClass>(defnitions["point"]);
                                 using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
                                 using var polygon = debugInstance.OpenDataset<FeatureClass>(defnitions["polygon"]);
-                                if (index == 1) {
+                                if (!append || index==1) {
                                     point.DeleteRows(new QueryFilter {
                                         WhereClause = "1=1",
                                     });
