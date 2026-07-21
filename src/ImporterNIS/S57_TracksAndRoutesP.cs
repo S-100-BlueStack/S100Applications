@@ -72,7 +72,7 @@ namespace S100Framework.Applications
                             // TODO: interoperabilityIdentifier
 
                             if (current.ORIENT.HasValue) {
-                                instance.orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value;
+                                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
                             }
 
                             if (current.STATUS != default) {

@@ -236,7 +236,7 @@ namespace S100Framework.Applications
 
                             if (current.COLPAT != default) {
                                 if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
+                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? null : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
@@ -368,11 +368,11 @@ namespace S100Framework.Applications
 
                             if (current.COLPAT != default) {
                                 if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
+                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? null : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
-                                instance.condition = current.CONDTN.Value == -32767 ? default : GetCondition(current.CONDTN.Value)!.value;
+                                instance.condition = current.CONDTN.Value == -32767 ? null : GetCondition(current.CONDTN.Value)!.value;
                             }
 
                             if (current.ELEVAT.HasValue) {
@@ -508,7 +508,7 @@ namespace S100Framework.Applications
 
                             if (current.COLPAT != default) {
                                 if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
+                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? null : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
@@ -2094,7 +2094,7 @@ namespace S100Framework.Applications
                             };
                             if (light.ORIENT.HasValue)
                                 lightSector.directionalCharacter.orientation = new orientation {
-                                    orientationValue = light.ORIENT.Value == -32767m ? default : light.ORIENT.Value,
+                                    orientationValue = light.ORIENT.Value == -32767m ? null : light.ORIENT.Value,
                                 };
                         }
                         lightSector.colour = colours;

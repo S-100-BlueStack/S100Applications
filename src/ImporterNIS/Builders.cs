@@ -169,7 +169,7 @@ namespace S100Framework.Applications
             }
 
             if (current.DRVAL1.HasValue) {
-                instance.minimumBerthDepth = current.DRVAL1.Value == -32767m ? default : current.DRVAL1.Value;
+                instance.minimumBerthDepth = current.DRVAL1.Value == -32767m ? null : current.DRVAL1.Value;
             }
 
             DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
@@ -226,6 +226,8 @@ namespace S100Framework.Applications
                 instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
             }
 
+            if (current.OBJECTID == 38) System.Diagnostics.Debugger.Break();
+
             DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
             if (dateRange != default) {
                 instance.fixedDateRange = dateRange;
@@ -237,7 +239,7 @@ namespace S100Framework.Applications
 
             if (current.ORIENT.HasValue) {
                 instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
-                    orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value,
+                    orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value,
                     // TODO: oriantationUncertainty
                     //orientationUncertainty = ,
                 };
@@ -746,10 +748,10 @@ namespace S100Framework.Applications
             var instance = new DeepWaterRoutePart();
 
             if (current.ORIENT.HasValue) {
-                instance.orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value;
+                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
             }
             if (current.DRVAL1.HasValue) {
-                instance.depthRangeMinimumValue = current.DRVAL1.Value == -32767m ? default : current.DRVAL1.Value;
+                instance.depthRangeMinimumValue = current.DRVAL1.Value == -32767m ? null : current.DRVAL1.Value;
             }
             if (current.TRAFIC.HasValue) {
                 instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC!.Value);
@@ -1961,7 +1963,7 @@ namespace S100Framework.Applications
             // TODO: interoperabilityIdentifier
 
             if (current.ORIENT.HasValue) {
-                instance.orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value;
+                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
             }
 
             if (current.RESTRN != default) {
