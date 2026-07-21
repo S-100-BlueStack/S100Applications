@@ -226,8 +226,6 @@ namespace S100Framework.Applications
                 instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
             }
 
-            if (current.OBJECTID == 38) System.Diagnostics.Debugger.Break();
-
             DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
             if (dateRange != default) {
                 instance.fixedDateRange = dateRange;

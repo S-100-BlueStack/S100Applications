@@ -13,7 +13,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -43,7 +43,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -67,37 +67,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Quality of position
         /// </summary>
         [Description("Quality of position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal datum
         /// </summary>
         [Description("Horizontal datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Long name
@@ -109,13 +109,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -247,7 +247,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -349,7 +349,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -373,19 +373,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Date end
@@ -409,43 +409,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of local magnetic anomaly
         /// </summary>
         [Description("Value of local magnetic anomaly")]
-        internal decimal? VALLMA = default;
+        internal decimal? VALLMA = null;
 
         /// <summary>
         /// Value of annual change in magnetic variation
         /// </summary>
         [Description("Value of annual change in magnetic variation")]
-        internal decimal? VALACM = default;
+        internal decimal? VALACM = null;
 
         /// <summary>
         /// Value of magnetic variation
         /// </summary>
         [Description("Value of magnetic variation")]
-        internal decimal? VALMAG = default;
+        internal decimal? VALMAG = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of Tidal stream
         /// </summary>
         [Description("Category of Tidal stream")]
-        internal int? CAT_TS = default;
+        internal int? CAT_TS = null;
 
         /// <summary>
         /// Current velocity
         /// </summary>
         [Description("Current velocity")]
-        internal decimal? CURVEL = default;
+        internal decimal? CURVEL = null;
 
         /// <summary>
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -481,7 +481,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - accuracy of water level
         /// </summary>
         [Description("Tide - accuracy of water level")]
-        internal int? T_ACWL = default;
+        internal int? T_ACWL = null;
 
         /// <summary>
         /// Tide - high and low water values
@@ -493,7 +493,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - method of tidal prediction
         /// </summary>
         [Description("Tide - method of tidal prediction")]
-        internal int? T_MTOD = default;
+        internal int? T_MTOD = null;
 
         /// <summary>
         /// Tide - time and height differences
@@ -505,7 +505,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - time interval of values
         /// </summary>
         [Description("Tide - time interval of values")]
-        internal int? T_TINT = default;
+        internal int? T_TINT = null;
 
         /// <summary>
         /// Tide - time series values
@@ -535,13 +535,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -795,7 +795,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -897,7 +897,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -921,19 +921,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Date end
@@ -957,37 +957,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of local magnetic anomaly
         /// </summary>
         [Description("Value of local magnetic anomaly")]
-        internal decimal? VALLMA = default;
+        internal decimal? VALLMA = null;
 
         /// <summary>
         /// Value of annual change in magnetic variation
         /// </summary>
         [Description("Value of annual change in magnetic variation")]
-        internal decimal? VALACM = default;
+        internal decimal? VALACM = null;
 
         /// <summary>
         /// Value of magnetic variation
         /// </summary>
         [Description("Value of magnetic variation")]
-        internal decimal? VALMAG = default;
+        internal decimal? VALMAG = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -1179,7 +1179,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -1281,7 +1281,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -1305,19 +1305,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Date end
@@ -1341,43 +1341,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of local magnetic anomaly
         /// </summary>
         [Description("Value of local magnetic anomaly")]
-        internal decimal? VALLMA = default;
+        internal decimal? VALLMA = null;
 
         /// <summary>
         /// Value of annual change in magnetic variation
         /// </summary>
         [Description("Value of annual change in magnetic variation")]
-        internal decimal? VALACM = default;
+        internal decimal? VALACM = null;
 
         /// <summary>
         /// Value of magnetic variation
         /// </summary>
         [Description("Value of magnetic variation")]
-        internal decimal? VALMAG = default;
+        internal decimal? VALMAG = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of Tidal stream
         /// </summary>
         [Description("Category of Tidal stream")]
-        internal int? CAT_TS = default;
+        internal int? CAT_TS = null;
 
         /// <summary>
         /// Current velocity
         /// </summary>
         [Description("Current velocity")]
-        internal decimal? CURVEL = default;
+        internal decimal? CURVEL = null;
 
         /// <summary>
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -1413,7 +1413,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - accuracy of water level
         /// </summary>
         [Description("Tide - accuracy of water level")]
-        internal int? T_ACWL = default;
+        internal int? T_ACWL = null;
 
         /// <summary>
         /// Tide - high and low water values
@@ -1425,7 +1425,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - method of tidal prediction
         /// </summary>
         [Description("Tide - method of tidal prediction")]
-        internal int? T_MTOD = default;
+        internal int? T_MTOD = null;
 
         /// <summary>
         /// Tide - time and height differences
@@ -1437,7 +1437,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Tide - time interval of values
         /// </summary>
         [Description("Tide - time interval of values")]
-        internal int? T_TINT = default;
+        internal int? T_TINT = null;
 
         /// <summary>
         /// Tide - time series values
@@ -1467,31 +1467,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -1754,7 +1754,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -1856,7 +1856,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -1880,19 +1880,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Colour
@@ -1916,37 +1916,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -2138,7 +2138,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -2240,7 +2240,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -2264,19 +2264,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Colour
@@ -2300,61 +2300,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of weed/kelp
         /// </summary>
         [Description("Category of weed/kelp")]
-        internal int? CATWED = default;
+        internal int? CATWED = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -2558,7 +2558,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -2660,7 +2660,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -2684,19 +2684,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Colour
@@ -2720,43 +2720,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of weed/kelp
         /// </summary>
         [Description("Category of weed/kelp")]
-        internal int? CATWED = default;
+        internal int? CATWED = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -2951,7 +2951,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -3053,7 +3053,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -3077,43 +3077,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of fishing facility
         /// </summary>
         [Description("Category of fishing facility")]
-        internal int? CATFIF = default;
+        internal int? CATFIF = null;
 
         /// <summary>
         /// Category of obstruction
         /// </summary>
         [Description("Category of obstruction")]
-        internal int? CATOBS = default;
+        internal int? CATOBS = null;
 
         /// <summary>
         /// Category of water turbulence
         /// </summary>
         [Description("Category of water turbulence")]
-        internal int? CATWAT = default;
+        internal int? CATWAT = null;
 
         /// <summary>
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -3131,13 +3131,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -3185,7 +3185,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -3203,55 +3203,55 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of oil barrier
         /// </summary>
         [Description("Category of oil barrier")]
-        internal int? CATOLB = default;
+        internal int? CATOLB = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -3505,7 +3505,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -3607,7 +3607,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -3631,43 +3631,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of fishing facility
         /// </summary>
         [Description("Category of fishing facility")]
-        internal int? CATFIF = default;
+        internal int? CATFIF = null;
 
         /// <summary>
         /// Category of obstruction
         /// </summary>
         [Description("Category of obstruction")]
-        internal int? CATOBS = default;
+        internal int? CATOBS = null;
 
         /// <summary>
         /// Category of water turbulence
         /// </summary>
         [Description("Category of water turbulence")]
-        internal int? CATWAT = default;
+        internal int? CATWAT = null;
 
         /// <summary>
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -3685,13 +3685,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -3739,7 +3739,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -3757,85 +3757,85 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of wreck
         /// </summary>
         [Description("Category of wreck")]
-        internal int? CATWRK = default;
+        internal int? CATWRK = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -4104,7 +4104,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -4206,7 +4206,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -4230,43 +4230,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of fishing facility
         /// </summary>
         [Description("Category of fishing facility")]
-        internal int? CATFIF = default;
+        internal int? CATFIF = null;
 
         /// <summary>
         /// Category of obstruction
         /// </summary>
         [Description("Category of obstruction")]
-        internal int? CATOBS = default;
+        internal int? CATOBS = null;
 
         /// <summary>
         /// Category of water turbulence
         /// </summary>
         [Description("Category of water turbulence")]
-        internal int? CATWAT = default;
+        internal int? CATWAT = null;
 
         /// <summary>
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -4284,13 +4284,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -4338,7 +4338,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -4356,67 +4356,67 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of wreck
         /// </summary>
         [Description("Category of wreck")]
-        internal int? CATWRK = default;
+        internal int? CATWRK = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -4676,7 +4676,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -4778,7 +4778,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -4802,19 +4802,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -4826,49 +4826,49 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Value of depth contour
         /// </summary>
         [Description("Value of depth contour")]
-        internal decimal? VALDCO = default;
+        internal decimal? VALDCO = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -5058,7 +5058,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -5160,7 +5160,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -5184,19 +5184,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of pipeline/pipe
@@ -5208,7 +5208,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -5238,61 +5238,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Buried depth
         /// </summary>
         [Description("Buried depth")]
-        internal decimal? BURDEP = default;
+        internal decimal? BURDEP = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of cable
         /// </summary>
         [Description("Category of cable")]
-        internal int? CATCBL = default;
+        internal int? CATCBL = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -5507,7 +5507,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -5609,7 +5609,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -5633,19 +5633,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of pipeline/pipe
@@ -5657,7 +5657,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -5687,31 +5687,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of cable
         /// </summary>
         [Description("Category of cable")]
-        internal int? CATCBL = default;
+        internal int? CATCBL = null;
 
         /// <summary>
         /// Category of offshore platform
@@ -5723,7 +5723,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of production area
         /// </summary>
         [Description("Category of production area")]
-        internal int? CATPRA = default;
+        internal int? CATPRA = null;
 
         /// <summary>
         /// Colour
@@ -5741,19 +5741,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -5771,13 +5771,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -6015,7 +6015,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -6117,7 +6117,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -6141,25 +6141,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Publication reference
@@ -6171,31 +6171,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -6369,7 +6369,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -6471,7 +6471,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -6495,19 +6495,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Communication channel
@@ -6531,7 +6531,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -6555,43 +6555,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Traffic flow
         /// </summary>
         [Description("Traffic flow")]
-        internal int? TRAFIC = default;
+        internal int? TRAFIC = null;
 
         /// <summary>
         /// Category of ferry
         /// </summary>
         [Description("Category of ferry")]
-        internal int? CATFRY = default;
+        internal int? CATFRY = null;
 
         /// <summary>
         /// Category of navigation line
         /// </summary>
         [Description("Category of navigation line")]
-        internal int? CATNAV = default;
+        internal int? CATNAV = null;
 
         /// <summary>
         /// Category of recommended track
         /// </summary>
         [Description("Category of recommended track")]
-        internal int? CATTRK = default;
+        internal int? CATTRK = null;
 
         /// <summary>
         /// Category of Traffic Separation Scheme
         /// </summary>
         [Description("Category of Traffic Separation Scheme")]
-        internal int? CATTSS = default;
+        internal int? CATTSS = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -6603,7 +6603,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Technique of sounding measurement
@@ -6615,13 +6615,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Restriction
@@ -6633,13 +6633,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -6876,7 +6876,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -6978,7 +6978,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -7002,19 +7002,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Communication channel
@@ -7038,7 +7038,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -7062,43 +7062,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Traffic flow
         /// </summary>
         [Description("Traffic flow")]
-        internal int? TRAFIC = default;
+        internal int? TRAFIC = null;
 
         /// <summary>
         /// Category of ferry
         /// </summary>
         [Description("Category of ferry")]
-        internal int? CATFRY = default;
+        internal int? CATFRY = null;
 
         /// <summary>
         /// Category of navigation line
         /// </summary>
         [Description("Category of navigation line")]
-        internal int? CATNAV = default;
+        internal int? CATNAV = null;
 
         /// <summary>
         /// Category of recommended track
         /// </summary>
         [Description("Category of recommended track")]
-        internal int? CATTRK = default;
+        internal int? CATTRK = null;
 
         /// <summary>
         /// Category of Traffic Separation Scheme
         /// </summary>
         [Description("Category of Traffic Separation Scheme")]
-        internal int? CATTSS = default;
+        internal int? CATTSS = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -7110,7 +7110,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Technique of sounding measurement
@@ -7122,25 +7122,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -7373,7 +7373,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -7475,7 +7475,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -7499,19 +7499,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Communication channel
@@ -7535,7 +7535,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -7559,13 +7559,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Traffic flow
         /// </summary>
         [Description("Traffic flow")]
-        internal int? TRAFIC = default;
+        internal int? TRAFIC = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Restriction
@@ -7577,31 +7577,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -7815,7 +7815,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -7917,7 +7917,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -7941,31 +7941,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buoy shape
         /// </summary>
         [Description("Buoy shape")]
-        internal int? BOYSHP = default;
+        internal int? BOYSHP = null;
 
         /// <summary>
         /// Beacon shape
         /// </summary>
         [Description("Beacon shape")]
-        internal int? BCNSHP = default;
+        internal int? BCNSHP = null;
 
         /// <summary>
         /// Call sign
@@ -7977,25 +7977,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of cardinal mark
         /// </summary>
         [Description("Category of cardinal mark")]
-        internal int? CATCAM = default;
+        internal int? CATCAM = null;
 
         /// <summary>
         /// Category of fog signal
         /// </summary>
         [Description("Category of fog signal")]
-        internal int? CATFOG = default;
+        internal int? CATFOG = null;
 
         /// <summary>
         /// Category of installation buoy
         /// </summary>
         [Description("Category of installation buoy")]
-        internal int? CATINB = default;
+        internal int? CATINB = null;
 
         /// <summary>
         /// Category of lateral mark
         /// </summary>
         [Description("Category of lateral mark")]
-        internal int? CATLAM = default;
+        internal int? CATLAM = null;
 
         /// <summary>
         /// Category of light
@@ -8007,7 +8007,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of radar station
         /// </summary>
         [Description("Category of radar station")]
-        internal int? CATRAS = default;
+        internal int? CATRAS = null;
 
         /// <summary>
         /// Category of radio station
@@ -8019,7 +8019,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of radar transponder beacon
         /// </summary>
         [Description("Category of radar transponder beacon")]
-        internal int? CATRTB = default;
+        internal int? CATRTB = null;
 
         /// <summary>
         /// Category of special purpose mark
@@ -8049,19 +8049,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -8079,49 +8079,49 @@ namespace S100Framework.Applications.S57auto.esri
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Estimated range of transmission
         /// </summary>
         [Description("Estimated range of transmission")]
-        internal decimal? ESTRNG = default;
+        internal decimal? ESTRNG = null;
 
         /// <summary>
         /// Exhibition condition of light
         /// </summary>
         [Description("Exhibition condition of light")]
-        internal int? EXCLIT = default;
+        internal int? EXCLIT = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Light characteristic
         /// </summary>
         [Description("Light characteristic")]
-        internal int? LITCHR = default;
+        internal int? LITCHR = null;
 
         /// <summary>
         /// Light visibility
@@ -8133,13 +8133,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Marks navigational - System of
         /// </summary>
         [Description("Marks navigational - System of")]
-        internal int? MARSYS = default;
+        internal int? MARSYS = null;
 
         /// <summary>
         /// Mulitiplicity of lights
         /// </summary>
         [Description("Mulitiplicity of lights")]
-        internal int? MLTYLT = default;
+        internal int? MLTYLT = null;
 
         /// <summary>
         /// Nature of construction
@@ -8151,7 +8151,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Periodic date end
@@ -8181,25 +8181,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sector limit one
         /// </summary>
         [Description("Sector limit one")]
-        internal decimal? SECTR1 = default;
+        internal decimal? SECTR1 = null;
 
         /// <summary>
         /// Sector limit two
         /// </summary>
         [Description("Sector limit two")]
-        internal decimal? SECTR2 = default;
+        internal decimal? SECTR2 = null;
 
         /// <summary>
         /// Signal frequency
         /// </summary>
         [Description("Signal frequency")]
-        internal int? SIGFRQ = default;
+        internal int? SIGFRQ = null;
 
         /// <summary>
         /// Signal generation
         /// </summary>
         [Description("Signal generation")]
-        internal int? SIGGEN = default;
+        internal int? SIGGEN = null;
 
         /// <summary>
         /// Signal group
@@ -8211,7 +8211,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Signal period
         /// </summary>
         [Description("Signal period")]
-        internal decimal? SIGPER = default;
+        internal decimal? SIGPER = null;
 
         /// <summary>
         /// Signal sequence
@@ -8229,73 +8229,73 @@ namespace S100Framework.Applications.S57auto.esri
         /// Topmark/daymark shape
         /// </summary>
         [Description("Topmark/daymark shape")]
-        internal int? TOPSHP = default;
+        internal int? TOPSHP = null;
 
         /// <summary>
         /// Value of maximum range
         /// </summary>
         [Description("Value of maximum range")]
-        internal decimal? VALMXR = default;
+        internal decimal? VALMXR = null;
 
         /// <summary>
         /// Value of nominal range
         /// </summary>
         [Description("Value of nominal range")]
-        internal decimal? VALNMR = default;
+        internal decimal? VALNMR = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -8646,7 +8646,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -8748,7 +8748,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -8772,43 +8772,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of ice
         /// </summary>
         [Description("Category of ice")]
-        internal int? CATICE = default;
+        internal int? CATICE = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Periodic date end
@@ -8832,37 +8832,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -9066,7 +9066,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -9168,7 +9168,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -9192,19 +9192,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of military practice area
@@ -9252,19 +9252,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -9463,7 +9463,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -9565,7 +9565,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -9589,19 +9589,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of military practice area
@@ -9649,37 +9649,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -9887,7 +9887,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -9989,7 +9989,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -10013,19 +10013,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Object Class Definition
@@ -10055,19 +10055,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -10121,25 +10121,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -10370,7 +10370,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -10472,7 +10472,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -10496,19 +10496,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Object Class Definition
@@ -10538,19 +10538,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -10604,43 +10604,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -10880,7 +10880,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -10982,7 +10982,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -11006,19 +11006,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Object Class Definition
@@ -11048,19 +11048,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -11114,25 +11114,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -11363,7 +11363,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -11465,7 +11465,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -11489,19 +11489,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -11513,31 +11513,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Restriction
@@ -11555,13 +11555,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -11756,7 +11756,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -11858,7 +11858,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -11882,19 +11882,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -11906,31 +11906,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Depth
         /// </summary>
         [Description("Depth")]
-        internal decimal? DEPTH = default;
+        internal decimal? DEPTH = null;
 
         /// <summary>
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Status
@@ -11948,25 +11948,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Quality of position
         /// </summary>
         [Description("Quality of position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Entry date
         /// </summary>
         [Description("Entry date")]
-        internal decimal? ENTRY_DATE = default;
+        internal decimal? ENTRY_DATE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -12002,13 +12002,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// Shape
@@ -12185,7 +12185,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -12287,7 +12287,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -12311,37 +12311,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buoy shape
         /// </summary>
         [Description("Buoy shape")]
-        internal int? BOYSHP = default;
+        internal int? BOYSHP = null;
 
         /// <summary>
         /// Category of gate
         /// </summary>
         [Description("Category of gate")]
-        internal int? CATGAT = default;
+        internal int? CATGAT = null;
 
         /// <summary>
         /// Category of mooring/warping facility
         /// </summary>
         [Description("Category of mooring/warping facility")]
-        internal int? CATMOR = default;
+        internal int? CATMOR = null;
 
         /// <summary>
         /// Colour
@@ -12359,19 +12359,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -12389,43 +12389,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Lifting capacity
         /// </summary>
         [Description("Lifting capacity")]
-        internal decimal? LIFCAP = default;
+        internal decimal? LIFCAP = null;
 
         /// <summary>
         /// Nature of construction
@@ -12455,7 +12455,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -12467,55 +12467,55 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of checkpoint
         /// </summary>
         [Description("Category of checkpoint")]
-        internal int? CATCHP = default;
+        internal int? CATCHP = null;
 
         /// <summary>
         /// Category of crane
         /// </summary>
         [Description("Category of crane")]
-        internal int? CATCRN = default;
+        internal int? CATCRN = null;
 
         /// <summary>
         /// Category of distance mark
         /// </summary>
         [Description("Category of distance mark")]
-        internal int? CATDIS = default;
+        internal int? CATDIS = null;
 
         /// <summary>
         /// Category of harbour facility
@@ -12533,13 +12533,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of pilot boarding place
         /// </summary>
         [Description("Category of pilot boarding place")]
-        internal int? CATPIL = default;
+        internal int? CATPIL = null;
 
         /// <summary>
         /// Category of pile
         /// </summary>
         [Description("Category of pile")]
-        internal int? CATPLE = default;
+        internal int? CATPLE = null;
 
         /// <summary>
         /// Category of rescue station
@@ -12581,7 +12581,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Pilot district
@@ -12593,37 +12593,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Radius
         /// </summary>
         [Description("Radius")]
-        internal decimal? RADIUS = default;
+        internal decimal? RADIUS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -12953,7 +12953,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -13055,7 +13055,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -13079,37 +13079,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buoy shape
         /// </summary>
         [Description("Buoy shape")]
-        internal int? BOYSHP = default;
+        internal int? BOYSHP = null;
 
         /// <summary>
         /// Category of gate
         /// </summary>
         [Description("Category of gate")]
-        internal int? CATGAT = default;
+        internal int? CATGAT = null;
 
         /// <summary>
         /// Category of mooring/warping facility
         /// </summary>
         [Description("Category of mooring/warping facility")]
-        internal int? CATMOR = default;
+        internal int? CATMOR = null;
 
         /// <summary>
         /// Colour
@@ -13127,19 +13127,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -13157,43 +13157,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Lifting capacity
         /// </summary>
         [Description("Lifting capacity")]
-        internal decimal? LIFCAP = default;
+        internal decimal? LIFCAP = null;
 
         /// <summary>
         /// Nature of construction
@@ -13223,7 +13223,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -13235,55 +13235,55 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of canal
         /// </summary>
         [Description("Category of canal")]
-        internal int? CATCAN = default;
+        internal int? CATCAN = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -13550,7 +13550,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -13652,7 +13652,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -13676,37 +13676,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buoy shape
         /// </summary>
         [Description("Buoy shape")]
-        internal int? BOYSHP = default;
+        internal int? BOYSHP = null;
 
         /// <summary>
         /// Category of gate
         /// </summary>
         [Description("Category of gate")]
-        internal int? CATGAT = default;
+        internal int? CATGAT = null;
 
         /// <summary>
         /// Category of mooring/warping facility
         /// </summary>
         [Description("Category of mooring/warping facility")]
-        internal int? CATMOR = default;
+        internal int? CATMOR = null;
 
         /// <summary>
         /// Colour
@@ -13724,19 +13724,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -13754,43 +13754,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Lifting capacity
         /// </summary>
         [Description("Lifting capacity")]
-        internal decimal? LIFCAP = default;
+        internal decimal? LIFCAP = null;
 
         /// <summary>
         /// Nature of construction
@@ -13820,7 +13820,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -13832,61 +13832,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of canal
         /// </summary>
         [Description("Category of canal")]
-        internal int? CATCAN = default;
+        internal int? CATCAN = null;
 
         /// <summary>
         /// Category of checkpoint
         /// </summary>
         [Description("Category of checkpoint")]
-        internal int? CATCHP = default;
+        internal int? CATCHP = null;
 
         /// <summary>
         /// Category of crane
         /// </summary>
         [Description("Category of crane")]
-        internal int? CATCRN = default;
+        internal int? CATCRN = null;
 
         /// <summary>
         /// Category of dock
         /// </summary>
         [Description("Category of dock")]
-        internal int? CATDOC = default;
+        internal int? CATDOC = null;
 
         /// <summary>
         /// Category of harbour facility
@@ -13904,7 +13904,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of pilot boarding place
         /// </summary>
         [Description("Category of pilot boarding place")]
-        internal int? CATPIL = default;
+        internal int? CATPIL = null;
 
         /// <summary>
         /// Category of small craft facility
@@ -13928,7 +13928,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Pilot district
@@ -13940,19 +13940,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Radius
         /// </summary>
         [Description("Radius")]
-        internal decimal? RADIUS = default;
+        internal decimal? RADIUS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -14261,7 +14261,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -14363,7 +14363,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -14387,25 +14387,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buried depth
         /// </summary>
         [Description("Buried depth")]
-        internal decimal? BURDEP = default;
+        internal decimal? BURDEP = null;
 
         /// <summary>
         /// Category of bridge
@@ -14417,13 +14417,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of dam
         /// </summary>
         [Description("Category of dam")]
-        internal int? CATDAM = default;
+        internal int? CATDAM = null;
 
         /// <summary>
         /// Category of fortified structure
         /// </summary>
         [Description("Category of fortified structure")]
-        internal int? CATFOR = default;
+        internal int? CATFOR = null;
 
         /// <summary>
         /// Category of landmark
@@ -14435,13 +14435,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of road
         /// </summary>
         [Description("Category of road")]
-        internal int? CATROD = default;
+        internal int? CATROD = null;
 
         /// <summary>
         /// Category of runway
         /// </summary>
         [Description("Category of runway")]
-        internal int? CATRUN = default;
+        internal int? CATRUN = null;
 
         /// <summary>
         /// Colour
@@ -14459,19 +14459,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -14489,7 +14489,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Function
@@ -14501,19 +14501,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Nature of construction
@@ -14549,49 +14549,49 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance, closed
         /// </summary>
         [Description("Vertical clearance, closed")]
-        internal decimal? VERCCL = default;
+        internal decimal? VERCCL = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical clearance, open
         /// </summary>
         [Description("Vertical clearance, open")]
-        internal decimal? VERCOP = default;
+        internal decimal? VERCOP = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Building shape
         /// </summary>
         [Description("Building shape")]
-        internal int? BUISHP = default;
+        internal int? BUISHP = null;
 
         /// <summary>
         /// Category of airport/airfield
@@ -14603,55 +14603,55 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of built-up area
         /// </summary>
         [Description("Category of built-up area")]
-        internal int? CATBUA = default;
+        internal int? CATBUA = null;
 
         /// <summary>
         /// Category of conveyor
         /// </summary>
         [Description("Category of conveyor")]
-        internal int? CATCON = default;
+        internal int? CATCON = null;
 
         /// <summary>
         /// Category of production area
         /// </summary>
         [Description("Category of production area")]
-        internal int? CATPRA = default;
+        internal int? CATPRA = null;
 
         /// <summary>
         /// Category of pylon
         /// </summary>
         [Description("Category of pylon")]
-        internal int? CATPYL = default;
+        internal int? CATPYL = null;
 
         /// <summary>
         /// Category of silo/tank
         /// </summary>
         [Description("Category of silo/tank")]
-        internal int? CATSIL = default;
+        internal int? CATSIL = null;
 
         /// <summary>
         /// Lifting capacity
         /// </summary>
         [Description("Lifting capacity")]
-        internal decimal? LIFCAP = default;
+        internal decimal? LIFCAP = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -14952,7 +14952,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -15054,7 +15054,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -15078,25 +15078,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buried depth
         /// </summary>
         [Description("Buried depth")]
-        internal decimal? BURDEP = default;
+        internal decimal? BURDEP = null;
 
         /// <summary>
         /// Category of bridge
@@ -15108,13 +15108,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of dam
         /// </summary>
         [Description("Category of dam")]
-        internal int? CATDAM = default;
+        internal int? CATDAM = null;
 
         /// <summary>
         /// Category of fortified structure
         /// </summary>
         [Description("Category of fortified structure")]
-        internal int? CATFOR = default;
+        internal int? CATFOR = null;
 
         /// <summary>
         /// Category of landmark
@@ -15126,13 +15126,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of road
         /// </summary>
         [Description("Category of road")]
-        internal int? CATROD = default;
+        internal int? CATROD = null;
 
         /// <summary>
         /// Category of runway
         /// </summary>
         [Description("Category of runway")]
-        internal int? CATRUN = default;
+        internal int? CATRUN = null;
 
         /// <summary>
         /// Colour
@@ -15150,19 +15150,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -15180,7 +15180,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Function
@@ -15192,19 +15192,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Nature of construction
@@ -15240,61 +15240,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance, closed
         /// </summary>
         [Description("Vertical clearance, closed")]
-        internal decimal? VERCCL = default;
+        internal decimal? VERCCL = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical clearance, open
         /// </summary>
         [Description("Vertical clearance, open")]
-        internal decimal? VERCOP = default;
+        internal decimal? VERCOP = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of cable
         /// </summary>
         [Description("Category of cable")]
-        internal int? CATCBL = default;
+        internal int? CATCBL = null;
 
         /// <summary>
         /// Category of conveyor
         /// </summary>
         [Description("Category of conveyor")]
-        internal int? CATCON = default;
+        internal int? CATCON = null;
 
         /// <summary>
         /// Category of fence/wall
         /// </summary>
         [Description("Category of fence/wall")]
-        internal int? CATFNC = default;
+        internal int? CATFNC = null;
 
         /// <summary>
         /// Category of pipeline/pipe
@@ -15306,31 +15306,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Ice factor
         /// </summary>
         [Description("Ice factor")]
-        internal decimal? ICEFAC = default;
+        internal decimal? ICEFAC = null;
 
         /// <summary>
         /// Lifting capacity
         /// </summary>
         [Description("Lifting capacity")]
-        internal decimal? LIFCAP = default;
+        internal decimal? LIFCAP = null;
 
         /// <summary>
         /// Vertical clearance, safe
         /// </summary>
         [Description("Vertical clearance, safe")]
-        internal decimal? VERCSA = default;
+        internal decimal? VERCSA = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -15625,7 +15625,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -15727,7 +15727,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -15751,25 +15751,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Buried depth
         /// </summary>
         [Description("Buried depth")]
-        internal decimal? BURDEP = default;
+        internal decimal? BURDEP = null;
 
         /// <summary>
         /// Category of bridge
@@ -15781,13 +15781,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of dam
         /// </summary>
         [Description("Category of dam")]
-        internal int? CATDAM = default;
+        internal int? CATDAM = null;
 
         /// <summary>
         /// Category of fortified structure
         /// </summary>
         [Description("Category of fortified structure")]
-        internal int? CATFOR = default;
+        internal int? CATFOR = null;
 
         /// <summary>
         /// Category of landmark
@@ -15799,13 +15799,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of road
         /// </summary>
         [Description("Category of road")]
-        internal int? CATROD = default;
+        internal int? CATROD = null;
 
         /// <summary>
         /// Category of runway
         /// </summary>
         [Description("Category of runway")]
-        internal int? CATRUN = default;
+        internal int? CATRUN = null;
 
         /// <summary>
         /// Colour
@@ -15823,19 +15823,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -15853,7 +15853,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Function
@@ -15865,19 +15865,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Nature of construction
@@ -15913,49 +15913,49 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical clearance, closed
         /// </summary>
         [Description("Vertical clearance, closed")]
-        internal decimal? VERCCL = default;
+        internal decimal? VERCCL = null;
 
         /// <summary>
         /// Vertical clearance
         /// </summary>
         [Description("Vertical clearance")]
-        internal decimal? VERCLR = default;
+        internal decimal? VERCLR = null;
 
         /// <summary>
         /// Vertical clearance, open
         /// </summary>
         [Description("Vertical clearance, open")]
-        internal decimal? VERCOP = default;
+        internal decimal? VERCOP = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Building shape
         /// </summary>
         [Description("Building shape")]
-        internal int? BUISHP = default;
+        internal int? BUISHP = null;
 
         /// <summary>
         /// Category of airport/airfield
@@ -15967,67 +15967,67 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of built-up area
         /// </summary>
         [Description("Category of built-up area")]
-        internal int? CATBUA = default;
+        internal int? CATBUA = null;
 
         /// <summary>
         /// Category of control point
         /// </summary>
         [Description("Category of control point")]
-        internal int? CATCTR = default;
+        internal int? CATCTR = null;
 
         /// <summary>
         /// Category of production area
         /// </summary>
         [Description("Category of production area")]
-        internal int? CATPRA = default;
+        internal int? CATPRA = null;
 
         /// <summary>
         /// Category of pylon
         /// </summary>
         [Description("Category of pylon")]
-        internal int? CATPYL = default;
+        internal int? CATPYL = null;
 
         /// <summary>
         /// Category of silo/tank
         /// </summary>
         [Description("Category of silo/tank")]
-        internal int? CATSIL = default;
+        internal int? CATSIL = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -16334,7 +16334,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -16436,7 +16436,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -16460,25 +16460,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of slope
         /// </summary>
         [Description("Category of slope")]
-        internal int? CATSLO = default;
+        internal int? CATSLO = null;
 
         /// <summary>
         /// Category of vegetation
@@ -16496,31 +16496,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -16550,25 +16550,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of land region
@@ -16580,43 +16580,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of sea area
         /// </summary>
         [Description("Category of sea area")]
-        internal int? CATSEA = default;
+        internal int? CATSEA = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -16857,7 +16857,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -16959,7 +16959,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -16983,25 +16983,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of slope
         /// </summary>
         [Description("Category of slope")]
-        internal int? CATSLO = default;
+        internal int? CATSLO = null;
 
         /// <summary>
         /// Category of vegetation
@@ -17019,31 +17019,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -17073,37 +17073,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -17325,7 +17325,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -17427,7 +17427,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -17451,25 +17451,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of slope
         /// </summary>
         [Description("Category of slope")]
-        internal int? CATSLO = default;
+        internal int? CATSLO = null;
 
         /// <summary>
         /// Category of vegetation
@@ -17487,31 +17487,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -17541,25 +17541,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of land region
@@ -17571,25 +17571,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of sea area
         /// </summary>
         [Description("Category of sea area")]
-        internal int? CATSEA = default;
+        internal int? CATSEA = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -17821,7 +17821,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -17923,7 +17923,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -17947,25 +17947,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of shoreline construction
         /// </summary>
         [Description("Category of shoreline construction")]
-        internal int? CATSLC = default;
+        internal int? CATSLC = null;
 
         /// <summary>
         /// Colour
@@ -17983,19 +17983,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -18013,31 +18013,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Nature of construction
@@ -18055,55 +18055,55 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of coastline
         /// </summary>
         [Description("Category of coastline")]
-        internal int? CATCOA = default;
+        internal int? CATCOA = null;
 
         /// <summary>
         /// Elevation
         /// </summary>
         [Description("Elevation")]
-        internal decimal? ELEVAT = default;
+        internal decimal? ELEVAT = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -18343,7 +18343,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -18445,7 +18445,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -18469,25 +18469,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of shoreline construction
         /// </summary>
         [Description("Category of shoreline construction")]
-        internal int? CATSLC = default;
+        internal int? CATSLC = null;
 
         /// <summary>
         /// Colour
@@ -18505,19 +18505,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -18535,31 +18535,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Nature of construction
@@ -18577,61 +18577,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -18874,7 +18874,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -18976,7 +18976,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -19000,25 +19000,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of shoreline construction
         /// </summary>
         [Description("Category of shoreline construction")]
-        internal int? CATSLC = default;
+        internal int? CATSLC = null;
 
         /// <summary>
         /// Colour
@@ -19036,19 +19036,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Date end
@@ -19066,31 +19066,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal clearance
         /// </summary>
         [Description("Horizontal clearance")]
-        internal decimal? HORCLR = default;
+        internal decimal? HORCLR = null;
 
         /// <summary>
         /// Horizontal length
         /// </summary>
         [Description("Horizontal length")]
-        internal decimal? HORLEN = default;
+        internal decimal? HORLEN = null;
 
         /// <summary>
         /// Horizontal width
         /// </summary>
         [Description("Horizontal width")]
-        internal decimal? HORWID = default;
+        internal decimal? HORWID = null;
 
         /// <summary>
         /// Nature of construction
@@ -19108,43 +19108,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -19378,7 +19378,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -19480,7 +19480,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -19504,25 +19504,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category marine farm/culture
         /// </summary>
         [Description("Category marine farm/culture")]
-        internal int? CATMFA = default;
+        internal int? CATMFA = null;
 
         /// <summary>
         /// Date end
@@ -19540,7 +19540,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Nationality
@@ -19576,7 +19576,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -19588,49 +19588,49 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -19857,7 +19857,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -19959,7 +19959,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -19983,25 +19983,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category marine farm/culture
         /// </summary>
         [Description("Category marine farm/culture")]
-        internal int? CATMFA = default;
+        internal int? CATMFA = null;
 
         /// <summary>
         /// Date end
@@ -20019,7 +20019,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Nationality
@@ -20055,7 +20055,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -20067,37 +20067,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of anchorage
@@ -20115,37 +20115,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Radius
         /// </summary>
         [Description("Radius")]
-        internal decimal? RADIUS = default;
+        internal decimal? RADIUS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -20392,7 +20392,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -20494,7 +20494,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -20518,25 +20518,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category marine farm/culture
         /// </summary>
         [Description("Category marine farm/culture")]
-        internal int? CATMFA = default;
+        internal int? CATMFA = null;
 
         /// <summary>
         /// Date end
@@ -20554,7 +20554,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Exposition of sounding
         /// </summary>
         [Description("Exposition of sounding")]
-        internal int? EXPSOU = default;
+        internal int? EXPSOU = null;
 
         /// <summary>
         /// Nationality
@@ -20590,7 +20590,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Status
@@ -20602,37 +20602,37 @@ namespace S100Framework.Applications.S57auto.esri
         /// Value of sounding
         /// </summary>
         [Description("Value of sounding")]
-        internal decimal? VALSOU = default;
+        internal decimal? VALSOU = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Water level effect
         /// </summary>
         [Description("Water level effect")]
-        internal int? WATLEV = default;
+        internal int? WATLEV = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of anchorage
@@ -20656,25 +20656,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Jurisdiction
         /// </summary>
         [Description("Jurisdiction")]
-        internal int? JRSDTN = default;
+        internal int? JRSDTN = null;
 
         /// <summary>
         /// Radius
         /// </summary>
         [Description("Radius")]
-        internal decimal? RADIUS = default;
+        internal decimal? RADIUS = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -20919,7 +20919,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -21021,7 +21021,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -21045,25 +21045,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Quality of position
         /// </summary>
         [Description("Quality of position")]
-        internal int? QUAPOS = default;
+        internal int? QUAPOS = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -21075,25 +21075,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Scale value one
         /// </summary>
         [Description("Scale value one")]
-        internal int? SCVAL1 = default;
+        internal int? SCVAL1 = null;
 
         /// <summary>
         /// Scale value two
         /// </summary>
         [Description("Scale value two")]
-        internal int? SCVAL2 = default;
+        internal int? SCVAL2 = null;
 
         /// <summary>
         /// Sounding distance - minimum
         /// </summary>
         [Description("Sounding distance - minimum")]
-        internal decimal? SDISMN = default;
+        internal decimal? SDISMN = null;
 
         /// <summary>
         /// Sounding distance - maximum
         /// </summary>
         [Description("Sounding distance - maximum")]
-        internal decimal? SDISMX = default;
+        internal decimal? SDISMX = null;
 
         /// <summary>
         /// Survey authority
@@ -21129,61 +21129,61 @@ namespace S100Framework.Applications.S57auto.esri
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of quality of data
         /// </summary>
         [Description("Category of quality of data")]
-        internal int? CATQUA = default;
+        internal int? CATQUA = null;
 
         /// <summary>
         /// Category of zone of confidence in data
         /// </summary>
         [Description("Category of zone of confidence in data")]
-        internal int? CATZOC = default;
+        internal int? CATZOC = null;
 
         /// <summary>
         /// Compilation scale of data
         /// </summary>
         [Description("Compilation scale of data")]
-        internal int? CSCALE = default;
+        internal int? CSCALE = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// Horizontal accuracy
         /// </summary>
         [Description("Horizontal accuracy")]
-        internal decimal? HORACC = default;
+        internal decimal? HORACC = null;
 
         /// <summary>
         /// Horizontal datum
         /// </summary>
         [Description("Horizontal datum")]
-        internal int? HORDAT = default;
+        internal int? HORDAT = null;
 
         /// <summary>
         /// Marks navigational - System of
         /// </summary>
         [Description("Marks navigational - System of")]
-        internal int? MARSYS = default;
+        internal int? MARSYS = null;
 
         /// <summary>
         /// Orientation
         /// </summary>
         [Description("Orientation")]
-        internal decimal? ORIENT = default;
+        internal decimal? ORIENT = null;
 
         /// <summary>
         /// Publication reference
@@ -21195,7 +21195,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? POSACC = default;
+        internal decimal? POSACC = null;
 
         /// <summary>
         /// Shift parameters
@@ -21207,31 +21207,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// Sounding accuracy
         /// </summary>
         [Description("Sounding accuracy")]
-        internal decimal? SOUACC = default;
+        internal decimal? SOUACC = null;
 
         /// <summary>
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -21488,7 +21488,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -21590,7 +21590,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -21614,25 +21614,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Quality of position
         /// </summary>
         [Description("Quality of position")]
-        internal int? QUAPOS = default;
+        internal int? QUAPOS = null;
 
         /// <summary>
         /// Quality of sounding measurement
@@ -21644,25 +21644,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Scale value one
         /// </summary>
         [Description("Scale value one")]
-        internal int? SCVAL1 = default;
+        internal int? SCVAL1 = null;
 
         /// <summary>
         /// Scale value two
         /// </summary>
         [Description("Scale value two")]
-        internal int? SCVAL2 = default;
+        internal int? SCVAL2 = null;
 
         /// <summary>
         /// Sounding distance - minimum
         /// </summary>
         [Description("Sounding distance - minimum")]
-        internal decimal? SDISMN = default;
+        internal decimal? SDISMN = null;
 
         /// <summary>
         /// Sounding distance - maximum
         /// </summary>
         [Description("Sounding distance - maximum")]
-        internal decimal? SDISMX = default;
+        internal decimal? SDISMX = null;
 
         /// <summary>
         /// Survey authority
@@ -21698,19 +21698,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -21920,7 +21920,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -22022,7 +22022,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -22046,19 +22046,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// Category of pipeline/pipe
@@ -22070,7 +22070,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Condition
         /// </summary>
         [Description("Condition")]
-        internal int? CONDTN = default;
+        internal int? CONDTN = null;
 
         /// <summary>
         /// Date end
@@ -22100,43 +22100,43 @@ namespace S100Framework.Applications.S57auto.esri
         /// Vertical accuracy
         /// </summary>
         [Description("Vertical accuracy")]
-        internal decimal? VERACC = default;
+        internal decimal? VERACC = null;
 
         /// <summary>
         /// Vertical datum
         /// </summary>
         [Description("Vertical datum")]
-        internal int? VERDAT = default;
+        internal int? VERDAT = null;
 
         /// <summary>
         /// Vertical length
         /// </summary>
         [Description("Vertical length")]
-        internal decimal? VERLEN = default;
+        internal decimal? VERLEN = null;
 
         /// <summary>
         /// Buried depth
         /// </summary>
         [Description("Buried depth")]
-        internal decimal? BURDEP = default;
+        internal decimal? BURDEP = null;
 
         /// <summary>
         /// Depth range value 1
         /// </summary>
         [Description("Depth range value 1")]
-        internal decimal? DRVAL1 = default;
+        internal decimal? DRVAL1 = null;
 
         /// <summary>
         /// Depth range value 2
         /// </summary>
         [Description("Depth range value 2")]
-        internal decimal? DRVAL2 = default;
+        internal decimal? DRVAL2 = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Category of offshore platform
@@ -22160,19 +22160,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// Conspicuous, radar
         /// </summary>
         [Description("Conspicuous, radar")]
-        internal int? CONRAD = default;
+        internal int? CONRAD = null;
 
         /// <summary>
         /// Conspicuous, visually
         /// </summary>
         [Description("Conspicuous, visually")]
-        internal int? CONVIS = default;
+        internal int? CONVIS = null;
 
         /// <summary>
         /// Height
         /// </summary>
         [Description("Height")]
-        internal decimal? HEIGHT = default;
+        internal decimal? HEIGHT = null;
 
         /// <summary>
         /// Nature of construction
@@ -22190,31 +22190,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// Quality of Position
         /// </summary>
         [Description("Quality of Position")]
-        internal int? P_QUAPOS = default;
+        internal int? P_QUAPOS = null;
 
         /// <summary>
         /// Positional Accuracy
         /// </summary>
         [Description("Positional Accuracy")]
-        internal decimal? P_POSACC = default;
+        internal decimal? P_POSACC = null;
 
         /// <summary>
         /// Horizontal Datum
         /// </summary>
         [Description("Horizontal Datum")]
-        internal int? P_HORDAT = default;
+        internal int? P_HORDAT = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -22464,7 +22464,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -22494,7 +22494,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -22518,31 +22518,31 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -22661,7 +22661,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -22703,7 +22703,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Category of coverage
         /// </summary>
         [Description("Category of coverage")]
-        internal int? CATCOV = default;
+        internal int? CATCOV = null;
 
         /// <summary>
         /// Information
@@ -22733,19 +22733,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// NIS_EDITOR
@@ -22840,7 +22840,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -22864,7 +22864,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Compilation Scale
         /// </summary>
         [Description("Compilation Scale")]
-        internal int? CSCL = default;
+        internal int? CSCL = null;
 
         /// <summary>
         /// Dataset Name
@@ -22882,25 +22882,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Edition Number
         /// </summary>
         [Description("Edition Number")]
-        internal int? EDTN = default;
+        internal int? EDTN = null;
 
         /// <summary>
         /// Update Number
         /// </summary>
         [Description("Update Number")]
-        internal int? UPDN = default;
+        internal int? UPDN = null;
 
         /// <summary>
         /// Application Profile
         /// </summary>
         [Description("Application Profile")]
-        internal int? PROF = default;
+        internal int? PROF = null;
 
         /// <summary>
         /// INTU
         /// </summary>
         [Description("INTU")]
-        internal int? INTU = default;
+        internal int? INTU = null;
 
         /// <summary>
         /// Update Application Date
@@ -22924,7 +22924,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Product Specification
         /// </summary>
         [Description("Product Specification")]
-        internal int? PRSP = default;
+        internal int? PRSP = null;
 
         /// <summary>
         /// Product Spec Description
@@ -22954,67 +22954,67 @@ namespace S100Framework.Applications.S57auto.esri
         /// ATTF Lexical Level
         /// </summary>
         [Description("ATTF Lexical Level")]
-        internal int? AALL = default;
+        internal int? AALL = null;
 
         /// <summary>
         /// NATF Lexical Level
         /// </summary>
         [Description("NATF Lexical Level")]
-        internal int? NALL = default;
+        internal int? NALL = null;
 
         /// <summary>
         /// Horizontal Geodetic Datum
         /// </summary>
         [Description("Horizontal Geodetic Datum")]
-        internal int? HDAT = default;
+        internal int? HDAT = null;
 
         /// <summary>
         /// Vertical Datum
         /// </summary>
         [Description("Vertical Datum")]
-        internal int? VDAT = default;
+        internal int? VDAT = null;
 
         /// <summary>
         /// Sounding Datum
         /// </summary>
         [Description("Sounding Datum")]
-        internal int? SDAT = default;
+        internal int? SDAT = null;
 
         /// <summary>
         /// Depth Units
         /// </summary>
         [Description("Depth Units")]
-        internal int? DUNI = default;
+        internal int? DUNI = null;
 
         /// <summary>
         /// Height Units
         /// </summary>
         [Description("Height Units")]
-        internal int? HUNI = default;
+        internal int? HUNI = null;
 
         /// <summary>
         /// Precision Units
         /// </summary>
         [Description("Precision Units")]
-        internal int? PUNI = default;
+        internal int? PUNI = null;
 
         /// <summary>
         /// Coordinate Units
         /// </summary>
         [Description("Coordinate Units")]
-        internal int? COUN = default;
+        internal int? COUN = null;
 
         /// <summary>
         /// Coordinate Multiplication Factor
         /// </summary>
         [Description("Coordinate Multiplication Factor")]
-        internal int? COMF = default;
+        internal int? COMF = null;
 
         /// <summary>
         /// Sounding Multiplication Factor
         /// </summary>
         [Description("Sounding Multiplication Factor")]
-        internal int? SOMF = default;
+        internal int? SOMF = null;
 
         /// <summary>
         /// DSPM Comment
@@ -23174,7 +23174,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -23204,7 +23204,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Verified state
         /// </summary>
         [Description("Verified state")]
-        internal int? VERIFIED = default;
+        internal int? VERIFIED = null;
 
         /// <summary>
         /// Verifier
@@ -23228,19 +23228,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// Information
@@ -23324,25 +23324,25 @@ namespace S100Framework.Applications.S57auto.esri
         /// Collection type
         /// </summary>
         [Description("Collection type")]
-        internal int? COLLECTION_TYPE = default;
+        internal int? COLLECTION_TYPE = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// SCAMIN step
         /// </summary>
         [Description("SCAMIN step")]
-        internal int? SCAMIN_STEP = default;
+        internal int? SCAMIN_STEP = null;
 
         /// <summary>
         /// NIS Verified state
         /// </summary>
         [Description("NIS Verified state")]
-        internal int? NIS_VERIFIED = default;
+        internal int? NIS_VERIFIED = null;
 
         /// <summary>
         /// NIS Verifier
@@ -23510,7 +23510,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// OBJECTID
         /// </summary>
         [Description("OBJECTID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// GlobalID
@@ -23522,7 +23522,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Relationship indicator
         /// </summary>
         [Description("Relationship indicator")]
-        internal int? RIND = default;
+        internal int? RIND = null;
 
         /// <summary>
         /// data set name
@@ -23546,7 +23546,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// Entry date
         /// </summary>
         [Description("Entry date")]
-        internal decimal? ENTRY_DATE = default;
+        internal decimal? ENTRY_DATE = null;
 
         /// <summary>
         /// Source universal ID
@@ -23594,19 +23594,19 @@ namespace S100Framework.Applications.S57auto.esri
         /// PLTS compilation scale
         /// </summary>
         [Description("PLTS compilation scale")]
-        internal int? PLTS_COMP_SCALE = default;
+        internal int? PLTS_COMP_SCALE = null;
 
         /// <summary>
         /// Is Conflate
         /// </summary>
         [Description("Is Conflate")]
-        internal int? IS_CONFLATE = default;
+        internal int? IS_CONFLATE = null;
 
         /// <summary>
         /// NIS product type
         /// </summary>
         [Description("NIS product type")]
-        internal int? NIS_PRODUCTS = default;
+        internal int? NIS_PRODUCTS = null;
 
         /// <summary>
         /// Editor
@@ -23719,13 +23719,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// ObjectID
         /// </summary>
         [Description("ObjectID")]
-        internal int? OBJECTID = default;
+        internal int? OBJECTID = null;
 
         /// <summary>
         /// FCSubtype
         /// </summary>
         [Description("FCSubtype")]
-        internal int? FCSUBTYPE = default;
+        internal int? FCSUBTYPE = null;
 
         /// <summary>
         /// ObjectClass
@@ -23737,13 +23737,13 @@ namespace S100Framework.Applications.S57auto.esri
         /// RIND
         /// </summary>
         [Description("RIND")]
-        internal int? RIND = default;
+        internal int? RIND = null;
 
         /// <summary>
         /// Priority
         /// </summary>
         [Description("Priority")]
-        internal int? PRIORITY = default;
+        internal int? PRIORITY = null;
 
         /// <summary>
         /// FEATURECLASS
@@ -23755,7 +23755,7 @@ namespace S100Framework.Applications.S57auto.esri
         /// PRIM
         /// </summary>
         [Description("PRIM")]
-        internal int? PRIM = default;
+        internal int? PRIM = null;
         public PLTS_Master_Slaves(Row row) {
             base.TableName = "PLTS_Master_Slaves";
             if (DBNull.Value != row["OBJECTID"] && row["OBJECTID"] is not null) {
@@ -23785,4 +23785,3 @@ namespace S100Framework.Applications.S57auto.esri
         }
     }
 }
-
