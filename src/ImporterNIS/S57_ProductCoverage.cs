@@ -72,7 +72,7 @@ namespace S100Framework.Applications
             var regex = string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
 
             var dictionaryCoverage = new Dictionary<string, Polygon>();
-            
+
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
                 var row = productDefinitions.Current;
@@ -163,7 +163,7 @@ namespace S100Framework.Applications
                 }
                 if (!polygons.Any()) System.Diagnostics.Debugger.Break();
 
-                var coverage = (Polygon)GeometryEngine.Instance.Union(polygons.Where(e => e.catcov == 1).Select(e=>e.shape));
+                var coverage = (Polygon)GeometryEngine.Instance.Union(polygons.Where(e => e.catcov == 1).Select(e => e.shape));
 
                 var _minimumDisplayScale = 10000000;
 
@@ -171,7 +171,7 @@ namespace S100Framework.Applications
 
                 if (hit.Any()) {
                     _minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
-                }                
+                }
 
                 electronicProduct57.minimumDisplayScale = electronicProduct101.minimumDisplayScale = _minimumDisplayScale;
 

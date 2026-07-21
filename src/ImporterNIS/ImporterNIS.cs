@@ -1786,7 +1786,7 @@ namespace S100Framework.Applications
         internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
             InformationResult result = new();
 
-            var createNauticalInformation = (string fileReference, string language) => {                                
+            var createNauticalInformation = (string fileReference, string language) => {
                 return new NauticalInformation {
                     information = [
                     new information() {

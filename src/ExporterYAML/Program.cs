@@ -2,8 +2,6 @@
 using ArcGIS.Core.Geometry;
 using CommandLine;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using NetTopologySuite.Geometries;
 using S100FC;
 using S100FC.S101;
 using S100FC.Topology;
@@ -329,7 +327,7 @@ namespace S100Framework.Applications
                                 using var point = debugInstance.OpenDataset<FeatureClass>(defnitions["point"]);
                                 using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
                                 using var polygon = debugInstance.OpenDataset<FeatureClass>(defnitions["polygon"]);
-                                if (!append || index==1) {
+                                if (!append || index == 1) {
                                     point.DeleteRows(new QueryFilter {
                                         WhereClause = "1=1",
                                     });
@@ -567,7 +565,7 @@ namespace S100Framework.Applications
                                 var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
                                 //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
 
-                                var foid = $"110:{name.Substring(1)}:1";       // Geodatastyrelsen: 110 
+                                var foid = $"110:{name.Substring(1)}:1";       // Point: 110 
 
                                 var feature = new S100FC.YAML.Feature {
                                     Prim = Primitive.NoGeometry,

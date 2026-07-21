@@ -47,7 +47,7 @@ namespace S100Framework.Applications
 
             foreach (var c in coverages) {
 
-                var combined = PolygonBuilderEx.CreatePolygon(sdat.Where(e=>e.PLTS_COMP_SCALE>= c.DataCoverage.maximumDisplayScale && e.PLTS_COMP_SCALE<c.DataCoverage.minimumDisplayScale).Select(e => e.shape));
+                var combined = PolygonBuilderEx.CreatePolygon(sdat.Where(e => e.PLTS_COMP_SCALE >= c.DataCoverage.maximumDisplayScale && e.PLTS_COMP_SCALE < c.DataCoverage.minimumDisplayScale).Select(e => e.shape));
 
                 if (GeometryEngine.Instance.Disjoint(c.Coverage, combined)) {
                     soundingDatums = [.. soundingDatums, (new SoundingDatum {
