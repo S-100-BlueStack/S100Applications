@@ -27,7 +27,7 @@ namespace S100Framework.Applications
 
             if (current.COLPAT != default) {
                 if (instance.colour is not null && instance.colour.Length > 1)
-                    instance.colourPattern = ImporterNIS."-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
+                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : ImporterNIS.GetColourPattern(current.COLPAT)!.value;
             }
 
             if (current.CONDTN.HasValue) {
