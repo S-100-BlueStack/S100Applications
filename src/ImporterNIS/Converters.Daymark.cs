@@ -32,7 +32,7 @@ namespace S100Framework.Applications
                     //    instance.colourPattern = ImporterNIS.GetColourPattern(colpats[0])?.value;
                     //}
                     //else {
-                        instance.colourPattern = ImporterNIS.GetColourPattern(current.COLPAT)?.value;
+                        instance.colourPattern = ImporterNIS."-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
                     //}
                 }
             }

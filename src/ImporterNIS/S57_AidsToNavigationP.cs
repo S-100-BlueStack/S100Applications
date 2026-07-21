@@ -236,7 +236,7 @@ namespace S100Framework.Applications
 
                             if (current.COLPAT != default) {
                                 if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)?.value;
+                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
@@ -508,7 +508,7 @@ namespace S100Framework.Applications
 
                             if (current.COLPAT != default) {
                                 if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)?.value;
+                                    instance.colourPattern = "-32767".Equals(current.COLPAT) ? default : GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
