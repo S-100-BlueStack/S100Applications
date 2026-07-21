@@ -4,6 +4,7 @@ using CommandLine;
 using Microsoft.Extensions.Logging;
 using S100FC;
 using S100FC.S101;
+using S100FC.S101.SimpleAttributes;
 using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
@@ -222,13 +223,15 @@ namespace S100Framework.Applications
                             if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
                                 whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
 
+                            verticalDatum datum = electricProduct.verticalDatum!.Value;                            
+
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
                                 Comment = "Not for navigation!",
                                 Edition = 1,
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",
-                                verticalDatum = "Baltic Sea Chart Datum 2000,44",
+                                verticalDatum = $"{datum.listedValues.Single(e=>e.code==datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
                             }, new SpatialQueryFilter {
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Relation,
