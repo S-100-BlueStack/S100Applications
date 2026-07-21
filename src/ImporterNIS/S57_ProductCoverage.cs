@@ -223,6 +223,7 @@ namespace S100Framework.Applications
                             buffer["featurebindings"] = "[]";
                             buffer["specificusage"] = electronicProduct57.specificUsage.Value;
                             buffer["sourceIdentifier"] = electronicProduct57.sourceIdentifier;
+                            buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
 
                             SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
                             using var featureN = featureClass.CreateRow(buffer);
@@ -237,6 +238,7 @@ namespace S100Framework.Applications
                             buffer["featurebindings"] = "[]";
                             buffer["specificusage"] = electronicProduct101.specificUsage.Value;
                             buffer["sourceIdentifier"] = electronicProduct101.sourceIdentifier;
+                            buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
 
                             SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
                             using var featureN = featureClass.CreateRow(buffer);
