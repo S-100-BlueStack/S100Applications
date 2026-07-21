@@ -25,13 +25,15 @@ namespace S100Framework.Applications
             }
 
             if (current.COLPAT != default) {
-                if (current.COLPAT.Contains(",")) {
-                    var colpats = current.COLPAT.Split(',');
-                    Logger.Current.DataError(current.OBJECTID ?? -1, current.TableName!, current.LNAM ?? "Unknown LNAM", $"Illegal COLPAT: {current.COLPAT}. Only {colpats[0]} is used. The colors needs reviewing.");
-                    instance.colourPattern = ImporterNIS.GetColourPattern(colpats[0])?.value;
-                }
-                else {
-                    instance.colourPattern = ImporterNIS.GetColourPattern(current.COLPAT)?.value;
+                if (instance.colour is not null && instance.colour.Length > 1) {
+                    //if (current.COLPAT.Contains(",")) {
+                    //    var colpats = current.COLPAT.Split(',');
+                    //    Logger.Current.DataError(current.OBJECTID ?? -1, current.TableName!, current.LNAM ?? "Unknown LNAM", $"Illegal COLPAT: {current.COLPAT}. Only {colpats[0]} is used. The colors needs reviewing.");
+                    //    instance.colourPattern = ImporterNIS.GetColourPattern(colpats[0])?.value;
+                    //}
+                    //else {
+                        instance.colourPattern = ImporterNIS.GetColourPattern(current.COLPAT)?.value;
+                    //}
                 }
             }
 

@@ -49,7 +49,8 @@ namespace S100Framework.Applications
                 }
 
                 if (relatedTopmark.COLPAT != default) {
-                    topmarkColourPattern = ImporterNIS.GetColourPattern(relatedTopmark.COLPAT);
+                    if (topmarkColours is not null && topmarkColours.Length > 1)
+                        topmarkColourPattern = ImporterNIS.GetColourPattern(relatedTopmark.COLPAT);
                 }
 
                 var topmark = new topmark() {

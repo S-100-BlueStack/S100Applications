@@ -18,7 +18,8 @@ namespace S100Framework.Applications
             }
 
             if (current.COLPAT != default) {
-                instance.colourPattern = ImporterNIS.GetColourPattern(current.COLPAT)?.value;
+                if (instance.colour is not null && instance.colour.Length > 1)
+                    instance.colourPattern = ImporterNIS.GetColourPattern(current.COLPAT)?.value;
             }
 
             DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);

@@ -108,7 +108,8 @@ namespace S100Framework.Applications
                             }
 
                             if (current.COLPAT != default) {
-                                instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                if (instance.colour is not null && instance.colour.Length > 1)
+                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
@@ -378,7 +379,8 @@ namespace S100Framework.Applications
                             }
 
                             if (current.COLPAT != default) {
-                                instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                if (instance.colour is not null && instance.colour.Length > 1)
+                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
@@ -500,7 +502,8 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.COLPAT != default) {
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                    if (instance.colour is not null && instance.colour.Length > 1)
+                                        instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                                 }
 
                                 if (current.CONDTN.HasValue) {
@@ -701,7 +704,8 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.COLPAT != default) {
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                    if (instance.colour is not null && instance.colour.Length > 1)
+                                        instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                                 }
 
                                 if (current.CONDTN.HasValue) {
@@ -834,7 +838,8 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.COLPAT != default) {
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                    if (instance.colour is not null && instance.colour.Length > 1)
+                                        instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                                 }
 
                                 if (current.CONDTN.HasValue) {
@@ -948,7 +953,8 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.COLPAT != default) {
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                    if (instance.colour is not null && instance.colour.Length > 1)
+                                        instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                                 }
 
                                 var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
@@ -1116,7 +1122,8 @@ namespace S100Framework.Applications
                             }
 
                             if (current.COLPAT != default) {
-                                instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
+                                if (instance.colour is not null && instance.colour.Length > 1)
+                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
                             }
 
                             if (current.CONDTN.HasValue) {
