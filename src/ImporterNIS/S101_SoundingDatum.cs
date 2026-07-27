@@ -23,7 +23,7 @@ namespace S100Framework.Applications
                 var m_sdat = new MetaDataA((Feature)search.Current);
 
                 var instance = new SoundingDatum {
-                    verticalDatum = GetVerticalDatum(m_sdat.VERDAT ?? 3)!.value,
+                    verticalDatum = GetVerticalDatum(m_sdat.VERDAT ?? 3, ((Feature)search.Current).GetShape())!.value,
                 };
 
                 if (!string.IsNullOrEmpty(m_sdat.SORDAT)) {

@@ -678,8 +678,7 @@ namespace S100Framework.Applications
 
                                         var code = Convert.ToString(current["code"]);
 
-                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";       // Geodatastyrelsen: 110 
-                                                                                                                                      //var foid = $"110:{uid.Substring(1)}:1";
+                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";
 
 
                                         try {

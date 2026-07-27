@@ -195,8 +195,13 @@ namespace S100Framework.Applications
                     minimumDisplayScale = _minimumDisplayScale,
                 };
 
-                var vdat = GetVerticalDatum(current.VDAT ?? 3);
-                var sdat = GetSoundingDatum(current.SDAT!.Value);
+                var _coverage = (Polygon)(GeometryEngine.Instance.Union([..polygons.Select(e => e.shape)]));
+
+                var vdat = GetVerticalDatum(current.VDAT ?? 3, _coverage);
+                var sdat = GetSoundingDatum(current.SDAT!.Value, _coverage);
+
+                electronicProduct57.verticalDatum = vdat!.value;
+                electronicProduct101.verticalDatum = vdat!.value;
 
                 coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
 

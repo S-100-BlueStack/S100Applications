@@ -53,7 +53,7 @@ namespace S100Framework.Applications
 
         public static QueryFilter QueryFilter { get; internal set; } = new();
 
-        public static IDictionary<int, int> VerticalDatumConverter = new Dictionary<int, int>();
+        //public static IDictionary<int, int> VerticalDatumConverter = new Dictionary<int, int>();
 
 
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
@@ -76,9 +76,9 @@ namespace S100Framework.Applications
             bool clip = false;
 
             arguments.WithParsed<Options>(o => {
-                if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
-                    VerticalDatumConverter = o.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
-                }
+                //if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
+                //    VerticalDatumConverter = o.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
+                //}
 
                 if (o.maximumDisplayScale.HasValue)
                     maximumDisplayScale = o.maximumDisplayScale.Value;
@@ -1514,18 +1514,20 @@ namespace S100Framework.Applications
             return rhythmOfLight;
         }
 
-        internal static verticalDatum? GetVerticalDatum(int? value) {
+        internal static verticalDatum? GetVerticalDatum(int? value, Geometry geometry) {
             if (!value.HasValue) return default(verticalDatum?);
 
-            if (VerticalDatumConverter.ContainsKey(value.Value)) {
-                return EnumHelper.GetEnumValue(VerticalDatumConverter[value.Value]);
+            var verticalDatumConverter = Scamin.Instance.GetVerticalDatumConverters(geometry);
+            if (verticalDatumConverter.ContainsKey(value.Value)) {
+                return EnumHelper.GetEnumValue(verticalDatumConverter[value.Value]);
             }
             return EnumHelper.GetEnumValue(value);
         }
 
-        internal static verticalDatum? GetSoundingDatum(int value) {
-            if (VerticalDatumConverter.ContainsKey(value)) {
-                return EnumHelper.GetEnumValue(VerticalDatumConverter[value]);
+        internal static verticalDatum? GetSoundingDatum(int value, Geometry geometry) {
+            var verticalDatumConverter = Scamin.Instance.GetVerticalDatumConverters(geometry);
+            if (verticalDatumConverter.ContainsKey(value)) {
+                return EnumHelper.GetEnumValue(verticalDatumConverter[value]);
             }
             return EnumHelper.GetEnumValue(value);
         }

@@ -602,7 +602,7 @@ namespace S100Framework.Applications
 
                             // TODO: interoperabilityIdentifier
 
-                            var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT);
+                            var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT, current.SHAPE!);
                             if (verticalDatum != null) {
                                 var update = true;
                                 foreach (var elm in VerticalDatums.Instance.Touch(current.SHAPE!)) {

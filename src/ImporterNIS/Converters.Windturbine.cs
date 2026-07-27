@@ -89,7 +89,7 @@ namespace S100Framework.Applications
 
             if (current.VERLEN.HasValue) {
                 instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
-                var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT);
+                var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT, current.SHAPE!);
                 if (verticalDatum != default)
                     instance.verticalDatum = verticalDatum.value;
             }

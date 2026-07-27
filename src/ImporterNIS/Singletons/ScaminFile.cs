@@ -1,6 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
 using System.Xml.Linq;
+using YamlDotNet.Core.Tokens;
 
 namespace S100Framework.Applications.Singletons
 {
@@ -16,9 +17,12 @@ namespace S100Framework.Applications.Singletons
         public string Name { get; }
         public Polygon Polygon { get; }
 
-        public NamedPolygon(string name, Polygon polygon) {
+        public string VerticalDatumConverter { get;}
+
+        public NamedPolygon(string name, Polygon polygon, string verticalDatumConverter) {
             this.Name = name;
             this.Polygon = polygon;
+            this.VerticalDatumConverter = verticalDatumConverter;
         }
     }
 
@@ -39,8 +43,8 @@ namespace S100Framework.Applications.Singletons
                 while (cursor.MoveNext()) {
                     var name = Convert.ToString(cursor.Current["name"])!;
                     var polygon = (Polygon)((Feature)cursor.Current).GetShape();
-
-                    AddPolygon(name, polygon, sr);
+                    var verticalDatumConverter = Convert.ToString(cursor.Current["VerticalDatumConverter"]) ?? string.Empty;
+                    AddPolygon(name, polygon, sr, verticalDatumConverter);
                 }
             }
 
@@ -140,6 +144,24 @@ namespace S100Framework.Applications.Singletons
             get => _polygons;
         }
 
+        internal Dictionary<int, int> GetVerticalDatumConverters(Geometry geometry) {
+            foreach (var np in _polygons) {
+                // Check if inputGeometry touches the polygon
+                if (GeometryEngine.Instance.Touches(geometry, np.Polygon) ||
+                    GeometryEngine.Instance.Intersects(geometry, np.Polygon)) {
+                    if (string.IsNullOrEmpty(np.VerticalDatumConverter))
+                        return [];
+                    return np.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
+                }
+                else if (GeometryEngine.Instance.Within(np.Polygon, geometry)) {
+                    if (string.IsNullOrEmpty(np.VerticalDatumConverter))
+                        return [];
+                    return np.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
+                }
+            }
+            return [];
+        }
+
         internal int? GetMinimumScale(S100Framework.Applications.S57.esri.S57Object feature, string subtypeName/*, string relatedStructureName*/, int compilationScale, bool isRelatedToStructure = false) {
             if (feature.SCAMIN_STEP.HasValue) {
                 var scamin = feature.SCAMIN_STEP.Value;
@@ -191,12 +213,12 @@ namespace S100Framework.Applications.Singletons
         /// <param xmlFileName="xmlFileName"></param>
         /// <param xmlFileName="points">Coordinate2D points</param>
         /// <param xmlFileName="spatialReference">The spatial reference</param>
-        private static void AddPolygon(string xmlFileName, IReadOnlyList<Coordinate2D> points, SpatialReference spatialReference) {
-            var builder = new PolygonBuilderEx(spatialReference);
-            builder.AddPart(points);
-            var polygon = builder.ToGeometry();
-            _polygons.Add(new NamedPolygon(xmlFileName, polygon));
-        }
+        //private static void AddPolygon(string xmlFileName, IReadOnlyList<Coordinate2D> points, SpatialReference spatialReference, string verticalDatumConverter) {
+        //    var builder = new PolygonBuilderEx(spatialReference);
+        //    builder.AddPart(points);
+        //    var polygon = builder.ToGeometry();
+        //    _polygons.Add(new NamedPolygon(xmlFileName, polygon, verticalDatumConverter));
+        //}
 
         /// <summary>
         /// Adds the polygon
@@ -204,8 +226,8 @@ namespace S100Framework.Applications.Singletons
         /// <param xmlFileName="xmlFileName"></param>
         /// <param xmlFileName="points">Coordinate2D points</param>
         /// <param xmlFileName="spatialReference">The spatial reference</param>
-        private static void AddPolygon(string xmlFileName, Polygon polygon, SpatialReference spatialReference) {
-            _polygons.Add(new NamedPolygon(xmlFileName, polygon));
+        private static void AddPolygon(string xmlFileName, Polygon polygon, SpatialReference spatialReference, string verticalDatumConverter) {
+            _polygons.Add(new NamedPolygon(xmlFileName, polygon, verticalDatumConverter));
         }
 
         private static List<string> GetTouchedPolygonNames(Geometry inputGeometry) {
