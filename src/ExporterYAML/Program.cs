@@ -2,6 +2,7 @@
 using ArcGIS.Core.Geometry;
 using CommandLine;
 using Microsoft.Extensions.Logging;
+using S100BlueStack.Settings;
 using S100FC;
 using S100FC.S101;
 using S100FC.S101.SimpleAttributes;
@@ -176,17 +177,19 @@ namespace S100Framework.Applications
                 Directory.CreateDirectory(output!);
                 logger.LogInformation("Output path: {output}", output);
 
-                using Geodatabase source = createGeodatabase();
-
-                var syntax = source.GetSQLSyntax();
-
-                var definitionTables = source.GetDefinitions<TableDefinition>();
-                var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
+                Func<Geodatabase?> createSource = () => { return null; };
 
                 var featureCatalogue = S100FC.Catalogues.FeatureCatalogue.Catalogues.Single(e => e.ProductID.Equals("S-101"));
 
                 var datasets = new List<(Dataset Dataset, SpatialQueryFilter Filters)>();
                 {
+                    using Geodatabase source = createGeodatabase();
+
+                    var syntax = source.GetSQLSyntax();
+
+                    var definitionTables = source.GetDefinitions<TableDefinition>();
+                    var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
+
                     using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
                     if (!string.IsNullOrEmpty(wildcard)) {
@@ -220,10 +223,14 @@ namespace S100Framework.Applications
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
                             var whereClause = "upper(ps) = 'S-101'";
-                            if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
-                                whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
+                            if (electricProduct.specificUsage.HasValue) {
+                                whereClause += $" AND (specificusage = {electricProduct.specificUsage.Value} OR specificusage = 0)";
+                            }
+                            
+                            //if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
+                            //    whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
 
-                            verticalDatum datum = electricProduct.verticalDatum!.Value;                            
+                            verticalDatum datum = electricProduct.verticalDatum ?? 44;
 
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
@@ -231,7 +238,8 @@ namespace S100Framework.Applications
                                 Edition = 1,
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",
-                                verticalDatum = $"{datum.listedValues.Single(e=>e.code==datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                                VerticalDatum = $"{datum.listedValues.Single(e=>e.code==datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                                //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
                             }, new SpatialQueryFilter {
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Relation,
@@ -241,6 +249,42 @@ namespace S100Framework.Applications
                             }));
                         }
                     }
+
+                    using var config = source.OpenDataset<Table>(definitionTables.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("configuration")).GetName());
+                    {
+                        using var cursor = config.Search(new QueryFilter {
+                            WhereClause = "upper(ps) = 'S-128.NUVIONPRO' AND code = 'ProductCatalogue'"
+                        }, true);
+                        cursor.MoveNext();
+                        var current = cursor.Current;
+
+                        var productCatalogue = System.Text.Json.JsonSerializer.Deserialize<ProductCatalogue>(Convert.ToString(current["json"])!)!;
+
+                        var connection = productCatalogue.Connections.Single(e => e.ProductSpecification.Equals("S-101"));
+
+                        if(connection.ConnectionFile is null) {
+                            createSource = () => {
+                                return createGeodatabase();
+                            };
+                        }
+                        else {
+                            var geodatabase = connection.ConnectionFile.LocalPath;
+
+                            if (IO.File.Exists(geodatabase) && ".sde".Equals(IO.Path.GetExtension(geodatabase), StringComparison.InvariantCultureIgnoreCase)) {
+                                createSource = () => { return new Geodatabase(new DatabaseConnectionFile(new Uri(IO.Path.GetFullPath(geodatabase)))); };
+                            }
+                            else if (IO.Directory.Exists(geodatabase) && ".gdb".Equals(IO.Path.GetExtension(geodatabase), StringComparison.InvariantCultureIgnoreCase)) {
+                                createSource = () => { return new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(geodatabase)))); };
+                            }
+                            else if (IO.File.Exists(geodatabase) && ".geodatabase".Equals(IO.Path.GetExtension(geodatabase), StringComparison.OrdinalIgnoreCase)) {
+                                createSource = () => { return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(geodatabase)))); };
+                            }
+                            else
+                                throw new System.ArgumentOutOfRangeException(nameof(geodatabase));
+
+                        }
+
+                    }
                 }
 
                 //Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
@@ -249,21 +293,12 @@ namespace S100Framework.Applications
                 S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 foreach (var e in datasets) {
-                    //{
-                    //    using var fc = source.OpenDataset<FeatureClass>("main.surface");
+                    using var source = createSource()!;
 
-                    //    using var cursor = fc.Search(new SpatialQueryFilter {
-                    //        WhereClause = $"({e.Filters.WhereClause}) AND CODE = 'DataCoverage'",
-                    //        FilterGeometry = e.Filters.FilterGeometry,
-                    //        SpatialRelationship = SpatialRelationship.Relation,
-                    //        SpatialRelationshipDescription = DE9IM_Contains,
-                    //    }, true);
+                    var syntax = source.GetSQLSyntax();
 
-                    //    ;
-                    //    while (cursor.MoveNext()) {
-                    //        var c = (ArcGIS.Core.Data.Feature)cursor.Current;
-                    //    }
-                    //}
+                    var definitionTables = source.GetDefinitions<TableDefinition>();
+                    var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
 
                     try {
                         var supportFiles = new List<string>();

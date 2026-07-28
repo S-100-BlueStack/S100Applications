@@ -51,8 +51,8 @@ namespace S100Framework.Applications
             [Option('f', "filter", Required = false, HelpText = "Filter datasets (RegEx).")]
             public string? filter { get; set; } = default;
 
-            [Option("s128", Required = false, HelpText = "Create ElectronicProducts.", Default = true)]
-            public bool S128 { get; set; }
+            [Option("s128", Required = false, HelpText = "Target ElectronicProducts.")]
+            public string? S128 { get; set; }
 
             [Option('n', "notespath", Required = false, HelpText = "Path to notes files references in TXTDSC.")]
             public string? NotesPath { get; set; }
@@ -108,10 +108,6 @@ namespace S100Framework.Applications
 
             arguments.WithParsed<Options>(o => {
                 var target = o.Target!;
-
-                //if (!string.IsNullOrEmpty(o.VerticalDatumConverter)) {
-                //    var dictionary = o.VerticalDatumConverter.Split(',').Select(e => e.Split('=')).ToDictionary(e => int.Parse(e[0]), e => int.Parse(e[1]));
-                //}
 
                 if (IO.File.Exists(target) && ".sde".Equals(IO.Path.GetExtension(target), StringComparison.OrdinalIgnoreCase)) {
                     createGeodatabase = () => {

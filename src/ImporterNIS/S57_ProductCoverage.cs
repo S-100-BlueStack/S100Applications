@@ -37,7 +37,7 @@ namespace S100Framework.Applications
         //    _ => throw new NotImplementedException(),
         //};
 
-        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale2, bool s128, ref S101ProductCoverage[] converages, string datasets = "") {
+        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale2, ref S101ProductCoverage[] converages, string datasets = "") {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -205,7 +205,7 @@ namespace S100Framework.Applications
 
                 coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
 
-                if (s128) {
+                {
                     using var _ = productCoverageFeatureClass.Search(new QueryFilter {
                         WhereClause = $"Product_GUID = '{globalid:B}'",
                     }, true);

@@ -58,11 +58,14 @@ namespace S100Framework.Applications
 
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ParserResult<Options> arguments) {
             Logger.Current.Information("Starting");
+
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
+            Func<Geodatabase> createGeodatabaseElectronicProduct = () => { throw new NotImplementedException(); };
+
 
 
             // default value - overwritten by args
-            var s128 = true;
+            //var s128 = true;
 
             // default value - overwritten by args
             var skinOfEarthOnly = false;
@@ -123,7 +126,33 @@ namespace S100Framework.Applications
 
                 //append = o.Append;
 
-                s128 = o.S128;
+                var s128 = o.S128;
+                if (!string.IsNullOrEmpty(s128)) {
+                    if (IO.File.Exists(s128) && ".sde".Equals(IO.Path.GetExtension(s128), StringComparison.OrdinalIgnoreCase)) {
+                        createGeodatabaseElectronicProduct = () => {
+                            var geodatabase = new Geodatabase(new DatabaseConnectionFile(new Uri(IO.Path.GetFullPath(s128))));
+
+                            return geodatabase;
+                        };
+                    }
+                    else if (IO.Directory.Exists(s128) && ".gdb".Equals(IO.Path.GetExtension(s128), StringComparison.OrdinalIgnoreCase)) {
+                        createGeodatabaseElectronicProduct = () => {
+                            var geodatabase = new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(s128))));
+
+                            return geodatabase;
+                        };
+                    }
+                    else if (".geodatabase".Equals(IO.Path.GetExtension(s128), StringComparison.OrdinalIgnoreCase)) {
+                        createGeodatabaseElectronicProduct = () => {
+                            var geodatabase = new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(s128))));
+
+                            return geodatabase;
+                        };
+                    }
+                }
+                else {
+                    createGeodatabaseElectronicProduct = () => createTargetGeodatabase();
+                }
 
                 filter = o.filter;
 
@@ -213,12 +242,30 @@ namespace S100Framework.Applications
             long[] scalesCompilation = [];
 
             S101ProductCoverage[] s101ProductCoverages = [];
-            using (var destination = createTargetGeodatabase()) {
+            //using (var destination = createTargetGeodatabase()) 
+            {
                 QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
 
                 using (Geodatabase source = createGeodatabase()) {
                     Logger.Current.Information($"Converting Product Coverages");
-                    Store((destination) => S57_ProductCoverage_Full(source, destination, QueryFilter, minimumDisplayScale, s128, ref s101ProductCoverages, filter), destination);
+
+                    using var electronicProducts = createGeodatabaseElectronicProduct();
+
+                    var query = new QueryFilter {
+                        WhereClause = $"upper(ps) = 'S-128'",
+                    };
+
+                    var featureClasses = electronicProducts.GetDefinitions<FeatureClassDefinition>();
+
+                    foreach (var featureClass in featureClasses) {
+                        using var _ = electronicProducts.OpenDataset<FeatureClass>(featureClass.GetName());
+
+                        Store((electronicProducts) => {
+                            _.DeleteRows(query);
+                        }, electronicProducts);
+                    }                    
+
+                    Store((d) => S57_ProductCoverage_Full(source, d, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter), electronicProducts);
                 }
             }
 
