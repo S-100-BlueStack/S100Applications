@@ -1,13 +1,15 @@
 # S100.Iso8211
 
-A C# library that reads ISO/IEC 8211 (DDF) files — the physical encoding behind IHO **S-100 Part 10a / S-101** and **S-57** — and converts them to JSON, including the full header and the features with assembled geometry.
+A C# library that reads ISO/IEC 8211 (DDF) files — the physical encoding behind IHO **S-100 Part 10a / S-101** and **S-57** — and converts them to **YAML** (default) or JSON, including the full header and the features with assembled geometry.
 
 Targets `net8.0`, no external dependencies (`System.Text.Json` only).
 
 ```
-src/S100.Iso8211        the library
-tools/S100.Iso8211.Cli  s100json command line converter
-tests/S100.Iso8211.SelfTest  builds a synthetic S-101 cell, reads it back, asserts 47 checks
+src/S100.Iso8211               the library
+  Serialization/               YAML + JSON writers behind one abstraction
+  S101/                        the S-101 semantic layer
+tools/S100.Iso8211.Cli         s100json command line converter
+tests/S100.Iso8211.SelfTest    builds a synthetic S-101 cell, reads it back, asserts 55 checks
 ```
 
 ```bash
@@ -18,6 +20,8 @@ dotnet run --project tests/S100.Iso8211.SelfTest    # → "All checks passed."
 ---
 
 ## Two layers, deliberately separated
+
+**Layer 0 — `S100.Iso8211.Serialization`** is a thin `IStructuredWriter` abstraction with a JSON implementation over `Utf8JsonWriter` and a hand-written block-style YAML emitter. The document writers target the interface, so the two formats never drift apart.
 
 **Layer 1 — `S100.Iso8211`** is a complete, product-agnostic ISO/IEC 8211:1994 reader. It knows nothing about charts. This layer is fully specified by the standard, so it should be correct for any conforming file: S-101, S-102 exchange sets, S-57 ENCs, SDTS, whatever.
 
@@ -37,7 +41,10 @@ Where I could avoid depending on edition-specific detail, I did:
 
 ```csharp
 using var reader = Iso8211Reader.Open("101DK00DEMO.000");
-Iso8211JsonWriter.WriteToFile(reader, "cell.raw.json");
+
+Iso8211DocumentWriter.WriteToFile(reader, "cell.raw.yaml");   // format inferred from extension
+Iso8211DocumentWriter.WriteToFile(reader, "cell.raw.txt", OutputFormat.Json);   // or forced
+Iso8211DocumentWriter.Write(reader, stream);                  // defaults to YAML
 ```
 
 Emits the DDR leader, the field control field with its tag pairs, every data descriptive field (name, structure/type codes, array descriptor, format controls, resolved subfields), then every record.
@@ -54,7 +61,8 @@ var dataset = S101DatasetReader.Read("101DK00DEMO.000", new S101ReaderOptions
 foreach (var f in dataset.Features)
     Console.WriteLine($"{f.FeatureObjectId} {f.FeatureTypeName} {f.Geometry?.Type}");
 
-S101JsonWriter.WriteToFile(dataset, "cell.features.json");
+S101DocumentWriter.WriteToFile(dataset, "cell.features.yaml");
+S101DocumentWriter.WriteToFile(dataset, "cell.features.json");
 ```
 
 ### Walking records directly
@@ -75,11 +83,14 @@ foreach (var record in reader.ReadRecords())          // streamed, not buffered
 ### CLI
 
 ```bash
-s100json cell.000                              # features + header (default)
-s100json cell.000 -m raw -o dump.json          # lossless
-s100json cell.000 -m geojson -o cell.geojson   # plain RFC 7946
+s100json cell.000                              # YAML features + header → cell.000.yaml
+s100json cell.000 -m raw -o dump.yaml          # lossless
+s100json cell.000 -f json -m geojson -o -      # plain RFC 7946, JSON, to stdout
+s100json cell.000 -o cell.json                 # format inferred from the extension
 s100json cell.000 --big-endian --skip-malformed
 ```
+
+Format resolution: an explicit `-f/--format` wins, then the output file extension, then YAML.
 
 ---
 
@@ -104,26 +115,47 @@ Dangling references become per-feature `warnings` in the JSON instead of excepti
 
 ---
 
-## JSON shapes
+## Output shapes
 
-Raw mode, field values:
+Identical structure in both formats — the self-test parses the YAML and the JSON and asserts the
+two documents are equal. Raw mode, field values:
 
 - field whose only group repeats → **array of objects** (`ATTR`, `SPAS`, `C2IL`)
 - field with a single non-repeating group → **object** (`FRID`, `FOID`, `DSID`)
 - concatenated field → object with the fixed subfields plus a `values` array
 
-```json
-"C3IL": { "VDID": 23, "values": [ { "YCOO": 557100000, "XCOO": 126100000, "ZCOO": 12500 } ] }
+```yaml
+C3IL:
+  VDID: 23
+  values:
+    - YCOO: 557100000
+      XCOO: 126100000
+      ZCOO: 12500
 ```
 
 Feature mode is a GeoJSON `FeatureCollection` with a `header` object added (dropped entirely with `-m geojson`). Complex attributes nest; repeated attributes become arrays:
 
-```json
-"attributes": {
-  "lightSector": { "sectorLimitOne": ["340", "330"] },
-  "featureName": "Køge Bugt N"
-}
+```yaml
+attributes:
+  lightSector:
+    sectorLimitOne:
+      - "340"
+      - "330"
+  featureName: Køge Bugt N
 ```
+
+### About the YAML
+
+Block style, two-space indent, no anchors or aliases. Scalars go unquoted only when that is
+unambiguously safe — the first character must be a letter or underscore, which rules out every
+numeric, timestamp and indicator form in one test — and are double-quoted otherwise. So a text
+subfield holding `340` or `true` survives as a string rather than turning into a number or a
+boolean on the way back in. Empty mappings and sequences collapse to `{}` and `[]` rather than
+becoming null.
+
+The emitter is ~200 lines with no third-party dependency, which keeps the library dependency-free
+and the escaping rules auditable. If you would rather have YamlDotNet's emitter, implementing
+`IStructuredWriter` over it is a drop-in swap.
 
 ---
 
@@ -148,6 +180,10 @@ These are the places where I had to commit to an interpretation. Each is one lin
 ## Verification
 
 The self-test builds a synthetic cell from scratch with `Iso8211TestWriter` (a small ISO 8211 encoder, also handy for making fixtures), then reads it back and asserts on the leader, tag pairs, format cycling, concatenated fields, UTF-8 round-tripping, binary decoding of `b11`/`b12`/`b14`/`b24`/`b48`, coordinate scaling, complex attribute nesting, and the assembled Point / LineString / Polygon / MultiPoint geometry — including that a polygon ring built from three separate curves joined through a composite curve comes out closed and correctly ordered.
+
+Serialisation is covered too: 17 scalar-quoting cases, YAML indentation and structure checks, and
+extension-based format inference. During development I additionally parsed both outputs with PyYAML
+and asserted the YAML and JSON documents deserialise to the same object graph.
 
 It's a console app rather than xUnit so it runs with no package restore. Converting it to xUnit is mechanical if you'd rather it lived in CI as a normal test project.
 
