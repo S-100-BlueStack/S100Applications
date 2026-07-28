@@ -420,3 +420,4 @@ FodyWeavers.xsd
 /src/ImporterNIS/Properties/launchSettings.json
 /src/ImporterYAML/Properties/launchSettings.json
 /src/ExporterYAML/Properties/launchSettings.json
+/src/ISO8211/Properties/launchSettings.json
