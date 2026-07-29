@@ -74,7 +74,7 @@ namespace S100Framework.Applications
                 .WriteTo.File(
                     path: logpath,
                     rollingInterval: RollingInterval.Infinite,
-                    retainedFileCountLimit: 1,
+                    retainedFileCountLimit: 99,
                     shared: true,
                     outputTemplate: outputTemplate)
                 .CreateLogger();
@@ -464,7 +464,6 @@ namespace S100Framework.Applications
 
                         if (System.Diagnostics.Debugger.IsAttached) {
                             IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
-                            IO.File.WriteAllLines($"{datasetName}_geometries.wkt", topology.Geometries);
                         }
 
                         var collapse = topology.Collapse;
@@ -911,8 +910,6 @@ namespace S100Framework.Applications
                             // IO.Directory.CreateDirectory(IO.Path.Combine(output, datasetName));
 
                             if (!exchangeset) {
-                                logger.LogDebug("{s100compiler} {arguments}", s100compiler, commandline);
-
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
                                 p.StartInfo.UseShellExecute = false;
@@ -926,30 +923,25 @@ namespace S100Framework.Applications
                                 p.Exited += (s, e) => {
                                 };
 
-                                logger.LogTrace("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                 p.Start();
                                 p.WaitForExit();
 
                                 if (p.ExitCode != 0) {
-                                    var error = p.StandardError.ReadToEnd();
-
-                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
+                                    var error = p.StandardError.ReadToEnd();                                    
                                     logger.LogTrace(error);
                                     return p.ExitCode;
                                 }
                                 var fileinfo = new IO.FileInfo(IO.Path.Combine(IO.Path.GetFullPath(output), $"{datasetName}.000"));
                                 if (fileinfo.Length == 0) {
                                     var error = p.StandardError.ReadToEnd();
-
-                                    //logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
                                     logger.LogError(error);
                                     if (System.Diagnostics.Debugger.IsAttached)
                                         System.Diagnostics.Debugger.Break();
                                 }
                             }
-                            else {
-                                logger.LogInformation("{s100compiler} -f {dataset}.yaml -d {output}.000 -C {dataset} -c {fc}", s100compiler, datasetName, output, IO.Path.GetFileName(featureCataloguePath));
+                            else {                                
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
@@ -965,13 +957,13 @@ namespace S100Framework.Applications
                                 p.Exited += (s, e) => {
                                 };
 
+                                logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+
                                 p.Start();
                                 p.WaitForExit();
 
                                 if (p.ExitCode != 0) {
                                     var error = p.StandardError.ReadToEnd();
-
-                                    logger.LogError("\"{filename}\" {arguments}", p.StartInfo.FileName, commandline);
                                     logger.LogTrace(error);
                                     return p.ExitCode;
                                 }
@@ -990,8 +982,6 @@ namespace S100Framework.Applications
                                     var pipeline = IO.Path.Combine(IO.Path.GetDirectoryName(featureCataloguePath!)!, "pipeline-S101-S57.yaml");
                                     var s100mapper = $"\"{filename_s101}\" \"{filename_s57}\" --fc \"{IO.Path.GetFullPath(featureCataloguePath!)}\" --pipeline \"{pipeline}\"";
 
-                                    logger.LogInformation("s100mapper.exe {s101}.yaml {filename_s57}.yaml --fc {fc} --pipeline pipeline-S101-S57.yaml", datasetName, IO.Path.GetFileNameWithoutExtension(filename_s57), IO.Path.GetFileName(featureCataloguePath));
-
                                     var p = new Process();
                                     p.StartInfo.CreateNoWindow = true;
                                     p.StartInfo.UseShellExecute = false;
@@ -1006,30 +996,29 @@ namespace S100Framework.Applications
                                         ;
                                     };
 
+                                    logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+
                                     p.Start();
                                     p.WaitForExit();
 
                                     if (p.ExitCode != 0) {
                                         var error = p.StandardError.ReadToEnd();
-
-                                        logger.LogError("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
                                         logger.LogTrace(error);
                                         return p.ExitCode;
                                     }
 
-                                    var s57Compiler = $"\"{s57}\" s57";
+                                    var s57Compiler = $"\"{filename_s57}\" {IO.Path.GetDirectoryName(filename_s57)}";
                                     p.StartInfo.FileName = @"C:\Program Files\s57Compiler\s57Compiler.exe";
                                     p.StartInfo.Arguments = s57Compiler;
                                     p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(output);
+
+                                    logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                     p.Start();
                                     p.WaitForExit();
 
                                     if (p.ExitCode != 0) {
-                                        //var console = p.StandardOutput.ReadToEnd();
                                         var error = p.StandardError.ReadToEnd();
-
-                                        logger.LogError("\"{filename}\" {arguments}", IO.Path.GetFileName(p.StartInfo.FileName), s100mapper);
                                         logger.LogTrace(error);
                                         return p.ExitCode;
                                     }

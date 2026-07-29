@@ -19,6 +19,7 @@ namespace S100Framework.Applications
             Subtypes.Instance.RegisterSubtypes(metadataa);
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+
             using var buffer = featureClass.CreateRowBuffer();
 
             using var cursor = metadataa.Search(filter, true);
@@ -442,6 +443,16 @@ namespace S100Framework.Applications
                             if (DateHelper.TryGetSurveyDateRange(current.SURSTA, current.SUREND, out var surveyDateRange)) {
                                 instance.surveyDateRange = surveyDateRange;
                             }
+
+
+                            //if (current.OBJECTID == 110) System.Diagnostics.Debugger.Break();
+                            //if (current.OBJECTID == 125) System.Diagnostics.Debugger.Break();
+
+                            if (ImporterNIS.IsCoveredByUNSARE_UnsurveyedArea(current.SHAPE!)) {
+                                instance.categoryOfTemporalVariation = 6;   //  Unassessed
+                                instance.zoneOfConfidence[0]!.categoryOfZoneOfConfidenceInData = 5;  //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
+                            }
+
 
                             //var informationBindings = instance.GetInformationBindings();
                             informationBinding[] informationBindings = [];

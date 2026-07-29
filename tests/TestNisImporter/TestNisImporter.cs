@@ -1,5 +1,6 @@
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
+using ArcGIS.Core.Internal.Threading.Tasks;
 using NetTopologySuite.Algorithm;
 using S100Framework.Applications;
 using System.Globalization;
@@ -754,6 +755,83 @@ namespace TestNisImporter
         }
 
         [Fact]
+        public void BuildImportS100CellScripts() {
+            IO.DirectoryInfo[] roots = [new IO.DirectoryInfo(@"ENC")];
+
+            roots = [new IO.DirectoryInfo(@"C:\Users\B061450\source\repos\Geodatastyrelsen\S-100\noaa\s100\converted")];
+
+            var python = new StringBuilder();
+
+            foreach (var root in roots) {
+                foreach (var enc in root.EnumerateFiles("*.000")) {
+                    python.Append($"arcpy.maritime.ImportS100Cell(" + Environment.NewLine +
+                            $"    in_feature_catalogue=r\"c:\\Users\\Public\\Documents\\ArcGIS Maritime\\Product Files\\3.7\\S-101\\S-101_FC_2.0.0.xml\"," + Environment.NewLine +
+                            $"    in_base_cell=r\"{enc.FullName}\"," + Environment.NewLine +
+                             "    target_workspace=r\"geodatabase.gdb\"," + Environment.NewLine +
+                             "    in_update_cells=None," + Environment.NewLine +
+                             "    create_s57_product=\"CREATE_S57_PRODUCT\"" + Environment.NewLine +
+                            ")" + Environment.NewLine);
+                }
+            }
+
+            this._output.WriteLine(python.ToString());
+        }
+
+        [Fact]
+        public void BuildExportGeodatabaseToS57Scripts() {
+            IO.DirectoryInfo[] roots = [new IO.DirectoryInfo(@"ENC")];
+
+            roots = [new IO.DirectoryInfo(@"c:\Users\B061450\source\repos\Geodatastyrelsen\S-100\noaa\s57")];
+
+            var python = new StringBuilder();
+
+            foreach (var root in roots) {
+                foreach(var enc in root.EnumerateDirectories()) {
+                    python.Append($"arcpy.maritime.ExportGeodatabaseToS57(" + Environment.NewLine +
+                                 "    in_source_gdb=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s101.geodatabase\"," + Environment.NewLine +
+                                $"    product=r\"{enc.Name}\"," + Environment.NewLine +
+                                 "    export_type=\"NEW_EDITION\"," + Environment.NewLine +
+                                $"    out_location=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s100\\s57\\{enc.Name}\"," + Environment.NewLine +
+                                 "    in_product_config=None," + Environment.NewLine +
+                                 "    clip_data_option=\"DO_NOT_CLIP\"," + Environment.NewLine +
+                                 "    sample_export=\"OFFICIAL_EXPORT\"," + Environment.NewLine +
+                                 "    in_scamin_file=None," + Environment.NewLine +
+                                $"    in_feature_catalogue=r\"c:\\Users\\Public\\Documents\\ArcGIS Maritime\\Product Files\\3.7\\S-101\\S-101_FC_2.0.0.xml\"" + Environment.NewLine +
+                                ")" + Environment.NewLine);
+                }
+            }
+
+            this._output.WriteLine(python.ToString());
+        }
+
+        [Fact]
+        public void BuildExportS101CellScripts() {
+            IO.DirectoryInfo[] roots = [new IO.DirectoryInfo(@"ENC")];
+
+            roots = [new IO.DirectoryInfo(@"c:\Users\B061450\source\repos\Geodatastyrelsen\S-100\noaa\s100\converted")];
+
+            var python = new StringBuilder();
+
+            foreach (var root in roots) {
+                foreach (var enc in root.EnumerateFiles("*.000")) {
+                    IO.Directory.CreateDirectory($@"C:\Users\B061450\source\repos\Geodatastyrelsen\S-100\noaa\s100\s101\{IO.Path.GetFileNameWithoutExtension(enc.Name)}");
+
+                    python.Append($"arcpy.maritime.ExportS101Cell(" + Environment.NewLine +
+                                $"    in_feature_catalogue=r\"c:\\Users\\Public\\Documents\\ArcGIS Maritime\\Product Files\\3.7\\S-101\\S-101_FC_2.0.0.xml\"," + Environment.NewLine +
+                                 "    in_s101_workspace=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s101.geodatabase\"," + Environment.NewLine +
+                                $"    product=r\"{IO.Path.GetFileNameWithoutExtension(enc.Name)}\"," + Environment.NewLine +
+                                 "    export_type=\"NEW_EDITION\"," + Environment.NewLine +
+                                $"    output_location=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s100\\s101\\{IO.Path.GetFileNameWithoutExtension(enc.Name)}\"," + Environment.NewLine +
+                                 "    sample_export=\"OFFICIAL_EXPORT\"," + Environment.NewLine +
+                                 "    suppress_exchange_set=\"SUPPRESS_EXCHANGE_SET\"" + Environment.NewLine +                                
+                                ")" + Environment.NewLine);
+                }
+            }
+
+            this._output.WriteLine(python.ToString());
+        }
+
+        [Fact]
         public void BuildImportS57ToGeodatabaseScripts() {
             IO.DirectoryInfo[] roots = [new IO.DirectoryInfo(@"ENC")];
 
@@ -762,11 +840,14 @@ namespace TestNisImporter
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK2"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK3"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK4"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK5"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL1"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL2"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL3"),
-                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL4")];
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL4"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL5")];
 
+            roots = [new IO.DirectoryInfo(@"c:\Users\B061450\source\repos\Geodatastyrelsen\S-100\gst\s57")];
 
             var python = new StringBuilder();
 

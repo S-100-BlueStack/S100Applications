@@ -1206,6 +1206,15 @@ namespace S100Framework.Applications
             }
         }
 
+        internal static bool IsCoveredByUNSARE_UnsurveyedArea(Geometry shape) {
+            foreach (DepthsA depthArea in SpatialRelationResolver.Instance.GetSpatialRelatedValueFrom<DepthsA>(shape, SpatialRelationship.Contains)) {
+                if (depthArea.FcSubtype is 15) {  // UNSARE
+                    return true;
+                }
+            }
+            return false;
+        }
+
         internal static decimal? GetDefaultClearanceDepthWreck(Geometry? shape, decimal? valsou, int? expsou, decimal? height, int? watlev, int? catwrk, long objectid, string tablename, string lnam) {
 
             bool coveredByUnsurveyedArea = false;
@@ -1833,6 +1842,9 @@ namespace S100Framework.Applications
         }
 
         internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
+            
+            if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
+
             InformationResult result = new();
 
             var createNauticalInformation = (string fileReference, string language) => {

@@ -81,6 +81,21 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        internal IEnumerable<T> GetSpatialRelatedValueFrom<T>(Geometry shape, SpatialRelationship spatialRelationship) where T : class {
+            //return new List<T>() { (T)(object)current.GlobalId };
+
+            if (!_featureClasses.ContainsKey(typeof(T).Name)) {
+                _featureClasses[typeof(T).Name] = _geodatabase!.OpenDataset<FeatureClass>(this.GetFullTableName(typeof(T).Name));
+            }
+            var featureclass = _featureClasses[typeof(T).Name];
+
+            if (shape != null) {
+                foreach (var SpatialRelated in SelectIn<T>(shape, featureclass, spatialRelationship, ImporterNIS.QueryFilter)) {
+                    yield return SpatialRelated;
+                }
+            }
+        }
+
 
         private static IEnumerable<T> SelectIn<T>(Geometry geometry, FeatureClass in_featureclass, SpatialRelationship spatialRelationship, QueryFilter queryFilter) where T : class {
             var spatialQueryFilter = new SpatialQueryFilter {

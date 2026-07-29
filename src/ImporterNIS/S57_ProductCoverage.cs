@@ -200,8 +200,8 @@ namespace S100Framework.Applications
                 var vdat = GetVerticalDatum(current.VDAT ?? 3, _coverage);
                 var sdat = GetSoundingDatum(current.SDAT!.Value, _coverage);
 
-                electronicProduct57.verticalDatum = vdat!.value;
-                electronicProduct101.verticalDatum = vdat!.value;
+                electronicProduct57.verticalDatum = sdat!.value;
+                electronicProduct101.verticalDatum = sdat!.value;
 
                 coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
 
@@ -220,6 +220,8 @@ namespace S100Framework.Applications
                         using var buffer = featureClass.CreateRowBuffer();
                         buffer["ps"] = ps128;
 
+                        Feature s57,s101;
+                        string s57UID, s101UID;
                         //  S-57
                         {
                             buffer["code"] = electronicProduct57.S100FC_code;
@@ -231,8 +233,8 @@ namespace S100Framework.Applications
                             buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
 
                             SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
+                            s57 = featureClass.CreateRow(buffer);
+                            s57UID = s57.UID();
                         }
 
                         //  S-101
@@ -246,9 +248,49 @@ namespace S100Framework.Applications
                             buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
 
                             SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
+                            s101 = featureClass.CreateRow(buffer);
+                            s101UID = s101.UID();
                         }
+
+                        var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                            role = "theReference",
+                            roleType = "association",
+                            featureId=s101UID,
+                            featureType = electronicProduct101.S100FC_code,
+                        };
+                        ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
+                        
+                        //var productMappingS57theSource = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                        //    role = "theSource",
+                        //    roleType = "association",
+                        //    featureId = s57UID,
+                        //    featureType = electronicProduct57.S100FC_code,
+                        //};
+                        //((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theSource.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
+
+                        featureBinding[] featureBindingsS57 = [productMappingS57theReference];
+                        s57["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS57, jsonSerializerOptions128);
+                        s57.Store();
+
+                        var productMappingS101theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                            role = "theReference",
+                            roleType = "association",
+                            featureId = s57UID,
+                            featureType = electronicProduct57.S100FC_code,
+                        };
+                        ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theReference.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
+
+                        //var productMappingS101theSource = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                        //    role = "theSource",
+                        //    roleType = "association",
+                        //    featureId = s101UID,
+                        //    featureType = electronicProduct101.S100FC_code,
+                        //};
+                        //((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theSource.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
+
+                        featureBinding[] featureBindingsS101 = [productMappingS101theReference];
+                        s101["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS101, jsonSerializerOptions128);
+                        s101.Store();
                     }
                 }
             }
