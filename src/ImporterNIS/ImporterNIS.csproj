@@ -22,6 +22,11 @@
   </ItemGroup>-->
 
   <ItemGroup>
+    <None Remove="s100ed12.gdb.zip" />
+    <None Remove="s100ed12.geodatabase" />
+    <None Remove="s100ed13.geodatabase" />
+    <None Remove="s100ed14.geodatabase" />
+    <None Remove="s100ed15.geodatabase" />
     <None Remove="s100ed8.gdb.zip" />
     <None Remove="s100ed9.gdb.zip" />
     <None Remove="s100edX.gdb.zip" />
@@ -65,21 +70,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="coverage.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed12.gdb.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed12.geodatabase">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed13.geodatabase">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed14.geodatabase">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed15.geodatabase">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="s100ed16.geodatabase">

@@ -37,7 +37,7 @@ namespace S100Framework.Applications
         //    _ => throw new NotImplementedException(),
         //};
 
-        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target, QueryFilter filter, int minimumDisplayScale2, ref S101ProductCoverage[] converages, string datasets = "") {
+        private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target128, QueryFilter filter, int minimumDisplayScale2, ref S101ProductCoverage[] converages, string datasets, Action<S101ProductCoverage[]> createProductCoverages) {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -215,7 +215,7 @@ namespace S100Framework.Applications
                         productCoverages = [.. productCoverages, (Polygon)((Feature)_.Current).GetShape().Clone()];
                     }
 
-                    using (var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"))) {
+                    using (var featureClass = target128.OpenDataset<FeatureClass>(target128.GetName("surface"))) {
 
                         using var buffer = featureClass.CreateRowBuffer();
                         buffer["ps"] = ps128;
@@ -393,48 +393,50 @@ namespace S100Framework.Applications
                 }
             }
 
-            using (var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"))) {
-                using var buffer = featureClass.CreateRowBuffer();
-                buffer["ps"] = ps101;
+            createProductCoverages.Invoke(products);
 
-                foreach (var c in products) {
-                    buffer["code"] = c.DataCoverage.GetType().Name;
-                    buffer["attributebindings"] = c.DataCoverage.Flatten();
-                    buffer["informationbindings"] = "[]";
-                    buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = c.specificUsage;
-                    buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
+            //using (var featureClass = target101.OpenDataset<FeatureClass>(target101.GetName("surface"))) {
+            //    using var buffer = featureClass.CreateRowBuffer();
+            //    buffer["ps"] = ps101;
 
-                    foreach (var p in c.Coverage.Split()) {
-                        SetShape(buffer, p);
-                        using var featureN = featureClass.CreateRow(buffer);
-                        var name = featureN.UID();
-                    }
-                }
+            //    foreach (var c in products) {
+            //        buffer["code"] = c.DataCoverage.GetType().Name;
+            //        buffer["attributebindings"] = c.DataCoverage.Flatten();
+            //        buffer["informationbindings"] = "[]";
+            //        buffer["featurebindings"] = "[]";
+            //        buffer["specificusage"] = c.specificUsage;
+            //        buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
 
-                foreach (var c in products) {
-                    var vdat = new VerticalDatumOfData {
-                        verticalDatum = c.VDAT?.value,
-                    };
+            //        foreach (var p in c.Coverage.Split()) {
+            //            SetShape(buffer, p);
+            //            using var featureN = featureClass.CreateRow(buffer);
+            //            var name = featureN.UID();
+            //        }
+            //    }
 
-                    buffer["code"] = vdat.GetType().Name;
-                    buffer["attributebindings"] = vdat.Flatten();
-                    buffer["informationbindings"] = "[]";
-                    buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = c.specificUsage;
-                    buffer["sourceIdentifier"] = vdat.sourceIdentifier;
+            //    foreach (var c in products) {
+            //        var vdat = new VerticalDatumOfData {
+            //            verticalDatum = c.VDAT?.value,
+            //        };
 
-                    foreach (var p in c.Coverage.Split()) {
-                        SetShape(buffer, p);
-                        using var featureN = featureClass.CreateRow(buffer);
-                        var name = featureN.UID();
+            //        buffer["code"] = vdat.GetType().Name;
+            //        buffer["attributebindings"] = vdat.Flatten();
+            //        buffer["informationbindings"] = "[]";
+            //        buffer["featurebindings"] = "[]";
+            //        buffer["specificusage"] = c.specificUsage;
+            //        buffer["sourceIdentifier"] = vdat.sourceIdentifier;
 
-                        VerticalDatums.Instance.Add(p, vdat.verticalDatum);
+            //        foreach (var p in c.Coverage.Split()) {
+            //            SetShape(buffer, p);
+            //            using var featureN = featureClass.CreateRow(buffer);
+            //            var name = featureN.UID();
 
-                        SoundingDatums.Instance.Add(p, c.SDAT!);
-                    }
-                }
-            }
+            //            VerticalDatums.Instance.Add(p, vdat.verticalDatum);
+
+            //            SoundingDatums.Instance.Add(p, c.SDAT!);
+            //        }
+            //    }
+            //}
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }
 

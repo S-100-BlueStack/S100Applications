@@ -247,7 +247,7 @@ namespace S100Framework.Applications
                 QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
 
                 using (Geodatabase source = createGeodatabase()) {
-                    Logger.Current.Information($"Converting Product Coverages");
+                    Logger.Current.Information($"Converting Product Coverages");                    
 
                     using var electronicProducts = createGeodatabaseElectronicProduct();
 
@@ -265,7 +265,53 @@ namespace S100Framework.Applications
                         }, electronicProducts);
                     }                    
 
-                    Store((d) => S57_ProductCoverage_Full(source, d, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter), electronicProducts);
+                    Store((d) => S57_ProductCoverage_Full(source, electronicProducts, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter, (products) => {
+                        using var s101 = createTargetGeodatabase();
+                        Store((target101) => {
+                            using (var featureClass = target101.OpenDataset<FeatureClass>(target101.GetName("surface"))) {
+                                using var buffer = featureClass.CreateRowBuffer();
+                                buffer["ps"] = ps101;
+
+                                foreach (var c in products) {
+                                    buffer["code"] = c.DataCoverage.GetType().Name;
+                                    buffer["attributebindings"] = c.DataCoverage.Flatten();
+                                    buffer["informationbindings"] = "[]";
+                                    buffer["featurebindings"] = "[]";
+                                    buffer["specificusage"] = c.specificUsage;
+                                    buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
+
+                                    foreach (var p in c.Coverage.Split()) {
+                                        SetShape(buffer, p);
+                                        using var featureN = featureClass.CreateRow(buffer);
+                                        var name = featureN.UID();
+                                    }
+                                }
+
+                                foreach (var c in products) {
+                                    var vdat = new VerticalDatumOfData {
+                                        verticalDatum = c.VDAT?.value,
+                                    };
+
+                                    buffer["code"] = vdat.GetType().Name;
+                                    buffer["attributebindings"] = vdat.Flatten();
+                                    buffer["informationbindings"] = "[]";
+                                    buffer["featurebindings"] = "[]";
+                                    buffer["specificusage"] = c.specificUsage;
+                                    buffer["sourceIdentifier"] = vdat.sourceIdentifier;
+
+                                    foreach (var p in c.Coverage.Split()) {
+                                        SetShape(buffer, p);
+                                        using var featureN = featureClass.CreateRow(buffer);
+                                        var name = featureN.UID();
+
+                                        VerticalDatums.Instance.Add(p, vdat.verticalDatum);
+
+                                        SoundingDatums.Instance.Add(p, c.SDAT!);
+                                    }
+                                }
+                            }
+                        }, s101);
+                    }), electronicProducts);
                 }
             }
 
