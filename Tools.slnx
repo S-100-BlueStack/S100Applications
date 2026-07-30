@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="src/ISO8211/S100.Iso8211.Cli.csproj" />
-  <Project Path="src/ISO8211/S100.Iso8211.csproj" />
+  <Project Path="src/S100.Iso8211.Cli/S100.Iso8211.Cli.csproj" />
+  <Project Path="src/S100.Iso8211/S100.Iso8211.csproj" />
 </Solution>

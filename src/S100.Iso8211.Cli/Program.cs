@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using S100.Iso8211.S57;
 using S100.Iso8211.Serialization;
 using S100.Iso8211.S101;
 
@@ -19,10 +20,11 @@ internal static class Program
           -m, --mode <mode>       raw       lossless dump of the DDR and every record
                                   features  dataset header + features with geometry (default)
                                   geojson   plain RFC 7946 FeatureCollection
+          -p, --product <product> auto (default), s57 or s101. Detected from the DDR.
           --compact               Write minified JSON. Ignored for YAML.
           --big-endian            Decode b* subfields most significant byte first.
           --encoding <name>       Fallback text encoding (default utf-8).
-          --feature-types <file>  JSON object mapping feature type code -> name.
+          --feature-types <file>  JSON object mapping feature type or OBJL code -> name.
           --attributes <file>     JSON object mapping attribute code -> name.
           --skip-malformed        Keep going when a record fails to parse.
         """;
@@ -81,18 +83,40 @@ internal static class Program
             return;
         }
 
-        var dataset = S101DatasetReader.Read(reader, options.S101Options, Path.GetFileName(options.InputPath));
-        S101DocumentWriter.Write(
-            dataset, target, options.Format, options.Indented,
-            geoJsonOnly: options.Mode == ConversionMode.GeoJson);
+        Iso8211Product product = options.Product ?? ProductDetector.Detect(reader);
+        bool geoJsonOnly = options.Mode == ConversionMode.GeoJson;
+
+        int featureCount, spatialCount;
+        IReadOnlyList<string> warnings;
+
+        if (product == Iso8211Product.S57)
+        {
+            var dataset = S57DatasetReader.Read(reader, options.S57Options, Path.GetFileName(options.InputPath));
+            S57DocumentWriter.Write(dataset, target, options.Format, options.Indented, geoJsonOnly);
+            featureCount = dataset.Features.Count;
+            spatialCount = dataset.VectorRecords.Count;
+            warnings = dataset.Warnings;
+        }
+        else
+        {
+            var dataset = S101DatasetReader.Read(reader, options.S101Options, Path.GetFileName(options.InputPath));
+            S101DocumentWriter.Write(dataset, target, options.Format, options.Indented, geoJsonOnly);
+            featureCount = dataset.Features.Count;
+            spatialCount = dataset.SpatialRecords.Count;
+            warnings = dataset.Warnings;
+        }
 
         if (toStdout) return;
 
+        string label = product == Iso8211Product.S57 ? "S-57" : "S-101";
         Console.Error.WriteLine(
-            $"{dataset.Features.Count} features, {dataset.SpatialRecords.Count} spatial records -> {outputPath}");
+            $"{label}: {featureCount} features, {spatialCount} spatial records -> {outputPath}");
 
-        foreach (string warning in dataset.Warnings.Take(20))
+        foreach (string warning in warnings.Take(20))
             Console.Error.WriteLine($"  warning: {warning}");
+
+        if (warnings.Count > 20)
+            Console.Error.WriteLine($"  ... and {warnings.Count - 20} more warnings");
     }
 
     private static bool TryParseArguments(string[] args, out ConversionOptions options, out string? error)
@@ -118,6 +142,19 @@ internal static class Program
                         case "json": options.ExplicitFormat = OutputFormat.Json; break;
                         default:
                             error = $"Unknown format '{format}'. Expected yaml or json.";
+                            return false;
+                    }
+                    break;
+
+                case "-p" or "--product":
+                    if (!TryTakeValue(args, ref i, argument, out string product, out error)) return false;
+                    switch (product.ToLowerInvariant())
+                    {
+                        case "auto": options.Product = null; break;
+                        case "s57" or "s-57": options.Product = Iso8211Product.S57; break;
+                        case "s101" or "s-101": options.Product = Iso8211Product.S101; break;
+                        default:
+                            error = $"Unknown product '{product}'. Expected auto, s57 or s101.";
                             return false;
                     }
                     break;
@@ -162,12 +199,16 @@ internal static class Program
 
                 case "--feature-types":
                     if (!TryTakeValue(args, ref i, argument, out string featureTypesPath, out error)) return false;
-                    options.S101Options.FeatureTypeNames = LoadCodeMap(featureTypesPath);
+                    var featureTypes = LoadCodeMap(featureTypesPath);
+                    options.S101Options.FeatureTypeNames = featureTypes;
+                    options.S57Options.ObjectClassNames = featureTypes;
                     break;
 
                 case "--attributes":
                     if (!TryTakeValue(args, ref i, argument, out string attributesPath, out error)) return false;
-                    options.S101Options.AttributeNames = LoadCodeMap(attributesPath);
+                    var attributeNames = LoadCodeMap(attributesPath);
+                    options.S101Options.AttributeNames = attributeNames;
+                    options.S57Options.AttributeNames = attributeNames;
                     break;
 
                 default:
@@ -228,6 +269,10 @@ internal sealed class ConversionOptions
     public string ResolvedOutputPath => OutputPath ?? InputPath + Format.Extension();
     public ConversionMode Mode { get; set; } = ConversionMode.Features;
     public bool Indented { get; set; } = true;
+    /// <summary>Null means detect from the DDR.</summary>
+    public Iso8211Product? Product { get; set; }
+
     public Iso8211ReaderOptions ReaderOptions { get; } = new();
     public S101ReaderOptions S101Options { get; } = new();
+    public S57ReaderOptions S57Options { get; } = new();
 }

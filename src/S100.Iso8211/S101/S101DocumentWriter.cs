@@ -242,7 +242,8 @@ public static class S101DocumentWriter
         w.WriteEndObject();
     }
 
-    private static void WriteGeometry(IStructuredWriter w, S101Geometry? geometry)
+    /// <summary>Shared with the S-57 layer, which produces the same geometry container.</summary>
+    internal static void WriteGeometry(IStructuredWriter w, S101Geometry? geometry)
     {
         if (geometry is null) { w.WriteNullValue(); return; }
 

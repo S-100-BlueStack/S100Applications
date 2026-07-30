@@ -5,7 +5,8 @@
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>S100.Iso8211.SelfTest</RootNamespace>
+    <AssemblyName>s100json</AssemblyName>
+    <RootNamespace>S100.Iso8211.Cli</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/S100.Iso8211/S100.Iso8211.csproj" />
