@@ -12,6 +12,11 @@ public static class S101Codes
     public const string DatasetStructure = "DSSI";
     public const string CrsIdentifier = "CSID";
     public const string CrsIdentifierLegacy = "CRID";   // pre-1.0.0 drafts used CRID for the CRS record
+    public const string CrsHeader = "CRSH";
+    public const string CoordinateSystemAxes = "CSAX";
+    public const string Projection = "PROJ";
+    public const string GeodeticDatum = "GDAT";
+    public const string VerticalDatum = "VDAT";
     public const string InformationIdentifier = "IRID";
     public const string PointIdentifier = "PRID";
     public const string MultiPointIdentifier = "MRID";
@@ -209,6 +214,81 @@ public sealed class S101CoordinateTransform
     private static double Safe(double f) => f == 0 || double.IsNaN(f) ? 1 : f;
 }
 
+/// <summary>
+/// One component of the coordinate reference system: a single CRSH field plus the CSAX, PROJ, GDAT
+/// and VDAT fields that follow it in the record and therefore belong to it.
+/// </summary>
+/// <remarks>
+/// A cell is usually compound - a horizontal CRS component and a vertical one - so this is a list,
+/// not a single value. Flattening the components together loses the horizontal CRS.
+/// </remarks>
+public sealed class S101CrsComponent
+{
+    /// <summary>The CRSH field this component was built from.</summary>
+    public required DataField Header { get; init; }
+
+    /// <summary>CSAX, PROJ, GDAT, VDAT and anything else attached to this component, in file order.</summary>
+    public required IReadOnlyList<DataField> Fields { get; init; }
+
+    /// <summary>CRIX - which component this is, matching NCRC on the record identifier.</summary>
+    public long? Index => Header.GetInt64("CRIX");
+
+    /// <summary>CRST - CRS type, for example 1 for 2-D geographic and 5 for vertical.</summary>
+    public long? CrsType => Header.GetInt64("CRST");
+
+    /// <summary>CSTY - coordinate system type, for example 1 for ellipsoidal and 3 for vertical.</summary>
+    public long? CoordinateSystemType => Header.GetInt64("CSTY");
+
+    /// <summary>CRNM - the CRS name, for example "WGS84" or "Depth - lowest astronomical tide".</summary>
+    public string? Name => Header.GetString("CRNM");
+
+    /// <summary>CRSI - the CRS identifier within the source register, for example the EPSG code.</summary>
+    public string? Identifier => Header.GetString("CRSI");
+
+    /// <summary>CRSS - the register the identifier comes from, for example 2 for EPSG.</summary>
+    public long? Source => Header.GetInt64("CRSS");
+
+    /// <summary>SCRI - free text describing the source, normally omitted when CRSS names a register.</summary>
+    public string? SourceInformation => Header.GetString("SCRI");
+
+    public DataField? Field(string tag)
+    {
+        foreach (var f in Fields)
+            if (string.Equals(f.Tag, tag, StringComparison.OrdinalIgnoreCase)) return f;
+        return null;
+    }
+
+    public DataField? Axes => Field(S101Codes.CoordinateSystemAxes);
+    public DataField? ProjectionField => Field(S101Codes.Projection);
+    public DataField? GeodeticDatum => Field(S101Codes.GeodeticDatum);
+    public DataField? VerticalDatum => Field(S101Codes.VerticalDatum);
+
+    public override string ToString() => $"CRS {Index}: {Name}";
+}
+
+/// <summary>The coordinate reference system record (RCNM 15): one CSID, then one or more components.</summary>
+public sealed class S101CoordinateReferenceSystem
+{
+    /// <summary>The CSID field.</summary>
+    public DataField? Identifier { get; init; }
+
+    public required IReadOnlyList<S101CrsComponent> Components { get; init; }
+
+    /// <summary>Fields that appeared before any CRSH, kept so nothing in the record is dropped.</summary>
+    public IReadOnlyList<DataField> UnattachedFields { get; init; } = Array.Empty<DataField>();
+
+    public long? RecordName => Identifier?.GetInt64("RCNM");
+    public long? RecordId => Identifier?.GetInt64("RCID");
+
+    /// <summary>NCRC - how many components the record declares. Compare against Components.Count.</summary>
+    public long? ComponentCount => Identifier?.GetInt64("NCRC");
+
+    /// <summary>True when NCRC disagrees with the number of CRSH fields actually present.</summary>
+    public bool ComponentCountMismatch => ComponentCount is not null && ComponentCount != Components.Count;
+
+    public override string ToString() => $"CRS record with {Components.Count} component(s)";
+}
+
 /// <summary>Everything a caller needs from an S-101 cell: header metadata, features and geometry.</summary>
 public sealed class S101Dataset
 {
@@ -222,9 +302,8 @@ public sealed class S101Dataset
     public IReadOnlyList<KeyValuePair<string, object?>> DatasetStructure { get; init; }
         = Array.Empty<KeyValuePair<string, object?>>();
 
-    /// <summary>Every field of the coordinate reference system record, in file order.</summary>
-    public IReadOnlyList<KeyValuePair<string, object?>> CoordinateReferenceSystem { get; init; }
-        = Array.Empty<KeyValuePair<string, object?>>();
+    /// <summary>The coordinate reference system record, or null when the cell carries none.</summary>
+    public S101CoordinateReferenceSystem? CoordinateReferenceSystem { get; init; }
 
     public S101CoordinateTransform Transform { get; init; } = S101CoordinateTransform.Identity;
 

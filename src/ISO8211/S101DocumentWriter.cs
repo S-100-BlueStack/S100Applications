@@ -31,7 +31,7 @@ public static class S101DocumentWriter
             w.WriteStartObject("header");
             WriteKeyValues(w, "datasetIdentification", dataset.DatasetIdentification);
             WriteKeyValues(w, "datasetStructure", dataset.DatasetStructure);
-            WriteKeyValues(w, "coordinateReferenceSystem", dataset.CoordinateReferenceSystem);
+            WriteCoordinateReferenceSystem(w, dataset.CoordinateReferenceSystem);
 
             w.WriteStartObject("coordinateTransform");
             w.WriteNumber("multiplicationFactorX", dataset.Transform.MultiplicationFactorX);
@@ -89,6 +89,61 @@ public static class S101DocumentWriter
     {
         using var fs = File.Create(path);
         Write(dataset, fs, format ?? OutputFormats.FromPath(path), indented, geoJsonOnly);
+    }
+
+    /// <summary>
+    /// Writes the CRS record as its identifier subfields plus a "components" sequence, one entry per
+    /// CRSH. Flattening the components into a single mapping would emit duplicate keys and silently
+    /// drop every component but the last.
+    /// </summary>
+    private static void WriteCoordinateReferenceSystem(IStructuredWriter w, S101CoordinateReferenceSystem? crs)
+    {
+        w.WriteStartObject("coordinateReferenceSystem");
+
+        if (crs is not null)
+        {
+            if (crs.Identifier is not null) WriteSubfieldsInline(w, crs.Identifier);
+
+            w.WriteStartArray("components");
+            foreach (var component in crs.Components)
+            {
+                w.WriteStartObject();
+                WriteSubfieldsInline(w, component.Header);
+
+                foreach (var field in component.Fields)
+                {
+                    w.WritePropertyName(field.Tag);
+                    Iso8211DocumentWriter.WriteFieldValue(w, field);
+                }
+
+                w.WriteEndObject();
+            }
+            w.WriteEndArray();
+
+            if (crs.UnattachedFields.Count > 0)
+            {
+                w.WriteStartObject("unattachedFields");
+                foreach (var field in crs.UnattachedFields)
+                {
+                    w.WritePropertyName(field.Tag);
+                    Iso8211DocumentWriter.WriteFieldValue(w, field);
+                }
+                w.WriteEndObject();
+            }
+        }
+
+        w.WriteEndObject();
+    }
+
+    /// <summary>Writes each subfield of a non-repeating field as a property of the current mapping.</summary>
+    private static void WriteSubfieldsInline(IStructuredWriter w, DataField field)
+    {
+        foreach (var instance in field.Instances)
+            foreach (var value in instance.Values)
+            {
+                w.WritePropertyName(value.Label);
+                WriteValue(w, value.Value);
+            }
     }
 
     private static void WriteFeature(IStructuredWriter w, S101Feature feature, bool geoJsonOnly)
@@ -246,18 +301,23 @@ public static class S101DocumentWriter
         foreach (var (key, value) in values)
         {
             w.WritePropertyName(key);
-            switch (value)
-            {
-                case null: w.WriteNullValue(); break;
-                case string s: w.WriteStringValue(s); break;
-                case long l: w.WriteNumberValue(l); break;
-                case ulong u: w.WriteNumberValue(u); break;
-                case double d when double.IsFinite(d): w.WriteNumberValue(d); break;
-                case double: w.WriteNullValue(); break;
-                case byte[] b: w.WriteStringValue(Convert.ToHexString(b)); break;
-                default: w.WriteStringValue(value.ToString()); break;
-            }
+            WriteValue(w, value);
         }
         w.WriteEndObject();
+    }
+
+    private static void WriteValue(IStructuredWriter w, object? value)
+    {
+        switch (value)
+        {
+            case null: w.WriteNullValue(); break;
+            case string s: w.WriteStringValue(s); break;
+            case long l: w.WriteNumberValue(l); break;
+            case ulong u: w.WriteNumberValue(u); break;
+            case double d when double.IsFinite(d): w.WriteNumberValue(d); break;
+            case double: w.WriteNullValue(); break;
+            case byte[] b: w.WriteStringValue(Convert.ToHexString(b)); break;
+            default: w.WriteStringValue(value.ToString()); break;
+        }
     }
 }

@@ -5,11 +5,12 @@ A C# library that reads ISO/IEC 8211 (DDF) files — the physical encoding behin
 Targets `net8.0`, no external dependencies (`System.Text.Json` only).
 
 ```
+docs/CRSH.md                   reference notes for the coordinate reference system record
 src/S100.Iso8211               the library
   Serialization/               YAML + JSON writers behind one abstraction
   S101/                        the S-101 semantic layer
 tools/S100.Iso8211.Cli         s100json command line converter
-tests/S100.Iso8211.SelfTest    builds a synthetic S-101 cell, reads it back, asserts 55 checks
+tests/S100.Iso8211.SelfTest    builds a synthetic S-101 cell, reads it back, asserts 74 checks
 ```
 
 ```bash
@@ -109,6 +110,12 @@ Format resolution: an explicit `-f/--format` wins, then the output file extensio
 | Character sets | Truncated escape sequence → UTF-8, ISO 8859-1, UCS-2; blank defaults to UTF-8 |
 | Memory | Records streamed one at a time; the S-101 layer holds the cell in memory because features reference spatial records by id |
 
+The coordinate reference system record is read as a list of components rather than a flat mapping,
+because a cell is normally compound — a horizontal CRS plus a vertical one. `NCRC` is checked against
+the number of `CRSH` fields present and a mismatch is reported in `Warnings`.
+[docs/CRSH.md](docs/CRSH.md) documents the record in full, including how to migrate a call site
+written against the previous flat-list shape via `ToKeyValuePairs()`.
+
 Geometry assembly covers point, multi point, curve (`PTAS` begin/end node + interior vertices), composite curve (`CUCO`, honouring `ORNT`), and surface (`RIAS` rings, exterior/interior by `USAG`, rings auto-closed). Multiple spatial associations collapse into `MultiPoint` / `MultiLineString` / `MultiPolygon`, or a `GeometryCollection` when the types differ. Cycles are detected and reported rather than hanging.
 
 Dangling references become per-feature `warnings` in the JSON instead of exceptions — a bad reference in one feature shouldn't kill a whole conversion.
@@ -169,11 +176,15 @@ These are the places where I had to commit to an interpretation. Each is one lin
 
 3. **Feature type subfield** — read from `NFTC`, falling back to `OBJC`, `FTYP`, `FCID`, `OBJL`. Add yours to the list in `BuildFeature` if it differs.
 
-4. **`CRID` ambiguity** — Curve Record Identifier in S-101 1.0.0, but the CRS record identifier in pre-1.0 drafts. Disambiguated by checking `RCNM` (15 = CRS).
+4. **CRS components** — `CSAX`, `PROJ`, `GDAT` and `VDAT` are attached to the `CRSH` that precedes
+   them in field order, since ISO 8211 carries no explicit parent pointer. See
+   [docs/CRSH.md](docs/CRSH.md).
 
-5. **Surface rings** — one `RIAS` entry per ring. If your data splits a single ring across several `RIAS` entries, `RingsFor` in `GeometryAssembler.cs` needs to accumulate instead.
+5. **`CRID` ambiguity** — Curve Record Identifier in S-101 1.0.0, but the CRS record identifier in pre-1.0 drafts. Disambiguated by checking `RCNM` (15 = CRS).
 
-6. **Feature/attribute names** need the S-101 Feature Catalogue, which is out of scope here. Supply the code→name maps via `S101ReaderOptions` and the JSON uses readable names.
+6. **Surface rings** — one `RIAS` entry per ring. If your data splits a single ring across several `RIAS` entries, `RingsFor` in `GeometryAssembler.cs` needs to accumulate instead.
+
+7. **Feature/attribute names** need the S-101 Feature Catalogue, which is out of scope here. Supply the code→name maps via `S101ReaderOptions` and the JSON uses readable names.
 
 ---
 

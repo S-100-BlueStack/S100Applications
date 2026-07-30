@@ -31,6 +31,10 @@ public static class SampleCell
          .Define("CSID", "Coordinate Reference System Record Identifier", "RCNM!RCID!NCRC", "(b11,b14,b11)", 1, 5)
          .Define("CRSH", "Coordinate Reference System Header",
                  "CRIX!CRST!CSTY!CRNM!CRSI!CRSS!SCRI", "(3b11,2A,b11,A)", 1, 6)
+         .Define("CSAX", "Coordinate System Axes", "*AXTY!AXUM", "(2b11)", 1, 5)
+         .Define("GDAT", "Geodetic Datum",
+                 "DTNM!ELNM!ESMA!ESPT!ESPM!CMNM!CMGL", "(2A,b48,b11,b48,A,b48)", 1, 6)
+         .Define("VDAT", "Vertical Datum", "DTIX!DTNM!DTID!DTSR!SCRI", "(b11,2A,b11,A)", 1, 6)
          .Define("PRID", "Point Record Identifier", "RCNM!RCID!RVER!RUIN", "(b11,b14,b12,b11)", 1, 5)
          .Define("MRID", "Multi Point Record Identifier", "RCNM!RCID!RVER!RUIN", "(b11,b14,b12,b11)", 1, 5)
          .Define("CRID", "Curve Record Identifier", "RCNM!RCID!RVER!RUIN", "(b11,b14,b12,b11)", 1, 5)
@@ -51,6 +55,7 @@ public static class SampleCell
                  {
                      ("0001", "DSID"), ("DSID", "DSSI"),
                      ("0001", "CSID"), ("CSID", "CRSH"),
+                     ("CRSH", "CSAX"), ("CRSH", "GDAT"), ("CRSH", "VDAT"),
                      ("0001", "PRID"), ("PRID", "C2IT"),
                      ("0001", "MRID"), ("MRID", "C3IL"),
                      ("0001", "CRID"), ("CRID", "PTAS"), ("CRID", "C2IL"),
@@ -87,13 +92,35 @@ public static class SampleCell
                 .B14(0).B14(4).B14(1).B14(3).B14(1).B14(1).B14(4)
                 .End()));
 
-        // ---- 2. coordinate reference system --------------------------------------------
+        // ---- 2. coordinate reference system ---------------------------------------------
+        // Compound: a horizontal component and a vertical one, which is the normal case for a cell.
+        // CSAX / GDAT / VDAT belong to the CRSH they follow.
         w.Record(
             RecordId(),
-            ("CSID", FieldBuilder.New().B11(15).B14(1).B11(1).End()),
+            ("CSID", FieldBuilder.New().B11(15).B14(1).B11(2).End()),
+
             ("CRSH", FieldBuilder.New()
                 .B11(1).B11(1).B11(1)
                 .Text("WGS 84").Text("4326").B11(2).Text("EPSG")
+                .End()),
+            ("CSAX", FieldBuilder.New().B11(1).B11(1).B11(2).B11(1).End()),
+            ("GDAT", FieldBuilder.New()
+                .Text("World Geodetic System 1984").Text("WGS 84")
+                .B48(6378137.0).B11(1).B48(298.257223563)
+                .Text("Greenwich").B48(0.0)
+                .End()),
+
+            ("CRSH", FieldBuilder.New()
+                .B11(2).B11(5).B11(3)
+                .Text("Depth - lowest astronomical tide").Text("").B11(255).Text("")
+                .End()),
+            ("CSAX", FieldBuilder.New().B11(12).B11(4).End()),
+            ("VDAT", FieldBuilder.New()
+                .B11(1)                             // DTIX  b11
+                .Text("lowest astronomical tide")   // DTNM  A
+                .Text("23")                         // DTID  A
+                .B11(2)                             // DTSR  b11
+                .Text("")                           // SCRI  A
                 .End()));
 
         // ---- 3. point records -----------------------------------------------------------

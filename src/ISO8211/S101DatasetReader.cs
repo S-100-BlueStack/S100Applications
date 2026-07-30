@@ -43,7 +43,7 @@ public static class S101DatasetReader
 
         var datasetId = new List<KeyValuePair<string, object?>>();
         var datasetStructure = new List<KeyValuePair<string, object?>>();
-        var crs = new List<KeyValuePair<string, object?>>();
+        S101CoordinateReferenceSystem? crs = null;
 
         var spatialSources = new List<(S101RecordKind Kind, DataRecord Record)>();
         var featureRecords = new List<DataRecord>();
@@ -63,8 +63,16 @@ public static class S101DatasetReader
                     break;
 
                 case S101RecordKind.CoordinateReferenceSystem:
-                    foreach (var f in record.Fields)
-                        if (f.Tag != Iso8211Constants.RecordIdentifierFieldTag) Collect(f, crs);
+                    if (crs is not null)
+                    {
+                        warnings.Add($"Record #{record.Ordinal}: a second coordinate reference system " +
+                                     "record was found; only the first is kept.");
+                        break;
+                    }
+                    crs = BuildCoordinateReferenceSystem(record);
+                    if (crs.ComponentCountMismatch)
+                        warnings.Add($"CRS record declares NCRC {crs.ComponentCount} but carries " +
+                                     $"{crs.Components.Count} CRSH field(s).");
                     break;
 
                 case S101RecordKind.Information:
@@ -158,6 +166,60 @@ public static class S101DatasetReader
         }
 
         return S101RecordKind.Unknown;
+    }
+
+    // ---------------------------------------------------------------- coordinate reference system
+
+    /// <summary>
+    /// Splits the CRS record into components. CSAX, PROJ, GDAT and VDAT are children of the CRSH
+    /// that precedes them, so a single ordered pass over the fields is enough to group them.
+    /// </summary>
+    public static S101CoordinateReferenceSystem BuildCoordinateReferenceSystem(DataRecord record)
+    {
+        DataField? identifier = null;
+        var components = new List<S101CrsComponent>();
+        var unattached = new List<DataField>();
+
+        DataField? header = null;
+        List<DataField> attached = new();
+
+        void CloseComponent()
+        {
+            if (header is null) return;
+            components.Add(new S101CrsComponent { Header = header, Fields = attached });
+            header = null;
+            attached = new List<DataField>();
+        }
+
+        foreach (var field in record.Fields)
+        {
+            if (field.Tag == Iso8211Constants.RecordIdentifierFieldTag) continue;
+
+            if (string.Equals(field.Tag, S101Codes.CrsIdentifier, StringComparison.OrdinalIgnoreCase))
+            {
+                identifier = field;
+                continue;
+            }
+
+            if (string.Equals(field.Tag, S101Codes.CrsHeader, StringComparison.OrdinalIgnoreCase))
+            {
+                CloseComponent();
+                header = field;
+                continue;
+            }
+
+            if (header is null) unattached.Add(field);
+            else attached.Add(field);
+        }
+
+        CloseComponent();
+
+        return new S101CoordinateReferenceSystem
+        {
+            Identifier = identifier,
+            Components = components,
+            UnattachedFields = unattached
+        };
     }
 
     // ---------------------------------------------------------------- spatial records
