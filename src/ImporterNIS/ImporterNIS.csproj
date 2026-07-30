@@ -35,10 +35,12 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.23" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.24" />
+    <PackageReference Include="S100Framework.Catalogues" Version="3.1.17" />
+    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.17" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
-    <PackageReference Include="S100Framework.Topology" Version="4.3.2" />
-    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.4" />
+    <PackageReference Include="S100Framework.Topology" Version="4.3.3" />
+    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.6" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
@@ -46,11 +48,6 @@
 
   <ItemGroup>
     <Folder Include="Maps\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues.ProductSpecifications\S100Framework.Catalogues.ProductSpecifications.csproj" />
-    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues\S100Framework.Catalogues.csproj" />
   </ItemGroup>
 
   <ItemGroup>
