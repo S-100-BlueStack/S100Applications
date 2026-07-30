@@ -151,7 +151,7 @@ namespace S100Framework.Applications
                     }
                 }
                 else {
-                    createGeodatabaseElectronicProduct = () => createTargetGeodatabase();
+                    createGeodatabaseElectronicProduct = createTargetGeodatabase;
                 }
 
                 filter = o.filter;
@@ -247,7 +247,7 @@ namespace S100Framework.Applications
                 QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
 
                 using (Geodatabase source = createGeodatabase()) {
-                    Logger.Current.Information($"Converting Product Coverages");                    
+                    Logger.Current.Information($"Converting Product Coverages");
 
                     using var electronicProducts = createGeodatabaseElectronicProduct();
 
@@ -263,11 +263,10 @@ namespace S100Framework.Applications
                         Store((electronicProducts) => {
                             _.DeleteRows(query);
                         }, electronicProducts);
-                    }                    
+                    }
 
                     Store((d) => S57_ProductCoverage_Full(source, electronicProducts, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter, (products) => {
-                        using var s101 = createTargetGeodatabase();
-                        Store((target101) => {
+                        void CreateProducts(Geodatabase target101) {
                             using (var featureClass = target101.OpenDataset<FeatureClass>(target101.GetName("surface"))) {
                                 using var buffer = featureClass.CreateRowBuffer();
                                 buffer["ps"] = ps101;
@@ -310,7 +309,17 @@ namespace S100Framework.Applications
                                     }
                                 }
                             }
-                        }, s101);
+                        }
+
+                        if (createTargetGeodatabase.Equals(createGeodatabaseElectronicProduct))
+                            CreateProducts(d);
+                        else {
+                            using var s101 = createTargetGeodatabase();
+
+                            Store((database) => {
+                                CreateProducts(database);
+                            }, s101);
+                        }
                     }), electronicProducts);
                 }
             }
@@ -1888,7 +1897,7 @@ namespace S100Framework.Applications
         }
 
         internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
-            
+
             if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
 
             InformationResult result = new();
