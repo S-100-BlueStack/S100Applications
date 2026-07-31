@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>AALL</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool AALL_HasValue(this Feature feature) => !(DBNull.Value == feature["AALL"]);
+        public static bool AALL_HasValue(this Feature feature) => !(DBNull.Value == feature["AALL"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Agency
@@ -46,7 +46,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>AGEN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool AGEN_HasValue(this Feature feature) => !(DBNull.Value == feature["AGEN"]);
+        public static bool AGEN_HasValue(this Feature feature) => !(DBNull.Value == feature["AGEN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Beacon shape
@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>BCNSHP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool BCNSHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BCNSHP"]);
+        public static bool BCNSHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BCNSHP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Buoy shape
@@ -84,7 +84,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>BOYSHP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool BOYSHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BOYSHP"]);
+        public static bool BOYSHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BOYSHP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Building shape
@@ -103,7 +103,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>BUISHP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool BUISHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BUISHP"]);
+        public static bool BUISHP_HasValue(this Feature feature) => !(DBNull.Value == feature["BUISHP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Buried depth
@@ -122,7 +122,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>BURDEP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool BURDEP_HasValue(this Feature feature) => !(DBNull.Value == feature["BURDEP"]);
+        public static bool BURDEP_HasValue(this Feature feature) => !(DBNull.Value == feature["BURDEP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Call sign
@@ -141,7 +141,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CALSGN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CALSGN_HasValue(this Feature feature) => !(DBNull.Value == feature["CALSGN"]);
+        public static bool CALSGN_HasValue(this Feature feature) => !(DBNull.Value == feature["CALSGN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of anchorage
@@ -160,7 +160,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATACH</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATACH_HasValue(this Feature feature) => !(DBNull.Value == feature["CATACH"]);
+        public static bool CATACH_HasValue(this Feature feature) => !(DBNull.Value == feature["CATACH"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of airport/airfield
@@ -179,7 +179,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATAIR</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATAIR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATAIR"]);
+        public static bool CATAIR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATAIR"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of bridge
@@ -198,7 +198,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATBRG</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATBRG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATBRG"]);
+        public static bool CATBRG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATBRG"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of built-up area
@@ -217,7 +217,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATBUA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATBUA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATBUA"]);
+        public static bool CATBUA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATBUA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of cardinal mark
@@ -236,7 +236,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCAM</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCAM"]);
+        public static bool CATCAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCAM"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of canal
@@ -255,7 +255,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCAN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCAN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCAN"]);
+        public static bool CATCAN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCAN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of cable
@@ -274,7 +274,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCBL</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCBL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCBL"]);
+        public static bool CATCBL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCBL"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of checkpoint
@@ -293,7 +293,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCHP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCHP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCHP"]);
+        public static bool CATCHP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCHP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of coastline
@@ -312,7 +312,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCOA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCOA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCOA"]);
+        public static bool CATCOA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCOA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of conveyor
@@ -331,7 +331,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCON</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCON_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCON"]);
+        public static bool CATCON_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCON"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of coverage
@@ -350,7 +350,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCOV</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCOV_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCOV"]);
+        public static bool CATCOV_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCOV"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of crane
@@ -369,7 +369,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCRN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCRN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCRN"]);
+        public static bool CATCRN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCRN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of control point
@@ -388,7 +388,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATCTR</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATCTR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCTR"]);
+        public static bool CATCTR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATCTR"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of dam
@@ -407,7 +407,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATDAM</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATDAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDAM"]);
+        public static bool CATDAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDAM"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of distance mark
@@ -426,7 +426,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATDIS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATDIS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDIS"]);
+        public static bool CATDIS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDIS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of dock
@@ -445,7 +445,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATDOC</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATDOC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDOC"]);
+        public static bool CATDOC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDOC"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of dumping ground
@@ -464,7 +464,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATDPG</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATDPG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDPG"]);
+        public static bool CATDPG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATDPG"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of fishing facility
@@ -483,7 +483,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATFIF</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATFIF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFIF"]);
+        public static bool CATFIF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFIF"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of fence/wall
@@ -502,7 +502,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATFNC</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATFNC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFNC"]);
+        public static bool CATFNC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFNC"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of fog signal
@@ -521,7 +521,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATFOG</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATFOG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFOG"]);
+        public static bool CATFOG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFOG"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of fortified structure
@@ -540,7 +540,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATFOR</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATFOR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFOR"]);
+        public static bool CATFOR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFOR"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of ferry
@@ -559,7 +559,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATFRY</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATFRY_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFRY"]);
+        public static bool CATFRY_HasValue(this Feature feature) => !(DBNull.Value == feature["CATFRY"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of gate
@@ -578,7 +578,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATGAT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATGAT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATGAT"]);
+        public static bool CATGAT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATGAT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of harbour facility
@@ -597,7 +597,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATHAF</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATHAF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATHAF"]);
+        public static bool CATHAF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATHAF"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of hulk
@@ -616,7 +616,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATHLK</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATHLK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATHLK"]);
+        public static bool CATHLK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATHLK"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of ice
@@ -635,7 +635,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATICE</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATICE_HasValue(this Feature feature) => !(DBNull.Value == feature["CATICE"]);
+        public static bool CATICE_HasValue(this Feature feature) => !(DBNull.Value == feature["CATICE"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of installation buoy
@@ -654,7 +654,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATINB</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATINB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATINB"]);
+        public static bool CATINB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATINB"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of lateral mark
@@ -673,7 +673,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATLAM</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATLAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLAM"]);
+        public static bool CATLAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLAM"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of light
@@ -692,7 +692,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATLIT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATLIT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLIT"]);
+        public static bool CATLIT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLIT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of landmark
@@ -711,7 +711,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATLMK</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATLMK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLMK"]);
+        public static bool CATLMK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLMK"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of land region
@@ -730,7 +730,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATLND</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATLND_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLND"]);
+        public static bool CATLND_HasValue(this Feature feature) => !(DBNull.Value == feature["CATLND"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category marine farm/culture
@@ -749,7 +749,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATMFA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATMFA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMFA"]);
+        public static bool CATMFA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMFA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of mooring/warping facility
@@ -768,7 +768,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATMOR</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATMOR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMOR"]);
+        public static bool CATMOR_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMOR"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of military practice area
@@ -787,7 +787,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATMPA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATMPA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMPA"]);
+        public static bool CATMPA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATMPA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of navigation line
@@ -806,7 +806,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATNAV</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATNAV_HasValue(this Feature feature) => !(DBNull.Value == feature["CATNAV"]);
+        public static bool CATNAV_HasValue(this Feature feature) => !(DBNull.Value == feature["CATNAV"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of obstruction
@@ -825,7 +825,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATOBS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATOBS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOBS"]);
+        public static bool CATOBS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOBS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of offshore platform
@@ -844,7 +844,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATOFP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATOFP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOFP"]);
+        public static bool CATOFP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOFP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of oil barrier
@@ -863,7 +863,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATOLB</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATOLB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOLB"]);
+        public static bool CATOLB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATOLB"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of pilot boarding place
@@ -882,7 +882,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATPIL</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATPIL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPIL"]);
+        public static bool CATPIL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPIL"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of pipeline/pipe
@@ -901,7 +901,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATPIP</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATPIP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPIP"]);
+        public static bool CATPIP_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPIP"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of pile
@@ -920,7 +920,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATPLE</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATPLE_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPLE"]);
+        public static bool CATPLE_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPLE"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of production area
@@ -939,7 +939,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATPRA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATPRA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPRA"]);
+        public static bool CATPRA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPRA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of pylon
@@ -958,7 +958,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATPYL</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATPYL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPYL"]);
+        public static bool CATPYL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATPYL"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of quality of data
@@ -977,7 +977,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATQUA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATQUA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATQUA"]);
+        public static bool CATQUA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATQUA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of radar station
@@ -996,7 +996,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATRAS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATRAS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRAS"]);
+        public static bool CATRAS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRAS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of restricted area
@@ -1015,7 +1015,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATREA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATREA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATREA"]);
+        public static bool CATREA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATREA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of road
@@ -1034,7 +1034,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATROD</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATROD_HasValue(this Feature feature) => !(DBNull.Value == feature["CATROD"]);
+        public static bool CATROD_HasValue(this Feature feature) => !(DBNull.Value == feature["CATROD"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of radio station
@@ -1053,7 +1053,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATROS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATROS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATROS"]);
+        public static bool CATROS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATROS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of rescue station
@@ -1072,7 +1072,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATRSC</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATRSC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRSC"]);
+        public static bool CATRSC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRSC"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of radar transponder beacon
@@ -1091,7 +1091,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATRTB</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATRTB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRTB"]);
+        public static bool CATRTB_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRTB"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of runway
@@ -1110,7 +1110,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATRUN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATRUN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRUN"]);
+        public static bool CATRUN_HasValue(this Feature feature) => !(DBNull.Value == feature["CATRUN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of small craft facility
@@ -1129,7 +1129,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSCF</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSCF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSCF"]);
+        public static bool CATSCF_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSCF"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of sea area
@@ -1148,7 +1148,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSEA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSEA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSEA"]);
+        public static bool CATSEA_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSEA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of silo/tank
@@ -1167,7 +1167,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSIL</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSIL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIL"]);
+        public static bool CATSIL_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIL"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of signal station, traffic
@@ -1186,7 +1186,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSIT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSIT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIT"]);
+        public static bool CATSIT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of signal station, warning
@@ -1205,7 +1205,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSIW</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSIW_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIW"]);
+        public static bool CATSIW_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSIW"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of shoreline construction
@@ -1224,7 +1224,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSLC</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSLC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSLC"]);
+        public static bool CATSLC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSLC"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of slope
@@ -1243,7 +1243,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSLO</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSLO_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSLO"]);
+        public static bool CATSLO_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSLO"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of special purpose mark
@@ -1262,7 +1262,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATSPM</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATSPM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSPM"]);
+        public static bool CATSPM_HasValue(this Feature feature) => !(DBNull.Value == feature["CATSPM"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of recommended track
@@ -1281,7 +1281,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATTRK</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATTRK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATTRK"]);
+        public static bool CATTRK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATTRK"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of Traffic Separation Scheme
@@ -1300,7 +1300,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATTSS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATTSS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATTSS"]);
+        public static bool CATTSS_HasValue(this Feature feature) => !(DBNull.Value == feature["CATTSS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of vegetation
@@ -1319,7 +1319,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATVEG</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATVEG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATVEG"]);
+        public static bool CATVEG_HasValue(this Feature feature) => !(DBNull.Value == feature["CATVEG"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of water turbulence
@@ -1338,7 +1338,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATWAT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATWAT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWAT"]);
+        public static bool CATWAT_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWAT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of weed/kelp
@@ -1357,7 +1357,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATWED</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATWED_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWED"]);
+        public static bool CATWED_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWED"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of wreck
@@ -1376,7 +1376,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATWRK</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATWRK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWRK"]);
+        public static bool CATWRK_HasValue(this Feature feature) => !(DBNull.Value == feature["CATWRK"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of zone of confidence in data
@@ -1395,7 +1395,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CATZOC</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CATZOC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATZOC"]);
+        public static bool CATZOC_HasValue(this Feature feature) => !(DBNull.Value == feature["CATZOC"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Category of Tidal stream
@@ -1414,7 +1414,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CAT_TS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CAT_TS_HasValue(this Feature feature) => !(DBNull.Value == feature["CAT_TS"]);
+        public static bool CAT_TS_HasValue(this Feature feature) => !(DBNull.Value == feature["CAT_TS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Object Class Definition
@@ -1433,7 +1433,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CLSDEF</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CLSDEF_HasValue(this Feature feature) => !(DBNull.Value == feature["CLSDEF"]);
+        public static bool CLSDEF_HasValue(this Feature feature) => !(DBNull.Value == feature["CLSDEF"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Object Class Name
@@ -1452,7 +1452,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CLSNAM</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CLSNAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CLSNAM"]);
+        public static bool CLSNAM_HasValue(this Feature feature) => !(DBNull.Value == feature["CLSNAM"]) && !string.IsNullOrEmpty(Convert.ToString("CLSNAM"));
 
         /// <summary>
         /// Collection type
@@ -1471,7 +1471,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COLLECTION_TYPE</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COLLECTION_TYPE_HasValue(this Feature feature) => !(DBNull.Value == feature["COLLECTION_TYPE"]);
+        public static bool COLLECTION_TYPE_HasValue(this Feature feature) => !(DBNull.Value == feature["COLLECTION_TYPE"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Colour
@@ -1490,7 +1490,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COLOUR</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COLOUR_HasValue(this Feature feature) => !(DBNull.Value == feature["COLOUR"]);
+        public static bool COLOUR_HasValue(this Feature feature) => !(DBNull.Value == feature["COLOUR"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Colour pattern
@@ -1509,7 +1509,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COLPAT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COLPAT_HasValue(this Feature feature) => !(DBNull.Value == feature["COLPAT"]);
+        public static bool COLPAT_HasValue(this Feature feature) => !(DBNull.Value == feature["COLPAT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Communication channel
@@ -1528,7 +1528,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COMCHA</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COMCHA_HasValue(this Feature feature) => !(DBNull.Value == feature["COMCHA"]);
+        public static bool COMCHA_HasValue(this Feature feature) => !(DBNull.Value == feature["COMCHA"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Coordinate Multiplication Factor
@@ -1547,7 +1547,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COMF</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COMF_HasValue(this Feature feature) => !(DBNull.Value == feature["COMF"]);
+        public static bool COMF_HasValue(this Feature feature) => !(DBNull.Value == feature["COMF"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Comment
@@ -1566,7 +1566,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>COMT</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool COMT_HasValue(this Feature feature) => !(DBNull.Value == feature["COMT"]);
+        public static bool COMT_HasValue(this Feature feature) => !(DBNull.Value == feature["COMT"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Condition
@@ -1585,7 +1585,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CONDTN</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CONDTN_HasValue(this Feature feature) => !(DBNull.Value == feature["CONDTN"]);
+        public static bool CONDTN_HasValue(this Feature feature) => !(DBNull.Value == feature["CONDTN"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Conspicuous, radar
@@ -1604,7 +1604,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CONRAD</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CONRAD_HasValue(this Feature feature) => !(DBNull.Value == feature["CONRAD"]);
+        public static bool CONRAD_HasValue(this Feature feature) => !(DBNull.Value == feature["CONRAD"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Conspicuous, visually
@@ -1623,7 +1623,7 @@
         /// </summary>
         /// <param name="feature">The feature to probe.</param>
         /// <returns><c>true</c> when <c>CONVIS</c> is not <see cref="DBNull"/>; otherwise <c>false</c>.</returns>
-        public static bool CONVIS_HasValue(this Feature feature) => !(DBNull.Value == feature["CONVIS"]);
+        public static bool CONVIS_HasValue(this Feature feature) => !(DBNull.Value == feature["CONVIS"]) && !string.IsNullOrEmpty(Convert.ToString());
 
         /// <summary>
         /// Coordinate Units
