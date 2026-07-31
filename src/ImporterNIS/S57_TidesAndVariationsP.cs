@@ -47,9 +47,19 @@ namespace S100Framework.Applications
                 var status = current.STATUS ?? default;
 
                 switch (fcSubtype) {
-                    case 1: { // LOCMAG_LocalMagneticAnomaly
-                            throw new NotImplementedException("No LOCMAG_LocalMagneticAnomaly in DK | GL NIS");
+                    case 1: { // CURENT_CurrentNonGravitational
+                            var instance = (CurrentNonGravitational)ImporterNIS.Build("CURENT", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
                     case 5: { // LOCMAG_LocalMagneticAnomaly
                             var instance = new LocalMagneticAnomaly {
                                 /* s-65 Annex B -> LOCMAG
@@ -268,9 +278,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 35: { // TS_PAD_TidalStreamPanelData
-                            throw new NotImplementedException("No TS_PAD_TidalStreamPanelData in DK | GL NIS");
-                        }
+                            var instance = (TidalStreamPanelData)ImporterNIS.Build("TS_PAD", feature, buffer);
 
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case 40: { // TS_PNH_TidalStreamNonHarmonicPrediction
                             throw new NotImplementedException("No TS_PNH_TidalStreamNonHarmonicPrediction in DK | GL NIS");
                         }

@@ -458,13 +458,9 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 75: { // ICNARE_IncinerationArea
-                            throw new NotImplementedException($"No ICNARE_IncinerationArea in DK or GL. {tableName}");
-
                             //The S-57 Object class ICNARE will not be converted. 
-                            //https://iho.int/uploads/user/pubs/standards/s-65/S-65%20Annex%20B_Ed%201.2.0_Final.pdf
-
                         }
-
+                        break;
                     case 85: { // LOGPON_LogPond
 
                             throw new NotImplementedException($"No LOGPON_LogPond in DK or GL. {tableName}");

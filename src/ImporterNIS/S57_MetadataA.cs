@@ -104,9 +104,18 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // M_ACCY_AccuracyOfData
-                            throw new NotImplementedException($"No M_ACCY_AccuracyOfData in DK or GL. {tableName}");
+                            var instance = (QualityOfNonBathymetricData)ImporterNIS.Build("M_ACCY", feature, buffer);
 
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
                     case 20: { // M_CSCL_CompilationScaleOfData
                             continue;   //  S57_ProductCoverage
                             //throw new NotImplementedException($"No M_CSCL_CompilationScaleOfData in DK or GL. {tableName}");
