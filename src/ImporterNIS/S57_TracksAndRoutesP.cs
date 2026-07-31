@@ -48,7 +48,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // PRCARE_PrecautionaryArea
-                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", current, buffer);
+                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

@@ -47,7 +47,7 @@ namespace S100Framework.Applications
                 switch (fcSubtype) {
 
                     case 30: { // MIPARE_MilitaryPracticeArea
-                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", current, buffer);
+                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

@@ -96,7 +96,7 @@ namespace S100Framework.Applications
                         break;
 
                     case 5: {     // DRGARE // SKIN OF EARTH
-                            var instance = ImporterNIS.Build("DRGARE", current, bufferTopo);
+                            var instance = ImporterNIS.Build("DRGARE", feature, bufferTopo);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();

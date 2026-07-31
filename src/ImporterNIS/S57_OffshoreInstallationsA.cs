@@ -56,7 +56,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // CBLARE_CableArea
-                            var instance = (CableArea)ImporterNIS.Build("CBLARE", current, buffer);
+                            var instance = (CableArea)ImporterNIS.Build("CBLARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -184,7 +184,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // OSPARE_OffshoreProductionArea
-                            var instance = (OffshoreProductionArea)ImporterNIS.Build("OSPARE", current, buffer);
+                            var instance = (OffshoreProductionArea)ImporterNIS.Build("OSPARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -197,7 +197,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 15: { // PIPARE_SubmarinePipelineArea
-                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", current, buffer);
+                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

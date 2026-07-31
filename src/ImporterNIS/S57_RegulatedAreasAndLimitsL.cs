@@ -57,7 +57,7 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No ASLXIS_ArchipelagicSeaLaneAxis in DK or GL. {tableName}");
                         }
                     case 25: { // MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", current, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

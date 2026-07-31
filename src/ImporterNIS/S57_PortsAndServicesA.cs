@@ -69,7 +69,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // BERTHS_Berth
-                            var instance = (Berth)ImporterNIS.Build("BERTHS", current, buffer);
+                            var instance = (Berth)ImporterNIS.Build("BERTHS", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -890,7 +890,7 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No GRIDRN_Gridiron in DK or GL. {tableName}");
                         }
                     case 55: { // HRBFAC_HarbourFacility
-                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", current, buffer);
+                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
