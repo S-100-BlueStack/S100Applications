@@ -18,7 +18,6 @@ using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -1284,12 +1283,12 @@ namespace S100Framework.Applications
                     ("regulatedareasandlimitsl", SpatialRelationship.Contains, "FCSubtype IN(25)"),           //MARCUL                    
                     ("regulatedareasandlimitsa", SpatialRelationship.Contains, "FCSubtype IN(95)"),           //MARCUL                                        
                 ];
-            var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e=>e.GetName().ToLowerInvariant());
-            foreach(var e in dictionary) {
+            var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e => e.GetName().ToLowerInvariant());
+            foreach (var e in dictionary) {
                 using var danger = geodatabase.OpenDataset<FeatureClass>(definitions.Single(d => d.EndsWith(e.tablename)));
 
                 using var search = danger.Search(new SpatialQueryFilter {
-                    WhereClause =$"({queryFilter}) AND ({e.filter})",
+                    WhereClause = $"({queryFilter}) AND ({e.filter})",
                     SpatialRelationship = e.relationship,
                     FilterGeometry = shape,
                 }, true);

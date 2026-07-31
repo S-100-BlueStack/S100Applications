@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace S100Framework.Applications.S57.esri
+﻿namespace S100Framework.Applications.S57.esri
 {
     using ArcGIS.Core.Data;
     using ArcGIS.Core.Geometry;

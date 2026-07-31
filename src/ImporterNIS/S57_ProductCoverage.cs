@@ -195,7 +195,7 @@ namespace S100Framework.Applications
                     minimumDisplayScale = _minimumDisplayScale,
                 };
 
-                var _coverage = (Polygon)(GeometryEngine.Instance.Union([..polygons.Select(e => e.shape)]));
+                var _coverage = (Polygon)(GeometryEngine.Instance.Union([.. polygons.Select(e => e.shape)]));
 
                 var vdat = GetVerticalDatum(current.VDAT ?? 3, _coverage);
                 var sdat = GetSoundingDatum(current.SDAT!.Value, _coverage);
@@ -220,7 +220,7 @@ namespace S100Framework.Applications
                         using var buffer = featureClass.CreateRowBuffer();
                         buffer["ps"] = ps128;
 
-                        Feature s57,s101;
+                        Feature s57, s101;
                         string s57UID, s101UID;
                         //  S-57
                         {
@@ -255,11 +255,11 @@ namespace S100Framework.Applications
                         var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
                             role = "theReference",
                             roleType = "association",
-                            featureId=s101UID,
+                            featureId = s101UID,
                             featureType = electronicProduct101.S100FC_code,
                         };
                         ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
-                        
+
                         //var productMappingS57theSource = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
                         //    role = "theSource",
                         //    roleType = "association",

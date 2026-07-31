@@ -1,5 +1,4 @@
 ﻿using ArcGIS.Core.Data;
-using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
@@ -47,7 +46,7 @@ namespace S100Framework.Applications
             //    var equals = GeometryEngine.Instance.Equals(e_metadata, e_depthsa);
             //    var within = GeometryEngine.Instance.Within(f_depthsa, f_metadata);
             //    var contains = GeometryEngine.Instance.Contains(f_depthsa, f_metadata);
-                
+
 
             //    using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
             //        WhereClause = "PLTS_COMP_SCALE >= 22000 AND PLTS_COMP_SCALE < 90000",
@@ -498,13 +497,13 @@ namespace S100Framework.Applications
                             //    //using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
                             //    //    WhereClause = filter.WhereClause,
                             //    //    FilterGeometry = current.SHAPE,
-                                    
+
                             //    //}, true);
 
                             //}
                             //if (current.OBJECTID == 125) System.Diagnostics.Debugger.Break();                            
 
-                            if(ImporterNIS.ContainsBarthyFeatures_UnsurveyedArea(current.SHAPE!,source, filter.WhereClause)) {
+                            if (ImporterNIS.ContainsBarthyFeatures_UnsurveyedArea(current.SHAPE!, source, filter.WhereClause)) {
                                 var isCoveredByUNSARE_UnsurveyedArea = false;
 
                                 if (ImporterNIS.IsCoveredByUNSARE_UnsurveyedArea(current.SHAPE!)) {

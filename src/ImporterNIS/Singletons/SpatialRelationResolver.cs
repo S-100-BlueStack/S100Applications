@@ -1,6 +1,5 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 
 namespace S100Framework.Applications.Singletons
@@ -140,7 +139,7 @@ namespace S100Framework.Applications.Singletons
         private static IEnumerable<T> SelectIn<T>(Geometry geometry, FeatureClass in_featureclass, string spatialRelationship, QueryFilter queryFilter) where T : class {
             var spatialQueryFilter = new SpatialQueryFilter {
                 FilterGeometry = geometry,
-                SpatialRelationship =SpatialRelationship.Relation,
+                SpatialRelationship = SpatialRelationship.Relation,
                 SpatialRelationshipDescription = spatialRelationship,
                 WhereClause = queryFilter.WhereClause
             };

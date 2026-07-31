@@ -1,7 +1,7 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
-using System.Xml.Linq;
 using S100Framework.Applications.S57.esri;
+using System.Xml.Linq;
 
 namespace S100Framework.Applications.Singletons
 {
@@ -17,7 +17,7 @@ namespace S100Framework.Applications.Singletons
         public string Name { get; }
         public Polygon Polygon { get; }
 
-        public string VerticalDatumConverter { get;}
+        public string VerticalDatumConverter { get; }
 
         public NamedPolygon(string name, Polygon polygon, string verticalDatumConverter) {
             this.Name = name;
