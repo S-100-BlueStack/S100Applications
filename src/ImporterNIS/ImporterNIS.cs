@@ -1896,9 +1896,9 @@ namespace S100Framework.Applications
             return null;
         }
 
-        internal static InformationResult BindNauticalInformationFrom(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
+        internal static InformationResult BindNauticalInformationFrom(long sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
 
-            if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
+            //if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
 
             InformationResult result = new();
 
@@ -2134,7 +2134,7 @@ namespace S100Framework.Applications
         //    List<information> information = CreateInformationFrom(current);
         //    instanceInformation.AddRange(information);
         //}
-        internal static InformationResult AddInformation(int sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref = default) {
+        internal static InformationResult AddInformation(long sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref = default) {
             // TODO: TBD.
             //List<information> information = CreateInformationFrom(sourceObjectid, sourceTableName, ntxtds, txtdsc, inform, ninform);
             //instanceInformation.AddRange(information);

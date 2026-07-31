@@ -126,7 +126,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // NAVLNE_NavigationLine
-                            var instance = (NavigationLine)ImporterNIS.Build("NAVLNE", current, buffer);
+                            var instance = (NavigationLine)ImporterNIS.Build("NAVLNE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

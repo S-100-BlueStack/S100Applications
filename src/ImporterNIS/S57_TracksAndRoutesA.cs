@@ -51,7 +51,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // DWRTPT_DeepWaterRoutePart
-                            var instance = (DeepWaterRoutePart)ImporterNIS.Build("DWRTPT", current, buffer);
+                            var instance = (DeepWaterRoutePart)ImporterNIS.Build("DWRTPT", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -64,7 +64,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 5: { // FAIRWY_Fairway
-                            var instance = (Fairway)ImporterNIS.Build("FAIRWY", current, buffer);
+                            var instance = (Fairway)ImporterNIS.Build("FAIRWY", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -146,7 +146,7 @@ namespace S100Framework.Applications
                         break;
 
                     case 15: { // ISTZNE_InshoreTrafficZone
-                            var instance = (InshoreTrafficZone)ImporterNIS.Build("ISTZNE", current, buffer);
+                            var instance = (InshoreTrafficZone)ImporterNIS.Build("ISTZNE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -162,7 +162,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 20: { // PRCARE_PrecautionaryArea
-                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", current, buffer);
+                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -391,7 +391,7 @@ namespace S100Framework.Applications
                         }
 
                     case 60: { // TSSLPT_TrafficSeparationSchemeLanePart
-                            var instance = (TrafficSeparationSchemeLanePart)ImporterNIS.Build("TSSLPT", current, buffer);
+                            var instance = (TrafficSeparationSchemeLanePart)ImporterNIS.Build("TSSLPT", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -404,7 +404,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 65: { // TSSRON_TrafficSeparationSchemeRoundabout
-                            var instance = (TrafficSeparationSchemeRoundabout)ImporterNIS.Build("TSSRON", current, buffer);
+                            var instance = (TrafficSeparationSchemeRoundabout)ImporterNIS.Build("TSSRON", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

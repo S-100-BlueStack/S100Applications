@@ -63,7 +63,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // BERTHS_Berth
-                            var instance = (Berth)ImporterNIS.Build("BERTHS", current, buffer);
+                            var instance = (Berth)ImporterNIS.Build("BERTHS", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -79,7 +79,7 @@ namespace S100Framework.Applications
                         break;
 
                     case 5: { // CGUSTA_CoastguardStation
-                            var instance = (CoastGuardStation)ImporterNIS.Build("CGUSTA", current, buffer);
+                            var instance = (CoastGuardStation)ImporterNIS.Build("CGUSTA", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -229,7 +229,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 20: { // DISMAR_DistanceMark
-                            var instance = (DistanceMark)ImporterNIS.Build("DISMAR", current, buffer);
+                            var instance = (DistanceMark)ImporterNIS.Build("DISMAR", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -350,7 +350,7 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No GRIDRN_Gridiron in DK or GL. {tableName}");
                         }
                     case 35: { // HRBFAC_HarbourFacility
-                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", current, buffer);
+                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1218,7 +1218,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 60: { // RSCSTA_RescueStation
-                            var instance = (RescueStation)ImporterNIS.Build("RSCSTA", current, buffer);
+                            var instance = (RescueStation)ImporterNIS.Build("RSCSTA", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

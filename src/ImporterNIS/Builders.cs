@@ -8,34 +8,36 @@ using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
+    using S100Framework.Applications.S57.esri;
+
     internal static partial class ImporterNIS
     {
-        private static readonly Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> _builders = new Dictionary<string, Func<S57Object, RowBuffer, FeatureType>> {
-            { "DISMAR", (current, buffer) => { return DISMAR((PortsAndServices)current, buffer); } },
-            { "BERTHS", (current, buffer) => { return BERTHS((PortsAndServices)current, buffer); } },
-            { "NAVLNE", (current, buffer) => { return NAVLNE((TracksAndRoutes)current, buffer); } },
-            { "ADMARE", (current, buffer) => { return ADMARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "RESARE", (current, buffer) => { return RESARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "ACHARE", (current, buffer) => { return ACHARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "CTSARE", (current, buffer) => { return CTSARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "DWRTPT", (current, buffer) => { return DWRTPT((TracksAndRoutes)current, buffer); } },
-            { "DRGARE", (current, buffer) => { return DRGARE((Depths)current, buffer); } },
-            { "DMPGRD", (current, buffer) => { return DMPGRD((RegulatedAreasAndLimits)current, buffer); } },
-            { "FAIRWY", (current, buffer) => { return FAIRWY((TracksAndRoutes)current, buffer); } },
-            { "HRBFAC", (current, buffer) => { return HRBFAC((PortsAndServices)current, buffer); } },
-            { "ISTZNE", (current, buffer) => { return ISTZNE((TracksAndRoutes)current, buffer); } },
-            { "MARCUL", (current, buffer) => { return MARCUL((RegulatedAreasAndLimits)current, buffer); } },
-            { "MIPARE", (current, buffer) => { return MIPARE((MilitaryFeatures)current, buffer); } },
-            { "OSPARE", (current, buffer) => { return OSPARE((OffshoreInstallations)current, buffer); } },
-            { "PRCARE", (current, buffer) => { return PRCARE((TracksAndRoutes)current, buffer); } },
-            { "CGUSTA", (current, buffer) => { return CGUSTA((PortsAndServices)current, buffer); } },
-            { "SPLARE", (current, buffer) => { return SPLARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "CBLARE", (current, buffer) => { return CBLARE((OffshoreInstallations)current, buffer); } },
-            { "TSSLPT", (current, buffer) => { return TSSLPT((TracksAndRoutes)current, buffer); } },
-            { "TSSRON", (current, buffer) => { return TSSRON((TracksAndRoutes)current, buffer); } },
-            { "PIPARE", (current, buffer) => { return PIPARE((OffshoreInstallations)current, buffer); } },
-            { "TESARE", (current, buffer) => { return TESARE((RegulatedAreasAndLimits)current, buffer); } },
-            { "RSCSTA", (current, buffer) => { return RSCSTA((PortsAndServices)current, buffer); } },
+        private static readonly Dictionary<string, Func<Feature, RowBuffer, FeatureType>> _builders = new Dictionary<string, Func<Feature, RowBuffer, FeatureType>> {
+            { "DISMAR", (current, buffer) => { return DISMAR(current, buffer); } },
+            { "BERTHS", (current, buffer) => { return BERTHS(current, buffer); } },
+            { "NAVLNE", (current, buffer) => { return NAVLNE(current, buffer); } },
+            { "ADMARE", (current, buffer) => { return ADMARE(current, buffer); } },
+            { "RESARE", (current, buffer) => { return RESARE(current, buffer); } },
+            { "ACHARE", (current, buffer) => { return ACHARE(current, buffer); } },
+            { "CTSARE", (current, buffer) => { return CTSARE(current, buffer); } },
+            { "DWRTPT", (current, buffer) => { return DWRTPT(current, buffer); } },
+            { "DRGARE", (current, buffer) => { return DRGARE(current, buffer); } },
+            { "DMPGRD", (current, buffer) => { return DMPGRD(current, buffer); } },
+            { "FAIRWY", (current, buffer) => { return FAIRWY(current, buffer); } },
+            { "HRBFAC", (current, buffer) => { return HRBFAC(current, buffer); } },
+            { "ISTZNE", (current, buffer) => { return ISTZNE(current, buffer); } },
+            { "MARCUL", (current, buffer) => { return MARCUL(current, buffer); } },
+            { "MIPARE", (current, buffer) => { return MIPARE(current, buffer); } },
+            { "OSPARE", (current, buffer) => { return OSPARE(current, buffer); } },
+            { "PRCARE", (current, buffer) => { return PRCARE(current, buffer); } },
+            { "CGUSTA", (current, buffer) => { return CGUSTA(current, buffer); } },
+            { "SPLARE", (current, buffer) => { return SPLARE(current, buffer); } },
+            { "CBLARE", (current, buffer) => { return CBLARE(current, buffer); } },
+            { "TSSLPT", (current, buffer) => { return TSSLPT(current, buffer); } },
+            { "TSSRON", (current, buffer) => { return TSSRON(current, buffer); } },
+            { "PIPARE", (current, buffer) => { return PIPARE(current, buffer); } },
+            { "TESARE", (current, buffer) => { return TESARE(current, buffer); } },
+            { "RSCSTA", (current, buffer) => { return RSCSTA(current, buffer); } },
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -54,9 +56,9 @@ namespace S100Framework.Applications
 
         private static readonly Regex regexVesselSpeedLimit = new Regex(@"(Speed limit is)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);   //  Speed limit is 5 knots
 
-        private static FeatureType Build(string code, S57Object feature, RowBuffer buffer) => _builders[code]?.Invoke(feature, buffer)!;
+        private static FeatureType Build(string code, Feature feature, RowBuffer buffer) => _builders[code]?.Invoke(feature, buffer)!;
 
-        private static DistanceMark DISMAR(PortsAndServices current, RowBuffer buffer) {
+        private static DistanceMark DISMAR(Feature current, RowBuffer buffer) {
             var instance = new DistanceMark();
 
             /*
@@ -66,28 +68,29 @@ namespace S100Framework.Applications
                 to False. Where CATDIS has been populated with a value other than 1, distance mark visible will
                 be set to True.                             
             */
-            if (!current.CATDIS.HasValue || (current.CATDIS.HasValue && current.CATDIS.Value == 1) || (current.CATDIS.HasValue && current.CATDIS.Value == -32767)) {
+            if (!current.CATDIS_HasValue() || (current.CATDIS() == 1)) {
                 instance.distanceMarkVisible = false;
             }
-            else if (current.CATDIS.HasValue) {
+            else if (current.CATDIS_HasValue()) {
                 instance.distanceMarkVisible = true;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexWaterwayDistance.IsMatch(current.INFORM)) {
-                var _value = regexWaterwayDistance.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexWaterwayDistance.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            var inform = current.INFORM();
+            if (!string.IsNullOrEmpty(inform) && regexWaterwayDistance.IsMatch(inform)) {
+                var _value = regexWaterwayDistance.Match(inform).Groups["value"]?.Value;
+                var _unit = regexWaterwayDistance.Match(inform).Groups["unit"]?.Value.ToLowerInvariant();
 
                 instance.measuredDistanceValue = new() {
                     waterwayDistance = default,
@@ -110,15 +113,15 @@ namespace S100Framework.Applications
                 }
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -129,13 +132,13 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static Berth BERTHS(PortsAndServices current, RowBuffer buffer) {
+        private static Berth BERTHS(Feature current, RowBuffer buffer) {
             var instance = new Berth {
             };
 
@@ -149,60 +152,61 @@ namespace S100Framework.Applications
                 or hazardous cargo.
             */
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexMaximumDraughtPermitted.IsMatch(current.INFORM)) {
-                var _value = regexMaximumDraughtPermitted.Match(current.INFORM).Groups["value"]?.Value;
+            var inform = current.INFORM();
+            if (!string.IsNullOrEmpty(inform) && regexMaximumDraughtPermitted.IsMatch(inform)) {
+                var _value = regexMaximumDraughtPermitted.Match(inform).Groups["value"]?.Value;
 
                 if (decimal.TryParse(_value, out decimal value)) {
                     instance.maximumPermittedDraught = value;
                 }
             }
 
-            if (current.DRVAL1.HasValue) {
-                instance.minimumBerthDepth = current.DRVAL1.Value == -32767m ? null : current.DRVAL1.Value;
+            if (current.DRVAL1_HasValue()) {
+                instance.minimumBerthDepth = current.DRVAL1() == -32767m ? null : current.DRVAL1();
             }
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.QUASOU != default) {
+            if (current.QUASOU_HasValue()) {
                 var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.SOUACC.HasValue) {
+            if (current.SOUACC_HasValue()) {
                 instance.verticalUncertainty = new() {
-                    uncertaintyFixed = current.SOUACC.Value
+                    uncertaintyFixed = current.SOUACC()
                 };
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -213,21 +217,21 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static NavigationLine NAVLNE(TracksAndRoutes current, RowBuffer buffer) {
+        private static NavigationLine NAVLNE(Feature current, RowBuffer buffer) {
             var instance = new NavigationLine();
 
-            if (current.CATNAV.HasValue) {
-                instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV.Value);
+            if (current.CATNAV_HasValue()) {
+                instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV());
             }
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -235,33 +239,33 @@ namespace S100Framework.Applications
 
             // TODO: measured distance
 
-            if (current.ORIENT.HasValue) {
+            if (current.ORIENT_HasValue()) {
                 instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
-                    orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value,
+                    orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT(),
                     // TODO: oriantationUncertainty
                     //orientationUncertainty = ,
                 };
             }
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -272,33 +276,33 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static FeatureType ADMARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
-            if (!string.IsNullOrEmpty(current.INFORM) && regexPilotageDistrict.IsMatch(current.INFORM)) {
+        private static FeatureType ADMARE(Feature current, RowBuffer buffer) {
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexPilotageDistrict.IsMatch(current.INFORM()!)) {
                 var instance = new PilotageDistrict {
                 };
 
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
                 // TODO: interoperabilityIdentifier
 
-                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                    if (scamin.HasValue)
-                        instance.scaleMinimum = scamin.Value;
+                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                    if (scaleMinimum.HasValue)
+                        instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = result.information.ToArray();
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -307,14 +311,14 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
-            else if (!string.IsNullOrEmpty(current.INFORM) && regexMarinePollutionRegulationsArea.IsMatch(current.INFORM)) {
+            else if (!string.IsNullOrEmpty(current.INFORM()) && regexMarinePollutionRegulationsArea.IsMatch(current.INFORM()!)) {
                 var instance = new MarinePollutionRegulationsArea();
 
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
@@ -323,29 +327,29 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
-            else if (!string.IsNullOrEmpty(current.INFORM) && regexVesselTrafficServiceArea.IsMatch(current.INFORM)) {
+            else if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselTrafficServiceArea.IsMatch(current.INFORM()!)) {
                 var instance = new VesselTrafficServiceArea();
 
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
                 // TODO: interoperabilityIdentifier
 
-                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                    if (scamin.HasValue)
-                        instance.scaleMinimum = scamin.Value;
+                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                    if (scaleMinimum.HasValue)
+                        instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = result.information.ToArray();
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -354,43 +358,43 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else {
                 var instance = new AdministrationArea {
                 };
 
-                if (current.JRSDTN.HasValue) {
-                    instance.jurisdiction = EnumHelper.GetEnumValue(current.JRSDTN.Value);
+                if (current.JRSDTN_HasValue()) {
+                    instance.jurisdiction = EnumHelper.GetEnumValue(current.JRSDTN());
                 }
 
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
                 // TODO: interoperabilityIdentifier
 
-                if (current.NATION != default) {
-                    instance.nationality = [GetNation(current.NATION)];
+                if (current.NATION_HasValue()) {
+                    instance.nationality = [GetNation(current.NATION())];
                 }
 
-                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                    if (scamin.HasValue)
-                        instance.scaleMinimum = scamin.Value;
+                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                    if (scaleMinimum.HasValue)
+                        instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = result.information.ToArray();
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-                if (current.PICREP != default) {
-                    instance.pictorialRepresentation = FixFilename(current.PICREP);
+                if (current.PICREP_HasValue()) {
+                    instance.pictorialRepresentation = FixFilename(current.PICREP());
                 }
 
                 buffer["ps"] = ps101;
@@ -398,19 +402,19 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
         }
 
-        private static RestrictedArea RESARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static RestrictedArea RESARE(Feature current, RowBuffer buffer) {
             var instance = new RestrictedArea();
 
-            if (current.CATREA != default) {
-                if (current.CATREA != "26") { // Water Skiing Area
-                                              // CATREA
-                    var categoryOfRestrictedArea = EnumHelper.GetEnumValues(current.CATREA);
+            if (current.CATREA_HasValue()) {
+                if (current.CATREA() != "26") {   // Water Skiing Area
+                                                  // CATREA
+                    var categoryOfRestrictedArea = EnumHelper.GetEnumValues(current.CATREA());
                     if (categoryOfRestrictedArea is not null && categoryOfRestrictedArea.Any())
                         instance.categoryOfRestrictedArea = categoryOfRestrictedArea;
                 }
@@ -422,35 +426,35 @@ namespace S100Framework.Applications
                 }
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: InteroperabilityIdentifier
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -468,24 +472,24 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
 
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                if (scaleMinimum.HasValue)
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -494,41 +498,41 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
 
         }
 
-        private static FeatureType ACHARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
-            if (current.CATACH == "8") {
+        private static FeatureType ACHARE(Feature current, RowBuffer buffer) {
+            if ("8".Equals(current.CATACH())) {
                 //throw new NotSupportedException("Anchorage area category 8 not implemented. Create mooring area.");
 
                 var instance = new MooringArea();
 
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                if (dateRange != default) {
+                DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+                if (dateRange is not null) {
                     instance.fixedDateRange = dateRange;
                 }
 
-                if (current.RESTRN != default) {
-                    var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                if (current.RESTRN_HasValue()) {
+                    var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                     if (restriction is not null && restriction.Any())
                         instance.restriction = restriction;
                 }
 
-                if (current.STATUS != default) {
-                    instance.status = GetStatus(current.STATUS);
+                if (current.STATUS_HasValue()) {
+                    instance.status = GetStatus(current.STATUS());
                 }
 
-                if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                    var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                    var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+                if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                    var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                    var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                     var vesselSpeedLimit = new vesselSpeedLimit {
                     };
@@ -546,23 +550,23 @@ namespace S100Framework.Applications
                     instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                     var inform = $"Speed limit is {_value} {_unit}";
-                    if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                        current.INFORM = null;
+                    if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                        current["INFORM"] = DBNull.Value;
                     else
-                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
                 }
 
-                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue) {
-                        instance.scaleMinimum = scamin.Value;
+                        instance.scaleMinimum = scamin!.Value;
                     }
                 }
 
-                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = result.information.ToArray();
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -571,50 +575,50 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else {
                 var instance = new AnchorageArea();
 
-                if (current.CATACH != default) {
-                    var categoryOfAnchorage = EnumHelper.GetEnumValues(current.CATACH);
+                if (current.CATACH_HasValue()) {
+                    var categoryOfAnchorage = EnumHelper.GetEnumValues(current.CATACH());
                     if (categoryOfAnchorage is not null && categoryOfAnchorage.Any())
                         instance.categoryOfAnchorage = categoryOfAnchorage;
                 }
 
                 // new S-101
                 //instance.categoryOfCargo
-                var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                if (dateRange != default) {
+                DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+                if (dateRange is not null) {
                     instance.fixedDateRange = dateRange;
                 }
 
                 // TODO: interoperabilityIdentifier
 
-                DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                if (periodicDateRange != default) {
+                DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+                if (periodicDateRange is not null) {
                     instance.periodicDateRange = periodicDateRange;
                 }
 
-                if (current.RESTRN != default) {
+                if (current.RESTRN_HasValue()) {
                     var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                     if (restriction is not null && restriction.Any())
                         instance.restriction = restriction;
                 }
 
-                if (current.STATUS != default) {
-                    instance.status = GetStatus(current.STATUS);
+                if (current.STATUS_HasValue()) {
+                    instance.status = GetStatus(current.STATUS());
                 }
 
-                if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                    var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                    var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+                if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                    var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                    var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                     var vesselSpeedLimit = new vesselSpeedLimit {
                     };
@@ -632,22 +636,22 @@ namespace S100Framework.Applications
                     instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                     var inform = $"Speed limit is {_value} {_unit}";
-                    if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                        current.INFORM = null;
+                    if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                        current["INFORM"] = DBNull.Value;
                     else
-                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
                 }
 
-                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue)
-                        instance.scaleMinimum = scamin.Value;
+                        instance.scaleMinimum = scamin!.Value;
                 }
 
-                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = result.information.ToArray();
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -656,45 +660,45 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
         }
 
-        private static CargoTranshipmentArea CTSARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static CargoTranshipmentArea CTSARE(Feature current, RowBuffer buffer) {
             var instance = new CargoTranshipmentArea();
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.RESTRN != default) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+            if (current.RESTRN_HasValue()) {
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -712,22 +716,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -736,31 +740,31 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static DeepWaterRoutePart DWRTPT(TracksAndRoutes current, RowBuffer buffer) {
+        private static DeepWaterRoutePart DWRTPT(Feature current, RowBuffer buffer) {
             var instance = new DeepWaterRoutePart();
 
-            if (current.ORIENT.HasValue) {
-                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT();
             }
-            if (current.DRVAL1.HasValue) {
-                instance.depthRangeMinimumValue = current.DRVAL1.Value == -32767m ? null : current.DRVAL1.Value;
+            if (current.DRVAL1_HasValue()) {
+                instance.depthRangeMinimumValue = current.DRVAL1() == -32767m ? null : current.DRVAL1();
             }
-            if (current.TRAFIC.HasValue) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC!.Value);
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -769,20 +773,20 @@ namespace S100Framework.Applications
 
             // TODO: InteroperabilityIdentifier
 
-            if (current.QUASOU != default) {
+            if (current.QUASOU_HasValue()) {
                 var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
             if (current.TECSOU != null) {
@@ -791,19 +795,19 @@ namespace S100Framework.Applications
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
             }
 
-            if (current.TRAFIC.HasValue) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC.Value);
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
             }
 
-            if (current.SOUACC.HasValue) {
+            if (current.SOUACC_HasValue()) {
                 instance.verticalUncertainty = new() {
-                    uncertaintyFixed = current.SOUACC.Value
+                    uncertaintyFixed = current.SOUACC()
                 };
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -821,22 +825,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -845,20 +849,20 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static DredgedArea DRGARE(Depths current, RowBuffer buffer) {
-            var drval1 = current.DRVAL1 ?? default;
-            var drval2 = current.DRVAL2 ?? default(decimal?);
-            var sordat = current.SORDAT ?? default;
+        private static DredgedArea DRGARE(Feature current, RowBuffer buffer) {
+            var drval1 = current.DRVAL1() ?? default;
+            var drval2 = current.DRVAL2() ?? default(decimal?);
+            var sordat = current.SORDAT() ?? default;
 
-            var restrn = current.RESTRN ?? default;
-            var quasou = current.QUASOU ?? default;
-            var tecsou = current.TECSOU ?? default;
+            var restrn = current.RESTRN() ?? default;
+            var quasou = current.QUASOU() ?? default;
+            var tecsou = current.TECSOU() ?? default;
 
             var instance = new DredgedArea {
                 depthRangeMinimumValue = drval1,
@@ -867,22 +871,22 @@ namespace S100Framework.Applications
             if (drval2.HasValue)
                 instance.depthRangeMaximumValue = drval2.GetValueOrDefault();
 
-            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
+            if (!string.IsNullOrEmpty(current.SORDAT())) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
                     instance.dredgedDate = reportedDate;
                 }
             }
             else {
-                Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
             }
 
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            if (current.RESTRN != default) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+            if (current.RESTRN_HasValue()) {
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -894,7 +898,7 @@ namespace S100Framework.Applications
 
             // The S-57 attribute QUASOU for DEPARE will not be converted. It is considered that this attribute is
             // not relevant for Depth Area in S-101.
-            //if (current.QUASOU != default) {
+            //if (current.QUASOU_HasValue()) {
             //    instance.qualityOfVerticalMeasurement = EnumHelper.GetEnumValue<qualityOfVerticalMeasurement>(current);
             //}
 
@@ -911,16 +915,16 @@ namespace S100Framework.Applications
             }
 
             //TODO: verticalUncertainty - Not converted
-            //if (current.SOUACC.HasValue) {
+            //if (current.SOUACC_HasValue()) {
             //    instance.verticalUncertainty = new DomainModel.S101.ComplexAttributes.verticalUncertainty() {
-            //        uncertaintyFixed = current.SOUACC.Value
+            //        uncertaintyFixed = current.SOUACC()
             //    };
             //}
             //
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -938,13 +942,13 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -953,16 +957,16 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
 
-        private static DumpingGround DMPGRD(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static DumpingGround DMPGRD(Feature current, RowBuffer buffer) {
             var instance = new DumpingGround();
 
-            if (current.CATDPG != default) {
+            if (current.CATDPG_HasValue()) {
                 var categoryOfDumpingGround = EnumHelper.GetEnumValues(current.CATDPG);
                 if (categoryOfDumpingGround is not null && categoryOfDumpingGround.Any())
                     instance.categoryOfDumpingGround = categoryOfDumpingGround;
@@ -970,27 +974,27 @@ namespace S100Framework.Applications
 
             // TODO: DateDisused
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
             // TODO: interoperabilityIdentifier
 
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1008,22 +1012,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1032,24 +1036,24 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static Fairway FAIRWY(TracksAndRoutes current, RowBuffer buffer) {
+        private static Fairway FAIRWY(Feature current, RowBuffer buffer) {
             var instance = new Fairway();
 
-            if (current.DRVAL1.HasValue) {
-                instance.depthRangeMinimumValue = current.DRVAL1.Value != -32767m ? current.DRVAL1.Value : null;
+            if (current.DRVAL1_HasValue()) {
+                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -1057,39 +1061,39 @@ namespace S100Framework.Applications
 
             // TODO: maximumPermittedDraught
 
-            if (current.ORIENT.HasValue) {
-                instance.orientationValue = current.ORIENT.Value != -32767m ? current.ORIENT.Value : null;
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
             }
 
-            if (current.QUASOU != default) {
+            if (current.QUASOU_HasValue()) {
                 var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.TRAFIC.HasValue) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC.Value);
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
             }
 
-            if (current.SOUACC.HasValue) {
+            if (current.SOUACC_HasValue()) {
                 instance.verticalUncertainty = new() {
-                    uncertaintyFixed = current.SOUACC.Value
+                    uncertaintyFixed = current.SOUACC()
                 };
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1107,22 +1111,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1131,70 +1135,70 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static HarbourFacility HRBFAC(PortsAndServices current, RowBuffer buffer) {
+        private static HarbourFacility HRBFAC(Feature current, RowBuffer buffer) {
             var instance = new HarbourFacility();
 
-            if (current.CATHAF != default) {
-                var categoryOfHarbourFacility = EnumHelper.GetEnumValues(current.CATHAF);
+            if (current.CATHAF_HasValue()) {
+                var categoryOfHarbourFacility = EnumHelper.GetEnumValues(current.CATHAF());
                 if (categoryOfHarbourFacility is not null)
                     instance.categoryOfHarbourFacility = categoryOfHarbourFacility;
             }
 
-            if (current.COMCHA != default) {
-                instance.communicationChannel = GetCommunicationChannel(current.COMCHA);
+            if (current.COMCHA_HasValue()) {
+                instance.communicationChannel = GetCommunicationChannel(current.COMCHA()!);
             }
 
-            if (current.CONDTN.HasValue) {
-                instance.condition = GetCondition(current.CONDTN.Value)?.value;
+            if (current.CONDTN_HasValue()) {
+                instance.condition = GetCondition(current.CONDTN()!.Value).value;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (current.NATCON != default) {
-                var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON);
+            if (current.NATCON_HasValue()) {
+                var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON());
                 if (natureOfConstruction is not null && natureOfConstruction.Any())
                     instance.natureOfConstruction = natureOfConstruction;
             }
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
             // TODO: product
 
-            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
+            if (!string.IsNullOrEmpty(current.SORDAT())) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
             // TODO: restriction
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1212,22 +1216,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1236,34 +1240,34 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static InshoreTrafficZone ISTZNE(TracksAndRoutes current, RowBuffer buffer) {
+        private static InshoreTrafficZone ISTZNE(Feature current, RowBuffer buffer) {
             var instance = new InshoreTrafficZone();
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1281,22 +1285,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1305,60 +1309,60 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static MarineFarmCulture MARCUL(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static MarineFarmCulture MARCUL(Feature current, RowBuffer buffer) {
             var instance = new MarineFarmCulture();
 
             if (current.CATMFA != null) {
                 instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA);
             }
 
-            if (current.EXPSOU.HasValue) {
-                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU.Value);
+            if (current.EXPSOU_HasValue()) {
+                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU());
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperability identifier
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.QUASOU != default) {
+            if (current.QUASOU_HasValue()) {
                 var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.VALSOU.HasValue) {
-                instance.valueOfSounding = current.VALSOU.Value != -32767m ? current.VALSOU.Value : null;
+            if (current.VALSOU_HasValue()) {
+                instance.valueOfSounding = current.VALSOU() != -32767m ? current.VALSOU() : null;
             }
             else {
                 // Exactly one of the attributes height or value of sounding must be populated
-                if (current.WATLEV.HasValue && new int[] { 1, 2, -32767 }.Contains(current.WATLEV.Value)) {
+                if (current.WATLEV_HasValue() && new int[] { 1, 2, -32767 }.Contains(current.WATLEV()!.Value)) {
                     instance.height = null;
                 }
                 else
@@ -1366,18 +1370,18 @@ namespace S100Framework.Applications
             }
 
 
-            if (current.VERLEN.HasValue) {
-                instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
+            if (current.VERLEN_HasValue()) {
+                instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
             }
-            else if (current.VERLEN.HasValue && current.VERLEN.Value == -32767m) {
+            else if (current.VERLEN_HasValue() && current.VERLEN() == -32767m) {
                 //instance.verticalLength = default(decimal?);
             }
 
             // TODO: VerticalUncertainty
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1395,14 +1399,14 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.WATLEV.HasValue) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV);
+            if (current.WATLEV_HasValue()) {
+                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
             }
 
             // TODO: HEIGHT                            
@@ -1413,19 +1417,19 @@ namespace S100Framework.Applications
 
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
 
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1434,26 +1438,26 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static MilitaryPracticeArea MIPARE(MilitaryFeatures current, RowBuffer buffer) {
+        private static MilitaryPracticeArea MIPARE(Feature current, RowBuffer buffer) {
             var instance = new MilitaryPracticeArea();
 
-            if (current.CATMPA != default) {
+            if (current.CATMPA_HasValue()) {
                 var categoryOfMilitaryPracticeArea = EnumHelper.GetEnumValues(current.CATMPA);
                 if (categoryOfMilitaryPracticeArea is not null && categoryOfMilitaryPracticeArea.Any())
                     instance.categoryOfMilitaryPracticeArea = categoryOfMilitaryPracticeArea;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -1461,24 +1465,24 @@ namespace S100Framework.Applications
 
             // TODO: nationality
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1496,22 +1500,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1520,45 +1524,45 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static OffshoreProductionArea OSPARE(OffshoreInstallations current, RowBuffer buffer) {
+        private static OffshoreProductionArea OSPARE(Feature current, RowBuffer buffer) {
             var instance = new OffshoreProductionArea();
 
-            if (current.CATPRA.HasValue) {
+            if (current.CATPRA_HasValue()) {
                 // Windfarm
-                if (current.CATPRA.Value == 9) {
+                if (current.CATPRA() == 9) {
                     instance.categoryOfOffshoreProductionArea = 1;  // categoryOfOffshoreProductionArea.WindFarm;
                 }
-                else if (current.CATPRA.Value == 8) {
+                else if (current.CATPRA() == 8) {
                     instance.categoryOfOffshoreProductionArea = 4;  // categoryOfOffshoreProductionArea.TankFarm;
                 }
                 else {
-                    Logger.Current.DataError(current.OBJECTID!.Value, current.TableName!, current.LNAM ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA.Value}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName()!, current.LNAM() ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA()}");
                     //continue;
-                    //throw new NotSupportedException($"Cannot convert offshoreproductionarea with CATPRA {current.CATPRA.Value}");
-                    //instance.categoryOfOffshoreProductionArea = EnumHelper.GetEnumValue<categoryOfOffshoreProductionArea>(current.CATPRA.Value);
+                    //throw new NotSupportedException($"Cannot convert offshoreproductionarea with CATPRA {current.CATPRA()}");
+                    //instance.categoryOfOffshoreProductionArea = EnumHelper.GetEnumValue<categoryOfOffshoreProductionArea>(current.CATPRA());
                 }
             }
 
-            if (current.CONDTN.HasValue) {
-                instance.condition = GetCondition(current.CONDTN.Value)?.value;
+            if (current.CONDTN_HasValue()) {
+                instance.condition = GetCondition(current.CONDTN()!.Value).value;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
-            if (current.HEIGHT.HasValue) {
-                instance.height = current.HEIGHT.Value != -32767m ? current.HEIGHT.Value : null;
+            if (current.HEIGHT_HasValue()) {
+                instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
             }
             else {
 
@@ -1567,43 +1571,43 @@ namespace S100Framework.Applications
             // TODO: interoperabilityIdentifier
 
             if (current.PRODCT != null) {
-                var product = EnumHelper.GetEnumValues(current.PRODCT);
+                var product = EnumHelper.GetEnumValues(current.PRODCT());
                 if (product is not null && product.Any())
                     instance.product = product;
             }
 
-            if (current.CONRAD.HasValue) {
-                instance.radarConspicuous = current.CONRAD.Value == 2 ? false : true;
+            if (current.CONRAD_HasValue()) {
+                instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
             }
-            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
+            if (!string.IsNullOrEmpty(current.SORDAT())) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.VERLEN.HasValue) {
-                instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
+            if (current.VERLEN_HasValue()) {
+                instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
             }
             else {
                 //instance.verticalLength = default(decimal?);
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1621,28 +1625,28 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.CONVIS.HasValue) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS.Value);
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
             }
 
             // TODO: waterleveleffect
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1651,21 +1655,21 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static PrecautionaryArea PRCARE(TracksAndRoutes current, RowBuffer buffer) {
+        private static PrecautionaryArea PRCARE(Feature current, RowBuffer buffer) {
             var instance = new PrecautionaryArea();
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -1674,19 +1678,19 @@ namespace S100Framework.Applications
 
             // TODO: interoperabilityIdentifier
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1704,22 +1708,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1728,12 +1732,12 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static FeatureType CGUSTA(PortsAndServices current, RowBuffer buffer) {
+        private static FeatureType CGUSTA(Feature current, RowBuffer buffer) {
             /*
                 The S-101 Boolean attribute is MRCC has been introduced in S - 101 to indicate that a coast guard
                 station also performs the function of a Maritime Rescue and Coordination Centres(MRCC). This
@@ -1744,47 +1748,47 @@ namespace S100Framework.Applications
 
             var instance = new CoastGuardStation();
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexMaritimeRescue.IsMatch(current.INFORM)) {
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexMaritimeRescue.IsMatch(current.INFORM()!)) {
                 instance.isMRCC = true;
             }
-            else if (!string.IsNullOrEmpty(current.INFORM) && regexCoordinationCentre.IsMatch(current.INFORM)) {
+            else if (!string.IsNullOrEmpty(current.INFORM()) && regexCoordinationCentre.IsMatch(current.INFORM()!)) {
                 instance.isMRCC = true;
             }
 
-            if (current.COMCHA != default) {
-                instance.communicationChannel = current.COMCHA.Split(',').ToArray();
+            if (current.COMCHA_HasValue()) {
+                instance.communicationChannel = current.COMCHA()!.Split(',').ToArray();
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1793,39 +1797,39 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static SeaplaneLandingArea SPLARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static SeaplaneLandingArea SPLARE(Feature current, RowBuffer buffer) {
             var instance = new SeaplaneLandingArea();
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
 
             // TODO: interoperabilityIdentifier
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1843,22 +1847,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1867,44 +1871,44 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static CableArea CBLARE(OffshoreInstallations current, RowBuffer buffer) {
+        private static CableArea CBLARE(Feature current, RowBuffer buffer) {
             var instance = new CableArea();
 
-            if (current.CATCBL.HasValue) {
-                var categoryOfCable = EnumHelper.GetEnumValues(current.CATCBL.Value);
+            if (current.CATCBL_HasValue()) {
+                var categoryOfCable = EnumHelper.GetEnumValues(current.CATCBL());
                 if (categoryOfCable is not null && categoryOfCable.Any())
                     instance.categoryOfCable = categoryOfCable;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1922,21 +1926,21 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -1945,38 +1949,38 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static TrafficSeparationSchemeLanePart TSSLPT(TracksAndRoutes current, RowBuffer buffer) {
+        private static TrafficSeparationSchemeLanePart TSSLPT(Feature current, RowBuffer buffer) {
             var instance = new TrafficSeparationSchemeLanePart();
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (current.ORIENT.HasValue) {
-                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT();
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -1994,22 +1998,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -2018,34 +2022,34 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static TrafficSeparationSchemeRoundabout TSSRON(TracksAndRoutes current, RowBuffer buffer) {
+        private static TrafficSeparationSchemeRoundabout TSSRON(Feature current, RowBuffer buffer) {
             var instance = new TrafficSeparationSchemeRoundabout();
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -2063,22 +2067,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -2087,26 +2091,26 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static SubmarinePipelineArea PIPARE(OffshoreInstallations current, RowBuffer buffer) {
+        private static SubmarinePipelineArea PIPARE(Feature current, RowBuffer buffer) {
             var instance = new SubmarinePipelineArea();
 
-            if (current.CATPIP != default) {
+            if (current.CATPIP_HasValue()) {
                 var categoryOfPipelinePipe = EnumHelper.GetEnumValues(current.CATPIP);
                 if (categoryOfPipelinePipe is not null && categoryOfPipelinePipe.Any())
                     instance.categoryOfPipelinePipe = categoryOfPipelinePipe;
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
@@ -2118,19 +2122,19 @@ namespace S100Framework.Applications
                     instance.product = product;
             }
 
-            if (current.RESTRN != default) {
+            if (current.RESTRN_HasValue()) {
                 var restriction = EnumHelper.GetEnumValues(current.RESTRN);
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS());
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -2148,22 +2152,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -2172,31 +2176,31 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static TerritorialSeaArea TESARE(RegulatedAreasAndLimits current, RowBuffer buffer) {
+        private static TerritorialSeaArea TESARE(Feature current, RowBuffer buffer) {
             var instance = new TerritorialSeaArea();
 
             // TODO: inDispute
 
             // TODO: interoperabilityIdentifier
 
-            if (current.NATION != default) {
-                instance.nationality = [GetNation(current.NATION)];
+            if (current.NATION_HasValue()) {
+                instance.nationality = [GetNation(current.NATION())];
             }
 
-            if (current.RESTRN != default) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+            if (current.RESTRN_HasValue()) {
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (!string.IsNullOrEmpty(current.INFORM) && regexVesselSpeedLimit.IsMatch(current.INFORM)) {
-                var _value = regexVesselSpeedLimit.Match(current.INFORM).Groups["value"]?.Value;
-                var _unit = regexVesselSpeedLimit.Match(current.INFORM).Groups["unit"]?.Value?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
+                var _value = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["value"]?.Value;
+                var _unit = regexVesselSpeedLimit.Match(current.INFORM()!).Groups["unit"]?.Value.ToLowerInvariant();
 
                 var vesselSpeedLimit = new vesselSpeedLimit {
                 };
@@ -2214,22 +2218,22 @@ namespace S100Framework.Applications
                 instance.vesselSpeedLimit = [vesselSpeedLimit];
 
                 var inform = $"Speed limit is {_value} {_unit}";
-                if (inform.Equals(current.INFORM, StringComparison.InvariantCultureIgnoreCase))
-                    current.INFORM = null;
+                if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
+                    current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName}::{current.OBJECTID} {current.INFORM}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
-                    instance.scaleMinimum = scamin.Value;
+                    instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -2238,54 +2242,54 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
-        private static RescueStation RSCSTA(PortsAndServices current, RowBuffer buffer) {
+        private static RescueStation RSCSTA(Feature current, RowBuffer buffer) {
             var instance = new RescueStation();
 
-            if (current.CATRSC != null) {
-                var categoryOfRescueStation = EnumHelper.GetEnumValues(current.CATRSC);
+            if (current.CATRSC_HasValue()) {
+                var categoryOfRescueStation = EnumHelper.GetEnumValues(current.CATRSC());
                 if (categoryOfRescueStation is not null && categoryOfRescueStation.Any())
                     instance.categoryOfRescueStation = categoryOfRescueStation;
             }
 
-            if (current.COMCHA != default) {
-                instance.communicationChannel = current.COMCHA.Split(',').ToArray();
+            if (current.COMCHA_HasValue()) {
+                instance.communicationChannel = current.COMCHA()!.Split(',').ToArray();
             }
 
-            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-            if (dateRange != default) {
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
 
             // TODO: interoperabilityIdentifier            
 
-            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-            if (periodicDateRange != default) {
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.STATUS != default) {
-                instance.status = GetStatus(current.STATUS);
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
+                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
-                    instance.scaleMinimum = scaleMinimum.Value;
+                    instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = result.information.ToArray();
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
@@ -2294,9 +2298,10 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
     }
 }
+

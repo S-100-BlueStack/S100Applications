@@ -49,7 +49,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // ACHARE_AnchorageArea
-                            var instance = ImporterNIS.Build("ACHARE", current, buffer);
+                            var instance = ImporterNIS.Build("ACHARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -139,7 +139,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // CTSARE_CargoTranshipmentArea
-                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", current, buffer);
+                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature, buffer);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -160,7 +160,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 15: { // DMPGRD_DumpingGround
-                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", current, buffer);
+                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -185,7 +185,7 @@ namespace S100Framework.Applications
 
                         }
                     case 35: { // MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", current, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -198,7 +198,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 40: { // SPLARE_SeaPlaneLandingArea
-                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", current, buffer);
+                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
