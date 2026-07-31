@@ -175,8 +175,19 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 25: { // RADRNG_RadarRange
-                            throw new NotImplementedException($"No RADRNG_RadarRange in DK or GL. {tableName}");
+                            var instance = (RadarRange)ImporterNIS.Build("RADRNG", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
                     case 30: { // RCTLPT_RecommendedTrafficLanePart
                             var instance = new RecommendedTrafficLanePart {
                             };
@@ -334,9 +345,19 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 45: { // SUBTLN_SubmarineTransitLane
+                            var instance = (SubmarineTransitLane)ImporterNIS.Build("SUBTLN", feature, buffer);
 
-                            throw new NotImplementedException($"No SUBTLN_SubmarineTransitLane in DK or GL. {tableName}");
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;                
                     case 50: { // TSEZNE_TrafficSeparationZone
                             var instance = new SeparationZoneOrLine();
 

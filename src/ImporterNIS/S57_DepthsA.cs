@@ -3,6 +3,7 @@ using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
+using Windows.Storage.Streams;
 
 namespace S100Framework.Applications
 {
@@ -110,8 +111,19 @@ namespace S100Framework.Applications
                         break;
 
                     case 10: {    // SWPARE_SweptArea
-                            throw new NotImplementedException($"No SWPARE_SweptArea in DK or GL. {tableName}");
+                            var instance = (SweptArea)ImporterNIS.Build("SWPARE", feature, bufferTopo);
+
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
 
                     case 15: {    // UNSARE  // SKIN OF EARTH
                             var instance = new UnsurveyedArea();

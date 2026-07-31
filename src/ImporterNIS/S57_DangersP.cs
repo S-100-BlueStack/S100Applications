@@ -588,7 +588,7 @@ namespace S100Framework.Applications
 
                                 int?[] techniqueOfVerticalMeasurement = [];
                                 foreach (var e in current.TECSOU.Split(',', StringSplitOptions.RemoveEmptyEntries)) {
-                                    if (e.Equals("-32768")) {
+                                    if (e.Equals("-32767")) {
                                         techniqueOfVerticalMeasurement = [.. techniqueOfVerticalMeasurement, null];
                                     }
                                     else {

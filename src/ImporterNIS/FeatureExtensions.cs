@@ -2143,9 +2143,8 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>GLOBALID</c> field from.</param>
         /// <returns>The value of <c>GLOBALID</c>, or <c>null</c> when it is not set.</returns>
-        public static Guid? GLOBALID(this Feature feature) {
-            if (DBNull.Value == feature["GLOBALID"]) return null;
-            return Guid.TryParse(Convert.ToString(feature["GLOBALID"]), out var v) ? v : null;
+        public static Guid GLOBALID(this Feature feature) {
+            return feature.GetGlobalID();
         }
 
         /// <summary>

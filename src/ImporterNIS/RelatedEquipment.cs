@@ -141,22 +141,15 @@ namespace S100Framework.Applications
         }
 
         internal void CreateRelatedAreaEquipment(S57Object s57master, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {
-            var areaRelated = FeatureRelations.Instance.GetRelated(s57master.GlobalId);
+            CreateRelatedAreaEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature, scaleMinimum);
+        }
 
-            //var nullS57Objects = areaRelated
-            //        .Where(obj => obj.S57Object == null)
-            //        .ToList();
+        internal void CreateRelatedAreaEquipment(Feature s57master, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {
+            CreateRelatedAreaEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature, scaleMinimum);
+        }
 
-            //if (nullS57Objects.Count > 0) {
-            //    ;
-            //}
-
-            //if (areaRelated.Count == nullS57Objects.Count || nullS57Objects.Count > 0) {
-            //    return;
-            //}
-            //else {
-            //    ;
-            //}
+        internal void CreateRelatedAreaEquipment(Guid globalid, int PLTS_COMP_SCALE, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {
+            var areaRelated = FeatureRelations.Instance.GetRelated(globalid);
 
             var tableName = this._target.GetName("point");
             using var featureClass = this._target.OpenDataset<FeatureClass>(tableName);
@@ -190,7 +183,7 @@ namespace S100Framework.Applications
                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);  //System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), jsonSerializerOptions);
 
                     ImporterNIS.SetShape(buffer, shape);
-                    ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
+                    ImporterNIS.SetUsageBand(buffer, PLTS_COMP_SCALE);
 
                     using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();

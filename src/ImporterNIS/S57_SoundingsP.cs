@@ -26,11 +26,9 @@ namespace S100Framework.Applications
                     while (searchCursor.MoveNext()) {
                         recordCount += 1;
 
-                        var feature = (Feature)searchCursor.Current;
-                        var current = new SoundingsP(feature);
+                        var current = (Feature)searchCursor.Current;
 
-                        //var objectid = current.OBJECTID ?? default;
-                        var globalid = current.GLOBALID;
+                        var globalid = current.GLOBALID();
 
                         if (FeatureRelations.Instance.IsSlave(globalid)) {
                             continue;
@@ -40,18 +38,9 @@ namespace S100Framework.Applications
                             throw new Exception("Ups. Not supported");
                         }
 
-                        //var longname = current.LNAM ?? Strings.UNKNOWN;
-                        var fcSubtype = current.FCSUBTYPE ?? default;
-                        //var depth = current.DEPTH ?? default;
-                        //var quasou = current.QUASOU ?? default;
-                        //var quapos = current.P_QUAPOS ?? default;
-                        //var tecsou = current.TECSOU ?? default;
-                        //var objnam = current.OBJNAM ?? default;
-                        //var nobjnm = current.NOBJNM ?? default;
-
-                        switch (fcSubtype) {
+                        switch (current.FCSubtype()) {
                             case 1: {
-                                    var instance = ImporterNIS.Build("SOUNDG", feature, buffer);
+                                    var instance = ImporterNIS.Build("SOUNDG", current, buffer);
 
                                     if(instance is Sounding sounding) {
                                         var oid = insertCursor.Insert(buffer);
