@@ -121,7 +121,7 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -205,8 +205,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -264,8 +264,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -301,8 +301,8 @@ namespace S100Framework.Applications
                         instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-                instance.information = result.information.ToArray();
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                 buffer["ps"] = ps101;
@@ -341,15 +341,15 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                     var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scaleMinimum.HasValue)
                         instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-                instance.information = result.information.ToArray();
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                 buffer["ps"] = ps101;
@@ -381,15 +381,15 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                     var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scaleMinimum.HasValue)
                         instance.scaleMinimum = scaleMinimum;
                 }
 
-                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-                instance.information = result.information.ToArray();
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                 if (current.PICREP_HasValue()) {
@@ -480,7 +480,7 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
 
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
@@ -488,8 +488,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -557,7 +557,7 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                     var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue) {
@@ -565,8 +565,8 @@ namespace S100Framework.Applications
                     }
                 }
 
-                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-                instance.information = result.information.ToArray();
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                 buffer["ps"] = ps101;
@@ -643,15 +643,15 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                     var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue)
                         instance.scaleMinimum = scamin!.Value;
                 }
 
-                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-                instance.information = result.information.ToArray();
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
                 instance.SetInformationBindings(result.InformationBindings.ToArray());
 
                 buffer["ps"] = ps101;
@@ -723,15 +723,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -832,15 +832,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -947,8 +947,8 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1019,15 +1019,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1118,15 +1118,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1223,15 +1223,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1292,15 +1292,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1419,7 +1419,7 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
 
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
@@ -1428,8 +1428,8 @@ namespace S100Framework.Applications
             }
 
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1507,15 +1507,15 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1540,7 +1540,7 @@ namespace S100Framework.Applications
                     instance.categoryOfOffshoreProductionArea = 4;  // categoryOfOffshoreProductionArea.TankFarm;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName()!, current.LNAM() ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert OffshoreInstallation with CATPRA = {current.CATPRA()}");
                     //continue;
                     //throw new NotSupportedException($"Cannot convert offshoreproductionarea with CATPRA {current.CATPRA()}");
                     //instance.categoryOfOffshoreProductionArea = EnumHelper.GetEnumValue<categoryOfOffshoreProductionArea>(current.CATPRA());
@@ -1645,8 +1645,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1722,8 +1722,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1787,8 +1787,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1861,8 +1861,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -1939,8 +1939,8 @@ namespace S100Framework.Applications
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
             }
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -2012,8 +2012,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -2081,8 +2081,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -2166,8 +2166,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -2232,8 +2232,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scamin!.Value;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
@@ -2288,8 +2288,8 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = scaleMinimum;
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName()!, current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = result.information.ToArray();
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
 
             buffer["ps"] = ps101;
