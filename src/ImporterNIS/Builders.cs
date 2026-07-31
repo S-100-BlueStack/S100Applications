@@ -82,10 +82,7 @@ namespace S100Framework.Applications
             if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
-
-            // TODO: interoperabilityIdentifier
-
-
+           
             var inform = current.INFORM();
             if (!string.IsNullOrEmpty(inform) && regexWaterwayDistance.IsMatch(inform)) {
                 var _value = regexWaterwayDistance.Match(inform).Groups["value"]?.Value;
@@ -126,12 +123,11 @@ namespace S100Framework.Applications
 
             buffer["ps"] = ps101;
             buffer["code"] = instance.GetType().Name;
-
-
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -160,8 +156,6 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             var inform = current.INFORM();
             if (!string.IsNullOrEmpty(inform) && regexMaximumDraughtPermitted.IsMatch(inform)) {
                 var _value = regexMaximumDraughtPermitted.Match(inform).Groups["value"]?.Value;
@@ -181,7 +175,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -211,12 +205,11 @@ namespace S100Framework.Applications
 
             buffer["ps"] = ps101;
             buffer["code"] = instance.GetType().Name;
-
-
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -233,8 +226,6 @@ namespace S100Framework.Applications
             if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
-
-            // TODO: interoperabilityIdentifier
 
             // TODO: measured distance
 
@@ -270,12 +261,11 @@ namespace S100Framework.Applications
 
             buffer["ps"] = ps101;
             buffer["code"] = instance.GetType().Name;
-
-
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -289,8 +279,6 @@ namespace S100Framework.Applications
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
-
-                // TODO: interoperabilityIdentifier
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
@@ -310,7 +298,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -326,7 +315,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -336,8 +326,6 @@ namespace S100Framework.Applications
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
-
-                // TODO: interoperabilityIdentifier
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
@@ -357,7 +345,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -372,8 +361,6 @@ namespace S100Framework.Applications
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
                 if (featureName is not null)
                     instance.featureName = featureName;
-
-                // TODO: interoperabilityIdentifier
 
                 if (current.NATION_HasValue()) {
                     instance.nationality = [GetNation(current.NATION())];
@@ -401,7 +388,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -434,15 +422,13 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: InteroperabilityIdentifier
-
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
             if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -497,7 +483,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -574,7 +561,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -598,15 +586,13 @@ namespace S100Framework.Applications
                     instance.fixedDateRange = dateRange;
                 }
 
-                // TODO: interoperabilityIdentifier
-
                 DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
                 if (periodicDateRange is not null) {
                     instance.periodicDateRange = periodicDateRange;
                 }
 
                 if (current.RESTRN_HasValue()) {
-                    var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                    var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                     if (restriction is not null && restriction.Any())
                         instance.restriction = restriction;
                 }
@@ -659,7 +645,8 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = instance.Flatten();
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
                 SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
@@ -677,8 +664,6 @@ namespace S100Framework.Applications
             if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
-
-            // TODO: interoperabilityIdentifier
 
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
             if (periodicDateRange is not null) {
@@ -739,7 +724,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -770,16 +756,14 @@ namespace S100Framework.Applications
             // TODO: imoAdopted
             //instance.iMOAdopted = null;
 
-            // TODO: InteroperabilityIdentifier
-
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -789,7 +773,7 @@ namespace S100Framework.Applications
             }
 
             if (current.TECSOU != null) {
-                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU);
+                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU());
                 if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
             }
@@ -848,7 +832,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -889,8 +874,6 @@ namespace S100Framework.Applications
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
-
-            // TODO: InteroperabilityIdentifier
 
             // TODO: maximumPermittedDraught - From INFORM - No instances in GST - Not converted
 
@@ -956,7 +939,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
@@ -966,7 +950,7 @@ namespace S100Framework.Applications
             var instance = new DumpingGround();
 
             if (current.CATDPG_HasValue()) {
-                var categoryOfDumpingGround = EnumHelper.GetEnumValues(current.CATDPG);
+                var categoryOfDumpingGround = EnumHelper.GetEnumValues(current.CATDPG());
                 if (categoryOfDumpingGround is not null && categoryOfDumpingGround.Any())
                     instance.categoryOfDumpingGround = categoryOfDumpingGround;
             }
@@ -977,11 +961,8 @@ namespace S100Framework.Applications
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            // TODO: interoperabilityIdentifier
-
-
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1035,7 +1016,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1056,8 +1038,6 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             // TODO: maximumPermittedDraught
 
             if (current.ORIENT_HasValue()) {
@@ -1065,13 +1045,13 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1134,7 +1114,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1164,8 +1145,6 @@ namespace S100Framework.Applications
             if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
-
-            // TODO: interoperabilityIdentifier
 
             if (current.NATCON_HasValue()) {
                 var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON());
@@ -1239,7 +1218,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1252,10 +1232,8 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1308,7 +1286,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1317,7 +1296,7 @@ namespace S100Framework.Applications
             var instance = new MarineFarmCulture();
 
             if (current.CATMFA != null) {
-                instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA);
+                instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA());
             }
 
             if (current.EXPSOU_HasValue()) {
@@ -1341,13 +1320,13 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1437,7 +1416,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1446,7 +1426,7 @@ namespace S100Framework.Applications
             var instance = new MilitaryPracticeArea();
 
             if (current.CATMPA_HasValue()) {
-                var categoryOfMilitaryPracticeArea = EnumHelper.GetEnumValues(current.CATMPA);
+                var categoryOfMilitaryPracticeArea = EnumHelper.GetEnumValues(current.CATMPA());
                 if (categoryOfMilitaryPracticeArea is not null && categoryOfMilitaryPracticeArea.Any())
                     instance.categoryOfMilitaryPracticeArea = categoryOfMilitaryPracticeArea;
             }
@@ -1460,8 +1440,6 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             // TODO: nationality
 
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
@@ -1470,7 +1448,7 @@ namespace S100Framework.Applications
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1523,7 +1501,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1567,8 +1546,6 @@ namespace S100Framework.Applications
 
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.PRODCT != null) {
                 var product = EnumHelper.GetEnumValues(current.PRODCT());
                 if (product is not null && product.Any())
@@ -1588,7 +1565,7 @@ namespace S100Framework.Applications
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1654,7 +1631,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1675,10 +1653,8 @@ namespace S100Framework.Applications
             // TODO: imoAdopted
             //instance.iMOAdopted = null;
 
-            // TODO: interoperabilityIdentifier
-
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1731,7 +1707,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1767,8 +1744,6 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
             if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
@@ -1796,7 +1771,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1809,15 +1785,13 @@ namespace S100Framework.Applications
                 instance.featureName = featureName;
 
 
-            // TODO: interoperabilityIdentifier
-
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
             if (periodicDateRange is not null) {
                 instance.periodicDateRange = periodicDateRange;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1870,7 +1844,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1893,10 +1868,8 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -1948,7 +1921,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -1961,14 +1935,12 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.ORIENT_HasValue()) {
                 instance.orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT();
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -2021,7 +1993,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -2034,10 +2007,8 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -2090,7 +2061,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -2099,7 +2071,7 @@ namespace S100Framework.Applications
             var instance = new SubmarinePipelineArea();
 
             if (current.CATPIP_HasValue()) {
-                var categoryOfPipelinePipe = EnumHelper.GetEnumValues(current.CATPIP);
+                var categoryOfPipelinePipe = EnumHelper.GetEnumValues(current.CATPIP());
                 if (categoryOfPipelinePipe is not null && categoryOfPipelinePipe.Any())
                     instance.categoryOfPipelinePipe = categoryOfPipelinePipe;
             }
@@ -2113,16 +2085,14 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            // TODO: interoperabilityIdentifier
-
             if (current.PRODCT != null) {
-                var product = EnumHelper.GetEnumValues(current.PRODCT);
+                var product = EnumHelper.GetEnumValues(current.PRODCT());
                 if (product is not null && product.Any())
                     instance.product = product;
             }
 
             if (current.RESTRN_HasValue()) {
-                var restriction = EnumHelper.GetEnumValues(current.RESTRN);
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
@@ -2175,7 +2145,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -2184,8 +2155,6 @@ namespace S100Framework.Applications
             var instance = new TerritorialSeaArea();
 
             // TODO: inDispute
-
-            // TODO: interoperabilityIdentifier
 
             if (current.NATION_HasValue()) {
                 instance.nationality = [GetNation(current.NATION())];
@@ -2241,7 +2210,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
@@ -2267,8 +2237,6 @@ namespace S100Framework.Applications
             if (dateRange is not null) {
                 instance.fixedDateRange = dateRange;
             }
-
-            // TODO: interoperabilityIdentifier            
 
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
             if (periodicDateRange is not null) {
@@ -2297,7 +2265,8 @@ namespace S100Framework.Applications
             buffer["attributebindings"] = instance.Flatten();
             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            SetShape(buffer, current.SHAPE()); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }

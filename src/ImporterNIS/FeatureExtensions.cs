@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>AGEN</c> field from.</param>
         /// <returns>The value of <c>AGEN</c>, or <c>null</c> when it is not set.</returns>
-        public static string AGEN(this Feature feature) {
+        public static string? AGEN(this Feature feature) {
             //if (DBNull.Value == feature["AGEN"]) return null;
             var v = Convert.ToString(feature["AGEN"]);
             //if ("-32767".Equals(v)) return null;
@@ -129,7 +129,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CALSGN</c> field from.</param>
         /// <returns>The value of <c>CALSGN</c>, or <c>null</c> when it is not set.</returns>
-        public static string CALSGN(this Feature feature) {
+        public static string? CALSGN(this Feature feature) {
             //if (DBNull.Value == feature["CALSGN"]) return null;
             var v = Convert.ToString(feature["CALSGN"]);
             //if ("-32767".Equals(v)) return null;
@@ -148,7 +148,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATACH</c> field from.</param>
         /// <returns>The value of <c>CATACH</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATACH(this Feature feature) {
+        public static string? CATACH(this Feature feature) {
             //if (DBNull.Value == feature["CATACH"]) return null;
             var v = Convert.ToString(feature["CATACH"]);
             //if ("-32767".Equals(v)) return null;
@@ -167,7 +167,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATAIR</c> field from.</param>
         /// <returns>The value of <c>CATAIR</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATAIR(this Feature feature) {
+        public static string? CATAIR(this Feature feature) {
             //if (DBNull.Value == feature["CATAIR"]) return null;
             var v = Convert.ToString(feature["CATAIR"]);
             //if ("-32767".Equals(v)) return null;
@@ -186,7 +186,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATBRG</c> field from.</param>
         /// <returns>The value of <c>CATBRG</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATBRG(this Feature feature) {
+        public static string? CATBRG(this Feature feature) {
             //if (DBNull.Value == feature["CATBRG"]) return null;
             var v = Convert.ToString(feature["CATBRG"]);
             //if ("-32767".Equals(v)) return null;
@@ -452,7 +452,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATDPG</c> field from.</param>
         /// <returns>The value of <c>CATDPG</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATDPG(this Feature feature) {
+        public static string? CATDPG(this Feature feature) {
             //if (DBNull.Value == feature["CATDPG"]) return null;
             var v = Convert.ToString(feature["CATDPG"]);
             //if ("-32767".Equals(v)) return null;
@@ -585,7 +585,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATHAF</c> field from.</param>
         /// <returns>The value of <c>CATHAF</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATHAF(this Feature feature) {
+        public static string? CATHAF(this Feature feature) {
             //if (DBNull.Value == feature["CATHAF"]) return null;
             var v = Convert.ToString(feature["CATHAF"]);
             //if ("-32767".Equals(v)) return null;
@@ -604,7 +604,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATHLK</c> field from.</param>
         /// <returns>The value of <c>CATHLK</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATHLK(this Feature feature) {
+        public static string? CATHLK(this Feature feature) {
             //if (DBNull.Value == feature["CATHLK"]) return null;
             var v = Convert.ToString(feature["CATHLK"]);
             //if ("-32767".Equals(v)) return null;
@@ -680,7 +680,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATLIT</c> field from.</param>
         /// <returns>The value of <c>CATLIT</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATLIT(this Feature feature) {
+        public static string? CATLIT(this Feature feature) {
             //if (DBNull.Value == feature["CATLIT"]) return null;
             var v = Convert.ToString(feature["CATLIT"]);
             //if ("-32767".Equals(v)) return null;
@@ -699,7 +699,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATLMK</c> field from.</param>
         /// <returns>The value of <c>CATLMK</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATLMK(this Feature feature) {
+        public static string? CATLMK(this Feature feature) {
             //if (DBNull.Value == feature["CATLMK"]) return null;
             var v = Convert.ToString(feature["CATLMK"]);
             //if ("-32767".Equals(v)) return null;
@@ -718,7 +718,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATLND</c> field from.</param>
         /// <returns>The value of <c>CATLND</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATLND(this Feature feature) {
+        public static string? CATLND(this Feature feature) {
             //if (DBNull.Value == feature["CATLND"]) return null;
             var v = Convert.ToString(feature["CATLND"]);
             //if ("-32767".Equals(v)) return null;
@@ -775,7 +775,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATMPA</c> field from.</param>
         /// <returns>The value of <c>CATMPA</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATMPA(this Feature feature) {
+        public static string? CATMPA(this Feature feature) {
             //if (DBNull.Value == feature["CATMPA"]) return null;
             var v = Convert.ToString(feature["CATMPA"]);
             //if ("-32767".Equals(v)) return null;
@@ -832,7 +832,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATOFP</c> field from.</param>
         /// <returns>The value of <c>CATOFP</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATOFP(this Feature feature) {
+        public static string? CATOFP(this Feature feature) {
             //if (DBNull.Value == feature["CATOFP"]) return null;
             var v = Convert.ToString(feature["CATOFP"]);
             //if ("-32767".Equals(v)) return null;
@@ -889,7 +889,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATPIP</c> field from.</param>
         /// <returns>The value of <c>CATPIP</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATPIP(this Feature feature) {
+        public static string? CATPIP(this Feature feature) {
             //if (DBNull.Value == feature["CATPIP"]) return null;
             var v = Convert.ToString(feature["CATPIP"]);
             //if ("-32767".Equals(v)) return null;
@@ -1003,7 +1003,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATREA</c> field from.</param>
         /// <returns>The value of <c>CATREA</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATREA(this Feature feature) {
+        public static string? CATREA(this Feature feature) {
             //if (DBNull.Value == feature["CATREA"]) return null;
             var v = Convert.ToString(feature["CATREA"]);
             //if ("-32767".Equals(v)) return null;
@@ -1041,7 +1041,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATROS</c> field from.</param>
         /// <returns>The value of <c>CATROS</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATROS(this Feature feature) {
+        public static string? CATROS(this Feature feature) {
             //if (DBNull.Value == feature["CATROS"]) return null;
             var v = Convert.ToString(feature["CATROS"]);
             //if ("-32767".Equals(v)) return null;
@@ -1060,7 +1060,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATRSC</c> field from.</param>
         /// <returns>The value of <c>CATRSC</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATRSC(this Feature feature) {
+        public static string? CATRSC(this Feature feature) {
             //if (DBNull.Value == feature["CATRSC"]) return null;
             var v = Convert.ToString(feature["CATRSC"]);
             //if ("-32767".Equals(v)) return null;
@@ -1117,7 +1117,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATSCF</c> field from.</param>
         /// <returns>The value of <c>CATSCF</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATSCF(this Feature feature) {
+        public static string? CATSCF(this Feature feature) {
             //if (DBNull.Value == feature["CATSCF"]) return null;
             var v = Convert.ToString(feature["CATSCF"]);
             //if ("-32767".Equals(v)) return null;
@@ -1174,7 +1174,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATSIT</c> field from.</param>
         /// <returns>The value of <c>CATSIT</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATSIT(this Feature feature) {
+        public static string? CATSIT(this Feature feature) {
             //if (DBNull.Value == feature["CATSIT"]) return null;
             var v = Convert.ToString(feature["CATSIT"]);
             //if ("-32767".Equals(v)) return null;
@@ -1193,7 +1193,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATSIW</c> field from.</param>
         /// <returns>The value of <c>CATSIW</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATSIW(this Feature feature) {
+        public static string? CATSIW(this Feature feature) {
             //if (DBNull.Value == feature["CATSIW"]) return null;
             var v = Convert.ToString(feature["CATSIW"]);
             //if ("-32767".Equals(v)) return null;
@@ -1250,7 +1250,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATSPM</c> field from.</param>
         /// <returns>The value of <c>CATSPM</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATSPM(this Feature feature) {
+        public static string? CATSPM(this Feature feature) {
             //if (DBNull.Value == feature["CATSPM"]) return null;
             var v = Convert.ToString(feature["CATSPM"]);
             //if ("-32767".Equals(v)) return null;
@@ -1307,7 +1307,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CATVEG</c> field from.</param>
         /// <returns>The value of <c>CATVEG</c>, or <c>null</c> when it is not set.</returns>
-        public static string CATVEG(this Feature feature) {
+        public static string? CATVEG(this Feature feature) {
             //if (DBNull.Value == feature["CATVEG"]) return null;
             var v = Convert.ToString(feature["CATVEG"]);
             //if ("-32767".Equals(v)) return null;
@@ -1421,7 +1421,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CLSDEF</c> field from.</param>
         /// <returns>The value of <c>CLSDEF</c>, or <c>null</c> when it is not set.</returns>
-        public static string CLSDEF(this Feature feature) {
+        public static string? CLSDEF(this Feature feature) {
             //if (DBNull.Value == feature["CLSDEF"]) return null;
             var v = Convert.ToString(feature["CLSDEF"]);
             //if ("-32767".Equals(v)) return null;
@@ -1440,7 +1440,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>CLSNAM</c> field from.</param>
         /// <returns>The value of <c>CLSNAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string CLSNAM(this Feature feature) {
+        public static string? CLSNAM(this Feature feature) {
             //if (DBNull.Value == feature["CLSNAM"]) return null;
             var v = Convert.ToString(feature["CLSNAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -1478,7 +1478,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>COLOUR</c> field from.</param>
         /// <returns>The value of <c>COLOUR</c>, or <c>null</c> when it is not set.</returns>
-        public static string COLOUR(this Feature feature) {
+        public static string? COLOUR(this Feature feature) {
             //if (DBNull.Value == feature["COLOUR"]) return null;
             var v = Convert.ToString(feature["COLOUR"]);
             //if ("-32767".Equals(v)) return null;
@@ -1497,7 +1497,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>COLPAT</c> field from.</param>
         /// <returns>The value of <c>COLPAT</c>, or <c>null</c> when it is not set.</returns>
-        public static string COLPAT(this Feature feature) {
+        public static string? COLPAT(this Feature feature) {
             //if (DBNull.Value == feature["COLPAT"]) return null;
             var v = Convert.ToString(feature["COLPAT"]);
             //if ("-32767".Equals(v)) return null;
@@ -1516,7 +1516,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>COMCHA</c> field from.</param>
         /// <returns>The value of <c>COMCHA</c>, or <c>null</c> when it is not set.</returns>
-        public static string COMCHA(this Feature feature) {
+        public static string? COMCHA(this Feature feature) {
             //if (DBNull.Value == feature["COMCHA"]) return null;
             var v = Convert.ToString(feature["COMCHA"]);
             //if ("-32767".Equals(v)) return null;
@@ -1554,7 +1554,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>COMT</c> field from.</param>
         /// <returns>The value of <c>COMT</c>, or <c>null</c> when it is not set.</returns>
-        public static string COMT(this Feature feature) {
+        public static string? COMT(this Feature feature) {
             //if (DBNull.Value == feature["COMT"]) return null;
             var v = Convert.ToString(feature["COMT"]);
             //if ("-32767".Equals(v)) return null;
@@ -1706,7 +1706,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DATEND</c> field from.</param>
         /// <returns>The value of <c>DATEND</c>, or <c>null</c> when it is not set.</returns>
-        public static string DATEND(this Feature feature) {
+        public static string? DATEND(this Feature feature) {
             //if (DBNull.Value == feature["DATEND"]) return null;
             var v = Convert.ToString(feature["DATEND"]);
             //if ("-32767".Equals(v)) return null;
@@ -1725,7 +1725,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DATSTA</c> field from.</param>
         /// <returns>The value of <c>DATSTA</c>, or <c>null</c> when it is not set.</returns>
-        public static string DATSTA(this Feature feature) {
+        public static string? DATSTA(this Feature feature) {
             //if (DBNull.Value == feature["DATSTA"]) return null;
             var v = Convert.ToString(feature["DATSTA"]);
             //if ("-32767".Equals(v)) return null;
@@ -1744,7 +1744,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DELETE_COMMENT</c> field from.</param>
         /// <returns>The value of <c>DELETE_COMMENT</c>, or <c>null</c> when it is not set.</returns>
-        public static string DELETE_COMMENT(this Feature feature) {
+        public static string? DELETE_COMMENT(this Feature feature) {
             //if (DBNull.Value == feature["DELETE_COMMENT"]) return null;
             var v = Convert.ToString(feature["DELETE_COMMENT"]);
             //if ("-32767".Equals(v)) return null;
@@ -1782,7 +1782,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DEST_FC</c> field from.</param>
         /// <returns>The value of <c>DEST_FC</c>, or <c>null</c> when it is not set.</returns>
-        public static string DEST_FC(this Feature feature) {
+        public static string? DEST_FC(this Feature feature) {
             //if (DBNull.Value == feature["DEST_FC"]) return null;
             var v = Convert.ToString(feature["DEST_FC"]);
             //if ("-32767".Equals(v)) return null;
@@ -1801,7 +1801,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DEST_LNAM</c> field from.</param>
         /// <returns>The value of <c>DEST_LNAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string DEST_LNAM(this Feature feature) {
+        public static string? DEST_LNAM(this Feature feature) {
             //if (DBNull.Value == feature["DEST_LNAM"]) return null;
             var v = Convert.ToString(feature["DEST_LNAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -1820,7 +1820,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DEST_SUB</c> field from.</param>
         /// <returns>The value of <c>DEST_SUB</c>, or <c>null</c> when it is not set.</returns>
-        public static string DEST_SUB(this Feature feature) {
+        public static string? DEST_SUB(this Feature feature) {
             //if (DBNull.Value == feature["DEST_SUB"]) return null;
             var v = Convert.ToString(feature["DEST_SUB"]);
             //if ("-32767".Equals(v)) return null;
@@ -1839,7 +1839,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DEST_UID</c> field from.</param>
         /// <returns>The value of <c>DEST_UID</c>, or <c>null</c> when it is not set.</returns>
-        public static string DEST_UID(this Feature feature) {
+        public static string? DEST_UID(this Feature feature) {
             //if (DBNull.Value == feature["DEST_UID"]) return null;
             var v = Convert.ToString(feature["DEST_UID"]);
             //if ("-32767".Equals(v)) return null;
@@ -1896,7 +1896,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DSNM</c> field from.</param>
         /// <returns>The value of <c>DSNM</c>, or <c>null</c> when it is not set.</returns>
-        public static string DSNM(this Feature feature) {
+        public static string? DSNM(this Feature feature) {
             //if (DBNull.Value == feature["DSNM"]) return null;
             var v = Convert.ToString(feature["DSNM"]);
             //if ("-32767".Equals(v)) return null;
@@ -1915,7 +1915,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>DSPM_COMT</c> field from.</param>
         /// <returns>The value of <c>DSPM_COMT</c>, or <c>null</c> when it is not set.</returns>
-        public static string DSPM_COMT(this Feature feature) {
+        public static string? DSPM_COMT(this Feature feature) {
             //if (DBNull.Value == feature["DSPM_COMT"]) return null;
             var v = Convert.ToString(feature["DSPM_COMT"]);
             //if ("-32767".Equals(v)) return null;
@@ -1953,7 +1953,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>EDITOR</c> field from.</param>
         /// <returns>The value of <c>EDITOR</c>, or <c>null</c> when it is not set.</returns>
-        public static string EDITOR(this Feature feature) {
+        public static string? EDITOR(this Feature feature) {
             //if (DBNull.Value == feature["EDITOR"]) return null;
             var v = Convert.ToString(feature["EDITOR"]);
             //if ("-32767".Equals(v)) return null;
@@ -1972,7 +1972,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>EDITOR_COMMENT</c> field from.</param>
         /// <returns>The value of <c>EDITOR_COMMENT</c>, or <c>null</c> when it is not set.</returns>
-        public static string EDITOR_COMMENT(this Feature feature) {
+        public static string? EDITOR_COMMENT(this Feature feature) {
             //if (DBNull.Value == feature["EDITOR_COMMENT"]) return null;
             var v = Convert.ToString(feature["EDITOR_COMMENT"]);
             //if ("-32767".Equals(v)) return null;
@@ -2086,7 +2086,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>EXPORTTYPE</c> field from.</param>
         /// <returns>The value of <c>EXPORTTYPE</c>, or <c>null</c> when it is not set.</returns>
-        public static string EXPORTTYPE(this Feature feature) {
+        public static string? EXPORTTYPE(this Feature feature) {
             //if (DBNull.Value == feature["EXPORTTYPE"]) return null;
             var v = Convert.ToString(feature["EXPORTTYPE"]);
             //if ("-32767".Equals(v)) return null;
@@ -2143,7 +2143,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>FEATURECLASS</c> field from.</param>
         /// <returns>The value of <c>FEATURECLASS</c>, or <c>null</c> when it is not set.</returns>
-        public static string FEATURECLASS(this Feature feature) {
+        public static string? FEATURECLASS(this Feature feature) {
             //if (DBNull.Value == feature["FEATURECLASS"]) return null;
             var v = Convert.ToString(feature["FEATURECLASS"]);
             //if ("-32767".Equals(v)) return null;
@@ -2162,7 +2162,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>FUNCTN</c> field from.</param>
         /// <returns>The value of <c>FUNCTN</c>, or <c>null</c> when it is not set.</returns>
-        public static string FUNCTN(this Feature feature) {
+        public static string? FUNCTN(this Feature feature) {
             //if (DBNull.Value == feature["FUNCTN"]) return null;
             var v = Convert.ToString(feature["FUNCTN"]);
             //if ("-32767".Equals(v)) return null;
@@ -2369,7 +2369,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>INFORM</c> field from.</param>
         /// <returns>The value of <c>INFORM</c>, or <c>null</c> when it is not set.</returns>
-        public static string INFORM(this Feature feature) {
+        public static string? INFORM(this Feature feature) {
             //if (DBNull.Value == feature["INFORM"]) return null;
             var v = Convert.ToString(feature["INFORM"]);
             //if ("-32767".Equals(v)) return null;
@@ -2517,7 +2517,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>LITVIS</c> field from.</param>
         /// <returns>The value of <c>LITVIS</c>, or <c>null</c> when it is not set.</returns>
-        public static string LITVIS(this Feature feature) {
+        public static string? LITVIS(this Feature feature) {
             //if (DBNull.Value == feature["LITVIS"]) return null;
             var v = Convert.ToString(feature["LITVIS"]);
             //if ("-32767".Equals(v)) return null;
@@ -2536,7 +2536,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>LNAM</c> field from.</param>
         /// <returns>The value of <c>LNAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string LNAM(this Feature feature) {
+        public static string? LNAM(this Feature feature) {
             //if (DBNull.Value == feature["LNAM"]) return null;
             var v = Convert.ToString(feature["LNAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -2612,7 +2612,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NAME</c> field from.</param>
         /// <returns>The value of <c>NAME</c>, or <c>null</c> when it is not set.</returns>
-        public static string NAME(this Feature feature) {
+        public static string? NAME(this Feature feature) {
             //if (DBNull.Value == feature["NAME"]) return null;
             var v = Convert.ToString(feature["NAME"]);
             //if ("-32767".Equals(v)) return null;
@@ -2631,7 +2631,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NATCON</c> field from.</param>
         /// <returns>The value of <c>NATCON</c>, or <c>null</c> when it is not set.</returns>
-        public static string NATCON(this Feature feature) {
+        public static string? NATCON(this Feature feature) {
             //if (DBNull.Value == feature["NATCON"]) return null;
             var v = Convert.ToString(feature["NATCON"]);
             //if ("-32767".Equals(v)) return null;
@@ -2650,7 +2650,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NATION</c> field from.</param>
         /// <returns>The value of <c>NATION</c>, or <c>null</c> when it is not set.</returns>
-        public static string NATION(this Feature feature) {
+        public static string? NATION(this Feature feature) {
             //if (DBNull.Value == feature["NATION"]) return null;
             var v = Convert.ToString(feature["NATION"]);
             //if ("-32767".Equals(v)) return null;
@@ -2669,7 +2669,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NATQUA</c> field from.</param>
         /// <returns>The value of <c>NATQUA</c>, or <c>null</c> when it is not set.</returns>
-        public static string NATQUA(this Feature feature) {
+        public static string? NATQUA(this Feature feature) {
             //if (DBNull.Value == feature["NATQUA"]) return null;
             var v = Convert.ToString(feature["NATQUA"]);
             //if ("-32767".Equals(v)) return null;
@@ -2688,7 +2688,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NATSUR</c> field from.</param>
         /// <returns>The value of <c>NATSUR</c>, or <c>null</c> when it is not set.</returns>
-        public static string NATSUR(this Feature feature) {
+        public static string? NATSUR(this Feature feature) {
             //if (DBNull.Value == feature["NATSUR"]) return null;
             var v = Convert.ToString(feature["NATSUR"]);
             //if ("-32767".Equals(v)) return null;
@@ -2707,7 +2707,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NINFOM</c> field from.</param>
         /// <returns>The value of <c>NINFOM</c>, or <c>null</c> when it is not set.</returns>
-        public static string NINFOM(this Feature feature) {
+        public static string? NINFOM(this Feature feature) {
             //if (DBNull.Value == feature["NINFOM"]) return null;
             var v = Convert.ToString(feature["NINFOM"]);
             //if ("-32767".Equals(v)) return null;
@@ -2726,7 +2726,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NIS_EDITOR</c> field from.</param>
         /// <returns>The value of <c>NIS_EDITOR</c>, or <c>null</c> when it is not set.</returns>
-        public static string NIS_EDITOR(this Feature feature) {
+        public static string? NIS_EDITOR(this Feature feature) {
             //if (DBNull.Value == feature["NIS_EDITOR"]) return null;
             var v = Convert.ToString(feature["NIS_EDITOR"]);
             //if ("-32767".Equals(v)) return null;
@@ -2745,7 +2745,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NIS_EDITOR_COMMENT</c> field from.</param>
         /// <returns>The value of <c>NIS_EDITOR_COMMENT</c>, or <c>null</c> when it is not set.</returns>
-        public static string NIS_EDITOR_COMMENT(this Feature feature) {
+        public static string? NIS_EDITOR_COMMENT(this Feature feature) {
             //if (DBNull.Value == feature["NIS_EDITOR_COMMENT"]) return null;
             var v = Convert.ToString(feature["NIS_EDITOR_COMMENT"]);
             //if ("-32767".Equals(v)) return null;
@@ -2819,7 +2819,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NIS_VERIFIER</c> field from.</param>
         /// <returns>The value of <c>NIS_VERIFIER</c>, or <c>null</c> when it is not set.</returns>
-        public static string NIS_VERIFIER(this Feature feature) {
+        public static string? NIS_VERIFIER(this Feature feature) {
             //if (DBNull.Value == feature["NIS_VERIFIER"]) return null;
             var v = Convert.ToString(feature["NIS_VERIFIER"]);
             //if ("-32767".Equals(v)) return null;
@@ -2855,7 +2855,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NOBJNM</c> field from.</param>
         /// <returns>The value of <c>NOBJNM</c>, or <c>null</c> when it is not set.</returns>
-        public static string NOBJNM(this Feature feature) {
+        public static string? NOBJNM(this Feature feature) {
             //if (DBNull.Value == feature["NOBJNM"]) return null;
             var v = Convert.ToString(feature["NOBJNM"]);
             //if ("-32767".Equals(v)) return null;
@@ -2874,7 +2874,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NOID</c> field from.</param>
         /// <returns>The value of <c>NOID</c>, or <c>null</c> when it is not set.</returns>
-        public static string NOID(this Feature feature) {
+        public static string? NOID(this Feature feature) {
             //if (DBNull.Value == feature["NOID"]) return null;
             var v = Convert.ToString(feature["NOID"]);
             //if ("-32767".Equals(v)) return null;
@@ -2893,7 +2893,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NPLDST</c> field from.</param>
         /// <returns>The value of <c>NPLDST</c>, or <c>null</c> when it is not set.</returns>
-        public static string NPLDST(this Feature feature) {
+        public static string? NPLDST(this Feature feature) {
             //if (DBNull.Value == feature["NPLDST"]) return null;
             var v = Convert.ToString(feature["NPLDST"]);
             //if ("-32767".Equals(v)) return null;
@@ -2912,7 +2912,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>NTXTDS</c> field from.</param>
         /// <returns>The value of <c>NTXTDS</c>, or <c>null</c> when it is not set.</returns>
-        public static string NTXTDS(this Feature feature) {
+        public static string? NTXTDS(this Feature feature) {
             //if (DBNull.Value == feature["NTXTDS"]) return null;
             var v = Convert.ToString(feature["NTXTDS"]);
             //if ("-32767".Equals(v)) return null;
@@ -2931,7 +2931,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>OBJECTCLASS</c> field from.</param>
         /// <returns>The value of <c>OBJECTCLASS</c>, or <c>null</c> when it is not set.</returns>
-        public static string OBJECTCLASS(this Feature feature) {
+        public static string? OBJECTCLASS(this Feature feature) {
             //if (DBNull.Value == feature["OBJECTCLASS"]) return null;
             var v = Convert.ToString(feature["OBJECTCLASS"]);
             //if ("-32767".Equals(v)) return null;
@@ -2969,7 +2969,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>OBJNAM</c> field from.</param>
         /// <returns>The value of <c>OBJNAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string OBJNAM(this Feature feature) {
+        public static string? OBJNAM(this Feature feature) {
             //if (DBNull.Value == feature["OBJNAM"]) return null;
             var v = Convert.ToString(feature["OBJNAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -3007,7 +3007,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PEREND</c> field from.</param>
         /// <returns>The value of <c>PEREND</c>, or <c>null</c> when it is not set.</returns>
-        public static string PEREND(this Feature feature) {
+        public static string? PEREND(this Feature feature) {
             //if (DBNull.Value == feature["PEREND"]) return null;
             var v = Convert.ToString(feature["PEREND"]);
             //if ("-32767".Equals(v)) return null;
@@ -3026,7 +3026,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PERSTA</c> field from.</param>
         /// <returns>The value of <c>PERSTA</c>, or <c>null</c> when it is not set.</returns>
-        public static string PERSTA(this Feature feature) {
+        public static string? PERSTA(this Feature feature) {
             //if (DBNull.Value == feature["PERSTA"]) return null;
             var v = Convert.ToString(feature["PERSTA"]);
             //if ("-32767".Equals(v)) return null;
@@ -3045,7 +3045,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PICREP</c> field from.</param>
         /// <returns>The value of <c>PICREP</c>, or <c>null</c> when it is not set.</returns>
-        public static string PICREP(this Feature feature) {
+        public static string? PICREP(this Feature feature) {
             //if (DBNull.Value == feature["PICREP"]) return null;
             var v = Convert.ToString(feature["PICREP"]);
             //if ("-32767".Equals(v)) return null;
@@ -3064,7 +3064,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PILDST</c> field from.</param>
         /// <returns>The value of <c>PILDST</c>, or <c>null</c> when it is not set.</returns>
-        public static string PILDST(this Feature feature) {
+        public static string? PILDST(this Feature feature) {
             //if (DBNull.Value == feature["PILDST"]) return null;
             var v = Convert.ToString(feature["PILDST"]);
             //if ("-32767".Equals(v)) return null;
@@ -3102,7 +3102,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PRED</c> field from.</param>
         /// <returns>The value of <c>PRED</c>, or <c>null</c> when it is not set.</returns>
-        public static string PRED(this Feature feature) {
+        public static string? PRED(this Feature feature) {
             //if (DBNull.Value == feature["PRED"]) return null;
             var v = Convert.ToString(feature["PRED"]);
             //if ("-32767".Equals(v)) return null;
@@ -3159,7 +3159,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PRODCT</c> field from.</param>
         /// <returns>The value of <c>PRODCT</c>, or <c>null</c> when it is not set.</returns>
-        public static string PRODCT(this Feature feature) {
+        public static string? PRODCT(this Feature feature) {
             //if (DBNull.Value == feature["PRODCT"]) return null;
             var v = Convert.ToString(feature["PRODCT"]);
             //if ("-32767".Equals(v)) return null;
@@ -3233,7 +3233,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PSDN</c> field from.</param>
         /// <returns>The value of <c>PSDN</c>, or <c>null</c> when it is not set.</returns>
-        public static string PSDN(this Feature feature) {
+        public static string? PSDN(this Feature feature) {
             //if (DBNull.Value == feature["PSDN"]) return null;
             var v = Convert.ToString(feature["PSDN"]);
             //if ("-32767".Equals(v)) return null;
@@ -3252,7 +3252,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>PUBREF</c> field from.</param>
         /// <returns>The value of <c>PUBREF</c>, or <c>null</c> when it is not set.</returns>
-        public static string PUBREF(this Feature feature) {
+        public static string? PUBREF(this Feature feature) {
             //if (DBNull.Value == feature["PUBREF"]) return null;
             var v = Convert.ToString(feature["PUBREF"]);
             //if ("-32767".Equals(v)) return null;
@@ -3366,7 +3366,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>QUASOU</c> field from.</param>
         /// <returns>The value of <c>QUASOU</c>, or <c>null</c> when it is not set.</returns>
-        public static string QUASOU(this Feature feature) {
+        public static string? QUASOU(this Feature feature) {
             //if (DBNull.Value == feature["QUASOU"]) return null;
             var v = Convert.ToString(feature["QUASOU"]);
             //if ("-32767".Equals(v)) return null;
@@ -3404,7 +3404,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>RADWAL</c> field from.</param>
         /// <returns>The value of <c>RADWAL</c>, or <c>null</c> when it is not set.</returns>
-        public static string RADWAL(this Feature feature) {
+        public static string? RADWAL(this Feature feature) {
             //if (DBNull.Value == feature["RADWAL"]) return null;
             var v = Convert.ToString(feature["RADWAL"]);
             //if ("-32767".Equals(v)) return null;
@@ -3423,7 +3423,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>RESTRN</c> field from.</param>
         /// <returns>The value of <c>RESTRN</c>, or <c>null</c> when it is not set.</returns>
-        public static string RESTRN(this Feature feature) {
+        public static string? RESTRN(this Feature feature) {
             //if (DBNull.Value == feature["RESTRN"]) return null;
             var v = Convert.ToString(feature["RESTRN"]);
             //if ("-32767".Equals(v)) return null;
@@ -3461,7 +3461,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>RYRMGV</c> field from.</param>
         /// <returns>The value of <c>RYRMGV</c>, or <c>null</c> when it is not set.</returns>
-        public static string RYRMGV(this Feature feature) {
+        public static string? RYRMGV(this Feature feature) {
             //if (DBNull.Value == feature["RYRMGV"]) return null;
             var v = Convert.ToString(feature["RYRMGV"]);
             //if ("-32767".Equals(v)) return null;
@@ -3613,7 +3613,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SERIES</c> field from.</param>
         /// <returns>The value of <c>SERIES</c>, or <c>null</c> when it is not set.</returns>
-        public static string SERIES(this Feature feature) {
+        public static string? SERIES(this Feature feature) {
             //if (DBNull.Value == feature["SERIES"]) return null;
             var v = Convert.ToString(feature["SERIES"]);
             //if ("-32767".Equals(v)) return null;
@@ -3649,7 +3649,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SHIPAM</c> field from.</param>
         /// <returns>The value of <c>SHIPAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string SHIPAM(this Feature feature) {
+        public static string? SHIPAM(this Feature feature) {
             //if (DBNull.Value == feature["SHIPAM"]) return null;
             var v = Convert.ToString(feature["SHIPAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -3706,7 +3706,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SIGGRP</c> field from.</param>
         /// <returns>The value of <c>SIGGRP</c>, or <c>null</c> when it is not set.</returns>
-        public static string SIGGRP(this Feature feature) {
+        public static string? SIGGRP(this Feature feature) {
             //if (DBNull.Value == feature["SIGGRP"]) return null;
             var v = Convert.ToString(feature["SIGGRP"]);
             //if ("-32767".Equals(v)) return null;
@@ -3744,7 +3744,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SIGSEQ</c> field from.</param>
         /// <returns>The value of <c>SIGSEQ</c>, or <c>null</c> when it is not set.</returns>
-        public static string SIGSEQ(this Feature feature) {
+        public static string? SIGSEQ(this Feature feature) {
             //if (DBNull.Value == feature["SIGSEQ"]) return null;
             var v = Convert.ToString(feature["SIGSEQ"]);
             //if ("-32767".Equals(v)) return null;
@@ -3782,7 +3782,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SORDAT</c> field from.</param>
         /// <returns>The value of <c>SORDAT</c>, or <c>null</c> when it is not set.</returns>
-        public static string SORDAT(this Feature feature) {
+        public static string? SORDAT(this Feature feature) {
             //if (DBNull.Value == feature["SORDAT"]) return null;
             var v = Convert.ToString(feature["SORDAT"]);
             //if ("-32767".Equals(v)) return null;
@@ -3801,7 +3801,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SORIND</c> field from.</param>
         /// <returns>The value of <c>SORIND</c>, or <c>null</c> when it is not set.</returns>
-        public static string SORIND(this Feature feature) {
+        public static string? SORIND(this Feature feature) {
             //if (DBNull.Value == feature["SORIND"]) return null;
             var v = Convert.ToString(feature["SORIND"]);
             //if ("-32767".Equals(v)) return null;
@@ -3839,7 +3839,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SRC_FC</c> field from.</param>
         /// <returns>The value of <c>SRC_FC</c>, or <c>null</c> when it is not set.</returns>
-        public static string SRC_FC(this Feature feature) {
+        public static string? SRC_FC(this Feature feature) {
             //if (DBNull.Value == feature["SRC_FC"]) return null;
             var v = Convert.ToString(feature["SRC_FC"]);
             //if ("-32767".Equals(v)) return null;
@@ -3858,7 +3858,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SRC_LNAM</c> field from.</param>
         /// <returns>The value of <c>SRC_LNAM</c>, or <c>null</c> when it is not set.</returns>
-        public static string SRC_LNAM(this Feature feature) {
+        public static string? SRC_LNAM(this Feature feature) {
             //if (DBNull.Value == feature["SRC_LNAM"]) return null;
             var v = Convert.ToString(feature["SRC_LNAM"]);
             //if ("-32767".Equals(v)) return null;
@@ -3877,7 +3877,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SRC_SUB</c> field from.</param>
         /// <returns>The value of <c>SRC_SUB</c>, or <c>null</c> when it is not set.</returns>
-        public static string SRC_SUB(this Feature feature) {
+        public static string? SRC_SUB(this Feature feature) {
             //if (DBNull.Value == feature["SRC_SUB"]) return null;
             var v = Convert.ToString(feature["SRC_SUB"]);
             //if ("-32767".Equals(v)) return null;
@@ -3896,7 +3896,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SRC_UID</c> field from.</param>
         /// <returns>The value of <c>SRC_UID</c>, or <c>null</c> when it is not set.</returns>
-        public static string SRC_UID(this Feature feature) {
+        public static string? SRC_UID(this Feature feature) {
             //if (DBNull.Value == feature["SRC_UID"]) return null;
             var v = Convert.ToString(feature["SRC_UID"]);
             //if ("-32767".Equals(v)) return null;
@@ -3915,7 +3915,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>STATUS</c> field from.</param>
         /// <returns>The value of <c>STATUS</c>, or <c>null</c> when it is not set.</returns>
-        public static string STATUS(this Feature feature) {
+        public static string? STATUS(this Feature feature) {
             //if (DBNull.Value == feature["STATUS"]) return null;
             var v = Convert.ToString(feature["STATUS"]);
             //if ("-32767".Equals(v)) return null;
@@ -3934,7 +3934,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>STED</c> field from.</param>
         /// <returns>The value of <c>STED</c>, or <c>null</c> when it is not set.</returns>
-        public static string STED(this Feature feature) {
+        public static string? STED(this Feature feature) {
             //if (DBNull.Value == feature["STED"]) return null;
             var v = Convert.ToString(feature["STED"]);
             //if ("-32767".Equals(v)) return null;
@@ -3953,7 +3953,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SURATH</c> field from.</param>
         /// <returns>The value of <c>SURATH</c>, or <c>null</c> when it is not set.</returns>
-        public static string SURATH(this Feature feature) {
+        public static string? SURATH(this Feature feature) {
             //if (DBNull.Value == feature["SURATH"]) return null;
             var v = Convert.ToString(feature["SURATH"]);
             //if ("-32767".Equals(v)) return null;
@@ -3972,7 +3972,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SUREND</c> field from.</param>
         /// <returns>The value of <c>SUREND</c>, or <c>null</c> when it is not set.</returns>
-        public static string SUREND(this Feature feature) {
+        public static string? SUREND(this Feature feature) {
             //if (DBNull.Value == feature["SUREND"]) return null;
             var v = Convert.ToString(feature["SUREND"]);
             //if ("-32767".Equals(v)) return null;
@@ -3991,7 +3991,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SURSTA</c> field from.</param>
         /// <returns>The value of <c>SURSTA</c>, or <c>null</c> when it is not set.</returns>
-        public static string SURSTA(this Feature feature) {
+        public static string? SURSTA(this Feature feature) {
             if (DBNull.Value == feature["SURSTA"]) return null;
             var v = Convert.ToString(feature["SURSTA"]);
             //if ("-32767".Equals(v)) return null;
@@ -4010,7 +4010,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SURTYP</c> field from.</param>
         /// <returns>The value of <c>SURTYP</c>, or <c>null</c> when it is not set.</returns>
-        public static string SURTYP(this Feature feature) {
+        public static string? SURTYP(this Feature feature) {
             if (DBNull.Value == feature["SURTYP"]) return null;
             var v = Convert.ToString(feature["SURTYP"]);
             //if ("-32767".Equals(v)) return null;
@@ -4029,7 +4029,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>SYMINS</c> field from.</param>
         /// <returns>The value of <c>SYMINS</c>, or <c>null</c> when it is not set.</returns>
-        public static string SYMINS(this Feature feature) {
+        public static string? SYMINS(this Feature feature) {
             if (DBNull.Value == feature["SYMINS"]) return null;
             var v = Convert.ToString(feature["SYMINS"]);
             //if ("-32767".Equals(v)) return null;
@@ -4048,7 +4048,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TECSOU</c> field from.</param>
         /// <returns>The value of <c>TECSOU</c>, or <c>null</c> when it is not set.</returns>
-        public static string TECSOU(this Feature feature) {
+        public static string? TECSOU(this Feature feature) {
             if (DBNull.Value == feature["TECSOU"]) return null;
             var v = Convert.ToString(feature["TECSOU"]);
             //if ("-32767".Equals(v)) return null;
@@ -4067,7 +4067,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TIMEND</c> field from.</param>
         /// <returns>The value of <c>TIMEND</c>, or <c>null</c> when it is not set.</returns>
-        public static string TIMEND(this Feature feature) {
+        public static string? TIMEND(this Feature feature) {
             if (DBNull.Value == feature["TIMEND"]) return null;
             var v = Convert.ToString(feature["TIMEND"]);
             //if ("-32767".Equals(v)) return null;
@@ -4086,7 +4086,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TIMSTA</c> field from.</param>
         /// <returns>The value of <c>TIMSTA</c>, or <c>null</c> when it is not set.</returns>
-        public static string TIMSTA(this Feature feature) {
+        public static string? TIMSTA(this Feature feature) {
             if (DBNull.Value == feature["TIMSTA"]) return null;
             var v = Convert.ToString(feature["TIMSTA"]);
             //if ("-32767".Equals(v)) return null;
@@ -4143,7 +4143,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TS_TSP</c> field from.</param>
         /// <returns>The value of <c>TS_TSP</c>, or <c>null</c> when it is not set.</returns>
-        public static string TS_TSP(this Feature feature) {
+        public static string? TS_TSP(this Feature feature) {
             if (DBNull.Value == feature["TS_TSP"]) return null;
             var v = Convert.ToString(feature["TS_TSP"]);
             //if ("-32767".Equals(v)) return null;
@@ -4162,7 +4162,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TS_TSV</c> field from.</param>
         /// <returns>The value of <c>TS_TSV</c>, or <c>null</c> when it is not set.</returns>
-        public static string TS_TSV(this Feature feature) {
+        public static string? TS_TSV(this Feature feature) {
             if (DBNull.Value == feature["TS_TSV"]) return null;
             var v = Convert.ToString(feature["TS_TSV"]);
             //if ("-32767".Equals(v)) return null;
@@ -4181,7 +4181,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>TXTDSC</c> field from.</param>
         /// <returns>The value of <c>TXTDSC</c>, or <c>null</c> when it is not set.</returns>
-        public static string TXTDSC(this Feature feature) {
+        public static string? TXTDSC(this Feature feature) {
             if (DBNull.Value == feature["TXTDSC"]) return null;
             var v = Convert.ToString(feature["TXTDSC"]);
             //if ("-32767".Equals(v)) return null;
@@ -4219,7 +4219,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>T_HWLW</c> field from.</param>
         /// <returns>The value of <c>T_HWLW</c>, or <c>null</c> when it is not set.</returns>
-        public static string T_HWLW(this Feature feature) {
+        public static string? T_HWLW(this Feature feature) {
             if (DBNull.Value == feature["T_HWLW"]) return null;
             var v = Convert.ToString(feature["T_HWLW"]);
             //if ("-32767".Equals(v)) return null;
@@ -4257,7 +4257,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>T_THDF</c> field from.</param>
         /// <returns>The value of <c>T_THDF</c>, or <c>null</c> when it is not set.</returns>
-        public static string T_THDF(this Feature feature) {
+        public static string? T_THDF(this Feature feature) {
             if (DBNull.Value == feature["T_THDF"]) return null;
             var v = Convert.ToString(feature["T_THDF"]);
             //if ("-32767".Equals(v)) return null;
@@ -4295,7 +4295,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>T_TSVL</c> field from.</param>
         /// <returns>The value of <c>T_TSVL</c>, or <c>null</c> when it is not set.</returns>
-        public static string T_TSVL(this Feature feature) {
+        public static string? T_TSVL(this Feature feature) {
             if (DBNull.Value == feature["T_TSVL"]) return null;
             var v = Convert.ToString(feature["T_TSVL"]);
             //if ("-32767".Equals(v)) return null;
@@ -4314,7 +4314,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>T_VAHC</c> field from.</param>
         /// <returns>The value of <c>T_VAHC</c>, or <c>null</c> when it is not set.</returns>
-        public static string T_VAHC(this Feature feature) {
+        public static string? T_VAHC(this Feature feature) {
             if (DBNull.Value == feature["T_VAHC"]) return null;
             var v = Convert.ToString(feature["T_VAHC"]);
             //if ("-32767".Equals(v)) return null;
@@ -4671,7 +4671,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>VERIFIER</c> field from.</param>
         /// <returns>The value of <c>VERIFIER</c>, or <c>null</c> when it is not set.</returns>
-        public static string VERIFIER(this Feature feature) {
+        public static string? VERIFIER(this Feature feature) {
             if (DBNull.Value == feature["VERIFIER"]) return null;
             var v = Convert.ToString(feature["VERIFIER"]);
             //if ("-32767".Equals(v)) return null;
@@ -4728,7 +4728,7 @@
         /// </summary>
         /// <param name="feature">The feature to read the <c>WHERECLAUSE</c> field from.</param>
         /// <returns>The value of <c>WHERECLAUSE</c>, or <c>null</c> when it is not set.</returns>
-        public static string WHERECLAUSE(this Feature feature) {
+        public static string? WHERECLAUSE(this Feature feature) {
             if (DBNull.Value == feature["WHERECLAUSE"]) return null;
             var v = Convert.ToString(feature["WHERECLAUSE"]);
             //if ("-32767".Equals(v)) return null;
