@@ -18,6 +18,7 @@ using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -1261,12 +1262,43 @@ namespace S100Framework.Applications
             }
         }
 
+        const string DE9IM_Contains = "T*****FF*";
+
         internal static bool IsCoveredByUNSARE_UnsurveyedArea(Geometry shape) {
             foreach (DepthsA depthArea in SpatialRelationResolver.Instance.GetSpatialRelatedValueFrom<DepthsA>(shape, SpatialRelationship.Contains)) {
+                //foreach (DepthsA depthArea in SpatialRelationResolver.Instance.GetSpatialRelatedValueFrom<DepthsA>(shape, SpatialRelationship.Contains)) {
                 if (depthArea.FcSubtype is 15) {  // UNSARE
                     return true;
                 }
             }
+            return false;
+        }
+
+        internal static bool ContainsBarthyFeatures_UnsurveyedArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
+            (string tablename, SpatialRelationship relationship, string filter)[] dictionary = [
+                    ("dangersp", SpatialRelationship.Contains, "FCSubtype IN(35,45,20)"),    //UWTROC,WRECKS,OBSTRN
+                    ("dangersl", SpatialRelationship.Contains, "FCSubtype IN(5)"),           //OBSTRN
+                    ("dangersa", SpatialRelationship.Contains, "FCSubtype IN(15,25)"),       //OBSTRN,WRECKS
+                    ("depthsl", SpatialRelationship.Contains, "FCSubtype IN(5)"),           //DEPCNT                    
+                    ("regulatedareasandlimitsp", SpatialRelationship.Contains, "FCSubtype IN(35)"),           //MARCUL                    
+                    ("regulatedareasandlimitsl", SpatialRelationship.Contains, "FCSubtype IN(25)"),           //MARCUL                    
+                    ("regulatedareasandlimitsa", SpatialRelationship.Contains, "FCSubtype IN(95)"),           //MARCUL                                        
+                ];
+            var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e=>e.GetName().ToLowerInvariant());
+            foreach(var e in dictionary) {
+                using var danger = geodatabase.OpenDataset<FeatureClass>(definitions.Single(d => d.EndsWith(e.tablename)));
+
+                using var search = danger.Search(new SpatialQueryFilter {
+                    WhereClause =$"({queryFilter}) AND ({e.filter})",
+                    SpatialRelationship = e.relationship,
+                    FilterGeometry = shape,
+                }, true);
+
+                var hit = search.MoveNext();
+                if (hit)
+                    return true;
+            }
+
             return false;
         }
 

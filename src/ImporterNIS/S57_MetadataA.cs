@@ -1,9 +1,11 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
+using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 
@@ -18,7 +20,51 @@ namespace S100Framework.Applications
             using var metadataa = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(metadataa);
 
+            using var depthsa = source.OpenDataset<FeatureClass>(source.GetName("depthsa"));
+
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+
+
+            //{
+            //    using var c1 = metadataa.Search(new QueryFilter {
+            //        WhereClause = "OBJECTID = 250",
+            //    });
+            //    c1.MoveNext();
+            //    var wkt1 = ((Feature)c1.Current).GetShape().ToJson(true);
+
+            //    using var c2 = depthsa.Search(new QueryFilter {
+            //        WhereClause = "OBJECTID = 3153",
+            //    });
+            //    c2.MoveNext();
+            //    var wkt2 = ((Feature)c2.Current).GetShape().ToJson(true);
+
+            //    var f_metadata = (Polygon)((Feature)c1.Current).GetShape();
+            //    var f_depthsa = (Polygon)((Feature)c2.Current).GetShape();
+
+            //    var e_metadata = f_metadata.GetExteriorRing(0);
+            //    var e_depthsa = f_depthsa.GetExteriorRing(0);
+
+            //    var equals = GeometryEngine.Instance.Equals(e_metadata, e_depthsa);
+            //    var within = GeometryEngine.Instance.Within(f_depthsa, f_metadata);
+            //    var contains = GeometryEngine.Instance.Contains(f_depthsa, f_metadata);
+                
+
+            //    using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
+            //        WhereClause = "PLTS_COMP_SCALE >= 22000 AND PLTS_COMP_SCALE < 90000",
+            //        FilterGeometry = f_metadata,
+            //        SpatialRelationship = SpatialRelationship.Within,
+            //    }, true);
+
+            //    int count = 0;
+            //    while (spatialSearch.MoveNext()) {
+            //        count += 1;
+            //    }
+
+            //    System.Diagnostics.Debugger.Break();
+            //}
+
+
+
 
             using var buffer = featureClass.CreateRowBuffer();
 
@@ -445,14 +491,48 @@ namespace S100Framework.Applications
                             }
 
 
-                            //if (current.OBJECTID == 110) System.Diagnostics.Debugger.Break();
-                            //if (current.OBJECTID == 125) System.Diagnostics.Debugger.Break();
+                            //if (current.OBJECTID == 250) {
+                            //    var wkt = current.SHAPE!.ToJson(true);
+                            //    System.Diagnostics.Debugger.Break();
 
-                            if (ImporterNIS.IsCoveredByUNSARE_UnsurveyedArea(current.SHAPE!)) {
-                                instance.categoryOfTemporalVariation = 6;   //  Unassessed
-                                instance.zoneOfConfidence[0]!.categoryOfZoneOfConfidenceInData = 5;  //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
+                            //    //using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
+                            //    //    WhereClause = filter.WhereClause,
+                            //    //    FilterGeometry = current.SHAPE,
+                                    
+                            //    //}, true);
+
+                            //}
+                            //if (current.OBJECTID == 125) System.Diagnostics.Debugger.Break();                            
+
+                            if(ImporterNIS.ContainsBarthyFeatures_UnsurveyedArea(current.SHAPE!,source, filter.WhereClause)) {
+                                var isCoveredByUNSARE_UnsurveyedArea = false;
+
+                                if (ImporterNIS.IsCoveredByUNSARE_UnsurveyedArea(current.SHAPE!)) {
+                                    instance.categoryOfTemporalVariation = 6;   //  Unassessed
+                                    instance.zoneOfConfidence[0]!.categoryOfZoneOfConfidenceInData = 5;  //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
+                                    isCoveredByUNSARE_UnsurveyedArea = true;
+                                }
+
+                                {
+                                    ////using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
+                                    ////    WhereClause = filter.WhereClause,
+                                    ////    FilterGeometry = current.SHAPE!,
+                                    ////    SpatialRelationship = SpatialRelationship.Within,
+                                    ////}, true);
+
+                                    ////int count = 0;
+                                    ////while (spatialSearch.MoveNext()) {
+                                    ////    count += 1;
+                                    ////}
+                                    //////if (isCoveredByUNSARE_UnsurveyedArea && (count == 0))
+                                    //////    System.Diagnostics.Debugger.Break();
+
+                                    ////if (count > 0) {
+                                    ////    instance.categoryOfTemporalVariation = 6;   //  Unassessed
+                                    ////    instance.zoneOfConfidence[0]!.categoryOfZoneOfConfidenceInData = 5;  //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
+                                    ////}
+                                }
                             }
-
 
                             //var informationBindings = instance.GetInformationBindings();
                             informationBinding[] informationBindings = [];

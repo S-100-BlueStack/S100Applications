@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 
 namespace S100Framework.Applications.Singletons
@@ -96,6 +97,21 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        internal IEnumerable<T> GetSpatialRelatedValueFrom<T>(Geometry shape, string spatialRelationship) where T : class {
+            //return new List<T>() { (T)(object)current.GlobalId };
+
+            if (!_featureClasses.ContainsKey(typeof(T).Name)) {
+                _featureClasses[typeof(T).Name] = _geodatabase!.OpenDataset<FeatureClass>(this.GetFullTableName(typeof(T).Name));
+            }
+            var featureclass = _featureClasses[typeof(T).Name];
+
+            if (shape != null) {
+                foreach (var SpatialRelated in SelectIn<T>(shape, featureclass, spatialRelationship, ImporterNIS.QueryFilter)) {
+                    yield return SpatialRelated;
+                }
+            }
+        }
+
 
         private static IEnumerable<T> SelectIn<T>(Geometry geometry, FeatureClass in_featureclass, SpatialRelationship spatialRelationship, QueryFilter queryFilter) where T : class {
             var spatialQueryFilter = new SpatialQueryFilter {
@@ -109,6 +125,7 @@ namespace S100Framework.Applications.Singletons
                 while (spatialSearch.MoveNext()) {
                     var row = spatialSearch.Current;
                     var feature = (Feature)row;
+
                     if (feature != null) {
                         var val = Activator.CreateInstance(typeof(T), feature) as T;
                         if (val != null) {
@@ -120,6 +137,30 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        private static IEnumerable<T> SelectIn<T>(Geometry geometry, FeatureClass in_featureclass, string spatialRelationship, QueryFilter queryFilter) where T : class {
+            var spatialQueryFilter = new SpatialQueryFilter {
+                FilterGeometry = geometry,
+                SpatialRelationship =SpatialRelationship.Relation,
+                SpatialRelationshipDescription = spatialRelationship,
+                WhereClause = queryFilter.WhereClause
+            };
+
+            using (var spatialSearch = in_featureclass.Search(spatialQueryFilter, true)) {
+                var shape = spatialSearch.FindField("SHAPE");
+                while (spatialSearch.MoveNext()) {
+                    var row = spatialSearch.Current;
+                    var feature = (Feature)row;
+
+                    if (feature != null) {
+                        var val = Activator.CreateInstance(typeof(T), feature) as T;
+                        if (val != null) {
+                            yield return val;
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
 
