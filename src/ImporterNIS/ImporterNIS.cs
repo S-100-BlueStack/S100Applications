@@ -758,7 +758,7 @@ namespace S100Framework.Applications
 
                             Logger.Current.Information($"Converting Military Features");
                             Store((destination) => S57_MilitaryFeature(
-                                "MilitaryFeatureA",
+                                "MilitaryFeaturesA",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
