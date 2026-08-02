@@ -634,10 +634,24 @@ namespace S100Framework.Applications
                             Store((destination) => S57_MetadataP(source, destination, QueryFilter), destination);
 
                             Logger.Current.Information($"Converting Areas And Limits");
-                            Store((destination) => S57_RegulatedAreasAndLimitsA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_RegulatedAreasAndLimitsL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_RegulatedAreasAndLimitsP(source, destination, QueryFilter), destination);
-
+                            Store((destination) => S57_RegulatedAreasAndLimits(
+                                "RegulatedAreasAndLimitsA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_RegulatedAreasAndLimits(
+                                "RegulatedAreasAndLimitsL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_RegulatedAreasAndLimits(
+                                "RegulatedAreasAndLimitsP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
 
                             //filter.WhereClause = "globalid = '{D7DE9631-CF20-4143-B3F4-47BB4A2AE541}'";
@@ -688,9 +702,6 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Seabeds");
-                            //Store((destination) => S57_SeabedA(source, destination, QueryFilter), destination);
-                            //Store((destination) => S57_SeabedL(source, destination, QueryFilter), destination);
-                            //Store((destination) => S57_SeabedP(source, destination, QueryFilter), destination);
                             Store((destination) => S57_Seabed(
                                 "SeabedA",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),

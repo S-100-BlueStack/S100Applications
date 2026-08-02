@@ -601,7 +601,7 @@ namespace S100Framework.Applications
             if (current.CONRAD_HasValue()) {
                 instance.radarConspicuous = current.CONRAD() == -32767 ? null : current.CONRAD()!.Value == 2 ? false : true;
             }
-            if (current.SORDAT_HasValue())) {
+            if (current.SORDAT_HasValue()) {
                 if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
