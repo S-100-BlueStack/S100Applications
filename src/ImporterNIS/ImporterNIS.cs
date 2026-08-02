@@ -773,9 +773,24 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Offshore Installations");
-                            Store((destination) => S57_OffshoreInstallationsA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_OffshoreInstallationsL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_OffshoreInstallationsP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_OffshoreInstallations(
+                                "OffshoreInstallationsA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_OffshoreInstallations(
+                                "OffshoreInstallationsL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_OffshoreInstallations(
+                                "OffshoreInstallationsP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting Tracks And Routes");
                             Store((destination) => S57_TracksAndRoutesA(source, destination, QueryFilter), destination);
