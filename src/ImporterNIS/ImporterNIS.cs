@@ -757,8 +757,19 @@ namespace S100Framework.Applications
                             Store((destination) => S57_IcefeaturesA(source, destination, QueryFilter), destination);
 
                             Logger.Current.Information($"Converting Military Features");
-                            Store((destination) => S57_MilitaryFeatureA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_MilitaryFeaturesP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_MilitaryFeature(
+                                "MilitaryFeatureA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_MilitaryFeature(
+                                "MilitaryFeaturesP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+
 
 
                             Logger.Current.Information($"Converting Offshore Installations");
