@@ -602,8 +602,9 @@ namespace S100Framework.Applications
                         relatedEquipment = new RelatedEquipment(source, destination);
 
                         if (skinOfEarthOnly) {
-                            Logger.Current.Information($"Converting skin of earth only Filter: {QueryFilter.WhereClause}");
-                            // All "SKIN OF EARTH" cases / subtypes are marked with a "skin of earth" comment
+                            Logger.Current.Information($"Skin of the earth");
+                            Logger.Current.Information($"WhereClause: {QueryFilter.WhereClause}");
+
                             var whereClause = QueryFilter.WhereClause.Clone();
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";
                             Store((destination) => S57_DepthsA(source, destination, QueryFilter), destination);
@@ -615,23 +616,33 @@ namespace S100Framework.Applications
                             Store((destination) => S57_PortsAndServicesA(source, destination, QueryFilter), destination);
 
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40)";
-                            Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Metadata(
+                                "MetadataA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                destination,
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
                         }
                         else {
-                            /*var whereClause = QueryFilter.WhereClause.Clone();
-                            QueryFilter.WhereClause = $"{whereClause} and globalid = '{{EEC8A630-411C-43E0-8EF3-97B7A5FD5E4F}}'";
-                            QueryFilter.WhereClause = $"{whereClause}";
-                            */
-
-                            Logger.Current.Information($"Converting all tables: {QueryFilter.WhereClause}");
-
-                            //Logger.Current.Information($"Converting Sounding Datums");
-                            //var coverages = s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE == scale);
-                            //Store((destination) => S101_SoundingDatum(source, destination, QueryFilter, [.. coverages]), destination);
+                            Logger.Current.Information($"WhereClause: {QueryFilter.WhereClause}");
 
                             Logger.Current.Information($"Converting Metadata");
-                            Store((destination) => S57_MetadataA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_MetadataP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Metadata(
+                                "MetadataA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                destination,
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_Metadata(
+                                "MetadataP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                destination,
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+
 
                             Logger.Current.Information($"Converting Areas And Limits");
                             Store((destination) => S57_RegulatedAreasAndLimits(
@@ -653,11 +664,6 @@ namespace S100Framework.Applications
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
 
-
-                            //filter.WhereClause = "globalid = '{D7DE9631-CF20-4143-B3F4-47BB4A2AE541}'";
-                            //filter.WhereClause = "globalid = '{855B900E-760C-4D68-AE02-8F3CA6FE60DD}'";
-                            //filter.WhereClause = "globalid = '{BAFFC1F3-A89C-4E13-982F-B577E50A06DC}'";
-                            //filter.WhereClause = "globalid = '{1F1D8B58-4959-4202-80F5-6CA4DD47D209}'";
 
                             Logger.Current.Information($"Converting Dangers");
                             Store((destination) => S57_DangersA(source, destination, QueryFilter), destination);

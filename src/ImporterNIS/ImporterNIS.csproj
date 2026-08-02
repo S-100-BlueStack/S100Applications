@@ -11,6 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="S57_MetadataA.cs" />
+    <Compile Remove="S57_MetadataP.cs" />
     <Compile Remove="S57_RegulatedAreasAndLimitsA.cs" />
     <Compile Remove="S57_RegulatedAreasAndLimitsL.cs" />
     <Compile Remove="S57_RegulatedAreasAndLimitsP.cs" />
