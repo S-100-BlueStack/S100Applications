@@ -23,48 +23,6 @@ namespace S100Framework.Applications
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
 
-
-            //{
-            //    using var c1 = metadataa.Search(new QueryFilter {
-            //        WhereClause = "OBJECTID = 250",
-            //    });
-            //    c1.MoveNext();
-            //    var wkt1 = ((Feature)c1.Current).GetShape().ToJson(true);
-
-            //    using var c2 = depthsa.Search(new QueryFilter {
-            //        WhereClause = "OBJECTID = 3153",
-            //    });
-            //    c2.MoveNext();
-            //    var wkt2 = ((Feature)c2.Current).GetShape().ToJson(true);
-
-            //    var f_metadata = (Polygon)((Feature)c1.Current).GetShape();
-            //    var f_depthsa = (Polygon)((Feature)c2.Current).GetShape();
-
-            //    var e_metadata = f_metadata.GetExteriorRing(0);
-            //    var e_depthsa = f_depthsa.GetExteriorRing(0);
-
-            //    var equals = GeometryEngine.Instance.Equals(e_metadata, e_depthsa);
-            //    var within = GeometryEngine.Instance.Within(f_depthsa, f_metadata);
-            //    var contains = GeometryEngine.Instance.Contains(f_depthsa, f_metadata);
-
-
-            //    using var spatialSearch = depthsa.Search(new SpatialQueryFilter {
-            //        WhereClause = "PLTS_COMP_SCALE >= 22000 AND PLTS_COMP_SCALE < 90000",
-            //        FilterGeometry = f_metadata,
-            //        SpatialRelationship = SpatialRelationship.Within,
-            //    }, true);
-
-            //    int count = 0;
-            //    while (spatialSearch.MoveNext()) {
-            //        count += 1;
-            //    }
-
-            //    System.Diagnostics.Debugger.Break();
-            //}
-
-
-
-
             using var buffer = featureClass.CreateRowBuffer();
 
             using var cursor = metadataa.Search(filter, true);
@@ -120,162 +78,35 @@ namespace S100Framework.Applications
                             continue;   //  S57_ProductCoverage
                             //throw new NotImplementedException($"No M_CSCL_CompilationScaleOfData in DK or GL. {tableName}");
                         }
-
                     case 25: { // M_HOPA_HorizontalDatumShiftParameters
                             throw new NotImplementedException($"No M_HOPA_HorizontalDatumShiftParameters in DK or GL. {tableName}");
                         }
                     case 30: { // M_NPUB_NauticalPublicationInformation
-                            //if (current.OBJECTID == 6) System.Diagnostics.Debugger.Break();
-                            var instance = new InformationArea();
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
-                                    instance.reportedDate = reportedDate;
-                                }
-                                else {
-                                    Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
-                                }
-                            }
-
-                            if (current.PICREP != default) {
-                                instance.pictorialRepresentation = FixFilename(current.PICREP);
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
-
-                            var informations = result.information.ToArray();
-
-                            //if (current.PUBREF != default) {
-                            //    informations = [..informations, new information {
-                            //        language = "eng",
-                            //        headline = current.PUBREF.Equals("-32767") ? null : current.PUBREF.Trim(),
-                            //    }];
-                            //}
-
-                            if (informations.Any())
-                                instance.information = informations;
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            //buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(result.InformationBindings, jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
                     case 35: { // M_NSYS_NavigationalSystemOfMarks // Navigational System of Marks - region A and B globally
-                            if (current.ORIENT.HasValue) {
-                                var localDirectionOfBuoyage = new LocalDirectionOfBuoyage {
-                                };
+                            var instance = ImporterNIS.Build("M_NSYS", feature, buffer);
 
-                                // TODO: interoperabilityIdentifier
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
 
-                                if (current.MARSYS.HasValue) {
-                                    localDirectionOfBuoyage.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS.Value);
-                                }
-                                //else {
-                                //    Logger.Current.DataError(current.OBJECTID ?? default, current.TableName ?? "Unknown tablename", current.LNAM ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
-                                //}
-                                localDirectionOfBuoyage.orientationValue = current.ORIENT.Value == -32767m ? default : current.ORIENT.Value;
+                            if(instance is LocalDirectionOfBuoyage localDirectionOfBuoyage)
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, localDirectionOfBuoyage, featureN, null);
+                            if(instance is NavigationalSystemOfMarks navigationalSystemOfMarks)
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, navigationalSystemOfMarks, featureN, null);
 
-                                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                    string subtype = "";
-                                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                    var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                    if (scaleMinimum.HasValue)
-                                        localDirectionOfBuoyage.scaleMinimum = scaleMinimum.Value;
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
-                                localDirectionOfBuoyage.information = result.information.ToArray();
-                                localDirectionOfBuoyage.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = localDirectionOfBuoyage.GetType().Name;
-
-                                buffer["attributebindings"] = localDirectionOfBuoyage.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(localDirectionOfBuoyage.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = localDirectionOfBuoyage.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                var featurelocalDirectionOfBuoyage = featureClass.CreateRow(buffer);
-                                var namelocalDirectionOfBuoyage = $"{featurelocalDirectionOfBuoyage.GetGlobalID()}";
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, localDirectionOfBuoyage, featurelocalDirectionOfBuoyage, localDirectionOfBuoyage.scaleMinimum);
-                                }
-
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(localDirectionOfBuoyage, ImporterNIS.jsonSerializerOptions));
-                            }
-                            else {
-                                var instance = new NavigationalSystemOfMarks {
-                                };
-
-                                if (current.MARSYS.HasValue) {
-                                    instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS.Value);
-                                }
-                                else {
-                                    Logger.Current.DataError(current.OBJECTID ?? default, current.TableName ?? "Unknown tablename", current.LNAM ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM, current.PUBREF);
-                                instance.information = result.information.ToArray();
-                                instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-
-
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                using var featureN = featureClass.CreateRow(buffer);
-                                var name = featureN.UID();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, default);
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
                     case 40: { // M_QUAL_QualityOfData // SKIN OF EARTH

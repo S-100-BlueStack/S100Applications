@@ -60,6 +60,8 @@ namespace S100Framework.Applications
             { "EXEZNE", (current, buffer) => { return EXEZNE(current, buffer); } },
             { "FSHZNE", (current, buffer) => { return FSHZNE(current, buffer); } },
             { "HRBARE", (current, buffer) => { return HRBARE(current, buffer); } },
+            { "M_NPUB", (current, buffer) => { return M_NPUB(current, buffer); } },
+            { "M_NSYS", (current, buffer) => { return M_NSYS(current, buffer); } },
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -648,6 +650,110 @@ namespace S100Framework.Applications
             SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
+        }
+
+        private static InformationArea M_NPUB(Feature current, RowBuffer buffer) {
+            var instance = new InformationArea();
+
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                    instance.reportedDate = reportedDate;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                }
+            }
+
+            if (current.PICREP_HasValue()) {
+                instance.pictorialRepresentation = FixFilename(current.PICREP()!);
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static FeatureType M_NSYS(Feature current, RowBuffer buffer) {
+            if (current.ORIENT_HasValue()) {
+                var instance = new LocalDirectionOfBuoyage();
+
+                if (current.MARSYS_HasValue()) {
+                    instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS()!);
+                }
+
+                instance.orientationValue = current.ORIENT() == -32767m ? default : current.ORIENT();
+
+                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                    string subtype = "";
+
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+
+                    instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                }
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                return instance;
+            }
+            else {
+                var instance = new NavigationalSystemOfMarks();
+
+                if (current.MARSYS_HasValue()) {
+                    instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS());
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName() ?? "Unknown tablename", current.LNAM() ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
+                }
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                return instance;
+            }
         }
 
         private static SeabedArea SBDARE(Feature current, RowBuffer buffer) {
