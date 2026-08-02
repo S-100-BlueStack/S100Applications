@@ -696,7 +696,7 @@ namespace S100Framework.Applications
                                 "DepthsL",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
-                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
                                 (buffer, shape) => SetShape(buffer, shape), spatialQuality), destination);
 
 

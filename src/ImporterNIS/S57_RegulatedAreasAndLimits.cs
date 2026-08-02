@@ -38,7 +38,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     // ACHARE_AnchorageArea
                     case "regulatedareasandlimitsp::1": {
                             var instance = ImporterNIS.Build("ACHARE", feature, buffer);

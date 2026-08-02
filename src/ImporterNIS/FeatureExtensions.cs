@@ -2082,25 +2082,6 @@
         public static bool EXPSOU_HasValue(this Feature feature) => !(DBNull.Value == feature["EXPSOU"]) && feature["EXPSOU"] is not null;
 
         /// <summary>
-        /// FCSubtype
-        /// </summary>
-        /// <param name="feature">The feature to read the <c>FCSUBTYPE</c> field from.</param>
-        /// <returns>The value of <c>FCSUBTYPE</c>, or <c>null</c> when it is not set.</returns>
-        public static int? FCSUBTYPE(this Feature feature) {
-            if (DBNull.Value == feature["FCSUBTYPE"]) return null;
-            var v = Convert.ToInt32(feature["FCSUBTYPE"]);
-            //if (-32767 == v) return null;
-            return v;
-        }
-
-        /// <summary>
-        /// Indicates whether <c>FCSUBTYPE</c> (FCSubtype) holds a value.
-        /// </summary>
-        /// <param name="feature">The feature to probe.</param>
-        /// <returns><c>true</c> when <c>FCSUBTYPE</c> is neither <see cref="DBNull"/> nor <c>null</c>; otherwise <c>false</c>.</returns>
-        public static bool FCSUBTYPE_HasValue(this Feature feature) => !(DBNull.Value == feature["FCSUBTYPE"]) && feature["FCSUBTYPE"] is not null;
-
-        /// <summary>
         /// FEATURECLASS
         /// </summary>
         /// <param name="feature">The feature to read the <c>FEATURECLASS</c> field from.</param>
@@ -4535,8 +4516,8 @@
 
         public static bool PLTS_COMP_SCALE_HasValue(this Feature feature) => !(DBNull.Value == feature["PLTS_COMP_SCALE"]) && feature["PLTS_COMP_SCALE"] is not null;
 
-        public static int? FCSubtype(this Feature feature) {
-            if (DBNull.Value == feature["FCSubtype"]) return null;
+        public static int FCSubtype(this Feature feature) {
+            //if (DBNull.Value == feature["FCSubtype"]) return null;
             var v = Convert.ToInt32(feature["FCSubtype"]);
             return v;
         }

@@ -43,7 +43,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM()!;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "metadataa::1": { // M_ACCY_AccuracyOfData
                             var instance = (QualityOfNonBathymetricData)ImporterNIS.Build("M_ACCY", feature, buffer);
 

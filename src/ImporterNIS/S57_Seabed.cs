@@ -37,7 +37,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
 
                     case "seabedl::10": { // SBDARE_SeabedArea
                             var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current, buffer);

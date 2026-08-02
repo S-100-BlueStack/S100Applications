@@ -37,7 +37,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "offshoreinstallationsp::1": { // OFSPLF_OffshorePlatform
                             var instance = (OffshorePlatform)ImporterNIS.Build("OFSPLF", current, buffer);
 

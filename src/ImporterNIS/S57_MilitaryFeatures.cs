@@ -38,7 +38,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "militaryfeaturesp::30": { // MIPARE_MilitaryPracticeArea
                             var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature, buffer);
 

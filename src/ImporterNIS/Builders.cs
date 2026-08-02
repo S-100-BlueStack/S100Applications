@@ -177,8 +177,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -260,8 +260,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -290,8 +290,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -320,8 +320,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -373,8 +373,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -435,8 +435,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -474,8 +474,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -510,8 +510,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -544,8 +544,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -586,8 +586,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -622,8 +622,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -712,8 +712,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -780,8 +780,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -825,8 +825,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -870,8 +870,8 @@ namespace S100Framework.Applications
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                     string subtype = "";
 
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
@@ -1358,8 +1358,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -1418,8 +1418,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -1450,8 +1450,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
@@ -1483,8 +1483,8 @@ namespace S100Framework.Applications
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                     string subtype = "";
 
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
@@ -1518,8 +1518,8 @@ namespace S100Framework.Applications
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                     string subtype = "";
 
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
@@ -1594,8 +1594,8 @@ namespace S100Framework.Applications
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                     string subtype = "";
 
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
@@ -1648,8 +1648,8 @@ namespace S100Framework.Applications
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
                     string subtype = "";
 
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
@@ -1724,7 +1724,7 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype()!.Value, out subtype))
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
@@ -1794,7 +1794,7 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                instance.status = GetStatus(current.STATUS()!);
             }
 
             if (current.SOUACC_HasValue()) {
@@ -1805,8 +1805,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -1861,8 +1861,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -1895,8 +1895,8 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                     var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scaleMinimum.HasValue)
                         instance.scaleMinimum = scaleMinimum;
@@ -1942,8 +1942,8 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                     var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scaleMinimum.HasValue)
                         instance.scaleMinimum = scaleMinimum;
@@ -1981,8 +1981,8 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                     var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scaleMinimum.HasValue)
                         instance.scaleMinimum = scaleMinimum;
@@ -2079,8 +2079,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
 
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
@@ -2157,8 +2157,8 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                     var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue) {
                         instance.scaleMinimum = scamin!.Value;
@@ -2242,8 +2242,8 @@ namespace S100Framework.Applications
 
                 if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                     string subtype = "";
-                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                     var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                     if (scamin.HasValue)
                         instance.scaleMinimum = scamin!.Value;
@@ -2321,8 +2321,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -2429,8 +2429,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -2613,8 +2613,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -2711,8 +2711,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -2815,8 +2815,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -2883,8 +2883,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3011,8 +3011,8 @@ namespace S100Framework.Applications
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
 
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
 
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
@@ -3098,8 +3098,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -3228,8 +3228,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3304,8 +3304,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3368,8 +3368,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3441,8 +3441,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -3519,8 +3519,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3590,8 +3590,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3658,8 +3658,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -3742,8 +3742,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;
@@ -3807,8 +3807,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scamin.HasValue)
                     instance.scaleMinimum = scamin!.Value;
@@ -3862,8 +3862,8 @@ namespace S100Framework.Applications
 
             if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
                 string subtype = "";
-                if (current.TableName() != default && current.FCSUBTYPE_HasValue() && !Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSUBTYPE()}");
+                if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
                 var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 if (scaleMinimum.HasValue)
                     instance.scaleMinimum = scaleMinimum;

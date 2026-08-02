@@ -41,7 +41,7 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "depthsa::1": {     // DEPARE // SKIN OF EARTH
                             var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature, bufferTopo);
 
