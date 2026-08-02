@@ -13,6 +13,7 @@ namespace S100Framework.Applications
     using S100FC.S101.InformationTypes;
     using S100Framework.Applications.S57.esri;
     using S100Framework.Applications.S57auto.esri;
+    using System.Runtime.CompilerServices;
     using static System.Runtime.InteropServices.JavaScript.JSType;
 
     internal static partial class ImporterNIS
@@ -66,6 +67,11 @@ namespace S100Framework.Applications
             //{ "M_QUAL", (current, buffer) => { return M_QUAL(current, buffer); } },
             { "M_SREL", (current, buffer) => { return M_SREL(current, buffer); } },
             { "M_VDAT", (current, buffer) => { return M_VDAT(current, buffer); } },
+            { "DEPARE", (current, buffer) => { return DEPARE(current, buffer); } },
+            { "UNSARE", (current, buffer) => { return UNSARE(current, buffer); } },
+            { "DEPCNT", (current, buffer) => { return DEPCNT(current, buffer); } },
+            { "SPRING", (current, buffer) => { return SPRING(current, buffer); } },
+
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -265,6 +271,27 @@ namespace S100Framework.Applications
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Spring SPRING(Feature current, RowBuffer buffer) {
+            var instance = new Spring();
+
+            // TODO
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
@@ -1139,6 +1166,83 @@ namespace S100Framework.Applications
                 }
                 if (update)
                     instance.verticalDatum = verticalDatum.value;
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static DepthArea DEPARE(Feature current, RowBuffer buffer) {
+            var instance = new DepthArea();
+
+            instance.depthRangeMinimumValue = current.DRVAL1()!.Value;
+
+            if (current.DRVAL2_HasValue())
+                instance.depthRangeMaximumValue = current.DRVAL2() == -32767m ? null : current.DRVAL2();
+            
+            // TODO: Spatial association to Spatial Quality
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static UnsurveyedArea UNSARE(Feature current, RowBuffer buffer) {
+            var instance = new UnsurveyedArea();
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static DepthContour DEPCNT(Feature current, RowBuffer buffer) {
+            var instance = new DepthContour();
+
+            if (current.VALDCO_HasValue()) {
+                instance.valueOfDepthContour = current.VALDCO() == -32767m ? null : current.VALDCO();
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSUBTYPE()!.Value, out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE()!.Value}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());

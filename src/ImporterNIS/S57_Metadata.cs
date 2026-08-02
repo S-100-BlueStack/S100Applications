@@ -59,12 +59,23 @@ namespace S100Framework.Applications
                         break;
                     case "metadataa::20": { // M_CSCL_CompilationScaleOfData
                             continue;   //  S57_ProductCoverage
-                            //throw new NotImplementedException($"No M_CSCL_CompilationScaleOfData in DK or GL. {tableName}");
                         }
                     case "metadataa::25": { // M_HOPA_HorizontalDatumShiftParameters
                             throw new NotImplementedException($"No M_HOPA_HorizontalDatumShiftParameters in DK or GL. {tableName}");
                         }
-                    case "metadatap::1":
+                    case "metadatap::1": { // M_NPUB_NauticalPublicationInformation
+                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedPointEquipment(new MetaDataP(current), instance, featureN, null);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case "metadataa::30": { // M_NPUB_NauticalPublicationInformation
                             var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
 

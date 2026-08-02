@@ -6,69 +6,56 @@ using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
-
+using Windows.Storage.Streams;
 
 namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
-        /*
-         *  curve
-         *  point
-         *  pointset
-         *  surface
-         *  
-         */
+        private static void S57_Depths(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape, informationBinding<SpatialAssociation>[] spatialQuality) {
+            using var dataset = source(tableName);
+            Subtypes.Instance.RegisterSubtypes(dataset);
 
-        private static void S57_DepthsL(Geodatabase source, Geodatabase target, QueryFilter filter) {
-            var tableName = "DepthsL";
+            using var featureClassTopo = target();
 
-            using var depthsl = source.OpenDataset<FeatureClass>(source.GetName("DepthsL"));
-            Subtypes.Instance.RegisterSubtypes(depthsl);
-
-            //using var plts_spatialattributel = source.OpenDataset<FeatureClass>(source.GetName("PLTS_SpatialAttributeL"));
-            //using var informationtype = target.OpenDataset<Table>(target.GetName("informationType"));
-            //using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
-            //using var buffer = featureClass.CreateRowBuffer();
-
-            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_curve"));
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("curve"));
             using var bufferTopo = featureClassTopo.CreateRowBuffer();
 
-
-            using var cursor = depthsl.Search(filter, true);
+            using var cursor = dataset.Search(filter, true);
             int recordCount = 0;
-
-            var spatialQuality = CreateAssociationSpatialQuality(target);
 
             while (cursor.MoveNext()) {
                 recordCount += 1;
-
                 var feature = (Feature)cursor.Current;
+                var current = feature;
 
-                if (feature.GetShape() is null) continue;
-                if (feature.GetShape().IsEmpty) continue;
+                var objectid = current.GetObjectID();
+                var globalid = current.GLOBALID();
 
-                var current = new DepthsL(feature);
-
-                var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
-
-                var objectid = current.OBJECTID ?? default;
-                var globalid = current.GLOBALID;
                 if (FeatureRelations.Instance.IsSlave(globalid)) {
                     continue;
                 }
 
                 if (ConversionAnalytics.Instance.IsConverted(globalid)) {
-                    throw new Exception("Not supported.");
+                    throw new Exception("Ups. Not supported");
                 }
 
-                var fcSubtype = current.FCSUBTYPE ?? default;
-                var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
-                var longname = current.LNAM ?? Strings.UNKNOWN;
+                var longname = current.LNAM() ?? string.Empty;
 
-                switch (fcSubtype) {
-                    case 5: { // DEPCNT_DepthContour
+                switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
+                    case "depthsa::1": {     // DEPARE // SKIN OF EARTH
+                            var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature, bufferTopo);
+
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, default);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "depthsl::5": { // DEPCNT_DepthContour
                             var instance = (DepthContour)ImporterNIS.Build("DEPCNT", feature, bufferTopo);
 
                             /*
@@ -86,10 +73,12 @@ namespace S100Framework.Applications
                             */
 
 
-                            (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
+                            (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE()!, default)];
+
+                            var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
 
                             if (spatialQualityHits.Any()) {
-                                Geometry g = current.SHAPE!;
+                                Geometry g = current.SHAPE()!;
 
                                 geometry = [];
 
@@ -126,15 +115,57 @@ namespace S100Framework.Applications
                                 using var featureN = featureClassTopo.CreateRow(bufferTopo);
                                 var name = featureN.UID();
 
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                if (FeatureRelations.Instance.HasSlaves(globalid)) {
                                     relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
                                 }
 
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                                ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             }
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
+                    case "depthsa::5": {     // DRGARE // SKIN OF EARTH
+                            var instance = ImporterNIS.Build("DRGARE", feature, bufferTopo);
+
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, default);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "depthsa::10": {    // SWPARE_SweptArea
+                            var instance = (SweptArea)ImporterNIS.Build("SWPARE", feature, bufferTopo);
+
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "depthsa::15": {    // UNSARE  // SKIN OF EARTH
+                            var instance = (SweptArea)ImporterNIS.Build("UNSARE", feature, bufferTopo);
+
+                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+
                     default:
                         // code block
                         System.Diagnostics.Debugger.Break();
@@ -177,10 +208,5 @@ namespace S100Framework.Applications
             _spatialAssociation = informationBinding;
             return [_spatialAssociation];
         }
-
-
-
-
     }
 }
-

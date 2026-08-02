@@ -10,14 +10,14 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static void S57_RegulatedAreasAndLimits(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape) {
-            using var seabed = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
-            Subtypes.Instance.RegisterSubtypes(seabed);
+            using var dataset = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
+            Subtypes.Instance.RegisterSubtypes(dataset);
 
             using var featureClass = target();    // target.OpenDataset<FeatureClass>(target.GetName("point"));
 
             using var buffer = featureClass.CreateRowBuffer();
 
-            using var cursor = seabed.Search(filter, true);
+            using var cursor = dataset.Search(filter, true);
             int recordCount = 0;
 
             while (cursor.MoveNext()) {
@@ -36,11 +36,27 @@ namespace S100Framework.Applications
                     throw new Exception("Ups. Not supported");
                 }
 
-                var longname = current.LNAM();
+                var longname = current.LNAM() ?? string.Empty;
 
                 switch ($"{tableName}::{feature.FCSubtype}".ToLowerInvariant()) {
-                    case "regulatedareasandlimitsp::1":
-                    case "regulatedareasandlimitsa::1": { // ACHARE_AnchorageArea
+                    // ACHARE_AnchorageArea
+                    case "regulatedareasandlimitsp::1": {
+                            var instance = ImporterNIS.Build("ACHARE", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                if (instance is MooringArea mooringArea)
+                                    relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, mooringArea.scaleMinimum);
+                                if (instance is AnchorageArea anchorageArea)
+                                    relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, anchorageArea.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "regulatedareasandlimitsa::1": { 
                             var instance = ImporterNIS.Build("ACHARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -59,7 +75,20 @@ namespace S100Framework.Applications
                     case "regulatedareasandlimitsl::1": { // ASLXIS_ArchipelagicSeaLaneAxis
                             throw new NotImplementedException($"No ASLXIS_ArchipelagicSeaLaneAxis in DK or GL. {tableName}");
                         }
-                    case "regulatedareasandlimitsp::5":
+                    // ACHBRT_AnchorBerth
+                    case "regulatedareasandlimitsp::5": { // ACHBRT_AnchorBerth
+                            var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case "regulatedareasandlimitsa::5": { // ACHBRT_AnchorBerth
                             var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature, buffer);
 
@@ -80,7 +109,7 @@ namespace S100Framework.Applications
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, instance.scaleMinimum);
                             }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
@@ -93,18 +122,18 @@ namespace S100Framework.Applications
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, instance.scaleMinimum);
                             }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
+                    // ICNARE_IncinerationArea
                     case "regulatedareasandlimitsp::25":
-                    case "regulatedareasandlimitsa::75": { // ICNARE_IncinerationArea
-                            throw new NotImplementedException($"No ICNARE_IncinerationArea in DK or GL. {tableName}");
-
+                    case "regulatedareasandlimitsa::75": { 
                             //The S-57 Object class ICNARE will not be converted. 
                         }
+                        break;
                     case "regulatedareasandlimitsp::30": { // LOGPON_LogPond
                             throw new NotImplementedException($"No LOGPON_LogPond in DK or GL. {tableName}");
                         }
@@ -121,7 +150,20 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    case "regulatedareasandlimitsp::35":
+                    // MARCUL_MarineFarmCulture
+                    case "regulatedareasandlimitsp::35": { // MARCUL_MarineFarmCulture
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case "regulatedareasandlimitsl::35": { // MARCUL_MarineFarmCulture
                             var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
 
@@ -142,7 +184,7 @@ namespace S100Framework.Applications
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                relatedEquipment!.CreateRelatedPointEquipment(new RegulatedAreasAndLimitsP(current), instance, featureN, instance.scaleMinimum);
                             }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));

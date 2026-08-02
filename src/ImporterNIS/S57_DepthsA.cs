@@ -58,30 +58,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: {     // DEPARE // SKIN OF EARTH
-                            var instance = new DepthArea {
-                                depthRangeMinimumValue = drval1,
-                            };
-
-                            if (drval2.HasValue)
-                                instance.depthRangeMaximumValue = drval2.GetValueOrDefault();
-
-                            // TODO: Spatial association to Spatial Quality
-
-                            // TODO: InteroperabilityIdentifier
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            bufferTopo["ps"] = ps101;
-                            bufferTopo["code"] = instance.GetType().Name;
-
-
-                            bufferTopo["attributebindings"] = instance.Flatten();
-                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature, bufferTopo);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();
@@ -89,9 +66,7 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, default);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -126,35 +101,17 @@ namespace S100Framework.Applications
                         break;
 
                     case 15: {    // UNSARE  // SKIN OF EARTH
-                            var instance = new UnsurveyedArea();
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            // TODO: InteroperabilityIdentifier
-
-                            bufferTopo["ps"] = ps101;
-                            bufferTopo["code"] = instance.GetType().Name;
-
-
-                            bufferTopo["attributebindings"] = instance.Flatten();
-                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (SweptArea)ImporterNIS.Build("UNSARE", feature, bufferTopo);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, default);
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
 

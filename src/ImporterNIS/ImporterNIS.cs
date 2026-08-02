@@ -607,7 +607,12 @@ namespace S100Framework.Applications
 
                             var whereClause = QueryFilter.WhereClause.Clone();
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";
-                            Store((destination) => S57_DepthsA(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Depths(
+                                "DepthsA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
 
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (5)";
                             Store((destination) => S57_NaturalFeaturesA(source, destination, QueryFilter), destination);
@@ -684,8 +689,15 @@ namespace S100Framework.Applications
                             Store((destination) => S57_CulturalFeaturesP(source, destination, QueryFilter), destination);
 
 
+                            var spatialQuality = CreateAssociationSpatialQuality(destination);
+
                             Logger.Current.Information($"Converting Contours");
-                            Store((destination) => S57_DepthsL(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Depths(
+                                "DepthsL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), spatialQuality), destination);
 
 
                             //Logger.Current.Information($"Converting S101_RecommendedTracksAndRoutes");
@@ -733,7 +745,13 @@ namespace S100Framework.Applications
                             Store((destination) => S57_CoastlineP(source, destination, QueryFilter), destination);
 
                             Logger.Current.Information($"Converting Depth Areas");
-                            Store((destination) => S57_DepthsA(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Depths(
+                                "DepthsA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
+
 
                             Logger.Current.Information($"Converting Ice features");
                             Store((destination) => S57_IcefeaturesA(source, destination, QueryFilter), destination);
