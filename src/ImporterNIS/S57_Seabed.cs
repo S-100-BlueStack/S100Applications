@@ -11,8 +11,6 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static void S57_Seabed(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape) {
-            var ps101 = "S-101";
-
             using var seabed = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(seabed);
 
