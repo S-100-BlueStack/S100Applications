@@ -166,9 +166,14 @@ namespace S100Framework.Applications.Singletons
                 // Use InsertCursor to efficiently insert multiple features
                 using (var rowBuffer = attachment.CreateRowBuffer())
                 using (var insertCursor = attachment.CreateInsertCursor()) {
+                    var hash = new HashSet<string>();
+
                     foreach (var nauticalInformation in NauticalInformations.Instance._nauticalInformations.Values) {
 
                         foreach (var info in nauticalInformation.information) {
+                            if (hash.Contains(info!.fileReference!)) continue;
+                            
+                            hash.Add(info!.fileReference!);
                             var supportFile = new S100BlueStack.Settings.SupportFile {
                                 FileName = info!.fileReference!
                             };

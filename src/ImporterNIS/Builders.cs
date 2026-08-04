@@ -178,7 +178,7 @@ namespace S100Framework.Applications
 
             // TODO
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
@@ -208,7 +208,7 @@ namespace S100Framework.Applications
 
             // TODO
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
@@ -291,7 +291,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -321,7 +321,7 @@ namespace S100Framework.Applications
 
             // TODO
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -351,7 +351,7 @@ namespace S100Framework.Applications
 
             // TODO
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -434,7 +434,7 @@ namespace S100Framework.Applications
                     instance.categoryOfLandmark = categoryOfLandmark;
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
@@ -466,7 +466,7 @@ namespace S100Framework.Applications
                 instance.nationality = GetNation(current.NATION()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -528,7 +528,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -567,7 +567,7 @@ namespace S100Framework.Applications
                 instance.nationality = [GetNation(current.NATION()!)];
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -603,7 +603,7 @@ namespace S100Framework.Applications
                 instance.nationality = [GetNation(current.NATION()!)];
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -637,7 +637,7 @@ namespace S100Framework.Applications
                 instance.nationality = [GetNation(current.NATION()!)];
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -679,7 +679,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -715,7 +715,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -805,7 +805,7 @@ namespace S100Framework.Applications
                 instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -873,7 +873,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -918,7 +918,7 @@ namespace S100Framework.Applications
             if (featureName is not null)
                 instance.featureName = featureName;
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -963,7 +963,7 @@ namespace S100Framework.Applications
 
                 instance.orientationValue = current.ORIENT() == -32767m ? default : current.ORIENT();
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
 
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1451,7 +1451,7 @@ namespace S100Framework.Applications
                 instance.valueOfDepthContour = current.VALDCO() == -32767m ? null : current.VALDCO();
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1511,7 +1511,7 @@ namespace S100Framework.Applications
                 instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1543,7 +1543,7 @@ namespace S100Framework.Applications
                 instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1576,7 +1576,7 @@ namespace S100Framework.Applications
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
 
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1611,7 +1611,7 @@ namespace S100Framework.Applications
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
 
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1687,7 +1687,7 @@ namespace S100Framework.Applications
                         instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                 }
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
 
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1741,7 +1741,7 @@ namespace S100Framework.Applications
                     instance.techniqueOfVerticalMeasurement = [.. current.TECSOU()!.Split(',').Select(e => EnumHelper.GetEnumValue(e))];
                 }
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
 
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -1818,7 +1818,7 @@ namespace S100Framework.Applications
                 }
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype}");
@@ -1899,7 +1899,7 @@ namespace S100Framework.Applications
                 };
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -1955,7 +1955,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -1989,7 +1989,7 @@ namespace S100Framework.Applications
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
                     if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2036,7 +2036,7 @@ namespace S100Framework.Applications
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2075,7 +2075,7 @@ namespace S100Framework.Applications
                     instance.nationality = [GetNation(current.NATION())];
                 }
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2172,7 +2172,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -2251,7 +2251,7 @@ namespace S100Framework.Applications
                         Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
                 }
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2336,7 +2336,7 @@ namespace S100Framework.Applications
                         Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
                 }
 
-                if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+                if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
                     if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                         throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2415,7 +2415,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2481,7 +2481,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.TECSOU != null) {
+            if (current.TECSOU_HasValue()) {
                 var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU());
                 if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
@@ -2523,7 +2523,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2707,7 +2707,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2805,7 +2805,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2909,7 +2909,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -2977,7 +2977,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3004,7 +3004,7 @@ namespace S100Framework.Applications
         private static MarineFarmCulture MARCUL(Feature current, RowBuffer buffer) {
             var instance = new MarineFarmCulture();
 
-            if (current.CATMFA != null) {
+            if (current.CATMFA_HasValue()) {
                 instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA());
             }
 
@@ -3104,7 +3104,7 @@ namespace S100Framework.Applications
 
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
 
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
@@ -3192,7 +3192,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (!Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3255,7 +3255,7 @@ namespace S100Framework.Applications
 
             }
 
-            if (current.PRODCT != null) {
+            if (current.PRODCT_HasValue()) {
                 var product = EnumHelper.GetEnumValues(current.PRODCT());
                 if (product is not null && product.Any())
                     instance.product = product;
@@ -3322,7 +3322,7 @@ namespace S100Framework.Applications
 
             // TODO: waterleveleffect
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3398,7 +3398,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3462,7 +3462,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS());
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3535,7 +3535,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3613,7 +3613,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3684,7 +3684,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3752,7 +3752,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3794,7 +3794,7 @@ namespace S100Framework.Applications
                 instance.fixedDateRange = dateRange;
             }
 
-            if (current.PRODCT != null) {
+            if (current.PRODCT_HasValue()) {
                 var product = EnumHelper.GetEnumValues(current.PRODCT());
                 if (product is not null && product.Any())
                     instance.product = product;
@@ -3836,7 +3836,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3901,7 +3901,7 @@ namespace S100Framework.Applications
                     Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");
@@ -3956,7 +3956,7 @@ namespace S100Framework.Applications
                 instance.status = GetStatus(current.STATUS()!);
             }
 
-            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE() != null) {
+            if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
                 if (current.TableName() != default && !Subtypes.Instance.TryGetSubtype(current.TableName(),current.FCSubtype(), out subtype))
                     throw new NotSupportedException($"Unknown subtype for {current.TableName()}, {current.FCSubtype()}");

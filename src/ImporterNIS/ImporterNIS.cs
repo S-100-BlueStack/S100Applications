@@ -2028,6 +2028,8 @@ namespace S100Framework.Applications
                     var file = IO.Directory.GetFiles(_notesPath, $"{ntxtds}", SearchOption.AllDirectories).FirstOrDefault();
                     if (string.IsNullOrEmpty(file))
                         Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ntxtds] {ntxtds}");
+                    else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                        Logger.Current.Warning("{tablename}::{objectid} ntxds {file}",sourceTableName,sourceObjectid,file);
 
                     string fileReference = ntxtds;
                     string language = "eng";
@@ -2052,6 +2054,9 @@ namespace S100Framework.Applications
                     var file = IO.Directory.GetFiles(_notesPath, $"{txtdsc}", SearchOption.AllDirectories).FirstOrDefault();
                     if (string.IsNullOrEmpty(file))
                         Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [txtdsc] {txtdsc}");
+                    else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                        Logger.Current.Warning("{tablename}::{objectid} txtdsc {file}", sourceTableName, sourceObjectid, file);
+
 
                     string fileReference = txtdsc;
                     string language = "eng";
@@ -2084,6 +2089,8 @@ namespace S100Framework.Applications
                         var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
                         if (string.IsNullOrEmpty(file))
                             Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [inform] {inform}");
+                        else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                            Logger.Current.Warning("{tablename}::{objectid} inform {file}", sourceTableName, sourceObjectid, file);
 
                         string fileReference = value;
                         string language = "eng";
@@ -2117,6 +2124,9 @@ namespace S100Framework.Applications
                             var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
                             if (string.IsNullOrEmpty(file))
                                 Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ninform] {ninform}");
+                            else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                                Logger.Current.Warning("{tablename}::{objectid} ninfoms {file}", sourceTableName, sourceObjectid, file);
+
 
                             string fileReference = value;
                             string language = "dan";
