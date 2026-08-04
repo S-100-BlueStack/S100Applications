@@ -73,6 +73,9 @@ namespace S100Framework.Applications
             { "SPRING", (current, buffer) => { return SPRING(current, buffer); } },
             { "OFSPLF", (current, buffer) => { return OFSPLF(current, buffer); } },
             { "CBLSUB", (current, buffer) => { return CBLSUB(current, buffer); } },
+            { "LOGPON", (current, buffer) => { return LOGPON(current, buffer); } },
+            { "CTRPNT", (current, buffer) => { return CTRPNT(current, buffer); } },
+            { "GRIDRN", (current, buffer) => { return GRIDRN(current, buffer); } },
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -144,6 +147,7 @@ namespace S100Framework.Applications
             return instance;
         }
 
+
         private static CurrentNonGravitational CURENT(Feature current, RowBuffer buffer) {
             var instance = new CurrentNonGravitational();
 
@@ -171,6 +175,36 @@ namespace S100Framework.Applications
 
         private static SweptArea SWPARE(Feature current, RowBuffer buffer) {
             var instance = new SweptArea();
+
+            // TODO
+
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Gridiron GRIDRN(Feature current, RowBuffer buffer) {
+            var instance = new Gridiron();
 
             // TODO
 
@@ -346,6 +380,68 @@ namespace S100Framework.Applications
             var instance = new Spring();
 
             // TODO
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static LogPond LOGPON(Feature current, RowBuffer buffer) {
+            var instance = new LogPond();
+
+            // TODO
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Landmark CTRPNT(Feature current, RowBuffer buffer) {
+            var instance = new Landmark();
+
+            /*
+                When converting the S-57 CTRPNT Object class the S-101 mandatory attribute visual prominence on the 
+                converted Landmark feature will be populated during the automated conversion process 
+                with value 2 (not visually conspicuous). Data Producers will be required to amend this value as appropriate.
+             */
+            instance.visualProminence = 2;
+
+            if (current.CATCTR_HasValue()) {
+                var categoryOfLandmark = EnumHelper.GetEnumValues(current.CATCTR());
+                if (categoryOfLandmark is not null)
+                    instance.categoryOfLandmark = categoryOfLandmark;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue() && current.SHAPE != null) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];

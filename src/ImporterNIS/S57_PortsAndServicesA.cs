@@ -887,8 +887,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 50: { // GRIDRN_Gridiron
-                            throw new NotImplementedException($"No GRIDRN_Gridiron in DK or GL. {tableName}");
+                            var instance = (Gridiron)ImporterNIS.Build("GRIDRN", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;
                     case 55: { // HRBFAC_HarbourFacility
                             var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", feature, buffer);
 

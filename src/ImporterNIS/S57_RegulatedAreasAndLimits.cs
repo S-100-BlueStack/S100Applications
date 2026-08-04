@@ -315,9 +315,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::85": { // LOGPON_LogPond
-                            throw new NotImplementedException($"No LOGPON_LogPond in DK or GL. {tableName}");
-                        }
+                            var instance = (LogPond)ImporterNIS.Build("LOGPON", feature, buffer);
 
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case "regulatedareasandlimitsa::95": { // MARCUL_MarineFarmCulture
                             var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
 

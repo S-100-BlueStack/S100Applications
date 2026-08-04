@@ -340,55 +340,20 @@ namespace S100Framework.Applications
 
                     case 20: { // CTRPNT_ControlPoint
                             if (current.CATCTR.HasValue && (current.CATCTR == 1 || current.CATCTR == 5)) {
-                                var instance = new Landmark {
-                                };
-                                var categoryOfLandmark = EnumHelper.GetEnumValues(current.CATCTR);
-                                if (categoryOfLandmark is not null)
-                                    instance.categoryOfLandmark = categoryOfLandmark;
-                                if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                    string subtype = "";
-
-                                    if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                    var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                    if (scamin.HasValue)
-                                        instance.scaleMinimum = scamin.Value;
-                                }
-
-                                var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                                instance.information = result.information.ToArray();
-                                instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                                if (current.PICREP != default) {
-                                    instance.pictorialRepresentation = FixFilename(current.PICREP);
-                                }
-
-                                instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
-
-
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-
-
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                var instance = (Landmark)ImporterNIS.Build("CTRPNT", feature, buffer);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
+                                if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                    relatedEquipment!.CreateRelatedLineEquipment(new SeabedP(feature), instance, featureN);
                                 }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, featureN.GetGlobalID(), name);
-                                Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                                ConversionAnalytics.Instance.AddConverted(tableName, feature.GetGlobalID(), name);
+                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-                            else
-                                throw new NotImplementedException($"No CTRPNT_ControlPoint in DK and GL. {tableName}");
+                            else {
+                                //  For S-101, it is considered that control point information is not required for ENC. In general, therefore, encoded CTRPNT will not be converted.
+                            }
                         }
                         break;
                     case 25: { // DAMCON_Dam

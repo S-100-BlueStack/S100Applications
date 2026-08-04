@@ -291,16 +291,17 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 40: { // TS_PNH_TidalStreamNonHarmonicPrediction
-                            throw new NotImplementedException("No TS_PNH_TidalStreamNonHarmonicPrediction in DK | GL NIS");
+                            //  Will not convert to S-101.
                         }
-
+                        break;
                     case 45: { // TS_PRH_TidalStreamHarmonicPrediction
-                            throw new NotImplementedException("No TS_PRH_TidalStreamHarmonicPrediction in DK | GL NIS");
+                            //  Will not convert to S-101.
                         }
-
+                        break;
                     case 50: { // TS_TIS_TidalStreamTimeSeries
-                            throw new NotImplementedException("No TS_TIS_TidalStreamTimeSeries in DK | GL NIS");
+                            //  Will not convert to S-101.
                         }
+                        break;
                     default:
                         // code block
                         //System.Diagnostics.Debugger.Break();

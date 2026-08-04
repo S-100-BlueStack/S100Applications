@@ -152,13 +152,13 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "depthsa::15": {    // UNSARE  // SKIN OF EARTH
-                            var instance = (SweptArea)ImporterNIS.Build("UNSARE", feature, bufferTopo);
+                            var instance = (UnsurveyedArea)ImporterNIS.Build("UNSARE", feature, bufferTopo);
 
                             using var featureN = featureClassTopo.CreateRow(bufferTopo);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, default);
                             }
 
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
