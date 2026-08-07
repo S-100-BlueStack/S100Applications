@@ -627,7 +627,12 @@ namespace S100Framework.Applications
                                 (buffer, shape) => SetShape(buffer, shape), []), destination);
 
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (5)";
-                            Store((destination) => S57_NaturalFeaturesA(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_NaturalFeatures(
+                                "NaturalFeaturesA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (40,60,80)";
                             Store((destination) => S57_PortsAndServicesA(source, destination, QueryFilter), destination);
@@ -705,9 +710,24 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Natural Features");
-                            Store((destination) => S57_NaturalFeaturesA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_NaturalFeaturesL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_NaturalFeaturesP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_NaturalFeatures(
+                                "NaturalFeaturesA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_NaturalFeatures(
+                                "NaturalFeaturesL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_NaturalFeatures(
+                                "NaturalFeaturesP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
 
                             Logger.Current.Information($"Converting Cultural Features");

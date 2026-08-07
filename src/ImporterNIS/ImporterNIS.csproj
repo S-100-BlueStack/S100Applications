@@ -23,6 +23,9 @@
     <Compile Remove="S57_MetadataP.cs" />
     <Compile Remove="S57_MilitaryFeaturesA.cs" />
     <Compile Remove="S57_MilitaryFeaturesP.cs" />
+    <Compile Remove="S57_NaturalFeaturesA.cs" />
+    <Compile Remove="S57_NaturalFeaturesL.cs" />
+    <Compile Remove="S57_NaturalFeaturesP.cs" />
     <Compile Remove="S57_OffshoreInstallationsA.cs" />
     <Compile Remove="S57_OffshoreInstallationsL.cs" />
     <Compile Remove="S57_OffshoreInstallationsP.cs" />

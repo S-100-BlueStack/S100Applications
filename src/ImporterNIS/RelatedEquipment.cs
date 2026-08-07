@@ -137,14 +137,14 @@ namespace S100Framework.Applications
         //}
 
         internal void CreateRelatedLineEquipment(S57Object s57master, FeatureType s101master, Feature s101MasterFeature) {
-            CreateRelatedLineEquipmen(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature);
+            CreateRelatedLineEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature);
         }
 
         internal void CreateRelatedLineEquipment(Feature s57master, FeatureType s101master, Feature s101MasterFeature) {
-            CreateRelatedLineEquipmen(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature);
+            CreateRelatedLineEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature);
         }
 
-        internal void CreateRelatedLineEquipmen(Guid globalid, int PLTS_COMP_SCALE, FeatureType s101master, Feature s101MasterFeature) {
+        internal void CreateRelatedLineEquipment(Guid globalid, int PLTS_COMP_SCALE, FeatureType s101master, Feature s101MasterFeature) {
             //throw new NotImplementedException();
         }
 

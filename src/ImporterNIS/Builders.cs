@@ -94,7 +94,8 @@ namespace S100Framework.Applications
             { "SEAARE", (current, buffer) => { return SEAARE(current, buffer); } },
             { "SLOGRD", (current, buffer) => { return SLOGRD(current, buffer); } },
             { "VEGATN", (current, buffer) => { return VEGATN(current, buffer); } },
-            
+            { "LNDELV", (current, buffer) => { return LNDELV(current, buffer); } },
+            { "SLOTOP", (current, buffer) => { return SLOTOP(current, buffer); } },
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -227,6 +228,102 @@ namespace S100Framework.Applications
             var instance = new Gridiron();
 
             // TODO
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static SlopeTopline SLOTOP(Feature current, RowBuffer buffer) {
+            var instance = new SlopeTopline();
+
+            if (current.CATSLO_HasValue()) {
+                instance.categoryOfSlope = EnumHelper.GetEnumValue(current.CATSLO());
+            }
+
+            if (current.COLOUR_HasValue()) {
+                var colour = GetColours(current.COLOUR());
+                if (colour is not null && colour.Any())
+                    instance.colour = colour;
+            }
+
+            if (current.ELEVAT_HasValue()) {
+                instance.elevation = current.ELEVAT() != -32767m ? current.ELEVAT() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.NATSUR_HasValue()) {
+                var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR(), instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!);
+                if (natureOfSurface is not null && natureOfSurface.Any())
+                    instance.natureOfSurface = natureOfSurface;
+            }
+
+            if (current.CONRAD_HasValue()) {
+                instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
+            }
+
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static LandElevation LNDELV(Feature current, RowBuffer buffer) {
+            var instance = new LandElevation();
+
+            if (current.ELEVAT_HasValue()) {
+                instance.elevation = current.ELEVAT() != -32767m ? current.ELEVAT() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";

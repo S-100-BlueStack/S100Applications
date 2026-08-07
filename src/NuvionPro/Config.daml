@@ -1,10 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ArcGIS defaultAssembly="NuvionPro.dll"
-        defaultNamespace="NuvionPro"
-        xmlns="http://schemas.esri.com/DADF/Registry"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-
+﻿<ArcGIS defaultAssembly="NuvionPro.dll" defaultNamespace="NuvionPro" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
   <AddInInfo id="{e88a79e5-f75d-4324-b52a-38eca2a1f9a1}" version="3.7.1901.20" desktopVersion="3.7">
     <Name>NuvionPro</Name>
     <Description>The project aimed to implement the S-100 standard within ArcGIS Pro to improve the creation, management, and dissemination of electronic navigational charts (ENCs) in compliance with the International Hydrographic Organization's (IHO) S-100 framework. The implementation of S-100 standards in ArcGIS Pro facilitates the transition from traditional paper charts to modern digital navigational tools, enhancing safety and efficiency in maritime navigation.</Description>
@@ -15,19 +9,19 @@
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
-
   <modules>
     <insertModule id="NuvionPro_Module" className="Module" autoLoad="true" caption="NuvionPro">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <!--<tab id="NuvionPro_Tab1" caption="New Tab">
+        <tab id="NuvionPro_Tab" caption="NuvionPro" keytip="N">
           <group refID="NuvionPro_Group1"/>
-        </tab>-->
+        </tab>
       </tabs>
-
       <groups>
+        <group id="NuvionPro_Group1" caption="Navigate" appearsOnAddInTab="false" keytip="N">
+          <tool refID="NuvionPro_PickReportTool" size="large" />
+        </group>
       </groups>
-
       <controls>
         <dynamicMenu caption="Specific Usage" className="NuvionPro.Commands.DynamicMenuSpecificUsage" id="NuvionPro_DynamicMenuSpecificUsage" largeImage="pack://application:,,,/ProTestApp;component/Images/MenuImage32.png" smallImage="pack://application:,,,/ProTestApp;component/Images/MenuImage16.png">
           <!--<tooltip heading="Heading" image="pack://application:,,,/Acme;component/Images/MenuImage16.png">Some text</tooltip>-->
@@ -39,9 +33,11 @@
         <button id="NuvionPro_ButtonHarbour" caption="Navigational Purpose Harbour" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="5"></button>
         <button id="NuvionPro_ButtonBerthing" caption="Navigational Purpose Berthing" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="6"></button>
         <button id="NuvionPro_ButtonClear" caption="Clear" className="NuvionPro.Commands.ButtonClear" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/FilterRemove16.png" largeImage="GenericButtonBlue32" keytip="0"></button>
+        <tool id="NuvionPro_PickReportTool" caption="PickReportTool" className="PickReportTool" loadOnClick="true" smallImage="GenericButtonRed16" largeImage="GenericButtonRed32" condition="esri_mapping_mapPane">
+          <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
+        </tool>
       </controls>
     </insertModule>
-
     <updateModule refID="esri_mapping">
       <menus>
         <updateMenu refID="esri_mapping_layerContextMenu">
@@ -53,11 +49,10 @@
       </menus>
     </updateModule>
   </modules>
-
   <categories>
     <updateCategory refID="esri_editing_AttributeTabs">
       <insertComponent id="S100AttributeTab" className="S100AttributeTabViewModel">
-        <content guid="{981f7707-9c4e-4b1c-9ecd-9d63946e943d}" className="Views.S100AttributeTabView"  L_name="S-100 Editor"/>
+        <content guid="{981f7707-9c4e-4b1c-9ecd-9d63946e943d}" className="Views.S100AttributeTabView" L_name="S-100 Editor" />
       </insertComponent>
     </updateCategory>
   </categories>
