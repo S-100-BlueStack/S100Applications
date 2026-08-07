@@ -4,6 +4,7 @@ using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 
+
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
 using ImporterNIS.Singletons;
@@ -682,9 +683,24 @@ namespace S100Framework.Applications
 
 
                             Logger.Current.Information($"Converting Dangers");
-                            Store((destination) => S57_DangersA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_DangersL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_DangersP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Dangers(
+                                "DangersA>",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_Dangers(
+                                "DangersL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_Dangers(
+                                "DangersP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
 
 
@@ -753,9 +769,24 @@ namespace S100Framework.Applications
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting CoastLines");
-                            Store((destination) => S57_CoastlineA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_CoastlineL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_CoastlineP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape), spatialQuality), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
 
                             Logger.Current.Information($"Converting Depth Areas");
                             Store((destination) => S57_Depths(
@@ -1336,6 +1367,30 @@ namespace S100Framework.Applications
         }
 
         const string DE9IM_Contains = "T*****FF*";
+
+        internal static (int FcSubtype, decimal? DRVAL1)? GetSurrunding_DepthArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
+            (string tablename, SpatialRelationship relationship)[] dictionary = [
+                    ("depthsa", SpatialRelationship.Contains),
+                ];
+            var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e => e.GetName().ToLowerInvariant());
+            foreach (var e in dictionary) {
+                using var danger = geodatabase.OpenDataset<FeatureClass>(definitions.Single(d => d.EndsWith(e.tablename)));
+
+                using var search = danger.Search(new SpatialQueryFilter {
+                    WhereClause = $"({queryFilter}))",
+                    SpatialRelationship = e.relationship,
+                    FilterGeometry = shape,
+                }, false);
+
+                var hit = search.MoveNext();
+                if (hit) {
+                    var f = (Feature)search.Current;
+                    return (f.FCSubtype(), f.DRVAL1());
+                }
+            }
+
+            return null;
+        }
 
         internal static bool IsCoveredByUNSARE_UnsurveyedArea(Geometry shape) {
             foreach (DepthsA depthArea in SpatialRelationResolver.Instance.GetSpatialRelatedValueFrom<DepthsA>(shape, SpatialRelationship.Contains)) {
