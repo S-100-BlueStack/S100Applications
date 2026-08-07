@@ -1,16 +1,33 @@
 ﻿using System.Runtime.CompilerServices;
+using WinRT;
 
 namespace S100Framework.Applications
 {
     public static class EnumHelper
     {
+        public static bool GetEnumValue(object? value, out int? attribute, int[] permittedValues, [CallerMemberName] string? propertyName = null) {
+            var _ = GetEnumValue(value, propertyName);
+            if (_ == null) {
+                attribute = null;
+            }
+            else if (!permittedValues.Any() || Array.IndexOf(permittedValues, _) >= 0) {
+                attribute = _;
+            }
+            else {
+                attribute = null;
+                return false;
+            }
+            return true;
+        }
+
         public static int? GetEnumValue(object? value, [CallerMemberName] string? propertyName = null) {
             if (value is null) return null;
             if (value is string strValue) {
                 if (strValue.Equals("-32767"))
                     return null;
-                if (int.TryParse(strValue, out int result))
+                if (int.TryParse(strValue, out int result)) {
                     return result;
+                }
                 throw new ArgumentException($"Invalid string value for enum {propertyName}: {strValue}");
             }
             if (value is int intValue) {
@@ -22,6 +39,10 @@ namespace S100Framework.Applications
         }
 
         public static int?[]? GetEnumValues(object? value) {
+            return GetEnumValues(value, []);
+        }
+
+        public static int?[]? GetEnumValues(object? value, int[] permittedValues) {
             if (value is null) return null;
             int?[]? array = default;
 
@@ -34,7 +55,8 @@ namespace S100Framework.Applications
                     }
                     else {
                         var v = GetEnumValue(values[i]);
-                        array = [.. array, GetEnumValue(values[i])];
+                        if (!permittedValues.Any() || Array.IndexOf(permittedValues, v) >= 0)
+                            array = [.. array, v];
                     }
                 }
             }

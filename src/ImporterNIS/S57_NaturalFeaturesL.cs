@@ -242,7 +242,7 @@ namespace S100Framework.Applications
                             // TODO: interoperabilityIdentifier
 
                             if (current.NATSUR != null) {
-                                var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR);
+                                var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR, instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!);
                                 if (natureOfSurface is not null && natureOfSurface.Any())
                                     instance.natureOfSurface = natureOfSurface;
                             }

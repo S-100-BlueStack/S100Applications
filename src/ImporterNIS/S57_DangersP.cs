@@ -206,7 +206,7 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.TECSOU != null) {
-                                    var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU);
+                                    var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU, instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
                                     if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                                         instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                                 }
@@ -307,10 +307,8 @@ namespace S100Framework.Applications
                                 instance.featureName = featureName;
 
                             if (current.NATSUR != null) {
-                                if ("-32767".Equals(current.NATSUR))
-                                    instance.natureOfSurface = null;
-                                else if ("14".Equals(current.NATSUR))
-                                    instance.natureOfSurface = 14;  //CORAL
+                                if (EnumHelper.GetEnumValue(current.NATSUR, out int? natureOfSurface, instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!))
+                                    instance.natureOfSurface = natureOfSurface;
                             }
 
                             if (current.QUASOU != default) {
@@ -333,7 +331,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.TECSOU != default) {
-                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU);
+                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU, instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
                                 if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                             }

@@ -335,7 +335,7 @@ namespace S100Framework.Applications
                                 }
 
                                 if (current.TECSOU != null) {
-                                    var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU);
+                                    var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU, instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
                                     if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                                         instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                                 }
@@ -503,7 +503,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.TECSOU != null) {
-                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU);
+                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU, instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
                                 if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                             }
