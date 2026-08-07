@@ -258,7 +258,8 @@ namespace S100Framework.Applications
             var instance = new SlopeTopline();
 
             if (current.CATSLO_HasValue()) {
-                instance.categoryOfSlope = EnumHelper.GetEnumValue(current.CATSLO());
+                if (EnumHelper.GetEnumValue(current.CATSLO(), out int? categoryOfSlope, instance.attributeBindingDefinition("categoryOfSlope")!.permitedValues!))
+                    instance.categoryOfSlope = categoryOfSlope;
             }
 
             if (current.COLOUR_HasValue()) {
@@ -286,7 +287,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -708,7 +710,8 @@ namespace S100Framework.Applications
             var instance = new UnderwaterAwashRock();
 
             if (current.EXPSOU_HasValue()) {
-                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU());
+                if (EnumHelper.GetEnumValue(current.EXPSOU(), out int? expositionOfSounding, instance.attributeBindingDefinition("expositionOfSounding")!.permitedValues!))
+                    instance.expositionOfSounding = expositionOfSounding;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
