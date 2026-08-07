@@ -307,7 +307,10 @@ namespace S100Framework.Applications
                                 instance.featureName = featureName;
 
                             if (current.NATSUR != null) {
-                                instance.natureOfSurface = EnumHelper.GetEnumValue(current.NATSUR);
+                                if ("-32767".Equals(current.NATSUR))
+                                    instance.natureOfSurface = null;
+                                else if ("14".Equals(current.NATSUR))
+                                    instance.natureOfSurface = 14;  //CORAL
                             }
 
                             if (current.QUASOU != default) {
