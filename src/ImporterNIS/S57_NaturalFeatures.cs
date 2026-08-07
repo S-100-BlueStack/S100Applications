@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
@@ -8,35 +9,24 @@ namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
-        private static void S57_NaturalFeaturesA(Geodatabase source, Geodatabase target, QueryFilter filter) {
-            var tableName = "NaturalFeaturesA";
+        private static void S57_NaturalFeatures(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape) {
+            using var dataset = source(tableName);
+            Subtypes.Instance.RegisterSubtypes(dataset);
 
-            using var naturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
-            Subtypes.Instance.RegisterSubtypes(naturalFeaturesA);
+            using var featureClass = target();
 
-            using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var buffer = featureClass.CreateRowBuffer();
 
-            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-            using var bufferTopo = featureClassTopo.CreateRowBuffer();
-
-            using var cursor = naturalFeaturesA.Search(filter, true);
-
-            var recordCount = 0;
+            using var cursor = dataset.Search(filter, true);
+            int recordCount = 0;
 
             while (cursor.MoveNext()) {
                 recordCount += 1;
-
                 var feature = (Feature)cursor.Current;
+                var current = feature;
 
-                if (feature.GetShape() is null) continue;
-                if (feature.GetShape().IsEmpty) continue;
-
-                var current = new NaturalFeaturesA(feature);
-
-                var objectid = current.OBJECTID ?? default;
-                var globalid = current.GLOBALID;
+                var objectid = current.GetObjectID();
+                var globalid = current.GLOBALID();
 
                 if (FeatureRelations.Instance.IsSlave(globalid)) {
                     continue;
@@ -46,13 +36,10 @@ namespace S100Framework.Applications
                     throw new Exception("Ups. Not supported");
                 }
 
-                var fcSubtype = current.FCSUBTYPE ?? default;
-                var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
-                var longname = current.LNAM ?? Strings.UNKNOWN;
+                var longname = current.LNAM() ?? string.Empty;
 
-
-                switch (fcSubtype) {
-                    case 1: { //  LAKARE_Lake
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
+                    case "naturalfeaturesa::1": { //  LAKARE_Lake
                             var instance = (Lake)ImporterNIS.Build("LAKARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -66,7 +53,7 @@ namespace S100Framework.Applications
                         }
                         break;
 
-                    case 5: { //  LNDARE // SKIN OF EARTH
+                    case "naturalfeaturesa::5": { //  LNDARE // SKIN OF EARTH
                             var instance = (LandArea)ImporterNIS.Build("LAKARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -78,11 +65,11 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
-                            LandAreas.Instance.Add(current.SHAPE!.Clone());
+                            LandAreas.Instance.Add(current.SHAPE()!.Clone());
                         }
                         break;
 
-                    case 10: {    // LNDRGN
+                    case "naturalfeaturesa::10": {    // LNDRGN
                             var instance = (LandRegion)ImporterNIS.Build("LNDRGN", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -96,11 +83,11 @@ namespace S100Framework.Applications
                         }
                         break;
 
-                    case 15: {    // RAPIDS_Rapids
+                    case "naturalfeaturesa::15": {    // RAPIDS_Rapids
                             throw new NotImplementedException($"No RAPIDS in DK or GL. {tableName}");
                         }
 
-                    case 20: {    // RIVERS_River
+                    case "naturalfeaturesa::20": {    // RIVERS_River
                             var instance = (River)ImporterNIS.Build("RIVERS", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -114,7 +101,7 @@ namespace S100Framework.Applications
                         }
                         break;
 
-                    case 25: {    // SEAARE_SeaAreaNamedWaterArea
+                    case "naturalfeaturesa::25": {    // SEAARE_SeaAreaNamedWaterArea
                             var instance = (SeaAreaNamedWaterArea)ImporterNIS.Build("SEAARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -128,7 +115,7 @@ namespace S100Framework.Applications
                         }
                         break;
 
-                    case 30: {    // SLOGRD_SlopingGround
+                    case "naturalfeaturesa::30": {    // SLOGRD_SlopingGround
                             var instance = (SlopingGround)ImporterNIS.Build("SLOGRD", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -142,7 +129,7 @@ namespace S100Framework.Applications
                         }
                         break;
 
-                    case 35: {    // VEGATN_Vegetation
+                    case "naturalfeaturesa::35": {    // VEGATN_Vegetation
                             var instance = (Vegetation)ImporterNIS.Build("VEGATN", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);

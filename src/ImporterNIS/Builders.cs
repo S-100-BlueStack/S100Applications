@@ -87,7 +87,14 @@ namespace S100Framework.Applications
             { "WRECKS", (current, buffer) => { return WRECKS(current, buffer); } },
             { "OILBAR", (current, buffer) => { return OILBAR(current, buffer); } },
             //{ "UWTROC", (current, buffer) => { return UWTROC(current, buffer); } },
-
+            { "LAKARE", (current, buffer) => { return LAKARE(current, buffer); } },
+            { "LNDARE", (current, buffer) => { return LNDARE(current, buffer); } },
+            { "LNDRGN", (current, buffer) => { return LNDRGN(current, buffer); } },
+            { "RIVERS", (current, buffer) => { return RIVERS(current, buffer); } },
+            { "SEAARE", (current, buffer) => { return SEAARE(current, buffer); } },
+            { "SLOGRD", (current, buffer) => { return SLOGRD(current, buffer); } },
+            { "VEGATN", (current, buffer) => { return VEGATN(current, buffer); } },
+            
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -161,7 +168,6 @@ namespace S100Framework.Applications
             return instance;
         }
 
-
         private static CurrentNonGravitational CURENT(Feature current, RowBuffer buffer) {
             var instance = new CurrentNonGravitational();
 
@@ -221,6 +227,360 @@ namespace S100Framework.Applications
             var instance = new Gridiron();
 
             // TODO
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Vegetation VEGATN(Feature current, RowBuffer buffer) {
+            var instance = new Vegetation();
+
+            if (current.CATVEG_HasValue()) {
+                instance.categoryOfVegetation = EnumHelper.GetEnumValue(current.CATVEG());
+            }
+
+            if (current.ELEVAT_HasValue()) {
+                instance.elevation = current.ELEVAT() != -32767m ?current.ELEVAT() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.HEIGHT_HasValue()) {
+                instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
+            }
+
+            if (current.VERLEN_HasValue()) {
+                instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
+            }
+
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static SlopingGround SLOGRD(Feature current, RowBuffer buffer) {
+            var instance = new SlopingGround();
+
+            if (current.CATSLO_HasValue()) {
+                if ((current.CATSLO() == 3 || current.CATSLO() == 4) && (!string.IsNullOrEmpty(current.NATSUR()) && "4".Equals(current.NATSUR())))
+                    throw new NotImplementedException();    //  If it is required to encode a sand dune or sand hill, it must be done using the feature Sloping Ground with attribute category of slope = 3 (dune) or 4 (hill) and attribute nature of surface = 4 (sand). If these features are positioned along the coastline, a Coastline feature must also be encoded.
+
+                instance.categoryOfSlope = EnumHelper.GetEnumValue(current.CATSLO());
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.COLOUR_HasValue()) {
+                var colours = GetColours(current.COLOUR()!);
+                if (colours is not null && colours.Any())
+                    instance.colour = colours;
+            }
+
+            if (current.NATSUR_HasValue()) {
+                var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR(), instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!);
+                if (natureOfSurface is not null && natureOfSurface.Any())
+                    instance.natureOfSurface = natureOfSurface;
+            }
+            if (current.CONRAD_HasValue()) {
+                instance.radarConspicuous = current.CONRAD() switch {
+                    1 => true,      //  radar conspicuous
+                    2 => false,     //  not radar conspicuous
+                    4 => true,      //  radar conspicuous (has radar reflector)
+                    -32767 => default,
+                    _ => throw new NotImplementedException(),
+                };
+            }
+
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS()!);
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static SeaAreaNamedWaterArea SEAARE(Feature current, RowBuffer buffer) {
+            var instance = new SeaAreaNamedWaterArea();
+
+            if (current.CATSEA_HasValue()) {
+                instance.categoryOfSeaArea = EnumHelper.GetEnumValue(current.CATSEA());
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static River RIVERS(Feature current, RowBuffer buffer) {
+
+            /* S-57 allows for RIVERS of geometric primitive area to be covered by the Group 1 objects LNDARE
+               or UNSARE, however in S-101 all Rivers of geometric primitive area must be covered by the Skin
+               of the Earth feature Land Area. During the automated conversion process, the converter may have
+               the capability to convert UNSARE covering RIVERS to Land Area (taking into account the attribution
+               of any adjoining LNDARE objects) and merge with any adjoining Land Area features. If the
+               converter does not have this capability, Data Producers are advised to check their S-57 data
+               holdings and amend their Group 1 coverage to have RIVERS of geometric primitive area covered
+               by LNDARE (and merge with adjoining LNDARE as appropriate). */
+
+            /* S-57 guidance recommends the encoding of intermittent lakes using an instance of the S-57 Object
+               class RIVERS. Data Producers are advised to check all instances of RIVERS of geometric primitive
+               area having attribute STATUS = 5 (periodic/intermittent) and if the real-world feature is a lake to
+               amend to an instance of the S-101 Feature _s101type Lake (see S-101 DCEG clause 5.10). */
+
+            var instance = new River();
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status[0];
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static LandRegion LNDRGN(Feature current, RowBuffer buffer) {
+            var instance = new LandRegion();
+
+            if (current.CATLND_HasValue()) {
+                var categoryOfLandRegion = EnumHelper.GetEnumValues(current.CATLND());
+                if (categoryOfLandRegion is not null && categoryOfLandRegion.Any())
+                    instance.categoryOfLandRegion = categoryOfLandRegion;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.NATSUR_HasValue()) {
+                var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR(), instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!);
+                if (natureOfSurface is not null && natureOfSurface.Any())
+                    instance.natureOfSurface = natureOfSurface;
+            }
+
+            if (current.WATLEV_HasValue()) {
+                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static LandArea LNDARE(Feature current, RowBuffer buffer) {
+            var instance = new LandArea();
+
+            if (current.CONDTN_HasValue()) {
+                instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                    instance.reportedDate = reportedDate;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                }
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status[0];
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Lake LAKARE(Feature current, RowBuffer buffer) {
+            /*  S-57 allows for LAKARE to be covered by the Group 1 objects LNDARE or UNSARE, however in
+                S-101 all Lake features must be covered by the Skin of the Earth feature Land Area. During the
+                automated conversion process, the converter may have the capability to convert UNSARE covering
+                LAKARE to Land Area (taking into account the attribution of any adjoining LNDARE objects) and
+                merge with any adjoining Land Area features. If the converter does not have this capability, Data
+                Producers are advised to check their S-57 data holdings and amend their Group 1 coverage to have
+                LAKARE covered by LNDARE (and merge with adjoining LNDARE as appropriate). */
+
+            var instance = new Lake();
+
+            if (current.ELEVAT_HasValue()) {
+                instance.elevation = current.ELEVAT() != -32767m ? current.ELEVAT() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status[0];
+            }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";
