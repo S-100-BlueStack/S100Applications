@@ -684,7 +684,7 @@ namespace S100Framework.Applications
 
                             Logger.Current.Information($"Converting Dangers");
                             Store((destination) => S57_Dangers(
-                                "DangersA>",
+                                "DangersA",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
                                 () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
@@ -1370,14 +1370,14 @@ namespace S100Framework.Applications
 
         internal static (int FcSubtype, decimal? DRVAL1)? GetSurrunding_DepthArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
             (string tablename, SpatialRelationship relationship)[] dictionary = [
-                    ("depthsa", SpatialRelationship.Contains),
+                    ("depthsa", SpatialRelationship.Within),
                 ];
             var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e => e.GetName().ToLowerInvariant());
             foreach (var e in dictionary) {
                 using var danger = geodatabase.OpenDataset<FeatureClass>(definitions.Single(d => d.EndsWith(e.tablename)));
 
                 using var search = danger.Search(new SpatialQueryFilter {
-                    WhereClause = $"({queryFilter}))",
+                    WhereClause = $"({queryFilter})",
                     SpatialRelationship = e.relationship,
                     FilterGeometry = shape,
                 }, false);
