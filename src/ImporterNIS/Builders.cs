@@ -952,7 +952,7 @@ namespace S100Framework.Applications
             }
 
             if (current.ELEVAT_HasValue()) {
-                instance.elevation = current.ELEVAT() == -32767 ? null : current.ELEVAT();
+                instance.elevation = current.ELEVAT() != -32767m ? current.ELEVAT() : null;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1848,7 +1848,7 @@ namespace S100Framework.Applications
                     instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS()!);
                 }
 
-                instance.orientationValue = current.ORIENT() == -32767m ? default : current.ORIENT();
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
@@ -2290,7 +2290,7 @@ namespace S100Framework.Applications
             instance.depthRangeMinimumValue = current.DRVAL1()!.Value;
 
             if (current.DRVAL2_HasValue())
-                instance.depthRangeMaximumValue = current.DRVAL2() == -32767m ? null : current.DRVAL2();
+                instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
 
             // TODO: Spatial association to Spatial Quality
 
@@ -2333,7 +2333,7 @@ namespace S100Framework.Applications
             var instance = new DepthContour();
 
             if (current.VALDCO_HasValue()) {
-                instance.valueOfDepthContour = current.VALDCO() == -32767m ? null : current.VALDCO();
+                instance.valueOfDepthContour = current.VALDCO() != -32767m ? current.VALDCO() : null;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2760,7 +2760,7 @@ namespace S100Framework.Applications
             }
 
             if (current.DRVAL1_HasValue()) {
-                instance.minimumBerthDepth = current.DRVAL1() == -32767m ? null : current.DRVAL1();
+                instance.minimumBerthDepth = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
             }
 
             DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
@@ -2825,7 +2825,7 @@ namespace S100Framework.Applications
 
             if (current.ORIENT_HasValue()) {
                 instance.orientation = new S100FC.S101.ComplexAttributes.orientation() {
-                    orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT(),
+                    orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null,
                     // TODO: oriantationUncertainty
                     //orientationUncertainty = ,
                 };
@@ -3329,10 +3329,10 @@ namespace S100Framework.Applications
             var instance = new DeepWaterRoutePart();
 
             if (current.ORIENT_HasValue()) {
-                instance.orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT();
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
             }
             if (current.DRVAL1_HasValue()) {
-                instance.depthRangeMinimumValue = current.DRVAL1() == -32767m ? null : current.DRVAL1();
+                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
             }
             if (current.TRAFIC_HasValue()) {
                 instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
@@ -3945,9 +3945,6 @@ namespace S100Framework.Applications
             if (current.VERLEN_HasValue()) {
                 instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
             }
-            else if (current.VERLEN_HasValue() && current.VERLEN() == -32767m) {
-                //instance.verticalLength = default(decimal?);
-            }
 
             // TODO: VerticalUncertainty
 
@@ -4530,7 +4527,7 @@ namespace S100Framework.Applications
             }
 
             if (current.ORIENT_HasValue()) {
-                instance.orientationValue = current.ORIENT() == -32767m ? null : current.ORIENT();
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
             }
 
             if (current.RESTRN_HasValue()) {
