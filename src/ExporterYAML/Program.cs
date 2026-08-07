@@ -226,7 +226,7 @@ namespace S100Framework.Applications
                             if (electricProduct.specificUsage.HasValue) {
                                 whereClause += $" AND (specificusage = {electricProduct.specificUsage.Value} OR specificusage = 0)";
                             }
-                            
+
                             //if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
                             //    whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
 
@@ -238,7 +238,7 @@ namespace S100Framework.Applications
                                 Edition = 1,
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",
-                                VerticalDatum = $"{datum.listedValues.Single(e=>e.code==datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                                VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
                                 //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
                             }, new SpatialQueryFilter {
                                 FilterGeometry = shape,
@@ -262,7 +262,7 @@ namespace S100Framework.Applications
 
                         var connection = productCatalogue.Connections.Single(e => e.ProductSpecification.Equals("S-101"));
 
-                        if(connection.ConnectionFile is null) {
+                        if (connection.ConnectionFile is null) {
                             createSource = () => {
                                 return createGeodatabase();
                             };
@@ -301,7 +301,7 @@ namespace S100Framework.Applications
                     var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
 
                     try {
-                        var supportFiles = new List<string>();
+                        var supportFiles = new Dictionary<string, string>();
 
                         var dataset = e.Dataset;
                         var filter = e.Filters;
@@ -524,7 +524,7 @@ namespace S100Framework.Applications
 
                         // InformationTypes
                         var informationTypes = new List<S100FC.YAML.Information>();
-                        var informationsTypesAdded = new List<string>();
+                        var informationsTypesAdded = new HashSet<string>();
 
                         try {
                             using var informationType = source.OpenDataset<Table>(definitionTables.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("informationtype")).GetName());
@@ -553,27 +553,7 @@ namespace S100Framework.Applications
                                 var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
                                 foreach (var filename in filenames) {
-                                    if (!supportFiles.Contains(filename)) {
-                                        supportFiles.Add(filename);
-
-                                        var attachment = source.GetAttachment(filename);
-                                        if (attachment is not null) {
-                                            var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
-                                            dataset?.Metadata.AddSupportFile(filename, base64);
-                                        }
-                                        else {
-                                            if (System.Diagnostics.Debugger.IsAttached)
-                                                System.Diagnostics.Debugger.Break();
-                                            logger.LogError("File not found ({filename})!", filename);
-                                        }
-
-                                        //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                        //var file = directoryNotes?.GetFiles(_, SearchOption.AllDirectories).FirstOrDefault();
-                                        //if (file != null) {
-                                        //    var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                        //    dataset?.Metadata.AddSupportFile(filename, base64);
-                                        //}
-                                    }
+                                    supportFiles.TryAdd(name, filename);
                                 }
                             }
                         }
@@ -616,22 +596,7 @@ namespace S100Framework.Applications
                                 var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
                                 foreach (var filename in filenames) {
-                                    if (!supportFiles.Contains(filename)) {
-                                        supportFiles.Add(filename);
-
-                                        var attachment = source.GetAttachment(filename);
-                                        if (attachment is not null) {
-                                            var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
-                                            dataset?.Metadata.AddSupportFile(filename, base64);
-                                        }
-                                        else
-                                            System.Diagnostics.Debugger.Break();
-
-                                        //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                        //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
-                                        //var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                        //dataset?.Metadata.AddSupportFile(filename, base64);
-                                    }
+                                    supportFiles.TryAdd(name, filename);
                                 }
                             }
                         }
@@ -730,22 +695,7 @@ namespace S100Framework.Applications
                                             var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
                                             foreach (var filename in filenames) {
-                                                if (!supportFiles.Contains(filename)) {
-                                                    supportFiles.Add(filename);
-
-                                                    var attachment = source.GetAttachment(filename);
-                                                    if (attachment is not null) {
-                                                        var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
-                                                        dataset?.Metadata.AddSupportFile(filename, base64);
-                                                    }
-                                                    //else
-                                                    //    System.Diagnostics.Debugger.Break();
-
-                                                    //var _ = fileReferenceRegex.Replace(filename, filename.Substring(3, 2));
-                                                    //var file = directoryNotes!.GetFiles(_, SearchOption.AllDirectories).First();
-                                                    //var base64 = Convert.ToBase64String(IO.File.ReadAllBytes(file.FullName));
-                                                    //dataset?.Metadata.AddSupportFile(filename, base64);
-                                                }
+                                                supportFiles.TryAdd(uid, filename);
                                             }
 
                                             // Surface Masks
@@ -785,9 +735,24 @@ namespace S100Framework.Applications
                                                         else
                                                             feature?.AddAssociation(asso);
 
-                                                        if (!informationsTypesAdded.Contains(binding.informationId!)) {
-                                                            informationsTypesAdded.Add(binding.informationId!);
+
+                                                        var newEntry = informationsTypesAdded.Add(binding.informationId!);
+                                                        if (newEntry) {
                                                             dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
+
+                                                            if (supportFiles.TryGetValue(binding.informationId!, out var filename)) {
+
+                                                                var attachment = source.GetAttachment(filename);
+                                                                if (attachment is not null) {
+                                                                    var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
+                                                                    dataset?.Metadata.AddSupportFile(filename, base64);
+                                                                }
+                                                                else {
+                                                                    if (System.Diagnostics.Debugger.IsAttached)
+                                                                        System.Diagnostics.Debugger.Break();
+                                                                    logger.LogError("File not found ({filename})!", filename);
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -929,7 +894,7 @@ namespace S100Framework.Applications
                                 p.WaitForExit();
 
                                 if (p.ExitCode != 0) {
-                                    var error = p.StandardError.ReadToEnd();                                    
+                                    var error = p.StandardError.ReadToEnd();
                                     logger.LogTrace(error);
                                     return p.ExitCode;
                                 }
@@ -941,7 +906,7 @@ namespace S100Framework.Applications
                                         System.Diagnostics.Debugger.Break();
                                 }
                             }
-                            else {                                
+                            else {
                                 commandline += $" -C {datasetName}";
 
                                 var p = new Process();
