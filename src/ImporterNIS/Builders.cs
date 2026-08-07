@@ -278,8 +278,10 @@ namespace S100Framework.Applications
                 }
             }
 
-            if (current.STATUS_HasValue()) {
-                instance.status = GetSingleStatus(current.STATUS())?.value;
+            if (current.STATUS_HasValue()) {                
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status[0];
             }
 
             if (current.TECSOU_HasValue()) {
@@ -439,7 +441,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -506,7 +510,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.TECSOU_HasValue()) {
@@ -620,9 +626,10 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = GetStatus(current.STATUS());
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
                 }
-
 
                 if (current.VERLEN_HasValue()) {
                     instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
@@ -678,7 +685,9 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = GetStatus(current.STATUS());
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
                 }
 
                 if (current.TECSOU_HasValue()) {
@@ -776,7 +785,9 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = ImporterNIS.GetStatus(current.STATUS());
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
                 }
 
                 if (current.TECSOU_HasValue()) {
@@ -852,7 +863,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.VERLEN_HasValue()) {
@@ -1084,7 +1097,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.VERLEN_HasValue()) {
@@ -1179,7 +1194,9 @@ namespace S100Framework.Applications
             // TODO: restriction
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1416,7 +1433,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1563,7 +1582,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1599,7 +1620,9 @@ namespace S100Framework.Applications
                 instance.featureName = featureName;
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1681,7 +1704,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.VERLEN_HasValue()) {
@@ -1757,7 +1782,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2565,7 +2592,9 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = ImporterNIS.GetSingleStatus(current.STATUS()!).value;
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status[0];
                 }
 
                 if (current.TECSOU_HasValue()) {
@@ -2775,7 +2804,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -2837,7 +2868,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3028,7 +3061,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3107,7 +3142,9 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = GetStatus(current.STATUS());
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
                 }
 
                 if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3192,7 +3229,9 @@ namespace S100Framework.Applications
                 }
 
                 if (current.STATUS_HasValue()) {
-                    instance.status = GetStatus(current.STATUS());
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
                 }
 
                 if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3271,7 +3310,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3363,7 +3404,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.TECSOU_HasValue()) {
@@ -3563,7 +3606,9 @@ namespace S100Framework.Applications
 
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3651,7 +3696,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.TRAFIC_HasValue()) {
@@ -3765,7 +3812,9 @@ namespace S100Framework.Applications
             // TODO: restriction
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3833,7 +3882,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -3926,7 +3977,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.VALSOU_HasValue()) {
@@ -4045,7 +4098,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4162,7 +4217,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.VERLEN_HasValue()) {
@@ -4251,7 +4308,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4341,7 +4400,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -4388,7 +4449,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4466,7 +4529,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4537,7 +4602,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4605,7 +4672,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4689,7 +4758,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -4835,7 +4906,9 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS()!);
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
