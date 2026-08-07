@@ -96,6 +96,11 @@ namespace S100Framework.Applications
             { "VEGATN", (current, buffer) => { return VEGATN(current, buffer); } },
             { "LNDELV", (current, buffer) => { return LNDELV(current, buffer); } },
             { "SLOTOP", (current, buffer) => { return SLOTOP(current, buffer); } },
+            { "LOCMAG", (current, buffer) => { return LOCMAG(current, buffer); } },
+            { "MAGVAR", (current, buffer) => { return MAGVAR(current, buffer); } },
+            { "TIDEWY", (current, buffer) => { return TIDEWY(current, buffer); } },
+            { "TS_FEB", (current, buffer) => { return TS_FEB(current, buffer); } },
+            
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -254,6 +259,221 @@ namespace S100Framework.Applications
             return instance;
         }
 
+        private static TidalStreamFloodEbb TS_FEB(Feature current, RowBuffer buffer) {
+            var instance = new TidalStreamFloodEbb();
+
+            if (current.CAT_TS_HasValue()) {
+                instance.categoryOfTidalStream = EnumHelper.GetEnumValue(current.CAT_TS());
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            //The S-57 attributes PEREND and PERSTA for TS_FEB will not be converted.It is considered that
+            //these attributes are not relevant for Tidal Stream – Flood / Ebb in S - 101.
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.ORIENT_HasValue()) {
+                instance.orientation = new() {
+                    orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null,
+                    orientationUncertainty = null,
+                };
+            }
+
+            if (current.CURVEL_HasValue()) {
+                instance.speed = new() {
+                    speedMaximum = current.CURVEL() != -32767m ? current.CURVEL() : null,
+                };
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static Tideway TIDEWY(Feature current, RowBuffer buffer) {
+            var instance = new Tideway();
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static MagneticVariation MAGVAR(Feature current, RowBuffer buffer) {
+            var instance = new MagneticVariation();
+
+            /*  27.152 reference year for magnetic variation (RYRMGV)
+                IHO Definition: REFERENCE YEAR FOR MAGNETIC VARIATION. The reference calendar year for magnetic
+                variation values. (S-57 Edition 3.1, Appendix A – Chapter 2, Page 2.176, November 2000).
+                Attribute Type: Truncated date
+                Unit: Four digit year indication (YYYY)
+                Format: YYYY----
+                Example: 2009----
+
+                Remarks:
+                The dashes (----) must be included in all cases.
+            */
+            if (current.RYRMGV_HasValue()) {
+                instance.referenceYearForMagneticVariation = current.RYRMGV() != "-32767" ? current.RYRMGV()!.PadRight(8, '-') : null;
+            }
+
+            if (current.VALACM_HasValue()) {
+                instance.valueOfAnnualChangeInMagneticVariation = current.VALACM() != -32767 ? current.VALACM() : null;
+            }
+
+            if (current.VALMAG_HasValue()) {
+                instance.valueOfMagneticVariation = current.VALMAG() != -32767m ? current.VALMAG() : null;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static LocalMagneticAnomaly LOCMAG(Feature current, RowBuffer buffer) {
+            /*  S-65 Annex B -> LOCMAG
+                The S-57 mandatory attribute VALLMA has been remodelled in S-101 as the mandatory complex
+                attribute value of local magnetic anomaly, having sub-attributes magnetic anomaly value
+                (mandatory) and reference direction, where:
+                - magnetic anomaly value is intended to indicate both the positive (easterly) and negative
+                (westerly) values where only a single instance of value of local magnetic anomaly is encoded,
+                having no populated value for reference direction; or
+                - magnetic anomaly value is intended to indicate an anomaly in a single direction, where only a
+                single instance of value of local magnetic anomaly is encoded and reference direction is
+                populated; or
+                - magnetic anomaly value is intended to indicate an anomaly that is different in a positive
+                (easterly) and negative (westerly) direction, where two instances of value of local magnetic
+                anomaly are encoded and reference direction is populated for both instances.
+
+                ** During the automated conversion process, the value populated in VALLMA will be converted across
+                to magnetic anomaly value, noting that the value of VALLMA will be converted from minutes to
+                decimal degrees for magnetic anomaly value. 
+
+                Data Producers will be required to confirm whether
+                the value populated in VALLMA is intended to indicate both the positive (easterly) and negative
+                (westerly) values of the anomaly, or a disparate range; noting that S-57 guidance recommends
+                encoding the values of a range in INFORM for the LOCMAG. Where the anomaly is a disparate
+                range, Data Producers will be required to adjust value of local magnetic anomaly in accordance
+                with the guidance above; and if the information contained in INFORM relates only to the range of
+                anomaly values, remove the associated instance of the complex attribute information (see clause
+                2.3).
+           */
+            var instance = new LocalMagneticAnomaly();
+
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                    instance.reportedDate = reportedDate;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                }
+            }
+
+            if (current.VALLMA_HasValue()) {
+                instance.valueOfLocalMagneticAnomaly = [new() {
+                                    magneticAnomalyValue = current.VALLMA() != -32767m ? current.VALLMA() / 60 : null,
+                                }];
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
         private static SlopeTopline SLOTOP(Feature current, RowBuffer buffer) {
             var instance = new SlopeTopline();
 
@@ -360,7 +580,7 @@ namespace S100Framework.Applications
             }
 
             if (current.ELEVAT_HasValue()) {
-                instance.elevation = current.ELEVAT() != -32767m ?current.ELEVAT() : null;
+                instance.elevation = current.ELEVAT() != -32767m ? current.ELEVAT() : null;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -738,7 +958,7 @@ namespace S100Framework.Applications
                 }
             }
 
-            if (current.STATUS_HasValue()) {                
+            if (current.STATUS_HasValue()) {
                 var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
                 if (status is not null && status.Any())
                     instance.status = status[0];

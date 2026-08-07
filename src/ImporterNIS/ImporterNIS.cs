@@ -762,11 +762,25 @@ namespace S100Framework.Applications
                             Logger.Current.Information($"Converting Soundings");
                             Store((destination) => S57_SoundingsP(source, destination, QueryFilter), destination);
 
-                            Logger.Current.Information($"Converting Tides And Variations");
-                            Store((destination) => S57_TidesAndVariationsA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_TidesAndVariationsL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_TidesAndVariationsP(source, destination, QueryFilter), destination);
-
+                            Logger.Current.Information($"Converting Tides And Variations");                            
+                            Store((destination) => S57_TidesAndVariations(
+                                "TidesAndVariationsA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_TidesAndVariations(
+                                "TidesAndVariationsL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_TidesAndVariations(
+                                "TidesAndVariationsP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting Seabeds");
                             Store((destination) => S57_Seabed(

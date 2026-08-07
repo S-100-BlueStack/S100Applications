@@ -35,6 +35,9 @@
     <Compile Remove="S57_SeabedA.cs" />
     <Compile Remove="S57_SeabedL.cs" />
     <Compile Remove="S57_SeabedP.cs" />
+    <Compile Remove="S57_TidesAndVariationsA.cs" />
+    <Compile Remove="S57_TidesAndVariationsL.cs" />
+    <Compile Remove="S57_TidesAndVariationsP.cs" />
     <Compile Remove="Singletons\Bridges.cs" />
   </ItemGroup>
 
