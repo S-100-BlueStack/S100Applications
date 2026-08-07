@@ -14,6 +14,9 @@
     <Compile Remove="S57_CoastlineA.cs" />
     <Compile Remove="S57_CoastlineL.cs" />
     <Compile Remove="S57_CoastlineP.cs" />
+    <Compile Remove="S57_DangersA.cs" />
+    <Compile Remove="S57_DangersL.cs" />
+    <Compile Remove="S57_DangersP.cs" />
     <Compile Remove="S57_DepthsA.cs" />
     <Compile Remove="S57_DepthsL.cs" />
     <Compile Remove="S57_MetadataA.cs" />
