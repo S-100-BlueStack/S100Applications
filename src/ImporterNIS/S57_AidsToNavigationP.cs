@@ -109,7 +109,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value;
+                                instance.elevation = current.ELEVAT.Value == -32767 ? null : current.ELEVAT.Value;
                             }
 
                             var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
@@ -244,7 +244,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value;
+                                instance.elevation = current.ELEVAT.Value == -32767 ? null : current.ELEVAT.Value;
                             }
 
                             var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
@@ -376,7 +376,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value;
+                                instance.elevation = current.ELEVAT.Value == -32767 ? null : current.ELEVAT.Value;
                             }
 
                             var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
@@ -516,7 +516,7 @@ namespace S100Framework.Applications
                             }
 
                             if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value;
+                                instance.elevation = current.ELEVAT.Value == -32767 ? null : current.ELEVAT.Value;
                             }
 
                             var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);

@@ -2143,7 +2143,7 @@ namespace S100Framework.Applications
             }
 
             if (current.STATUS_HasValue()) {
-                instance.status = GetStatus(current.STATUS());
+                instance.status = GetStatus(current.STATUS()!);
             }
 
             if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselSpeedLimit.IsMatch(current.INFORM()!)) {
@@ -2169,7 +2169,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2248,7 +2248,7 @@ namespace S100Framework.Applications
                     if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                         current["INFORM"] = DBNull.Value;
                     else
-                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
                 }
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2333,7 +2333,7 @@ namespace S100Framework.Applications
                     if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                         current["INFORM"] = DBNull.Value;
                     else
-                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                        Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
                 }
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2412,7 +2412,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2520,7 +2520,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2636,7 +2636,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2704,7 +2704,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2802,7 +2802,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2906,7 +2906,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2974,7 +2974,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3089,7 +3089,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.WATLEV_HasValue()) {
@@ -3189,7 +3189,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3313,7 +3313,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.CONVIS_HasValue()) {
@@ -3395,7 +3395,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3532,7 +3532,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3610,7 +3610,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3681,7 +3681,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3749,7 +3749,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3833,7 +3833,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3898,7 +3898,7 @@ namespace S100Framework.Applications
                 if (inform.Equals(current.INFORM(), StringComparison.InvariantCultureIgnoreCase))
                     current["INFORM"] = DBNull.Value;
                 else
-                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID} {current.INFORM()}");
+                    Logger.Current.Debug($"VesselSpeedLimit {current.TableName()}::{current.OBJECTID()} {current.INFORM()}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {

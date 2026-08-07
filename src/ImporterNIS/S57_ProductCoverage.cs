@@ -121,9 +121,9 @@ namespace S100Framework.Applications
                     datasetName = dsnm57,
                     specificUsage = specificUsage,
                     productSpecification = new productSpecification {
-                        editionDate = S100FC.S101.Summary.VersionDate,
-                        name = S100FC.S101.Summary.ProductId,
-                        version = S100FC.S101.Summary.Version.ToString(),
+                        editionDate = new DateOnly(2000,11,1),
+                        name = "S-57",
+                        version = "3.1",
                     },
                     maximumDisplayScale = null,
                     optimumDisplayScale = current.CSCL!.Value,

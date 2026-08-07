@@ -12,10 +12,12 @@ using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
+using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
 using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
+using System.Data;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -254,15 +256,24 @@ namespace S100Framework.Applications
                     var query = new QueryFilter {
                         WhereClause = $"upper(ps) = 'S-128'",
                     };
-
-                    var featureClasses = electronicProducts.GetDefinitions<FeatureClassDefinition>();
-
-                    foreach (var featureClass in featureClasses) {
+                    
+                    foreach (var featureClass in electronicProducts.GetDefinitions<FeatureClassDefinition>()) {
                         using var _ = electronicProducts.OpenDataset<FeatureClass>(featureClass.GetName());
 
+                        var count = _.GetCount(query);
                         Store((electronicProducts) => {
                             _.DeleteRows(query);
                         }, electronicProducts);
+                    }
+                    foreach (var table in electronicProducts.GetDefinitions<TableDefinition>()) {
+                        if (table.GetName().Split(',')[^1].EndsWith("configuration")) continue;
+
+                        using var _ = electronicProducts.OpenDataset<Table>(table.GetName());
+
+                        var count = _.GetCount(query);
+                        Store((electronicProducts) => {
+                            _.DeleteRows(query);
+                        }, electronicProducts);                        
                     }
 
                     Store((d) => S57_ProductCoverage_Full(source, electronicProducts, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter, (products) => {
@@ -688,8 +699,10 @@ namespace S100Framework.Applications
                             Store((destination) => S57_CulturalFeaturesL(source, destination, QueryFilter), destination);
                             Store((destination) => S57_CulturalFeaturesP(source, destination, QueryFilter), destination);
 
-
-                            var spatialQuality = CreateAssociationSpatialQuality(destination);
+                            informationBinding<SpatialAssociation>[] spatialQuality = [];
+                            Store((destination) => {
+                                spatialQuality = CreateAssociationSpatialQuality(destination);
+                            }, destination);
 
                             Logger.Current.Information($"Converting Contours");
                             Store((destination) => S57_Depths(
@@ -2029,7 +2042,7 @@ namespace S100Framework.Applications
                     if (string.IsNullOrEmpty(file))
                         Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ntxtds] {ntxtds}");
                     else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
-                        Logger.Current.Warning("{tablename}::{objectid} ntxds {file}",sourceTableName,sourceObjectid,file);
+                        Logger.Current.Warning("{tablename}::{objectid} ntxds {file}", sourceTableName, sourceObjectid, file);
 
                     string fileReference = ntxtds;
                     string language = "eng";
