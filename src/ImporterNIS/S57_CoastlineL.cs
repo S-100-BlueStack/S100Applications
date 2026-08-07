@@ -63,84 +63,7 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // COALNE_Coastline
-                            var instance = new Coastline();
-
-                            if (catcoa != default/* && instance.natureOfSurface == default*/) {
-                                categoryOfCoastline? e = catcoa switch {
-                                    1 => 1, //categoryOfCoastline.SteepCoast,
-                                    2 => 2, //categoryOfCoastline.FlatCoast,
-                                    3 => null, // SANDY SHORE
-                                    4 => null, // STONY SHORE
-                                    5 => null, // SHINGLY SHORE
-                                    6 => 6, //categoryOfCoastline.GlacierSeawardEnd,
-                                    7 => 7, //categoryOfCoastline.Mangrove,
-                                    8 => 8, //categoryOfCoastline.MarshyShore,
-                                    9 => null, //CORAL REEF
-                                    10 => 10, // ICE COAST
-                                    11 => null, // SHELLY SHORE
-                                    -32767 => default,
-                                    _ => throw new IndexOutOfRangeException($"catcoa to categoryOfCoastLine: {catcoa}")
-                                };
-                                if (e is not null) {
-                                    instance.categoryOfCoastline = e.value;
-                                }
-                            }
-
-                            if (current.COLOUR != default) {
-                                var colour = GetColours(current.COLOUR);
-                                if (colour is not null && colour.Any())
-                                    instance.colour = colour;
-                            }
-
-                            if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value == -32767 ? null : current.ELEVAT.Value;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            /*
-                                • The attribute nature of surface has been included as an allowable attribute for Coastline in S-101.
-                                During the automated conversion process, the following COALNE/CATCOA encoding instances will
-                                be converted to the corresponding Coastline/nature of surface instances.
-                                CATCOA = 3 (sandy shore) -> nature of surface = 4 (sand)
-                                CATCOA = 4 (stony shore) -> nature of surface = 5 (stone)
-                                CATCOA = 5 (shingly shore) -> nature of surface = 7 (pebbles)
-                                CATCOA = 9 (coral reef) -> nature of surface = 14 (coral)
-                                CATCOA = 11 (shelly shore) -> nature of surface = 17 (shells)
-                            */
-                            if (catcoa != default) {
-                                natureOfSurface? e = catcoa switch {
-                                    3 => 4, //natureOfSurface.Sand,
-                                    4 => 5, //natureOfSurface.Stone,
-                                    5 => 7, //natureOfSurface.Pebbles,
-                                    9 => 14, //natureOfSurface.Coral,
-                                    11 => 17,   //natureOfSurface.Shells,
-                                    -32767 => default,
-                                    _ => null //lthrow new IndexOutOfRangeException($"catcoa to natureOfSurface: {catcoa}")
-                                };
-                                if (e is not null) {
-                                    instance.natureOfSurface = [e.value];
-
-                                }
-                            }
-
-                            if (current.CONRAD.HasValue) {
-                                instance.radarConspicuous = current.CONRAD.Value == 2 ? false : true;
-                            }
-
-                            if (current.CONVIS.HasValue /*&& current.CONVIS.Value != -32767*/) {
-                                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS.Value);
-                            }
-
-                            bufferTopo["ps"] = ps101;
-                            bufferTopo["code"] = instance.GetType().Name;
-                            bufferTopo["attributebindings"] = instance.Flatten();
-                            bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                            bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-
-                            SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (Coastline)ImporterNIS.Build("COALNE", feature, bufferTopo);
 
                             (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE!, default)];
 
@@ -190,7 +113,6 @@ namespace S100Framework.Applications
                             }
 
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case

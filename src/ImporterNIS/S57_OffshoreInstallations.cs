@@ -9,7 +9,7 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static void S57_OffshoreInstallations(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape) {
-            using var dataset = source(tableName);   // source.OpenDataset<FeatureClass>(source.GetName(tableName));
+            using var dataset = source(tableName);
             Subtypes.Instance.RegisterSubtypes(dataset);
 
             using var featureClass = target();    // target.OpenDataset<FeatureClass>(target.GetName("point"));

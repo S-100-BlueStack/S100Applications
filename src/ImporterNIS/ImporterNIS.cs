@@ -753,9 +753,24 @@ namespace S100Framework.Applications
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting CoastLines");
-                            Store((destination) => S57_CoastlineA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_CoastlineL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_CoastlineP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape), spatialQuality), destination);
+                            Store((destination) => S57_Coastline(
+                                "CoastlineP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape), []), destination);
 
                             Logger.Current.Information($"Converting Depth Areas");
                             Store((destination) => S57_Depths(

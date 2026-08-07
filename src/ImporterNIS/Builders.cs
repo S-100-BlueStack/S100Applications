@@ -11,6 +11,7 @@ namespace S100Framework.Applications
     using ArcGIS.Core.Geometry;
     using NetTopologySuite.GeometriesGraph;
     using S100FC.S101.InformationTypes;
+    using S100FC.S101.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
     using S100Framework.Applications.S57auto.esri;
     using System.Runtime.CompilerServices;
@@ -76,6 +77,8 @@ namespace S100Framework.Applications
             { "LOGPON", (current, buffer) => { return LOGPON(current, buffer); } },
             { "CTRPNT", (current, buffer) => { return CTRPNT(current, buffer); } },
             { "GRIDRN", (current, buffer) => { return GRIDRN(current, buffer); } },
+            { "SLCONS", (current, buffer) => { return SLCONS(current, buffer); } },
+            { "COALNE", (current, buffer) => { return COALNE(current, buffer); } },
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -232,6 +235,197 @@ namespace S100Framework.Applications
 
             return instance;
         }
+
+
+
+        private static Coastline COALNE(Feature current, RowBuffer buffer) {
+            var instance = new Coastline();
+
+            if (current.CATCOA_HasValue()) {
+                if (EnumHelper.GetEnumValue(current.CATCOA(), out int? categoryOfCoastline, instance.attributeBindingDefinition("categoryOfCoastline")!.permitedValues!))
+                    instance.categoryOfCoastline = categoryOfCoastline;
+            }
+
+            if (current.COLOUR_HasValue()) { 
+                var colour = GetColours(current.COLOUR());
+                if (colour is not null && colour.Any())
+                    instance.colour = colour;
+            }
+
+            if (current.ELEVAT_HasValue()) {
+                instance.elevation = current.ELEVAT() == -32767 ? null : current.ELEVAT();
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            /*
+                • The attribute nature of surface has been included as an allowable attribute for Coastline in S-101.
+                During the automated conversion process, the following COALNE/CATCOA encoding instances will
+                be converted to the corresponding Coastline/nature of surface instances.
+                CATCOA = 3 (sandy shore) -> nature of surface = 4 (sand)
+                CATCOA = 4 (stony shore) -> nature of surface = 5 (stone)
+                CATCOA = 5 (shingly shore) -> nature of surface = 7 (pebbles)
+                CATCOA = 9 (coral reef) -> nature of surface = 14 (coral)
+                CATCOA = 11 (shelly shore) -> nature of surface = 17 (shells)
+            */
+            if (current.CATCOA_HasValue()) {
+                natureOfSurface? e = current.CATCOA() switch {
+                    3 => 4, //natureOfSurface.Sand,
+                    4 => 5, //natureOfSurface.Stone,
+                    5 => 7, //natureOfSurface.Pebbles,
+                    9 => 14, //natureOfSurface.Coral,
+                    11 => 17,   //natureOfSurface.Shells,
+                    -32767 => null,
+                    _ => null //lthrow new IndexOutOfRangeException($"catcoa to natureOfSurface: {catcoa}")
+                };
+                if (e is not null) {
+                    instance.natureOfSurface = [e.value];
+
+                }
+            }
+
+            if (current.CONRAD_HasValue()) {
+                instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
+            }
+
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static ShorelineConstruction SLCONS(Feature current, RowBuffer buffer) {
+            var instance = new ShorelineConstruction();
+
+            if (current.CATSLC_HasValue()) {
+                instance.categoryOfShorelineConstruction = EnumHelper.GetEnumValue(current.CATSLC());
+            }
+
+            if (current.COLOUR_HasValue()) {
+                var colour = GetColours(current.COLOUR()!);
+                if (colour is not null && colour.Any())
+                    instance.colour = colour;
+            }
+
+            if (current.COLPAT_HasValue()) {
+                if (instance.colour is not null && instance.colour.Length > 1)
+                    instance.colourPattern = GetColourPattern(current.COLPAT()!)!.value;
+            }
+
+            if (current.CONDTN_HasValue()) {
+                instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.HEIGHT_HasValue()) {
+                instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
+            }
+            else {
+
+            }
+
+            var horclr = current.HORCLR() ?? default;
+            var horacc = current.HORACC() ?? default;
+
+            if (horclr != default) {
+                instance.horizontalClearanceFixed = new() {
+                    horizontalClearanceValue = horclr,
+                    horizontalDistanceUncertainty = horacc,
+                };
+            }
+
+            if (current.HORLEN_HasValue()) {
+                instance.horizontalLength = current.HORLEN() != -32767m ? current.HORLEN() : null;
+            }
+
+            if (current.HORWID_HasValue()) {
+                instance.horizontalWidth = current.HORWID() != -32767m ? current.HORWID() : null;
+            }
+
+            if (current.NATCON_HasValue()) { 
+                var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON());
+                if (natureOfConstruction is not null && natureOfConstruction.Any())
+                    instance.natureOfConstruction = natureOfConstruction;
+            }
+
+            if (current.CONRAD_HasValue()) {
+                instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
+            }
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
+                    instance.reportedDate = reportedDate;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                }
+            }
+
+            if (current.STATUS_HasValue()) {
+                instance.status = GetStatus(current.STATUS()!);
+            }
+
+            if (current.VERLEN_HasValue()) {
+                instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
+            }
+
+            if (current.CONVIS_HasValue()) {
+                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+            }
+
+            if (current.WATLEV_HasValue()) {
+                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+
 
         private static PipelineSubmarineOnLand PIPSOL(Feature current, RowBuffer buffer) {
             var instance = new PipelineSubmarineOnLand();
