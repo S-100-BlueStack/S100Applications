@@ -51,7 +51,7 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
-                            LandAreas.Instance.Add(current.SHAPE()!.Clone());
+                            //LandAreas.Instance.Add(current.SHAPE()!.Clone());
                         }
                         break;
                     case "naturalfeaturesl::1": { // LNDARE_LandArea
@@ -66,7 +66,7 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
-                            LandAreas.Instance.Add(current.SHAPE()!.Clone());
+                            //LandAreas.Instance.Add(current.SHAPE()!.Clone());
                         }
                         break;
                     case "naturalfeaturesa::1": { //  LAKARE_Lake
@@ -109,7 +109,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesa::5": { //  LNDARE // SKIN OF EARTH
-                            var instance = (LandArea)ImporterNIS.Build("LAKARE", feature, buffer);
+                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

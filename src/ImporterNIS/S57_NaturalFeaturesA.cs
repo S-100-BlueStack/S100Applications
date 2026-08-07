@@ -67,7 +67,7 @@ namespace S100Framework.Applications
                         break;
 
                     case 5: { //  LNDARE // SKIN OF EARTH
-                            var instance = (LandArea)ImporterNIS.Build("LAKARE", feature, buffer);
+                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

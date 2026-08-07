@@ -2051,7 +2051,7 @@ namespace S100Framework.Applications
             List<featureName> featureName = [];
             if (objname != default) {
                 var objnam = objname.Trim();
-                if (!string.IsNullOrEmpty(objnam)) {
+                if (!string.IsNullOrEmpty(objnam) && !"-32767".Equals(objnam)) {
                     var item = new featureName {
                         language = "eng",
                         name = objnam,
@@ -2062,7 +2062,7 @@ namespace S100Framework.Applications
             }
             if (nobjnme != default) {
                 var nobjnm = nobjnme.Trim();
-                if (!string.IsNullOrEmpty(nobjnm)) {
+                if (!string.IsNullOrEmpty(nobjnm) && !"-32767".Equals(nobjnm)) {
                     var item = new featureName {
                         language = "dan",
                         name = nobjnm,
