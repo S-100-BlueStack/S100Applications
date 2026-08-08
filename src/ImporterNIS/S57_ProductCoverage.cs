@@ -9,8 +9,10 @@ using VortexLoader.Singletons;
 
 namespace S100Framework.Applications
 {
+    using ArcGIS.Core.Data.UtilityNetwork.Trace;
     using S100FC.S128;
     using S100FC.S128.FeatureTypes;
+    using S100FC.S128.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
     using System.Text.RegularExpressions;
 
@@ -72,11 +74,13 @@ namespace S100Framework.Applications
 
             var regex = string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
 
-            (ElectronicProduct s57, ElectronicProduct s101, Polygon shape)[] electronicProducts = [];
+            (Guid globalid, ElectronicProduct s57, ElectronicProduct s101, Polygon shape)[] electronicProducts = [];
+
+            (Guid productid, Polygon coverage, Polygon fullCoverage)[] coverageByProduct = [];
 
             var dictionaryCoverage = new Dictionary<string, Polygon>();
 
-            var dictionaryDataCoverage = new Dictionary<string, DataCoverage>();
+            //var dictionaryDataCoverage = new Dictionary<string, DataCoverage>();
 
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
@@ -104,15 +108,6 @@ namespace S100Framework.Applications
                 }
 
                 var dsnm101 = $"101{dsnm57!.Substring(0, 2)}00{dsnm57!.Substring(2)}";
-
-                ////var specificUsage = dsnm[7] switch {
-                ////    '5' => 5,   //S100FC.S128.specificUsage.NavigationalPurposeHarbour,
-                ////    '4' => 4,   //S100FC.S128.specificUsage.NavigationalPurposeApproach,
-                ////    '3' => 3,   //S100FC.S128.specificUsage.NavigationalPurposeCoastal,
-                ////    '2' => 2,   //S100FC.S128.specificUsage.NavigationalPurposeGeneral,
-                ////    '1' => 1,   //S100FC.S128.specificUsage.NavigationalPurposeOverview,
-                ////    _ => throw new InvalidDataException(),
-                ////};
 
                 var specificUsage = SpecificUsage(current.CSCL!.Value);
 
@@ -170,6 +165,12 @@ namespace S100Framework.Applications
 
                 var coverage = (Polygon)GeometryEngine.Instance.Union(polygons.Where(e => e.catcov == 1).Select(e => e.shape));
 
+                var _coverage = (Polygon)(GeometryEngine.Instance.Union([.. polygons.Select(e => e.shape)]));
+
+                coverageByProduct = [.. coverageByProduct, (globalid, coverage, _coverage)];
+
+                dictionaryCoverage.Add(electronicProduct101.datasetName, coverage);
+/*
                 var _minimumDisplayScale = 10000000;
 
                 var hit = coverages.Where(e => e.PLTS_COMP_SCALE > current.CSCL!.Value && GeometryEngine.Instance.Within(coverage, dictionaryCoverage[e.Name]));
@@ -189,16 +190,19 @@ namespace S100Framework.Applications
                     minimumDisplayScale = _minimumDisplayScale,
                 };
 
-                dictionaryDataCoverage.Add(electronicProduct101.datasetName, dataCoverage);
-
-                var _coverage = (Polygon)(GeometryEngine.Instance.Union([.. polygons.Select(e => e.shape)]));
-
+                dictionaryDataCoverage.Add(electronicProduct101.datasetName, dataCoverage);                
+*/
                 var vdat = GetVerticalDatum(current.VDAT ?? 3, _coverage);
                 var sdat = GetSoundingDatum(current.SDAT!.Value, _coverage);
 
                 electronicProduct57.verticalDatum = sdat!.value;
                 electronicProduct101.verticalDatum = sdat!.value;
 
+                var dataCoverage = new DataCoverage {
+                    //maximumDisplayScale = current.CSCL!.Value / 2,
+                    optimumDisplayScale = current.CSCL!.Value,
+                    //minimumDisplayScale = _minimumDisplayScale,
+                };
 
                 coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];                
 
@@ -212,17 +216,28 @@ namespace S100Framework.Applications
                         productCoverages = [.. productCoverages, (Polygon)((Feature)_.Current).GetShape().Clone()];
                     }
 
-                    electronicProducts = [.. electronicProducts, (electronicProduct57, electronicProduct101, (Polygon)(GeometryEngine.Instance.Union(productCoverages)))];
+                    electronicProducts = [.. electronicProducts, (globalid, electronicProduct57, electronicProduct101, (Polygon)(GeometryEngine.Instance.Union(productCoverages)))];
                 }
             }
 
             using (var featureClass = target128.OpenDataset<FeatureClass>(target128.GetName("surface"))) {
-
                 using var buffer = featureClass.CreateRowBuffer();
                 buffer["ps"] = ps128;                
 
                 foreach (var electronicProduct in electronicProducts.OrderByDescending(e=>e.s101.optimumDisplayScale!.Value)) {
                     SetShape(buffer, electronicProduct.shape);
+
+                    var _minimumDisplayScale = 10000000;
+
+                    var hit = coverages.Where(e => e.PLTS_COMP_SCALE > electronicProduct.s101.optimumDisplayScale!.Value && GeometryEngine.Instance.Within(electronicProduct.shape, dictionaryCoverage[e.Name]));
+
+                    if (hit.Any()) {
+                        //_minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
+                        _minimumDisplayScale = hit.OrderBy(e => e.DataCoverage.maximumDisplayScale).First().DataCoverage.maximumDisplayScale!.Value;
+                    }
+
+                    electronicProduct.s57.minimumDisplayScale = _minimumDisplayScale;
+                    electronicProduct.s101.minimumDisplayScale = _minimumDisplayScale;
 
                     int _maximumDisplayScale = 0;
                     foreach (var f in electronicProducts.Where(e => e.s101.optimumDisplayScale < electronicProduct.s101.optimumDisplayScale)) {
@@ -237,7 +252,11 @@ namespace S100Framework.Applications
                     electronicProduct.s57.maximumDisplayScale = _maximumDisplayScale;
                     electronicProduct.s101.maximumDisplayScale = _maximumDisplayScale;
 
-                    dictionaryDataCoverage[electronicProduct.s101.datasetName!].maximumDisplayScale = _maximumDisplayScale;
+                    var c = coverages.Single(e => e.Name.Equals(electronicProduct.s101.datasetName));
+                    c.DataCoverage.minimumDisplayScale = _minimumDisplayScale;
+                    c.DataCoverage.maximumDisplayScale = _maximumDisplayScale;
+
+                    //dictionaryDataCoverage[electronicProduct.s101.datasetName!].maximumDisplayScale = _maximumDisplayScale;
 
                     buffer["code"] = electronicProduct.s57.S100FC_code;
                     buffer["attributebindings"] = electronicProduct.s57.Flatten();

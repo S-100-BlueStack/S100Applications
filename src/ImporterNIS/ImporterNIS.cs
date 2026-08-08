@@ -1164,7 +1164,7 @@ namespace S100Framework.Applications
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
                             bufferBridge["specificusage"] = usage;
-                            bufferBridge["nominalscale"] = scale[0];
+                            bufferBridge["nominalscale"] = scale.First();
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetShape(bufferBridge, polygon);
