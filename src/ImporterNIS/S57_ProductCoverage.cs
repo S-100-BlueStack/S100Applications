@@ -10,7 +10,8 @@ using VortexLoader.Singletons;
 namespace S100Framework.Applications
 {
     using S100FC.S128;
-    using S100Framework.Applications.S57auto.esri;
+    using S100FC.S128.FeatureTypes;
+    using S100Framework.Applications.S57.esri;
     using System.Text.RegularExpressions;
 
     internal static partial class ImporterNIS
@@ -71,7 +72,11 @@ namespace S100Framework.Applications
 
             var regex = string.IsNullOrEmpty(datasets) ? new Regex(".*") : new Regex(datasets);
 
+            (ElectronicProduct s57, ElectronicProduct s101, Polygon shape)[] electronicProducts = [];
+
             var dictionaryCoverage = new Dictionary<string, Polygon>();
+
+            var dictionaryDataCoverage = new Dictionary<string, DataCoverage>();
 
             while (productDefinitions.MoveNext()) {
                 recordCount += 1;
@@ -121,7 +126,7 @@ namespace S100Framework.Applications
                     datasetName = dsnm57,
                     specificUsage = specificUsage,
                     productSpecification = new productSpecification {
-                        editionDate = new DateOnly(2000,11,1),
+                        editionDate = new DateOnly(2000, 11, 1),
                         name = "S-57",
                         version = "3.1",
                     },
@@ -173,27 +178,17 @@ namespace S100Framework.Applications
                     _minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
                 }
 
-                electronicProduct57.minimumDisplayScale = electronicProduct101.minimumDisplayScale = _minimumDisplayScale;
-
                 dictionaryCoverage.Add(electronicProduct101.datasetName, coverage);
 
-                //var radarScales = scamin.StandardRadarScale((Polygon)(GeometryEngine.Instance.Union(polygons)));
-
-                //var optimumScaleIndex = Array.IndexOf(radarScales, current.CSCL!.Value);
-
-                //if (optimumScaleIndex < 2)
-                //    optimumScaleIndex = 0;
-                //else
-                //    optimumScaleIndex -= 2;
-                // var minimumDisplayScale = radarScales[optimumScaleIndex];
-
-                //var _minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value);
+                electronicProduct57.minimumDisplayScale = electronicProduct101.minimumDisplayScale = _minimumDisplayScale;
 
                 var dataCoverage = new DataCoverage {
                     maximumDisplayScale = current.CSCL!.Value / 2,
                     optimumDisplayScale = current.CSCL!.Value,
                     minimumDisplayScale = _minimumDisplayScale,
                 };
+
+                dictionaryDataCoverage.Add(electronicProduct101.datasetName, dataCoverage);
 
                 var _coverage = (Polygon)(GeometryEngine.Instance.Union([.. polygons.Select(e => e.shape)]));
 
@@ -203,7 +198,8 @@ namespace S100Framework.Applications
                 electronicProduct57.verticalDatum = sdat!.value;
                 electronicProduct101.verticalDatum = sdat!.value;
 
-                coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];
+
+                coverages = [.. coverages, (dsnm101, current.CSCL!.Value, dataCoverage, vdat, sdat, polygons.Where(e => e.catcov == 1).Select(e => e.shape).ToArray())];                
 
                 {
                     using var _ = productCoverageFeatureClass.Search(new QueryFilter {
@@ -215,83 +211,78 @@ namespace S100Framework.Applications
                         productCoverages = [.. productCoverages, (Polygon)((Feature)_.Current).GetShape().Clone()];
                     }
 
-                    using (var featureClass = target128.OpenDataset<FeatureClass>(target128.GetName("surface"))) {
+                    electronicProducts = [.. electronicProducts, (electronicProduct57, electronicProduct101, (Polygon)(GeometryEngine.Instance.Union(productCoverages)))];
+                }
+            }
 
-                        using var buffer = featureClass.CreateRowBuffer();
-                        buffer["ps"] = ps128;
+            using (var featureClass = target128.OpenDataset<FeatureClass>(target128.GetName("surface"))) {
 
-                        Feature s57, s101;
-                        string s57UID, s101UID;
-                        //  S-57
-                        {
-                            buffer["code"] = electronicProduct57.S100FC_code;
-                            buffer["attributebindings"] = electronicProduct57.Flatten();
-                            buffer["informationbindings"] = "[]";
-                            buffer["featurebindings"] = "[]";
-                            buffer["specificusage"] = electronicProduct57.specificUsage.Value;
-                            buffer["sourceIdentifier"] = electronicProduct57.sourceIdentifier;
-                            buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
+                using var buffer = featureClass.CreateRowBuffer();
+                buffer["ps"] = ps128;                
 
-                            SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                            s57 = featureClass.CreateRow(buffer);
-                            s57UID = s57.UID();
+                foreach (var electronicProduct in electronicProducts.OrderByDescending(e=>e.s101.optimumDisplayScale!.Value)) {
+                    SetShape(buffer, electronicProduct.shape);
+
+                    int _maximumDisplayScale = 0;
+                    foreach (var f in electronicProducts.Where(e => e.s101.optimumDisplayScale < electronicProduct.s101.optimumDisplayScale)) {
+                        if (GeometryEngine.Instance.Disjoint(electronicProduct.shape, f.shape)) continue;
+                        if (GeometryEngine.Instance.Intersects(f.shape, electronicProduct.shape)) {
+                            if (f.s101.optimumDisplayScale!.Value > _maximumDisplayScale)
+                                _maximumDisplayScale = f.s101.optimumDisplayScale!.Value;
                         }
-
-                        //  S-101
-                        {
-                            buffer["code"] = electronicProduct101.S100FC_code;
-                            buffer["attributebindings"] = electronicProduct101.Flatten();
-                            buffer["informationbindings"] = "[]";
-                            buffer["featurebindings"] = "[]";
-                            buffer["specificusage"] = electronicProduct101.specificUsage.Value;
-                            buffer["sourceIdentifier"] = electronicProduct101.sourceIdentifier;
-                            buffer["nominalscale"] = electronicProduct57.optimumDisplayScale;
-
-                            SetShape(buffer, (Polygon)(GeometryEngine.Instance.Union(productCoverages)));
-                            s101 = featureClass.CreateRow(buffer);
-                            s101UID = s101.UID();
-                        }
-
-                        var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
-                            role = "theReference",
-                            roleType = "association",
-                            featureId = s101UID,
-                            featureType = electronicProduct101.S100FC_code,
-                        };
-                        ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
-
-                        //var productMappingS57theSource = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
-                        //    role = "theSource",
-                        //    roleType = "association",
-                        //    featureId = s57UID,
-                        //    featureType = electronicProduct57.S100FC_code,
-                        //};
-                        //((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theSource.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
-
-                        featureBinding[] featureBindingsS57 = [productMappingS57theReference];
-                        s57["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS57, jsonSerializerOptions128);
-                        s57.Store();
-
-                        var productMappingS101theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
-                            role = "theReference",
-                            roleType = "association",
-                            featureId = s57UID,
-                            featureType = electronicProduct57.S100FC_code,
-                        };
-                        ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theReference.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
-
-                        //var productMappingS101theSource = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
-                        //    role = "theSource",
-                        //    roleType = "association",
-                        //    featureId = s101UID,
-                        //    featureType = electronicProduct101.S100FC_code,
-                        //};
-                        //((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theSource.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
-
-                        featureBinding[] featureBindingsS101 = [productMappingS101theReference];
-                        s101["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS101, jsonSerializerOptions128);
-                        s101.Store();
+                        else System.Diagnostics.Debugger.Break();
                     }
+
+                    electronicProduct.s57.maximumDisplayScale = _maximumDisplayScale;
+                    electronicProduct.s101.maximumDisplayScale = _maximumDisplayScale;
+
+                    dictionaryDataCoverage[electronicProduct.s101.datasetName!].maximumDisplayScale = _maximumDisplayScale;
+
+                    buffer["code"] = electronicProduct.s57.S100FC_code;
+                    buffer["attributebindings"] = electronicProduct.s57.Flatten();
+                    buffer["informationbindings"] = "[]";
+                    buffer["featurebindings"] = "[]";
+                    buffer["specificusage"] = electronicProduct.s57.specificUsage!.Value;
+                    buffer["sourceIdentifier"] = electronicProduct.s57.sourceIdentifier;
+                    buffer["nominalscale"] = electronicProduct.s57.optimumDisplayScale;
+                    
+                    var s57 = featureClass.CreateRow(buffer);
+                    var s57UID = s57.UID();
+
+                    buffer["code"] = electronicProduct.s101.S100FC_code;
+                    buffer["attributebindings"] = electronicProduct.s101.Flatten();
+                    buffer["informationbindings"] = "[]";
+                    buffer["featurebindings"] = "[]";
+                    buffer["specificusage"] = electronicProduct.s101.specificUsage!.Value;
+                    buffer["sourceIdentifier"] = electronicProduct.s101.sourceIdentifier;
+                    buffer["nominalscale"] = electronicProduct.s101.optimumDisplayScale;
+
+                    var s101 = featureClass.CreateRow(buffer);
+                    var s101UID = s101.UID();
+
+                    var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                        role = "theReference",
+                        roleType = "association",
+                        featureId = s101UID,
+                        featureType = electronicProduct.s101.S100FC_code,
+                    };
+                    ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
+
+                    featureBinding[] featureBindingsS57 = [productMappingS57theReference];
+                    s57["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS57, jsonSerializerOptions128);
+                    s57.Store();
+
+                    var productMappingS101theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                        role = "theReference",
+                        roleType = "association",
+                        featureId = s57UID,
+                        featureType = electronicProduct.s57.S100FC_code,
+                    };
+                    ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theReference.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
+                    
+                    featureBinding[] featureBindingsS101 = [productMappingS101theReference];
+                    s101["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS101, jsonSerializerOptions128);
+                    s101.Store();
                 }
             }
 
