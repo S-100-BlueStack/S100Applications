@@ -77,71 +77,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 10: { // FERYRT_FerryRoute
-                            var instance = new FerryRoute();
-
-                            if (current.CATFRY.HasValue) {
-                                var categoryOfFerry = EnumHelper.GetEnumValues(current.CATFRY.Value);
-                                if (categoryOfFerry is not null)
-                                    instance.categoryOfFerry = categoryOfFerry;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            DateHelper.TryGetPeriodicDateRange(current.PERSTA, current.PEREND, out var periodicDateRange);
-                            if (periodicDateRange != default) {
-                                instance.periodicDateRange = periodicDateRange;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (FerryRoute)ImporterNIS.Build("FERYRT", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedLineEquipment(current, instance, featureN);
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
 
@@ -154,11 +99,8 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 20: { // PRCARE_PrecautionaryArea
@@ -189,47 +131,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 30: { // RCTLPT_RecommendedTrafficLanePart
-                            var instance = new RecommendedTrafficLanePart {
-                            };
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            if (current.ORIENT.HasValue) {
-                                instance.orientationValue = current.ORIENT.Value == -32767m ? null : current.ORIENT.Value;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (RecommendedTrafficLanePart)ImporterNIS.Build("RCTLPT", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -237,9 +139,7 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -359,41 +259,7 @@ namespace S100Framework.Applications
                         }
                         break;                
                     case 50: { // TSEZNE_TrafficSeparationZone
-                            var instance = new SeparationZoneOrLine();
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (SeparationZoneOrLine)ImporterNIS.Build("TSEZNE", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -401,10 +267,9 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
+
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     case 55: { // TSSCRS_TrafficSeparationSchemeCrossing
@@ -438,83 +303,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 70: { // TWRTPT_TwoWayRoutePart
-                            var instance = new TwoWayRoutePart();
-
-                            if (current.CATTRK.HasValue) {
-                                if (current.CATTRK.Value == 1) {
-                                    instance.basedOnFixedMarks = true;
-                                }
-                                else if (current.CATTRK.Value == 2) {
-                                    instance.basedOnFixedMarks = false;
-                                }
-                                else {
-                                    Logger.Current.DataError(current.OBJECTID ?? -1, tableName, longname, $"Cannot convert value {current.CATTRK.Value} to basedOnFixedMarks boolean. Only values 1 and 2 are supported.");
-                                }
-                            }
-
-                            if (current.DRVAL1.HasValue) {
-                                instance.depthRangeMinimumValue = current.DRVAL1.Value != -32767m ? current.DRVAL1.Value : null;
-                            }
-
-                            DateHelper.TryGetFixedDateRange(current.DATSTA, current.DATEND, out var dateRange);
-                            if (dateRange != default) {
-                                instance.fixedDateRange = dateRange;
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            if (current.ORIENT.HasValue) {
-                                instance.orientationValue = current.ORIENT.Value != -32767m ? current.ORIENT.Value : null;
-                            }
-
-                            if (current.QUASOU != default) {
-                                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU);
-                                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
-                                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.TECSOU != null) {
-                                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU, instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
-                                if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
-                                    instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
-                            }
-
-                            if (current.TRAFIC.HasValue) {
-                                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC.Value);
-                            }
-
-                            if (current.SOUACC.HasValue) {
-                                instance.verticalUncertainty = new() {
-                                    uncertaintyFixed = current.SOUACC.Value
-                                };
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-                                var scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE.Value, isRelatedToStructure: false);
-                                if (scaleMinimum.HasValue)
-                                    instance.scaleMinimum = scaleMinimum.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-
-
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            var instance = (TwoWayRoutePart)ImporterNIS.Build("TWRTPT", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -522,11 +311,8 @@ namespace S100Framework.Applications
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                 relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
                             }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
                         }
                         break;
                     default:

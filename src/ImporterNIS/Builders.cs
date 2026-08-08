@@ -7,16 +7,10 @@ using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
     using ArcGIS.Core.Geometry;
-    using NetTopologySuite.GeometriesGraph;
     using S100FC.S101.InformationTypes;
     using S100FC.S101.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
-    using S100Framework.Applications.S57auto.esri;
-    using System.Runtime.CompilerServices;
-    using YamlDotNet.Core.Tokens;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     internal static partial class ImporterNIS
     {
@@ -100,7 +94,16 @@ namespace S100Framework.Applications
             { "MAGVAR", (current, buffer) => { return MAGVAR(current, buffer); } },
             { "TIDEWY", (current, buffer) => { return TIDEWY(current, buffer); } },
             { "TS_FEB", (current, buffer) => { return TS_FEB(current, buffer); } },
-            
+            { "FERYRT", (current, buffer) => { return FERYRT(current, buffer); } },
+            { "RCTLPT", (current, buffer) => { return RCTLPT(current, buffer); } },
+            { "TSEZNE", (current, buffer) => { return TSEZNE(current, buffer); } },
+            { "TWRTPT", (current, buffer) => { return TWRTPT(current, buffer); } },
+            { "RCRTCL", (current, buffer) => { return RCRTCL(current, buffer); } },
+            { "RDOCAL", (current, buffer) => { return RDOCAL(current, buffer); } },
+            { "RECTRC", (current, buffer) => { return RECTRC(current, buffer); } },
+            { "TSELNE", (current, buffer) => { return TSELNE(current, buffer); } },
+            { "TSSBND", (current, buffer) => { return TSSBND(current, buffer); } },
+          
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -233,6 +236,547 @@ namespace S100Framework.Applications
             var instance = new Gridiron();
 
             // TODO
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static TrafficSeparationSchemeBoundary TSSBND(Feature current, RowBuffer buffer) {
+            var instance = new TrafficSeparationSchemeBoundary();
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+        private static SeparationZoneOrLine TSELNE(Feature current, RowBuffer buffer) {
+            var instance = new SeparationZoneOrLine();
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static RecommendedTrack RECTRC(Feature current, RowBuffer buffer) {
+            var instance = new RecommendedTrack();
+
+            if (current.CATTRK_HasValue()) {
+                if (current.CATTRK() == 1) {
+                    instance.basedOnFixedMarks = true;
+                }
+                else if (current.CATTRK() == 2) {
+                    instance.basedOnFixedMarks = false;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? string.Empty, $"Cannot convert value {current.CATTRK()} to basedOnFixedMarks boolean. Only values 1 and 2 are supported.");
+                }
+            }
+
+            if (current.DRVAL1_HasValue()) {
+                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            var inform = current.INFORM();
+            if (!string.IsNullOrEmpty(inform) && regexMaximumDraughtPermitted.IsMatch(inform)) {
+                var _value = regexMaximumDraughtPermitted.Match(inform).Groups["value"]?.Value;
+
+                if (decimal.TryParse(_value, out decimal value)) {
+                    instance.maximumPermittedDraught = value;
+                }
+            }
+
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
+            }
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.QUASOU_HasValue()) {
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
+                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.TECSOU_HasValue()) {
+                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU(), instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
+                if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
+                    instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
+            }
+
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+            }
+
+            if (current.SOUACC_HasValue()) {
+                instance.verticalUncertainty = new() {
+                    uncertaintyFixed = current.SOUACC() != -32767m ? current.SOUACC() : null,
+                };
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+        private static RadioCallingInPoint RDOCAL(Feature current, RowBuffer buffer) {
+            var instance = new RadioCallingInPoint();
+
+            if (current.COMCHA_HasValue()) {
+                instance.communicationChannel = GetCommunicationChannel(current.COMCHA()!);
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.ORIENT_HasValue()) {
+                if (current.ORIENT() != -32767m)
+                    instance.orientationValue = [current.ORIENT()];
+            }
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static RecommendedRouteCentreline RCRTCL(Feature current, RowBuffer buffer) {
+            var instance = new RecommendedRouteCentreline();
+
+            if (current.CATTRK_HasValue()) {
+                if (current.CATTRK() == 1) {
+                    instance.basedOnFixedMarks = true;
+                }
+                else if (current.CATTRK() == 2) {
+                    instance.basedOnFixedMarks = false;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? string.Empty, $"Cannot convert value {current.CATTRK()} to basedOnFixedMarks boolean. Only values 1 and 2 are supported.");
+                }
+            }
+
+            if (current.DRVAL1_HasValue()) {
+                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
+            }
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.QUASOU_HasValue()) {
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
+                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+            if (current.TECSOU_HasValue()) {
+                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU(), instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
+                if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
+                    instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
+            }
+
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+            }
+
+            if (current.SOUACC_HasValue()) {
+                instance.verticalUncertainty = new() {
+                    uncertaintyFixed = current.SOUACC() != -32676m ? current.SOUACC() : null,
+                };
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static TwoWayRoutePart TWRTPT(Feature current, RowBuffer buffer) {
+            var instance = new TwoWayRoutePart();
+
+            if (current.CATTRK_HasValue()) {
+                if (current.CATTRK() == 1) {
+                    instance.basedOnFixedMarks = true;
+                }
+                else if (current.CATTRK() == 2) {
+                    instance.basedOnFixedMarks = false;
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? string.Empty, $"Cannot convert value {current.CATTRK()} to basedOnFixedMarks boolean. Only values 1 and 2 are supported.");
+                }
+            }
+
+            if (current.DRVAL1_HasValue()) {
+                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
+            }
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
+            }
+
+            if (current.QUASOU_HasValue()) {
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
+                    instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+            if (current.TECSOU_HasValue()) {
+                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU(), instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
+                if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
+                    instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
+            }
+
+            if (current.TRAFIC_HasValue()) {
+                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+            }
+
+            if (current.SOUACC_HasValue()) {
+                instance.verticalUncertainty = new() {
+                    uncertaintyFixed = current.SOUACC() != -32767m ? current.SOUACC() : null,
+                };
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static SeparationZoneOrLine TSEZNE(Feature current, RowBuffer buffer) {
+            var instance = new SeparationZoneOrLine();
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static RecommendedTrafficLanePart RCTLPT(Feature current, RowBuffer buffer) {
+            var instance = new RecommendedTrafficLanePart();
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            if (current.ORIENT_HasValue()) {
+                instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
+
+            if (current.PLTS_COMP_SCALE_HasValue()) {
+                string subtype = "";
+
+                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            instance.information = [.. result.information];
+            instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+            buffer["ps"] = ps101;
+            buffer["code"] = instance.GetType().Name;
+            buffer["attributebindings"] = instance.Flatten();
+            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+            SetShape(buffer, current.SHAPE());
+            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+            return instance;
+        }
+
+        private static FerryRoute FERYRT(Feature current, RowBuffer buffer) {
+            var instance = new FerryRoute();
+
+            if (current.CATFRY_HasValue()) {
+                var categoryOfFerry = EnumHelper.GetEnumValues(current.CATFRY());
+                if (categoryOfFerry is not null)
+                    instance.categoryOfFerry = categoryOfFerry;
+            }
+
+            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+            if (dateRange != default) {
+                instance.fixedDateRange = dateRange;
+            }
+
+            DateHelper.TryGetPeriodicDateRange(current.PERSTA(), current.PEREND(), out var periodicDateRange);
+            if (periodicDateRange != default) {
+                instance.periodicDateRange = periodicDateRange;
+            }
+
+            if (current.STATUS_HasValue()) {
+                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                if (status is not null && status.Any())
+                    instance.status = status;
+            }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
                 string subtype = "";

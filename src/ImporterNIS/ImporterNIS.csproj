@@ -38,6 +38,9 @@
     <Compile Remove="S57_TidesAndVariationsA.cs" />
     <Compile Remove="S57_TidesAndVariationsL.cs" />
     <Compile Remove="S57_TidesAndVariationsP.cs" />
+    <Compile Remove="S57_TracksAndRoutesA.cs" />
+    <Compile Remove="S57_TracksAndRoutesL.cs" />
+    <Compile Remove="S57_TracksAndRoutesP.cs" />
     <Compile Remove="Singletons\Bridges.cs" />
   </ItemGroup>
 

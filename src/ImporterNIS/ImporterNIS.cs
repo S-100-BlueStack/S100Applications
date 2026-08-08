@@ -871,9 +871,24 @@ namespace S100Framework.Applications
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting Tracks And Routes");
-                            Store((destination) => S57_TracksAndRoutesA(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_TracksAndRoutesL(source, destination, QueryFilter), destination);
-                            Store((destination) => S57_TracksAndRoutesP(source, destination, QueryFilter), destination);
+                            Store((destination) => S57_TracksAndRoutes(
+                                "TracksAndRoutesA",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_TracksAndRoutes(
+                                "TracksAndRoutesL",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("curve")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
+                            Store((destination) => S57_TracksAndRoutes(
+                                "TracksAndRoutesP",
+                                (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
+                                QueryFilter,
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
+                                (buffer, shape) => SetShape(buffer, shape)), destination);
 
                             Logger.Current.Information($"Converting Aids to Navigation");
                             Store((destination) => S57_AidsToNavigationP(source, destination, QueryFilter), destination);
