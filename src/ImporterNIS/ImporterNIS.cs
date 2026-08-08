@@ -1156,11 +1156,15 @@ namespace S100Framework.Applications
                             if (featureNames.Any())
                                 instance.featureName = featureNames;
 
+                            var scale = parts.Select(e => e.Item2!.PLTS_COMP_SCALE!.Value).Distinct();
+                            if (scale.Count() > 1) System.Diagnostics.Debugger.Break();
+
                             bufferBridge["code"] = instance.GetType().Name;
                             bufferBridge["attributebindings"] = instance.Flatten();
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
                             bufferBridge["specificusage"] = usage;
+                            bufferBridge["nominalscale"] = scale[0];
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetShape(bufferBridge, polygon);

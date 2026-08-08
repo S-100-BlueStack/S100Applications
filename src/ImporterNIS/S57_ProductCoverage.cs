@@ -175,7 +175,8 @@ namespace S100Framework.Applications
                 var hit = coverages.Where(e => e.PLTS_COMP_SCALE > current.CSCL!.Value && GeometryEngine.Instance.Within(coverage, dictionaryCoverage[e.Name]));
 
                 if (hit.Any()) {
-                    _minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
+                    //_minimumDisplayScale = hit.OrderBy(e => e.PLTS_COMP_SCALE).First().PLTS_COMP_SCALE;
+                    _minimumDisplayScale = hit.OrderBy(e => e.DataCoverage.maximumDisplayScale).First().DataCoverage.maximumDisplayScale!.Value;
                 }
 
                 dictionaryCoverage.Add(electronicProduct101.datasetName, coverage);
