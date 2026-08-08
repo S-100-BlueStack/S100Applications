@@ -385,8 +385,8 @@ namespace S100Framework.Applications
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+            if (current.QUASOU_HasValue()) {                
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -403,8 +403,9 @@ namespace S100Framework.Applications
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
             }
 
-            if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+            if (current.TRAFIC_HasValue()) {                
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -470,7 +471,8 @@ namespace S100Framework.Applications
             }
 
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -536,7 +538,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -553,7 +555,8 @@ namespace S100Framework.Applications
             }
 
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -616,7 +619,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -633,7 +636,8 @@ namespace S100Framework.Applications
             }
 
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -752,8 +756,8 @@ namespace S100Framework.Applications
         private static FerryRoute FERYRT(Feature current, RowBuffer buffer) {
             var instance = new FerryRoute();
 
-            if (current.CATFRY_HasValue()) {
-                var categoryOfFerry = EnumHelper.GetEnumValues(current.CATFRY());
+            if (current.CATFRY_HasValue()) {                
+                var categoryOfFerry = EnumHelper.GetEnumValues(current.CATFRY(), instance.attributeBindingDefinition("categoryOfFerry")!.permitedValues!);
                 if (categoryOfFerry is not null)
                     instance.categoryOfFerry = categoryOfFerry;
             }
@@ -807,7 +811,8 @@ namespace S100Framework.Applications
             var instance = new TidalStreamFloodEbb();
 
             if (current.CAT_TS_HasValue()) {
-                instance.categoryOfTidalStream = EnumHelper.GetEnumValue(current.CAT_TS());
+                if (EnumHelper.GetEnumValue(current.CAT_TS(), out int? categoryOfTidalStream, instance.attributeBindingDefinition("categoryOfTidalStream")!.permitedValues!))
+                    instance.categoryOfTidalStream = categoryOfTidalStream;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1120,7 +1125,8 @@ namespace S100Framework.Applications
             var instance = new Vegetation();
 
             if (current.CATVEG_HasValue()) {
-                instance.categoryOfVegetation = EnumHelper.GetEnumValue(current.CATVEG());
+                if (EnumHelper.GetEnumValue(current.CATVEG(), out int? categoryOfVegetation, instance.attributeBindingDefinition("categoryOfVegetation")!.permitedValues!))
+                    instance.categoryOfVegetation = categoryOfVegetation;
             }
 
             if (current.ELEVAT_HasValue()) {
@@ -1140,7 +1146,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1175,7 +1182,8 @@ namespace S100Framework.Applications
                 if ((current.CATSLO() == 3 || current.CATSLO() == 4) && (!string.IsNullOrEmpty(current.NATSUR()) && "4".Equals(current.NATSUR())))
                     throw new NotImplementedException();    //  If it is required to encode a sand dune or sand hill, it must be done using the feature Sloping Ground with attribute category of slope = 3 (dune) or 4 (hill) and attribute nature of surface = 4 (sand). If these features are positioned along the coastline, a Coastline feature must also be encoded.
 
-                instance.categoryOfSlope = EnumHelper.GetEnumValue(current.CATSLO());
+                if (EnumHelper.GetEnumValue(current.CATSLO(), out int? categoryOfSlope, instance.attributeBindingDefinition("categoryOfSlope")!.permitedValues!))
+                    instance.categoryOfSlope = categoryOfSlope;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1204,7 +1212,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS()!);
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1236,7 +1245,8 @@ namespace S100Framework.Applications
             var instance = new SeaAreaNamedWaterArea();
 
             if (current.CATSEA_HasValue()) {
-                instance.categoryOfSeaArea = EnumHelper.GetEnumValue(current.CATSEA());
+                if (EnumHelper.GetEnumValue(current.CATSEA(), out int? categoryOfSeaArea, instance.attributeBindingDefinition("categoryOfSeaArea")!.permitedValues!))
+                    instance.categoryOfSeaArea = categoryOfSeaArea;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1325,7 +1335,7 @@ namespace S100Framework.Applications
             var instance = new LandRegion();
 
             if (current.CATLND_HasValue()) {
-                var categoryOfLandRegion = EnumHelper.GetEnumValues(current.CATLND());
+                var categoryOfLandRegion = EnumHelper.GetEnumValues(current.CATLND(), instance.attributeBindingDefinition("categoryOfLandRegion")!.permitedValues!);
                 if (categoryOfLandRegion is not null && categoryOfLandRegion.Any())
                     instance.categoryOfLandRegion = categoryOfLandRegion;
             }
@@ -1341,7 +1351,8 @@ namespace S100Framework.Applications
             }
 
             if (current.WATLEV_HasValue()) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                    instance.waterLevelEffect = waterLevelEffect;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1488,7 +1499,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -1643,7 +1654,8 @@ namespace S100Framework.Applications
                 instance.featureName = featureName;
 
             if (current.CATOLB_HasValue()) {
-                instance.categoryOfOilBarrier = EnumHelper.GetEnumValue(current.CATOLB());
+                if (EnumHelper.GetEnumValue(current.CATOLB(), out int? categoryOfOilBarrier, instance.attributeBindingDefinition("categoryOfOilBarrier")!.permitedValues!))
+                    instance.categoryOfOilBarrier = categoryOfOilBarrier;
             }
 
             if (current.CONDTN_HasValue()) {
@@ -1700,11 +1712,13 @@ namespace S100Framework.Applications
 
             // action point #42 Attributes converted correctly but the combination of both is prohibited in S-101 (DCEG 13.5). Ignore/ drop CATWRK when VALSOU is populated on conversion.
             if (current.CATWRK_HasValue() && !current.VALSOU_HasValue()) {
-                instance.categoryOfWreck = EnumHelper.GetEnumValue(current.CATWRK());
+                if (EnumHelper.GetEnumValue(current.CATWRK(), out int? categoryOfWreck, instance.attributeBindingDefinition("categoryOfWreck")!.permitedValues!))
+                    instance.categoryOfWreck = categoryOfWreck;
             }
 
             if (current.EXPSOU_HasValue()) {
-                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU());
+                if (EnumHelper.GetEnumValue(current.EXPSOU(), out int? expositionOfSounding, instance.attributeBindingDefinition("expositionOfSounding")!.permitedValues!))
+                    instance.expositionOfSounding = expositionOfSounding;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1716,7 +1730,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -1750,11 +1764,13 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.WATLEV_HasValue()) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                    instance.waterLevelEffect = waterLevelEffect;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1787,7 +1803,8 @@ namespace S100Framework.Applications
 
             // action point #42 Attributes converted correctly but the combination of both is prohibited in S-101 (DCEG 13.5). Ignore/ drop CATWRK when VALSOU is populated on conversion.
             if (current.CATWAT_HasValue()) {
-                instance.categoryOfWaterTurbulence = EnumHelper.GetEnumValue(current.CATWAT());
+                if (EnumHelper.GetEnumValue(current.CATWAT(), out int? categoryOfWaterTurbulence, instance.attributeBindingDefinition("categoryOfWaterTurbulence")!.permitedValues!))
+                    instance.categoryOfWaterTurbulence = categoryOfWaterTurbulence;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -1860,7 +1877,8 @@ namespace S100Framework.Applications
                 }
 
                 if (current.CONVIS_HasValue()) {
-                    instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS()!);
+                    if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                        instance.visualProminence = visualProminence;
                 }
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1895,7 +1913,7 @@ namespace S100Framework.Applications
                     instance.featureName = featureName;
 
                 if (current.QUASOU_HasValue()) {
-                    var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                    var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                     if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                         instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
                 }
@@ -1958,7 +1976,8 @@ namespace S100Framework.Applications
                 var instance = new Obstruction();
 
                 if (current.CATOBS_HasValue()) {
-                    instance.categoryOfObstruction = EnumHelper.GetEnumValue(current.CATOBS());
+                    if (EnumHelper.GetEnumValue(current.CATOBS(), out int? categoryOfObstruction, instance.attributeBindingDefinition("categoryOfObstruction")!.permitedValues!))
+                        instance.categoryOfObstruction = categoryOfObstruction;
                 }
 
                 if (current.CONDTN_HasValue()) {
@@ -1966,7 +1985,8 @@ namespace S100Framework.Applications
                 }
 
                 if (current.EXPSOU_HasValue()) {
-                    instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU());
+                    if (EnumHelper.GetEnumValue(current.EXPSOU(), out int? expositionOfSounding, instance.attributeBindingDefinition("expositionOfSounding")!.permitedValues!))
+                        instance.expositionOfSounding = expositionOfSounding;
                 }
 
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -2029,7 +2049,8 @@ namespace S100Framework.Applications
                 }
 
                 if (current.WATLEV_HasValue()) {
-                    instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                    if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                        instance.waterLevelEffect = waterLevelEffect;
                 }
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2062,7 +2083,8 @@ namespace S100Framework.Applications
             var instance = new FishingFacility();
 
             if (current.CATFIF_HasValue()) {
-                instance.categoryOfFishingFacility = EnumHelper.GetEnumValue(current.CATFIF());
+                if (EnumHelper.GetEnumValue(current.CATFIF(), out int? categoryOfFishingFacility, instance.attributeBindingDefinition("categoryOfFishingFacility")!.permitedValues!))
+                    instance.categoryOfFishingFacility = categoryOfFishingFacility;
             }
 
             if (current.CONDTN_HasValue()) {
@@ -2227,7 +2249,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2250,7 +2273,8 @@ namespace S100Framework.Applications
             var instance = new ShorelineConstruction();
 
             if (current.CATSLC_HasValue()) {
-                instance.categoryOfShorelineConstruction = EnumHelper.GetEnumValue(current.CATSLC());
+                if (EnumHelper.GetEnumValue(current.CATSLC(), out int? categoryOfShorelineConstruction, instance.attributeBindingDefinition("categoryOfShorelineConstruction")!.permitedValues!))
+                    instance.categoryOfShorelineConstruction = categoryOfShorelineConstruction;
             }
 
             if (current.COLOUR_HasValue()) {
@@ -2331,11 +2355,13 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;                
             }
 
             if (current.WATLEV_HasValue()) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                    instance.waterLevelEffect = waterLevelEffect;                
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2878,7 +2904,8 @@ namespace S100Framework.Applications
             var instance = new OffshorePlatform();
 
             if (current.CATOFP_HasValue()) {
-                instance.categoryOfOffshorePlatform = EnumHelper.GetEnumValue(current.CATOFP());
+                if (EnumHelper.GetEnumValue(current.CATOFP(), out int? categoryOfOffshorePlatform, instance.attributeBindingDefinition("categoryOfOffshorePlatform")!.permitedValues!))
+                    instance.categoryOfOffshorePlatform = categoryOfOffshorePlatform;
             }
 
             if (current.COLOUR_HasValue()) {
@@ -2938,7 +2965,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -2987,8 +3015,8 @@ namespace S100Framework.Applications
 
                     instance.categoryOfCable = 10; //categoryOfCable.TelecommunicationsCable;
                 }
-                else {
-                    instance.categoryOfCable = EnumHelper.GetEnumValue(current.CATCBL());
+                else if (EnumHelper.GetEnumValue(current.CATCBL(), out int? categoryOfCable, instance.attributeBindingDefinition("categoryOfCable")!.permitedValues!)) { 
+                        instance.categoryOfCable = categoryOfCable;
                 }
             }
 
@@ -3096,7 +3124,8 @@ namespace S100Framework.Applications
                 var instance = new LocalDirectionOfBuoyage();
 
                 if (current.MARSYS_HasValue()) {
-                    instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS()!);
+                    if (EnumHelper.GetEnumValue(current.MARSYS(), out int? marksNavigationalSystemOf, instance.attributeBindingDefinition("marksNavigationalSystemOf")!.permitedValues!))
+                        instance.marksNavigationalSystemOf = marksNavigationalSystemOf;
                 }
 
                 instance.orientationValue = current.ORIENT() != -32767m ? current.ORIENT() : null;
@@ -3128,7 +3157,8 @@ namespace S100Framework.Applications
                 var instance = new NavigationalSystemOfMarks();
 
                 if (current.MARSYS_HasValue()) {
-                    instance.marksNavigationalSystemOf = EnumHelper.GetEnumValue(current.MARSYS());
+                    if (EnumHelper.GetEnumValue(current.MARSYS(), out int? marksNavigationalSystemOf, instance.attributeBindingDefinition("marksNavigationalSystemOf")!.permitedValues!))
+                        instance.marksNavigationalSystemOf = marksNavigationalSystemOf;
                 }
                 else {
                     Logger.Current.DataError(current.GetObjectID(), current.TableName() ?? "Unknown tablename", current.LNAM() ?? "Unknown LNAM", $"Missing MARSYS value for M_NSYS where globalid = '{{{current.GLOBALID}}}'");
@@ -3455,7 +3485,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -3644,7 +3674,8 @@ namespace S100Framework.Applications
             instance.surfaceCharacteristics = surfaceCharacteristics;
 
             if (current.WATLEV_HasValue()) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                    instance.waterLevelEffect = waterLevelEffect;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3740,7 +3771,8 @@ namespace S100Framework.Applications
                 var instance = new WeedKelp();
 
                 if (current.CATWED_HasValue()) {
-                    instance.categoryOfWeedKelp = EnumHelper.GetEnumValue(current.CATWED());
+                    if (EnumHelper.GetEnumValue(current.CATWED(), out int? categoryOfWeedKelp, instance.attributeBindingDefinition("categoryOfWeedKelp")!.permitedValues!))
+                        instance.categoryOfWeedKelp = categoryOfWeedKelp;
                 }
 
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -3789,17 +3821,15 @@ namespace S100Framework.Applications
                 var instance = new Sounding();
 
                 if (current.QUASOU_HasValue()) {
-                    instance.qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU()!)!;
+                    var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
+                    if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
+                        instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
                 }
 
                 if (current.TECSOU_HasValue()) {
                     var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU(), instance.attributeBindingDefinition("techniqueOfVerticalMeasurement")!.permitedValues!);
                     if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                         instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
-                }
-
-                if (current.QUASOU_HasValue()) {
-                    instance.qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU()!)!;
                 }
 
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -4022,7 +4052,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -4068,7 +4098,8 @@ namespace S100Framework.Applications
             var instance = new NavigationLine();
 
             if (current.CATNAV_HasValue()) {
-                instance.categoryOfNavigationLine = EnumHelper.GetEnumValue(current.CATNAV());
+                if (EnumHelper.GetEnumValue(current.CATNAV(), out int? categoryOfNavigationLine, instance.attributeBindingDefinition("categoryOfNavigationLine")!.permitedValues!))
+                    instance.categoryOfNavigationLine = categoryOfNavigationLine;
             }
 
             DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
@@ -4206,7 +4237,8 @@ namespace S100Framework.Applications
                 };
 
                 if (current.JRSDTN_HasValue()) {
-                    instance.jurisdiction = EnumHelper.GetEnumValue(current.JRSDTN());
+                    if (EnumHelper.GetEnumValue(current.JRSDTN(), out int? jurisdiction, instance.attributeBindingDefinition("jurisdiction")!.permitedValues!))
+                        instance.jurisdiction = jurisdiction;
                 }
 
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -4600,7 +4632,8 @@ namespace S100Framework.Applications
                 instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
             }
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -4616,7 +4649,7 @@ namespace S100Framework.Applications
             //instance.iMOAdopted = null;
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -4640,7 +4673,8 @@ namespace S100Framework.Applications
             }
 
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -4908,7 +4942,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -4926,7 +4960,8 @@ namespace S100Framework.Applications
             }
 
             if (current.TRAFIC_HasValue()) {
-                instance.trafficFlow = EnumHelper.GetEnumValue(current.TRAFIC());
+                if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
+                    instance.trafficFlow = trafficFlow;
             }
 
             if (current.SOUACC_HasValue()) {
@@ -5165,11 +5200,13 @@ namespace S100Framework.Applications
             var instance = new MarineFarmCulture();
 
             if (current.CATMFA_HasValue()) {
-                instance.categoryOfMarineFarmCulture = EnumHelper.GetEnumValue(current.CATMFA());
+                if (EnumHelper.GetEnumValue(current.CATMFA(), out int? categoryOfMarineFarmCulture, instance.attributeBindingDefinition("categoryOfMarineFarmCulture")!.permitedValues!))
+                    instance.categoryOfMarineFarmCulture = categoryOfMarineFarmCulture;
             }
 
             if (current.EXPSOU_HasValue()) {
-                instance.expositionOfSounding = EnumHelper.GetEnumValue(current.EXPSOU());
+                if (EnumHelper.GetEnumValue(current.EXPSOU(), out int? expositionOfSounding, instance.attributeBindingDefinition("expositionOfSounding")!.permitedValues!))
+                    instance.expositionOfSounding = expositionOfSounding;
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
@@ -5189,7 +5226,7 @@ namespace S100Framework.Applications
             }
 
             if (current.QUASOU_HasValue()) {
-                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU());
+                var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
             }
@@ -5252,7 +5289,8 @@ namespace S100Framework.Applications
             }
 
             if (current.WATLEV_HasValue()) {
-                instance.waterLevelEffect = EnumHelper.GetEnumValue(current.WATLEV());
+                if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
+                    instance.waterLevelEffect = waterLevelEffect;
             }
 
             // TODO: HEIGHT                            
@@ -5480,7 +5518,8 @@ namespace S100Framework.Applications
             }
 
             if (current.CONVIS_HasValue()) {
-                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS());
+                if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
+                    instance.visualProminence = visualProminence;
             }
 
             // TODO: waterleveleffect
