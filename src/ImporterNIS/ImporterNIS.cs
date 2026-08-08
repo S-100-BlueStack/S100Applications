@@ -289,6 +289,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
                                     buffer["specificusage"] = c.specificUsage;
+                                    buffer["nominalscale"] = c.PLTS_COMP_SCALE;
                                     buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
 
                                     foreach (var p in c.Coverage.Split()) {
@@ -308,6 +309,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
                                     buffer["specificusage"] = c.specificUsage;
+                                    buffer["nominalscale"] = c.PLTS_COMP_SCALE;
                                     buffer["sourceIdentifier"] = vdat.sourceIdentifier;
 
                                     foreach (var p in c.Coverage.Split()) {
