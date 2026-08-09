@@ -26,6 +26,7 @@ namespace NuvionPro
             IsSketchTool = true;
             SketchType = SketchGeometryType.Point;
             SketchOutputMode = SketchOutputMode.Map;
+            UseSnapping = false;
         }
 
         protected override Task OnToolActivateAsync(bool active) {
@@ -33,6 +34,18 @@ namespace NuvionPro
         }
 
         protected override async Task<bool> OnSketchCompleteAsync(Geometry geometry) {
+            var viewModel = PickReportDockpaneViewModel.Show();
+            if (viewModel is null) {
+                return true;
+            }
+
+            // The view model owns cancellation, so rapid clicking supersedes rather than queues.
+            await viewModel.IdentifyAsync(geometry);
+            return true;
+
+
+
+
             var mv = MapView.Active;
             var identifyResult = await QueuedTask.Run(() => {
                 var sb = new StringBuilder();
