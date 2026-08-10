@@ -267,7 +267,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = product.s57.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = product.s57.specificUsage!.Value;
+                    //buffer["specificusage"] = product.s57.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s57.sourceIdentifier;
                     buffer["nominalscale"] = product.s57.optimumDisplayScale;
                     var s57 = featureClass.CreateRow(buffer);
@@ -277,7 +277,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = product.s101.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = product.s101.specificUsage!.Value;
+                    //buffer["specificusage"] = product.s101.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s101.sourceIdentifier;
                     buffer["nominalscale"] = product.s101.optimumDisplayScale;
                     var s101 = featureClass.CreateRow(buffer);
@@ -532,7 +532,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = electronicProduct.s57.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = electronicProduct.s57.specificUsage!.Value;
+                    //buffer["specificusage"] = electronicProduct.s57.specificUsage!.Value;
                     buffer["sourceIdentifier"] = electronicProduct.s57.sourceIdentifier;
                     buffer["nominalscale"] = electronicProduct.s57.optimumDisplayScale;
 
@@ -543,7 +543,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = electronicProduct.s101.Flatten();
                     buffer["informationbindings"] = "[]";
                     buffer["featurebindings"] = "[]";
-                    buffer["specificusage"] = electronicProduct.s101.specificUsage!.Value;
+                    //buffer["specificusage"] = electronicProduct.s101.specificUsage!.Value;
                     buffer["sourceIdentifier"] = electronicProduct.s101.sourceIdentifier;
                     buffer["nominalscale"] = electronicProduct.s101.optimumDisplayScale;
 

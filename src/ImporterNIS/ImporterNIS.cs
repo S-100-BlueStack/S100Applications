@@ -288,7 +288,7 @@ namespace S100Framework.Applications
                                     buffer["attributebindings"] = c.DataCoverage.Flatten();
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
-                                    buffer["specificusage"] = c.specificUsage;
+                                    //buffer["specificusage"] = c.specificUsage;
                                     buffer["nominalscale"] = c.PLTS_COMP_SCALE;
                                     buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
 
@@ -308,7 +308,7 @@ namespace S100Framework.Applications
                                     buffer["attributebindings"] = vdat.Flatten();
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
-                                    buffer["specificusage"] = c.specificUsage;
+                                    //buffer["specificusage"] = c.specificUsage;
                                     buffer["nominalscale"] = c.PLTS_COMP_SCALE;
                                     buffer["sourceIdentifier"] = vdat.sourceIdentifier;
 
@@ -1216,26 +1216,26 @@ namespace S100Framework.Applications
 
                     var whereClause = $"ps = '{ps101}' AND code IN ('NavigationalSystemOfMarks')";
 
-                    int[] specificUsage = [];
+                    int[] nominalscales = [];
                     {
                         using var cursor = surface.Search(new QueryFilter {
                             PrefixClause = "Distinct",
                             WhereClause = whereClause,
-                            SubFields = "specificusage",
-                            PostfixClause = "ORDER BY specificusage DESC",
+                            SubFields = "nominalscale",
+                            PostfixClause = "ORDER BY nominalscale DESC",
                         }, true);
 
                         while (cursor.MoveNext()) {
-                            var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
-                            specificUsage = [.. specificUsage, _];
+                            var _ = Convert.ToInt32(cursor.Current["nominalscale"]);
+                            nominalscales = [.. nominalscales, _];
                         }
                     }
 
-                    foreach (var usage in specificUsage.OrderDescending()) {
+                    foreach (var nominalscale in nominalscales.OrderDescending()) {
                         (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
 
                         using (var cursor = surface.Search(new QueryFilter {
-                            WhereClause = whereClause + $" AND specificUsage = {usage}",
+                            WhereClause = whereClause + $" AND nominalscale = {nominalscale}",
                         }, true)) {
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
@@ -1251,7 +1251,7 @@ namespace S100Framework.Applications
                         }
 
                         using (var cursor = surface.CreateUpdateCursor(new QueryFilter {
-                            WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND specificUsage = {usage}",
+                            WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND nominalscale = {nominalscale}",
                         }, false)) {
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
@@ -1280,7 +1280,6 @@ namespace S100Framework.Applications
                                 }
                             }
                         }
-
                     }
                 }, destination);
             }
@@ -1777,13 +1776,13 @@ namespace S100Framework.Applications
 
         internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
-            buffer["specificusage"] = _;
+            //buffer["specificusage"] = _;
             buffer["nominalscale"] = scale;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
-            buffer["specificusage"] = _;
+            //buffer["specificusage"] = _;
             buffer["nominalscale"] = scale;
         }
 
