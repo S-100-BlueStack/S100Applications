@@ -937,22 +937,37 @@ namespace S100Framework.Applications
 
                 var whereClause = $"ps = '{ps101}' AND code IN ('SpanFixed','SpanOpening','Pontoon','PylonBridgeSupport')";
 
-                int[] specificUsage = [];
+                //int[] specificUsage = [];
+                //{
+                //    using var cursor = surface.Search(new QueryFilter {
+                //        PrefixClause = "Distinct",
+                //        WhereClause = whereClause,
+                //        SubFields = "specificusage",
+                //        PostfixClause = "ORDER BY specificusage DESC",
+                //    }, true);
+
+                //    while (cursor.MoveNext()) {
+                //        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
+                //        specificUsage = [.. specificUsage, _];
+                //    }
+                //}
+
+                int[] nominalscales = [];
                 {
                     using var cursor = surface.Search(new QueryFilter {
                         PrefixClause = "Distinct",
                         WhereClause = whereClause,
-                        SubFields = "specificusage",
-                        PostfixClause = "ORDER BY specificusage DESC",
+                        SubFields = "nominalscale",
+                        PostfixClause = "ORDER BY nominalscale DESC",
                     }, true);
 
                     while (cursor.MoveNext()) {
-                        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
-                        specificUsage = [.. specificUsage, _];
+                        var _ = Convert.ToInt32(cursor.Current["nominalscale"]);
+                        nominalscales = [.. nominalscales, _];
                     }
                 }
 
-                foreach (var usage in specificUsage.OrderDescending()) {
+                foreach (var nominalscale in nominalscales.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
 
                     //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
@@ -960,7 +975,7 @@ namespace S100Framework.Applications
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
-                        WhereClause = whereClause + $" AND specificUsage = {usage}",
+                        WhereClause = whereClause + $" AND nominalscale = {nominalscale}",
                     }, true);
 
                     while (cursor.MoveNext()) {
@@ -1163,7 +1178,7 @@ namespace S100Framework.Applications
                             bufferBridge["attributebindings"] = instance.Flatten();
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
-                            bufferBridge["specificusage"] = usage;
+                            //bufferBridge["specificusage"] = usage;
                             bufferBridge["nominalscale"] = scale.First();
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
@@ -1948,14 +1963,14 @@ namespace S100Framework.Applications
             if (colorPattern.Contains(",")) {
                 Logger.Current.Error($"Multiple colorPatterns not supported in S-101 ({colorPattern})!");
             }
-            var colourPat = colorPattern switch {
+            int? colourPat = colorPattern switch {
                 "1" => 1,   //colourPattern.HorizontalStripes,
                 "2" => 2,   //colourPattern.VerticalStripes,
                 "3" => 3,   //colourPattern.DiagonalStripes,
                 "4" => 4,   //colourPattern.Squared,
                 "5" => 5,   //colourPattern.StripesDirectionUnknown,
                 "6" => 6,   //colourPattern.BorderStripe,
-                "-32767" => default,
+                "-32767" => null,
 
                 "3,4" => 3, //US
 
