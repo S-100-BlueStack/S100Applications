@@ -1590,11 +1590,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "code IN ('SpecialPurposeGeneralBeacon', 'LateralBuoy', 'CardinalBuoy', 'IsolatedDangerBuoy', 'SafeWaterBuoy', 'SpecialPurposeGeneralBuoy', 'EmergencyWreckMarkingBuoy', 'LateralBeacon', 'CardinalBeacon', 'IsolatedDangerBeacon', 'SafeWaterBeacon', 'SpecialPurposeGeneralBeacon', 'LightFloat')",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "code IN ('SpecialPurposeGeneralBeacon', 'LateralBuoy', 'CardinalBuoy', 'IsolatedDangerBuoy', 'SafeWaterBuoy', 'SpecialPurposeGeneralBuoy', 'EmergencyWreckMarkingBuoy', 'LateralBeacon', 'CardinalBeacon', 'IsolatedDangerBeacon', 'SafeWaterBeacon', 'SpecialPurposeGeneralBeacon', 'LightFloat')",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -4315,11 +4315,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'CardinalBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'CardinalBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -5937,11 +5937,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'CardinalBeacon'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'CardinalBeacon'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -7071,11 +7071,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Daymark'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Daymark'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -8620,11 +8620,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Dolphin'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Dolphin'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -9337,11 +9337,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'FogSignal'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'FogSignal'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -9984,11 +9984,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'IsolatedDangerBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'IsolatedDangerBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -11574,11 +11574,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LateralBeacon'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LateralBeacon'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -14401,11 +14401,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LateralBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LateralBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -21044,11 +21044,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LightAirObstruction'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LightAirObstruction'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -22127,11 +22127,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LightAllAround'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LightAllAround'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -23734,11 +23734,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "code = 'LightSectored'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "code = 'LightSectored'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -25338,11 +25338,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'MooringBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'MooringBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -27190,11 +27190,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RadarTransponderBeacon'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RadarTransponderBeacon'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -27946,11 +27946,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SafeWaterBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SafeWaterBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -30495,11 +30495,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SpecialPurposeGeneralBeacon'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SpecialPurposeGeneralBeacon'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -32906,11 +32906,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SpecialPurposeGeneralBuoy'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SpecialPurposeGeneralBuoy'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -36802,11 +36802,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'UnderwaterAwashRock'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'UnderwaterAwashRock'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -37307,11 +37307,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'FoulGround'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'FoulGround'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -37953,11 +37953,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Obstruction'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Obstruction'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -38458,11 +38458,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Wreck'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Wreck'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -38959,11 +38959,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'QualityOfBathymetricData'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'QualityOfBathymetricData'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -39405,11 +39405,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'InformationArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'InformationArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -39864,11 +39864,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'VerticalDatumOfData'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'VerticalDatumOfData'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -40323,11 +40323,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'ElectronicProduct'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'ElectronicProduct'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -41259,11 +41259,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RangeSystem'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RangeSystem'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -41691,11 +41691,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -42128,11 +42128,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'NavigationLine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'NavigationLine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -42584,11 +42584,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RadioCallingInPoint'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RadioCallingInPoint'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -43079,11 +43079,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -43516,11 +43516,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RecommendedTrack'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RecommendedTrack'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -43953,11 +43953,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RecommendedRouteCentreline'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RecommendedRouteCentreline'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -44390,11 +44390,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeBoundary'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeBoundary'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -44838,11 +44838,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRouteCentreline'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRouteCentreline'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -45270,11 +45270,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationScheme'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationScheme'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -45730,11 +45730,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'PrecautionaryArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'PrecautionaryArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -46190,11 +46190,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRoute'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRoute'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -46709,11 +46709,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Helipad'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Helipad'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -47393,11 +47393,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RadarStation'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RadarStation'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -47886,11 +47886,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'WindTurbine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'WindTurbine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -48724,11 +48724,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SeabedArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SeabedArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -49190,11 +49190,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'WeedKelp'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'WeedKelp'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -49690,11 +49690,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LandRegion'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LandRegion'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -50155,11 +50155,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SiloTank'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SiloTank'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -50621,11 +50621,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Landmark'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Landmark'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -51087,11 +51087,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'ProductionStorageArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'ProductionStorageArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -51632,11 +51632,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'AirportAirfield'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'AirportAirfield'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -52099,11 +52099,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'BuiltUpArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'BuiltUpArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -52565,11 +52565,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Building'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Building'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -53033,11 +53033,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LandElevation'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LandElevation'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -53536,11 +53536,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Rapids'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Rapids'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -53982,11 +53982,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Railway'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Railway'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -54466,11 +54466,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Road'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Road'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -54902,11 +54902,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Coastline'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Coastline'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -55337,11 +55337,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'ShorelineConstruction'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'ShorelineConstruction'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -56304,11 +56304,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'FloatingDock'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'FloatingDock'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -56766,11 +56766,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Dyke'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Dyke'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -57214,11 +57214,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'CableArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'CableArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -57817,11 +57817,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'OffshoreProductionArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'OffshoreProductionArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -58281,11 +58281,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'OffshorePlatform'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'OffshorePlatform'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -58745,11 +58745,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SubmarinePipelineArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SubmarinePipelineArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -59390,11 +59390,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Pile'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Pile'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -59856,11 +59856,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SignalStationWarning'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SignalStationWarning'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -60321,11 +60321,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Crane'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Crane'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -60826,11 +60826,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RescueStation'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RescueStation'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -61291,11 +61291,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'PilotBoardingPlace'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'PilotBoardingPlace'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -61798,11 +61798,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'HarbourFacility'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'HarbourFacility'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -62278,11 +62278,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'StraightTerritorialSeaBaseline'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'StraightTerritorialSeaBaseline'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -62807,11 +62807,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'FishingFacility'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'FishingFacility'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -63269,11 +63269,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'HarbourAreaAdministrative'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'HarbourAreaAdministrative'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -63740,11 +63740,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'TerritorialSeaArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'TerritorialSeaArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -64202,11 +64202,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'MarineFarmCulture'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'MarineFarmCulture'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -64665,11 +64665,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'AnchorageArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'AnchorageArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -65132,11 +65132,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'AdministrationArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'AdministrationArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -65599,11 +65599,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'ExclusiveEconomicZone'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'ExclusiveEconomicZone'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -66066,11 +66066,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DumpingGround'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DumpingGround'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -66533,11 +66533,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'AnchorageArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'AnchorageArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -67039,11 +67039,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'ContiguousZone'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'ContiguousZone'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -67506,11 +67506,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'CautionArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'CautionArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -67973,11 +67973,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RestrictedArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RestrictedArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -68440,11 +68440,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'StraightTerritorialSeaBaseline'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'StraightTerritorialSeaBaseline'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -68973,11 +68973,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'PipelineSubmarineOnLand'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'PipelineSubmarineOnLand'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -69469,11 +69469,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'CableSubmarine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'CableSubmarine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -69933,11 +69933,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DepthContour'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DepthContour'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -71438,11 +71438,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SeaAreaNamedWaterArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SeaAreaNamedWaterArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -72898,11 +72898,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Bridge'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Bridge'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -73363,11 +73363,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SpanFixed'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SpanFixed'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -73822,11 +73822,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SpanOpening'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SpanOpening'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -74281,11 +74281,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'PylonBridgeSupport'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'PylonBridgeSupport'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -74740,11 +74740,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Pontoon'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Pontoon'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -75234,11 +75234,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SeparationZoneOrLine'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -75682,11 +75682,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRoutePart'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DeepWaterRoutePart'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -76154,11 +76154,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeRoundabout'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeRoundabout'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -76598,11 +76598,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'RecommendedTrafficLanePart'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'RecommendedTrafficLanePart'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -77043,11 +77043,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'MilitaryPracticeArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'MilitaryPracticeArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -77579,11 +77579,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeLanePart'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'TrafficSeparationSchemeLanePart'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -78546,11 +78546,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "code = 'River' And ps = 'S-101'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "code = 'River' And ps = 'S-101'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -79461,11 +79461,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'IslandGroup'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'IslandGroup'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -79920,11 +79920,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'NavigationalSystemOfMarks'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'NavigationalSystemOfMarks'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -80849,11 +80849,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'BuiltUpArea'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'BuiltUpArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -83429,11 +83429,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'MagneticVariation'",
-        "definitionExpressionName" : "Query 1",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Query 1",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'MagneticVariation'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
