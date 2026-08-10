@@ -937,22 +937,22 @@ namespace S100Framework.Applications
 
                 var whereClause = $"ps = '{ps101}' AND code IN ('SpanFixed','SpanOpening','Pontoon','PylonBridgeSupport')";
 
-                int[] specificUsage = [];
+                int[] nominalscales = [];
                 {
                     using var cursor = surface.Search(new QueryFilter {
                         PrefixClause = "Distinct",
                         WhereClause = whereClause,
-                        SubFields = "specificusage",
-                        PostfixClause = "ORDER BY specificusage DESC",
+                        SubFields = "nominalscale",
+                        PostfixClause = "ORDER BY nominalscale DESC",
                     }, true);
 
                     while (cursor.MoveNext()) {
-                        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
-                        specificUsage = [.. specificUsage, _];
+                        var _ = Convert.ToInt32(cursor.Current["nominalscale"]);
+                        nominalscales = [.. nominalscales, _];
                     }
                 }
 
-                foreach (var usage in specificUsage.OrderDescending()) {
+                foreach (var nominalscale in nominalscales.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
 
                     //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
@@ -960,7 +960,7 @@ namespace S100Framework.Applications
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
-                        WhereClause = whereClause + $" AND specificUsage = {usage}",
+                        WhereClause = whereClause + $" AND nominalscale = {nominalscale}",
                     }, true);
 
                     while (cursor.MoveNext()) {
@@ -1163,7 +1163,7 @@ namespace S100Framework.Applications
                             bufferBridge["attributebindings"] = instance.Flatten();
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
-                            bufferBridge["specificusage"] = usage;
+                            //bufferBridge["specificusage"] = usage;
                             bufferBridge["nominalscale"] = scale.First();
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
