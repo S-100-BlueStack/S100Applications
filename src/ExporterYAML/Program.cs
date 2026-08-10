@@ -181,7 +181,7 @@ namespace S100Framework.Applications
 
                 var featureCatalogue = S100FC.Catalogues.FeatureCatalogue.Catalogues.Single(e => e.ProductID.Equals("S-101"));
 
-                var datasets = new List<(Dataset Dataset, SpatialQueryFilter Filters)>();
+                var datasets = new List<(Dataset Dataset, SpatialQueryFilter[] Filters)>();
                 {
                     using Geodatabase source = createGeodatabase();
 
@@ -223,14 +223,56 @@ namespace S100Framework.Applications
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
                             var whereClause = "upper(ps) = 'S-101'";
-                            if (electricProduct.specificUsage.HasValue) {
-                                whereClause += $" AND (specificusage = {electricProduct.specificUsage.Value} OR specificusage = 0)";
+
+                            SpatialQueryFilter[] spatialQueryFilters = [];
+
+                            using var datacoverageSearch = surface.Search(new SpatialQueryFilter {
+                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND attributeBindings LIKE '%\"minimumDisplayScale\":%{electricProduct.minimumDisplayScale}%'",
+                                FilterGeometry = shape,
+                                SpatialRelationship = SpatialRelationship.Contains,
+                            }, true);
+
+                            while (datacoverageSearch.MoveNext()) {
+                                var f = (ArcGIS.Core.Data.Feature)datacoverageSearch.Current;
+                                
+                                var dataCoverage = (S100FC.S101.FeatureTypes.DataCoverage)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S101.FeatureTypes.DataCoverage));
+
+                                var spatialQueryFilter = new SpatialQueryFilter {
+                                    WhereClause = whereClause + $" AND nominalscale = {dataCoverage.optimumDisplayScale}",
+                                    FilterGeometry = f.GetShape().Clone(),
+                                    SpatialRelationship = SpatialRelationship.Relation,
+                                    SpatialRelationshipDescription = "UNKNOWN",
+                                    SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
+                                };
+
+                                spatialQueryFilters = [.. spatialQueryFilters, spatialQueryFilter];
                             }
 
-                            //if (current.FindField("specificusage") != -1 && !current.IsNull("specificusage"))
-                            //    whereClause += $" AND (specificusage = {Convert.ToInt32(current["specificusage"])} OR specificusage = 0)";
+                            if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
+
+                            //if (electricProduct.specificUsage.HasValue) {
+                            //    whereClause += $" AND (specificusage = {electricProduct.specificUsage.Value} OR specificusage = 0)";
+                            //}
+
+                            //whereClause += $" AND (nominalscale >= {electricProduct.maximumDisplayScale!.Value} AND nominalscale < {electricProduct.minimumDisplayScale!.Value})";
 
                             verticalDatum datum = electricProduct.verticalDatum ?? 44;
+
+                            //datasets.Add((new Dataset {
+                            //    CellName = $"{electricProduct!.datasetName!}.000",
+                            //    Comment = "Not for navigation!",
+                            //    Edition = 1,
+                            //    ENCVer = "INT.IHO.S-101.2.0",
+                            //    FCVer = "2.0",
+                            //    VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                            //    //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                            //}, new SpatialQueryFilter {
+                            //    FilterGeometry = shape,
+                            //    SpatialRelationship = SpatialRelationship.Relation,
+                            //    SpatialRelationshipDescription = "UNKNOWN",
+                            //    WhereClause = whereClause,
+                            //    SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
+                            //}));
 
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
@@ -240,13 +282,7 @@ namespace S100Framework.Applications
                                 FCVer = "2.0",
                                 VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
                                 //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                            }, new SpatialQueryFilter {
-                                FilterGeometry = shape,
-                                SpatialRelationship = SpatialRelationship.Relation,
-                                SpatialRelationshipDescription = "UNKNOWN",
-                                WhereClause = whereClause,
-                                SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
-                            }));
+                            }, spatialQueryFilters));
                         }
                     }
 
