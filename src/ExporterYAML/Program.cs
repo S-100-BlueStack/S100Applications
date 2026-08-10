@@ -250,29 +250,7 @@ namespace S100Framework.Applications
 
                             if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
 
-                            //if (electricProduct.specificUsage.HasValue) {
-                            //    whereClause += $" AND (specificusage = {electricProduct.specificUsage.Value} OR specificusage = 0)";
-                            //}
-
-                            //whereClause += $" AND (nominalscale >= {electricProduct.maximumDisplayScale!.Value} AND nominalscale < {electricProduct.minimumDisplayScale!.Value})";
-
                             verticalDatum datum = electricProduct.verticalDatum ?? 44;
-
-                            //datasets.Add((new Dataset {
-                            //    CellName = $"{electricProduct!.datasetName!}.000",
-                            //    Comment = "Not for navigation!",
-                            //    Edition = 1,
-                            //    ENCVer = "INT.IHO.S-101.2.0",
-                            //    FCVer = "2.0",
-                            //    VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                            //    //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                            //}, new SpatialQueryFilter {
-                            //    FilterGeometry = shape,
-                            //    SpatialRelationship = SpatialRelationship.Relation,
-                            //    SpatialRelationshipDescription = "UNKNOWN",
-                            //    WhereClause = whereClause,
-                            //    SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
-                            //}));
 
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
@@ -340,7 +318,7 @@ namespace S100Framework.Applications
                         var supportFiles = new Dictionary<string, string>();
 
                         var dataset = e.Dataset;
-                        var filter = e.Filters;
+                        var spatialFilters = e.Filters;
 
                         var datasetName = dataset.CellName.Split('.')[0];
 
@@ -354,10 +332,12 @@ namespace S100Framework.Applications
 
                         var definitions = source.GetDefinitions<FeatureClassDefinition>();
 
-                        IEnumerable<(long objectid, string UID, ArcGIS.Core.Geometry.Geometry shape)> FeatureQuery(string tablename, string whereclause, string de9im) {
-                            using var featureClass = source.OpenDataset<FeatureClass>(definitions.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
+                        IEnumerable<(long objectid, string UID, string code, ArcGIS.Core.Geometry.Geometry shape)> FeatureQuery(string tablename, string whereclause, string de9im) {
+                            using var featureClass = source.OpenDataset<FeatureClass>(definitions.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals(tablename)).GetName());
 
-                            foreach(var f in filter) {
+                            HashSet<long> hits = [];
+
+                            foreach(var f in spatialFilters) {
                                 var clipGeometry = (ArcGIS.Core.Geometry.Geometry g) => {
                                     if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
 
@@ -397,21 +377,26 @@ namespace S100Framework.Applications
                                     return g;
                                 };
                             
-
                                 var backupClause = (string)f.WhereClause.Clone();
                                 {
                                     f.WhereClause = $"({f.WhereClause}) AND ({whereclause})";
                                     f.SpatialRelationshipDescription = de9im;
 
+                                    var lookup = hits.ToLookup(e=>e);
+
                                     using var cursor = featureClass.Search(f);
                                     while (cursor.MoveNext()) {
                                         var _ = (ArcGIS.Core.Data.Feature)cursor.Current;
+                                        var objectid = _.GetObjectID();
+                                        if (lookup.Contains(objectid)) continue;
 
+                                        hits.Add(objectid);
                                         var shape = _.GetShape();
                                         shape = clipGeometry(shape);
                                         if (shape.IsEmpty) continue;
 
-                                        yield return (_.GetObjectID(), Convert.ToString(_["UID"])!, shape);
+                                        //if ("F10400000165".Equals(Convert.ToString(_["UID"])!)) System.Diagnostics.Debugger.Break();
+                                        yield return (objectid, Convert.ToString(_["UID"])!, Convert.ToString(_["code"])!, shape);
                                     }
                                 }
                                 f.WhereClause = backupClause;
@@ -627,7 +612,7 @@ namespace S100Framework.Applications
 
 
 
-                        filter.SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings";
+                        //filter.SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings";
 
                         // InformationTypes
                         var informationTypes = new List<S100FC.YAML.Information>();
@@ -740,196 +725,201 @@ namespace S100Framework.Applications
 
                             var hashSet = new HashSet<long>();
 
-                            foreach (var de9im in filters) {
-                                filter.SpatialRelationshipDescription = de9im;
+                            foreach (var f in spatialFilters) {
 
-                                using var cursor = fc.Search(filter, true);
-                                while (cursor.MoveNext()) {
-                                    var current = (ArcGIS.Core.Data.Feature)cursor.Current;
+                                f.SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings";
 
-                                    var oid = current.GetObjectID();
-                                    if (hashSet.Contains(oid)) continue;
-                                    hashSet.Add(oid);
+                                foreach (var de9im in filters) {
+                                    f.SpatialRelationshipDescription = de9im;
 
-                                    var _uid = Convert.ToString(current["UID"])!;
+                                    using var cursor = fc.Search(f, true);
+                                    while (cursor.MoveNext()) {
+                                        var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                                    if (collapse.Contains(_uid)) continue;
+                                        var oid = current.GetObjectID();
+                                        if (hashSet.Contains(oid)) continue;
+                                        hashSet.Add(oid);
 
-                                    string[] features = [_uid];
+                                        var _uid = Convert.ToString(current["UID"])!;
 
-                                    if (result.mapper.Values.Contains(_uid)) {
-                                        features = result.mapper.Where(e => e.Value.Equals(_uid)).Select(e => e.Key).ToArray();
-                                    }
+                                        if (collapse.Contains(_uid)) continue;
 
-                                    foreach (var uid in features) {
-                                        // Only map geometry, and keep name seperate so foids remain unique
-                                        var geometry = uid;
+                                        string[] features = [_uid];
 
-                                        var shapetype = def.GetShapeType();
-
-                                        var prim = shapetype switch {
-                                            GeometryType.Point => Primitive.Point,
-                                            GeometryType.Multipoint => Primitive.Point,
-                                            GeometryType.Polyline => Primitive.Curve,
-                                            GeometryType.Polygon => Primitive.Surface,
-                                            _ => throw new InvalidOperationException(),
-                                        };
-
-
-                                        if (topology.MappingFOID.TryGetValue(uid!, out var value)) {
-                                            geometry = value;
+                                        if (result.mapper.Values.Contains(_uid)) {
+                                            features = result.mapper.Where(e => e.Value.Equals(_uid)).Select(e => e.Key).ToArray();
                                         }
-                                        else if (prim == Primitive.Surface || prim == Primitive.Curve)
-                                            continue;
 
-                                        var code = Convert.ToString(current["code"]);
+                                        foreach (var uid in features) {
+                                            // Only map geometry, and keep name seperate so foids remain unique
+                                            var geometry = uid;
 
-                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";
+                                            var shapetype = def.GetShapeType();
+
+                                            var prim = shapetype switch {
+                                                GeometryType.Point => Primitive.Point,
+                                                GeometryType.Multipoint => Primitive.Point,
+                                                GeometryType.Polyline => Primitive.Curve,
+                                                GeometryType.Polygon => Primitive.Surface,
+                                                _ => throw new InvalidOperationException(),
+                                            };
 
 
-                                        try {
-                                            var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
-
-                                            if (type == default) {
-                                                logger.LogError("Could not get type: {type} for feature: {name}", code, uid);
+                                            if (topology.MappingFOID.TryGetValue(uid!, out var value)) {
+                                                geometry = value;
+                                            }
+                                            else if (prim == Primitive.Surface || prim == Primitive.Curve)
                                                 continue;
-                                            }
 
-                                            var json = Convert.ToString(current["attributebindings"])!;
+                                            var code = Convert.ToString(current["code"]);
 
-                                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
+                                            var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";
 
-                                            var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
-                                            foreach (var filename in filenames) {
-                                                supportFiles.TryAdd(uid, filename);
-                                            }
+                                            try {
+                                                var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
 
-                                            // Surface Masks
-                                            var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(uid, StringComparison.InvariantCultureIgnoreCase));
+                                                if (type == default) {
+                                                    logger.LogError("Could not get type: {type} for feature: {name}", code, uid);
+                                                    continue;
+                                                }
 
-                                            // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
-                                            var masks = new[] {
+                                                var json = Convert.ToString(current["attributebindings"])!;
+
+                                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
+
+                                                var filenames = S100FC.YAML.Extensions.GetFileNames(json);
+
+                                                foreach (var filename in filenames) {
+                                                    supportFiles.TryAdd(uid, filename);
+                                                }
+
+                                                // Surface Masks
+                                                var topologySurface = topology.Surfaces.FirstOrDefault(e => e.Ref!.Equals(uid, StringComparison.InvariantCultureIgnoreCase));
+
+                                                // Build comma seperated string of masks, with :1 or :2 indicating which mask it is. Should be null/omitted if empty.
+                                                var masks = new[] {
                                                         topologySurface?.Masks1?.Select(e => $"C{e}:1"),
                                                         topologySurface?.Masks2?.Select(e => $"C{e}:2")
                                                     }.Where(m => m != null).SelectMany(m => m!);
 
-                                            var feature = new S100FC.YAML.Feature {
-                                                Name = code,
-                                                Foid = foid,
-                                                Prim = prim,
-                                                Geometry = geometry,
-                                                Masks = masks.Any() ? string.Join(",", masks) : null,
-                                                Attributes = instance?.attributeBindings.Length > 0 ? instance : null
-                                            };
+                                                var feature = new S100FC.YAML.Feature {
+                                                    Name = code,
+                                                    Foid = foid,
+                                                    Prim = prim,
+                                                    Geometry = geometry,
+                                                    Masks = masks.Any() ? string.Join(",", masks) : null,
+                                                    Attributes = instance?.attributeBindings.Length > 0 ? instance : null
+                                                };
 
 
-                                            // Information Associations
-                                            if (!current.IsNull("informationbindings")) {
-                                                var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(current["informationbindings"])!, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                                // Information Associations
+                                                if (!current.IsNull("informationbindings")) {
+                                                    var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(current["informationbindings"])!, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
 
-                                                if (informationBindings != default && informationBindings.Any()) {
-                                                    foreach (var binding in informationBindings) {
-                                                        var asso = new S100FC.YAML.Association {
-                                                            Name = binding.association!.S100FC_code,
-                                                            Role = binding.role,
-                                                            To = binding.informationId!,
-                                                        };
+                                                    if (informationBindings != default && informationBindings.Any()) {
+                                                        foreach (var binding in informationBindings) {
+                                                            var asso = new S100FC.YAML.Association {
+                                                                Name = binding.association!.S100FC_code,
+                                                                Role = binding.role,
+                                                                To = binding.informationId!,
+                                                            };
 
-                                                        // Special case for SpatialAssociation. Add to dictionary for later processing.
-                                                        if (prim != Primitive.Surface && asso.Name.Equals("SpatialAssociation", StringComparison.CurrentCultureIgnoreCase))
-                                                            spatialAssociations.TryAdd(geometry, asso);
-                                                        else
-                                                            feature?.AddAssociation(asso);
+                                                            // Special case for SpatialAssociation. Add to dictionary for later processing.
+                                                            if (prim != Primitive.Surface && asso.Name.Equals("SpatialAssociation", StringComparison.CurrentCultureIgnoreCase))
+                                                                spatialAssociations.TryAdd(geometry, asso);
+                                                            else
+                                                                feature?.AddAssociation(asso);
 
 
-                                                        var newEntry = informationsTypesAdded.Add(binding.informationId!);
-                                                        if (newEntry) {
-                                                            dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
+                                                            var newEntry = informationsTypesAdded.Add(binding.informationId!);
+                                                            if (newEntry) {
+                                                                dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
 
-                                                            if (supportFiles.TryGetValue(binding.informationId!, out var filename)) {
+                                                                if (supportFiles.TryGetValue(binding.informationId!, out var filename)) {
 
-                                                                var attachment = source.GetAttachment(filename);
-                                                                if (attachment is not null) {
-                                                                    var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
-                                                                    dataset?.Metadata.AddSupportFile(filename, base64);
-                                                                }
-                                                                else {
-                                                                    if (System.Diagnostics.Debugger.IsAttached)
-                                                                        System.Diagnostics.Debugger.Break();
-                                                                    logger.LogError("File not found ({filename})!", filename);
+                                                                    var attachment = source.GetAttachment(filename);
+                                                                    if (attachment is not null) {
+                                                                        var base64 = Convert.ToBase64String(attachment.Value.stream.ToArray());
+                                                                        dataset?.Metadata.AddSupportFile(filename, base64);
+                                                                    }
+                                                                    else {
+                                                                        if (System.Diagnostics.Debugger.IsAttached)
+                                                                            System.Diagnostics.Debugger.Break();
+                                                                        logger.LogError("File not found ({filename})!", filename);
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            }
 
-                                            // Feature Associations
-                                            if (!current.IsNull("featurebindings")) {
-                                                var featureBindingsJson = Convert.ToString(current["featurebindings"])!;
-                                                var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(featureBindingsJson, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                                // Feature Associations
+                                                if (!current.IsNull("featurebindings")) {
+                                                    var featureBindingsJson = Convert.ToString(current["featurebindings"])!;
+                                                    var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(featureBindingsJson, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
 
-                                                if (featureBindings != default && featureBindings.Any()) {
-                                                    foreach (var binding in featureBindings) {
-                                                        var roleType = binding.roleType;
+                                                    if (featureBindings != default && featureBindings.Any()) {
+                                                        foreach (var binding in featureBindings) {
+                                                            var roleType = binding.roleType;
 
-                                                        // Skip association roleType for now
-                                                        if (roleType == "association")
-                                                            continue;
+                                                            // Skip association roleType for now
+                                                            if (roleType == "association")
+                                                                continue;
 
-                                                        var asso = new S100FC.YAML.Association {
-                                                            Name = binding.association!.S100FC_code,
-                                                            Role = binding.role,
-                                                            To = $"110:{binding.featureId!.Substring(1)}:1"
-                                                        };
+                                                            var asso = new S100FC.YAML.Association {
+                                                                Name = binding.association!.S100FC_code,
+                                                                Role = binding.role,
+                                                                To = $"110:{binding.featureId!.Substring(1)}:1"
+                                                            };
 
-                                                        feature?.AddFeatureAssociation(asso);
+                                                            feature?.AddFeatureAssociation(asso);
 
-                                                        var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{binding.featureId.Substring(1)}:1"));
-                                                        if (noGeometry != null && !featureTypesAdded.Contains(binding.featureId)) {
-                                                            featureTypesAdded.Add(binding.featureId);
-                                                            dataset?.AddFeature(noGeometry);
+                                                            var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{binding.featureId.Substring(1)}:1"));
+                                                            if (noGeometry != null && !featureTypesAdded.Contains(binding.featureId)) {
+                                                                featureTypesAdded.Add(binding.featureId);
+                                                                dataset?.AddFeature(noGeometry);
+                                                            }
                                                         }
                                                     }
                                                 }
+
+                                                //if ("F10500070853".Equals(name)) System.Diagnostics.Debugger.Break();
+
+                                                //var lookup = topology.MappingFeature(name);
+
+                                                //if (!lookup.Any())
+                                                dataset?.AddFeature(feature!);
+                                                //else {
+                                                //    int _ = 1;
+                                                //    foreach (var c in lookup) {
+                                                //        feature!.Foid = $"110:{name.Substring(1)}:{_++}";
+                                                //        feature!.Geometry = c;
+                                                //        dataset?.AddFeature(feature!);
+                                                //    }
+                                                //}
+
+                                                Action geometryConverter = tableName.Split('.', StringSplitOptions.RemoveEmptyEntries)[^1] switch {
+                                                    "pointset" or "topo_pointset" => () => {
+                                                        var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
+                                                        geometries.Add(new(_, uid!));
+                                                    }
+                                                    ,
+                                                    "point" or "topo_point" => () => {
+                                                        geometries.Add(new(current.GetShape(), uid!));
+                                                    }
+                                                    ,
+                                                    _ => () => { }
+                                                    ,
+                                                };
+
+                                                geometryConverter();
+                                                //geometries.Add(new(current.GetShape(), name!));                                        
                                             }
-
-                                            //if ("F10500070853".Equals(name)) System.Diagnostics.Debugger.Break();
-
-                                            //var lookup = topology.MappingFeature(name);
-
-                                            //if (!lookup.Any())
-                                            dataset?.AddFeature(feature!);
-                                            //else {
-                                            //    int _ = 1;
-                                            //    foreach (var c in lookup) {
-                                            //        feature!.Foid = $"110:{name.Substring(1)}:{_++}";
-                                            //        feature!.Geometry = c;
-                                            //        dataset?.AddFeature(feature!);
-                                            //    }
-                                            //}
-
-                                            Action geometryConverter = tableName.Split('.', StringSplitOptions.RemoveEmptyEntries)[^1] switch {
-                                                "pointset" or "topo_pointset" => () => {
-                                                    var _ = MultipointBuilderEx.CreateMultipoint((MapPoint)current.GetShape());
-                                                    geometries.Add(new(_, uid!));
-                                                }
-                                                ,
-                                                "point" or "topo_point" => () => {
-                                                    geometries.Add(new(current.GetShape(), uid!));
-                                                }
-                                                ,
-                                                _ => () => { }
-                                                ,
-                                            };
-
-                                            geometryConverter();
-                                            //geometries.Add(new(current.GetShape(), name!));                                        
-                                        }
-                                        catch (Exception ex) {
-                                            logger.LogError("Exception: {ex}", ex);
-                                            continue;
+                                            catch (Exception ex) {
+                                                logger.LogError("Exception: {ex}", ex);
+                                                continue;
+                                            }
                                         }
                                     }
                                 }
