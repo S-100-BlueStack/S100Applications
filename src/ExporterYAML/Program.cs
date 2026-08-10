@@ -351,7 +351,78 @@ namespace S100Framework.Applications
                         // Build Topology
                         logger.LogInformation("Building topology..");
                         int index = 0;
-                        var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
+
+                        var definitions = source.GetDefinitions<FeatureClassDefinition>();
+
+                        IEnumerable<(long objectid, string UID, ArcGIS.Core.Geometry.Geometry shape)> FeatureQuery(string tablename, string whereclause, string de9im) {
+                            using var featureClass = source.OpenDataset<FeatureClass>(definitions.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
+
+                            foreach(var f in filter) {
+                                var clipGeometry = (ArcGIS.Core.Geometry.Geometry g) => {
+                                    if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
+
+                                    if (GeometryEngine.Instance.Disjoint(g, f.FilterGeometry)) return g;
+
+                                    if (!GeometryEngine.Instance.Relate(g, f.FilterGeometry, S100FC.Topology.Matrix.DE9IM_Crosses)) return g;
+
+                                    var difference = GeometryEngine.Instance.Intersection(g, f.FilterGeometry);
+
+                                    if (difference is ArcGIS.Core.Geometry.Polygon polygon) {
+                                        if (polygon.ExteriorRingCount > 1) {
+                                            ArcGIS.Core.Geometry.Polygon[] polygons = [];
+                                            ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                            for (int i = 1; i < polygon.PartCount; i++) {
+                                                var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
+                                                if (p.Area < 0)
+                                                    segments = [.. segments, polygon.Parts[i]];
+                                                else {
+                                                    var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                    polygons = [.. polygons, _];
+                                                    segments = [polygon.Parts[i]];
+                                                }
+                                            }
+                                            if (segments.Any()) {
+                                                var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                polygons = [.. polygons, _];
+                                            }
+                                            return g = PolygonBuilderEx.CreatePolygon(polygons);
+                                        }
+                                        else {
+                                            return polygon;
+                                        }
+                                    }
+                                    else
+                                        System.Diagnostics.Debugger.Break();
+
+                                    return g;
+                                };
+                            
+
+                                var backupClause = (string)f.WhereClause.Clone();
+                                {
+                                    f.WhereClause = $"({f.WhereClause}) AND ({whereclause})";
+                                    f.SpatialRelationshipDescription = de9im;
+
+                                    using var cursor = featureClass.Search(f);
+                                    while (cursor.MoveNext()) {
+                                        var _ = (ArcGIS.Core.Data.Feature)cursor.Current;
+
+                                        var shape = _.GetShape();
+                                        shape = clipGeometry(shape);
+                                        if (shape.IsEmpty) continue;
+
+                                        yield return (_.GetObjectID(), Convert.ToString(_["UID"])!, shape);
+                                    }
+                                }
+                                f.WhereClause = backupClause;
+                            }
+
+                            yield break;
+                        }
+
+
+                        //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
+                        var result = source.BuildTopology(FeatureQuery, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
 
                             var persist = code switch {
