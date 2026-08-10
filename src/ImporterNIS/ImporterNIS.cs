@@ -937,21 +937,6 @@ namespace S100Framework.Applications
 
                 var whereClause = $"ps = '{ps101}' AND code IN ('SpanFixed','SpanOpening','Pontoon','PylonBridgeSupport')";
 
-                //int[] specificUsage = [];
-                //{
-                //    using var cursor = surface.Search(new QueryFilter {
-                //        PrefixClause = "Distinct",
-                //        WhereClause = whereClause,
-                //        SubFields = "specificusage",
-                //        PostfixClause = "ORDER BY specificusage DESC",
-                //    }, true);
-
-                //    while (cursor.MoveNext()) {
-                //        var _ = Convert.ToInt32(cursor.Current["specificUsage"]);
-                //        specificUsage = [.. specificUsage, _];
-                //    }
-                //}
-
                 int[] nominalscales = [];
                 {
                     using var cursor = surface.Search(new QueryFilter {
@@ -1963,14 +1948,14 @@ namespace S100Framework.Applications
             if (colorPattern.Contains(",")) {
                 Logger.Current.Error($"Multiple colorPatterns not supported in S-101 ({colorPattern})!");
             }
-            int? colourPat = colorPattern switch {
+            var colourPat = colorPattern switch {
                 "1" => 1,   //colourPattern.HorizontalStripes,
                 "2" => 2,   //colourPattern.VerticalStripes,
                 "3" => 3,   //colourPattern.DiagonalStripes,
                 "4" => 4,   //colourPattern.Squared,
                 "5" => 5,   //colourPattern.StripesDirectionUnknown,
                 "6" => 6,   //colourPattern.BorderStripe,
-                "-32767" => null,
+                "-32767" => default,
 
                 "3,4" => 3, //US
 
