@@ -6,6 +6,7 @@ using S100BlueStack.Settings;
 using S100FC;
 using S100FC.S101;
 using S100FC.S101.SimpleAttributes;
+using S100FC.S128.FeatureTypes;
 using S100FC.Topology;
 using S100FC.YAML;
 using Serilog;
@@ -181,6 +182,48 @@ namespace S100Framework.Applications
 
                 var featureCatalogue = S100FC.Catalogues.FeatureCatalogue.Catalogues.Single(e => e.ProductID.Equals("S-101"));
 
+
+
+                //  TEST
+                {
+                    using Geodatabase source = createGeodatabase();
+
+                    var syntax = source.GetSQLSyntax();
+
+                    var definitionTables = source.GetDefinitions<TableDefinition>();
+                    var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
+
+                    using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
+
+                    long[] dataCoverages = [1, 2];
+                    foreach (var objectid in dataCoverages) {
+                        using var datacoverageSearch = surface.Search(new QueryFilter {
+                            WhereClause = $"OBJECTID = {objectid}",
+                        }, false);
+
+                        datacoverageSearch.MoveNext();
+
+                        var shape = ((ArcGIS.Core.Data.Feature)datacoverageSearch.Current).GetShape();
+
+                        using var featureSearch = surface.Search(new SpatialQueryFilter {
+                            WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND attributeBindings LIKE '%19999999%'",
+                            FilterGeometry = shape,
+                            SpatialRelationshipDescription = DE9IM_Contains,
+                            SpatialRelationship = SpatialRelationship.Relation,
+                        }, true);
+
+                        int hit = 0;
+                        while (featureSearch.MoveNext()) {
+                            var _ = featureSearch.Current.GetObjectID();
+                            hit += 1;
+                        }
+
+                    }
+                }
+
+
+
+
                 var datasets = new List<(Dataset Dataset, SpatialQueryFilter[] Filters)>();
                 {
                     using Geodatabase source = createGeodatabase();
@@ -234,8 +277,8 @@ namespace S100Framework.Applications
 
                             while (datacoverageSearch.MoveNext()) {
                                 var f = (ArcGIS.Core.Data.Feature)datacoverageSearch.Current;
-                                
-                                var dataCoverage = (S100FC.S101.FeatureTypes.DataCoverage)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S101.FeatureTypes.DataCoverage));
+
+                                var dataCoverage = (S100FC.S101.FeatureTypes.DataCoverage)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(f["attributebindings"])!, typeof(S100FC.S101.FeatureTypes.DataCoverage));
 
                                 var spatialQueryFilter = new SpatialQueryFilter {
                                     WhereClause = whereClause + $" AND nominalscale = {dataCoverage.optimumDisplayScale}",
@@ -301,6 +344,7 @@ namespace S100Framework.Applications
                     }
                 }
 
+
                 //Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 //  TEST, TEST, TEST, TEST, TEST, 
@@ -337,68 +381,79 @@ namespace S100Framework.Applications
 
                             HashSet<long> hits = [];
 
-                            foreach(var f in spatialFilters) {
-                                var clipGeometry = (ArcGIS.Core.Geometry.Geometry g) => {
-                                    if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
+                            var clipGeometry = GeometryEngine.Instance.Union(spatialFilters.Select(e => e.FilterGeometry));
 
-                                    if (GeometryEngine.Instance.Disjoint(g, f.FilterGeometry)) return g;
+                            var clip = (ArcGIS.Core.Geometry.Geometry g) => {
+                                if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
 
-                                    if (!GeometryEngine.Instance.Relate(g, f.FilterGeometry, S100FC.Topology.Matrix.DE9IM_Crosses)) return g;
+                                if (GeometryEngine.Instance.Disjoint(g, clipGeometry)) return g;
 
-                                    var difference = GeometryEngine.Instance.Intersection(g, f.FilterGeometry);
+                                if (!GeometryEngine.Instance.Relate(g, clipGeometry, S100FC.Topology.Matrix.DE9IM_Crosses)) return g;
 
-                                    if (difference is ArcGIS.Core.Geometry.Polygon polygon) {
-                                        if (polygon.ExteriorRingCount > 1) {
-                                            ArcGIS.Core.Geometry.Polygon[] polygons = [];
-                                            ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
-                                            for (int i = 1; i < polygon.PartCount; i++) {
-                                                var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
-                                                if (p.Area < 0)
-                                                    segments = [.. segments, polygon.Parts[i]];
-                                                else {
-                                                    var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                                    polygons = [.. polygons, _];
-                                                    segments = [polygon.Parts[i]];
-                                                }
-                                            }
-                                            if (segments.Any()) {
+                                var difference = GeometryEngine.Instance.Intersection(g, clipGeometry);
+
+                                if (difference is ArcGIS.Core.Geometry.Polygon polygon) {
+                                    if (polygon.ExteriorRingCount > 1) {
+                                        ArcGIS.Core.Geometry.Polygon[] polygons = [];
+                                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                        for (int i = 1; i < polygon.PartCount; i++) {
+                                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
+                                            if (p.Area < 0)
+                                                segments = [.. segments, polygon.Parts[i]];
+                                            else {
                                                 var _ = PolygonBuilderEx.CreatePolygon(segments);
                                                 polygons = [.. polygons, _];
+                                                segments = [polygon.Parts[i]];
                                             }
-                                            return g = PolygonBuilderEx.CreatePolygon(polygons);
                                         }
-                                        else {
-                                            return polygon;
+                                        if (segments.Any()) {
+                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                            polygons = [.. polygons, _];
                                         }
+                                        return g = PolygonBuilderEx.CreatePolygon(polygons);
                                     }
-                                    else
-                                        System.Diagnostics.Debugger.Break();
+                                    else {
+                                        return polygon;
+                                    }
+                                }
+                                else
+                                    System.Diagnostics.Debugger.Break();
 
-                                    return g;
-                                };
-                            
+                                return g;
+                            };
+
+
+                            foreach (var f in spatialFilters) {
+
                                 var backupClause = (string)f.WhereClause.Clone();
+                                var backupGeometry = f.FilterGeometry.Clone();
                                 {
                                     f.WhereClause = $"({f.WhereClause}) AND ({whereclause})";
+                                    f.FilterGeometry = f.FilterGeometry;
                                     f.SpatialRelationshipDescription = de9im;
 
-                                    var lookup = hits.ToLookup(e=>e);
+                                    var lookup = hits.ToLookup(e => e);
 
                                     using var cursor = featureClass.Search(f);
                                     while (cursor.MoveNext()) {
                                         var _ = (ArcGIS.Core.Data.Feature)cursor.Current;
                                         var objectid = _.GetObjectID();
+                                        var code = Convert.ToString(_["code"])!;
+
+                                        //if ("DataCoverage".Equals(code)) System.Diagnostics.Debugger.Break();
+
                                         if (lookup.Contains(objectid)) continue;
 
                                         hits.Add(objectid);
                                         var shape = _.GetShape();
-                                        shape = clipGeometry(shape);
+                                        shape = clip(shape);
                                         if (shape.IsEmpty) continue;
 
                                         //if ("F10400000165".Equals(Convert.ToString(_["UID"])!)) System.Diagnostics.Debugger.Break();
-                                        yield return (objectid, Convert.ToString(_["UID"])!, Convert.ToString(_["code"])!, shape);
+                                        yield return (objectid, Convert.ToString(_["UID"])!, code, shape);
                                     }
                                 }
+                                f.FilterGeometry = backupGeometry;
                                 f.WhereClause = backupClause;
                             }
 
