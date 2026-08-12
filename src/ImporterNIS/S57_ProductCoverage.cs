@@ -239,8 +239,7 @@ namespace S100Framework.Applications
                     var dataCoverage = new DataCoverage {
                         minimumDisplayScale = product.s101.minimumDisplayScale,
                         optimumDisplayScale = product.s101.optimumDisplayScale,
-                        maximumDisplayScale = product.s101.maximumDisplayScale,
-                        drawingIndex = product.s101.specificUsage,
+                        maximumDisplayScale = product.s101.maximumDisplayScale,                        
                     };
 
                     coverages = [.. coverages, new S101ProductCoverage(
