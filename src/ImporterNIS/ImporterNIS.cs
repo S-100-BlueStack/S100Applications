@@ -821,7 +821,7 @@ namespace S100Framework.Applications
                                 "CoastlineP",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
                                 QueryFilter,
-                                () => destination.OpenDataset<FeatureClass>(destination.GetName("surface")),
+                                () => destination.OpenDataset<FeatureClass>(destination.GetName("point")),
                                 (buffer, shape) => SetShape(buffer, shape), []), destination);
 
                             Logger.Current.Information($"Converting Depth Areas");

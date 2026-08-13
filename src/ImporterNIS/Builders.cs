@@ -1407,12 +1407,10 @@ namespace S100Framework.Applications
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
-                string subtype = "";
-
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
-
-                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                //  S-158:101 Validation Checks, check 101_1040
+                //  LandArea of geometric primitive surface has value of scaleMinimum.
+                //  For each LandArea geometry primitive surface where scaleMinimum is Present.
+                //  Remove the scaleMinimum attribute value.
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());

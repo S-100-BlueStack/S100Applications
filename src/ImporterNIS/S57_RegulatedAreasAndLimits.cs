@@ -112,6 +112,26 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
+                        break;                    
+                    case "regulatedareasandlimitsa::10": { // ADMARE_AdministrationAreaNamed                            
+                            var instance = ImporterNIS.Build("ADMARE", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                if (instance is AdministrationArea administrationArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, administrationArea.scaleMinimum);
+                                if (instance is PilotageDistrict pilotageDistrict)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, pilotageDistrict.scaleMinimum);
+                                if (instance is MarinePollutionRegulationsArea marinePollutionRegulationsArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, marinePollutionRegulationsArea.scaleMinimum);
+                                if (instance is VesselTrafficServiceArea vesselTrafficServiceArea)
+                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, vesselTrafficServiceArea.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
                         break;
                     case "regulatedareasandlimitsp::15": { // DMPGRD_DumpingGround
                             var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature, buffer);
@@ -126,10 +146,50 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    // ICNARE_IncinerationArea
-                    case "regulatedareasandlimitsp::25":
-                    case "regulatedareasandlimitsa::75": { 
+                    case "regulatedareasandlimitsa::15": { // ARCSLN_ArchipelagicSeaLane
+                            throw new NotImplementedException($"No ARCSLN_ArchipelagicSeaLane in DK or GL. {tableName}");
+                        }
+                    case "regulatedareasandlimitsa::20": { // CONZNE_ContiguousZone
+                            var instance = (ContiguousZone)ImporterNIS.Build("CONZNE", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "regulatedareasandlimitsp::25": {
                             //The S-57 Object class ICNARE will not be converted. 
+                        }
+                        break;
+                    case "regulatedareasandlimitsl::25": {  //  MARCUL_MarineFarmCulture
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedLineEquipment(current, instance, featureN);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "regulatedareasandlimitsa::25": { // COSARE_ContinentalShelfArea
+                            var instance = (ContinentalShelfArea)ImporterNIS.Build("COSARE", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
                     case "regulatedareasandlimitsp::30": { // LOGPON_LogPond
@@ -148,7 +208,19 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    // MARCUL_MarineFarmCulture
+                    case "regulatedareasandlimitsa::30": { // CTSARE_CargoTranshipmentArea
+                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature, buffer);
+
+                            using var featureN = featureClass.CreateRow(buffer);
+                            var name = featureN.UID();
+
+                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
+                            }
+                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
                     case "regulatedareasandlimitsp::35": { // MARCUL_MarineFarmCulture
                             var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
 
@@ -175,6 +247,9 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
+                    case "regulatedareasandlimitsa::35": { // CUSZNE_CustomZone
+                            throw new NotImplementedException($"No CUSZNE_CustomZone in DK or GL. {tableName}");
+                        }
                     case "regulatedareasandlimitsp::40": { // SPLARE_SeaPlaneLandingArea
                             var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature, buffer);
 
@@ -188,72 +263,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    case "regulatedareasandlimitsa::10": { // ADMARE_AdministrationAreaNamed                            
-                            var instance = ImporterNIS.Build("ADMARE", feature, buffer);
-
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
-
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                if (instance is AdministrationArea administrationArea)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, administrationArea.scaleMinimum);
-                                if (instance is PilotageDistrict pilotageDistrict)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, pilotageDistrict.scaleMinimum);
-                                if (instance is MarinePollutionRegulationsArea marinePollutionRegulationsArea)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, marinePollutionRegulationsArea.scaleMinimum);
-                                if (instance is VesselTrafficServiceArea vesselTrafficServiceArea)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, vesselTrafficServiceArea.scaleMinimum);
-                            }
-                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                        }
-                        break;
-                    case "regulatedareasandlimitsa::15": { // ARCSLN_ArchipelagicSeaLane
-                            throw new NotImplementedException($"No ARCSLN_ArchipelagicSeaLane in DK or GL. {tableName}");
-                        }
-                    case "regulatedareasandlimitsa::20": { // CONZNE_ContiguousZone
-                            var instance = (ContiguousZone)ImporterNIS.Build("CONZNE", feature, buffer);
-
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
-
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                        }
-                        break;
-                    case "regulatedareasandlimitsa::25": { // COSARE_ContinentalShelfArea
-                            var instance = (ContinentalShelfArea)ImporterNIS.Build("COSARE", feature, buffer);
-
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
-
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                        }
-                        break;
-
-                    case "regulatedareasandlimitsa::30": { // CTSARE_CargoTranshipmentArea
-                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature, buffer);
-
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
-
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                        }
-                        break;
-                    case "regulatedareasandlimitsa::35": { // CUSZNE_CustomZone
-                            throw new NotImplementedException($"No CUSZNE_CustomZone in DK or GL. {tableName}");
-                        }
                     case "regulatedareasandlimitsa::40": { // DMPGRD_DumpingGround
                             var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature, buffer);
 
@@ -310,6 +319,10 @@ namespace S100Framework.Applications
                             }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                        }
+                        break;
+                    case "regulatedareasandlimitsa::75": {
+                            //The S-57 Object class ICNARE will not be converted. 
                         }
                         break;
                     case "regulatedareasandlimitsa::85": { // LOGPON_LogPond
