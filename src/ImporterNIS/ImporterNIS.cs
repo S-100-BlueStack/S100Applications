@@ -289,7 +289,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
                                     //buffer["specificusage"] = c.specificUsage;
-                                    buffer["nominalscale"] = c.PLTS_COMP_SCALE;
+                                    buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                     buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
 
                                     foreach (var p in c.Coverage.Split()) {
@@ -309,7 +309,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
                                     //buffer["specificusage"] = c.specificUsage;
-                                    buffer["nominalscale"] = c.PLTS_COMP_SCALE;
+                                    buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                     buffer["sourceIdentifier"] = vdat.sourceIdentifier;
 
                                     foreach (var p in c.Coverage.Split()) {
@@ -1164,7 +1164,7 @@ namespace S100Framework.Applications
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
                             //bufferBridge["specificusage"] = usage;
-                            bufferBridge["nominalscale"] = scale.First();
+                            bufferBridge["nominalscale"] = optimumDisplayScaleConverter(scale.First()) ?? 10000000;
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetShape(bufferBridge, polygon);
@@ -1777,13 +1777,13 @@ namespace S100Framework.Applications
         internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
             //buffer["specificusage"] = _;
-            buffer["nominalscale"] = scale;
+            buffer["nominalscale"] = optimumDisplayScaleConverter(scale) ?? 10000000;
         }
 
         internal static void SetUsageBand(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
             //buffer["specificusage"] = _;
-            buffer["nominalscale"] = scale;
+            buffer["nominalscale"] = optimumDisplayScaleConverter(scale) ?? 10000000;
         }
 
         /// <summary>

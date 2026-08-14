@@ -22,25 +22,43 @@ namespace S100Framework.Applications
     {
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
-        //private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
-        //    //_ => default,
-        //    //>= 10000000 => default,
-        //    >= 3500000 => 10000000,
-        //    >= 1500000 => 3500000,
-        //    >= 700000 => 1500000,
-        //    >= 350000 => 700000,
-        //    >= 180000 => 350000,
-        //    >= 90000 => 180000,
-        //    >= 45000 => 90000,
-        //    >= 22000 => 45000,
-        //    >= 12000 => 22000,
-        //    >= 9000 => 12000,
-        //    >= 4000 => 8000,
-        //    >= 3000 => 4000,
-        //    >= 2000 => 3000,
-        //    >= 1000 => 2000,
-        //    _ => throw new NotImplementedException(),
-        //};
+        private static int? optimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
+            >= 10000000 => null,
+            >= 3500000 => 3500000,
+            >= 1500000 => 1500000,
+            >= 700000 => 700000,
+            >= 350000 => 350000,
+            >= 180000 => 180000,
+            >= 90000 => 90000,
+            >= 45000 => 45000,
+            >= 22000 => 22000,
+            >= 12000 => 12000,
+            >= 8000 => 8000,
+            >= 4000 => 4000,
+            >= 3000 => 3000,
+            >= 2000 => 2000,
+            >= 1000 => 1000,
+            _ => 1000,
+        };
+
+        private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
+            >= 10000000 => null,
+            >= 3500000 => 10000000,
+            >= 1500000 => 3500000,
+            >= 700000 => 1500000,
+            >= 350000 => 700000,
+            >= 180000 => 350000,
+            >= 90000 => 180000,
+            >= 45000 => 90000,
+            >= 22000 => 45000,
+            >= 12000 => 22000,
+            >= 8000 => 12000,
+            >= 4000 => 8000,
+            >= 3000 => 4000,
+            >= 2000 => 3000,
+            >= 1000 => 2000,
+            _ => 1000,
+        };
 
         private static void S57_ProductCoverage_Full(Geodatabase source, Geodatabase target128, QueryFilter filter, int minimumDisplayScale, ref S101ProductCoverage[] coverages, string datasets, Action<S101ProductCoverage[]> createProductCoverages) {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
@@ -51,7 +69,7 @@ namespace S100Framework.Applications
 
             coverages = [];
 
-            (Guid globalid, string DSNM, int optimumDisplayScale, ElectronicProduct s57, ElectronicProduct s101, Polygon fullCoverage, Polygon coverage, S100FC.S101.SimpleAttributes.verticalDatum vdat, S100FC.S101.SimpleAttributes.verticalDatum sdat)[] products = [];
+            (Guid globalid, string DSNM, int? optimumDisplayScale, int PLTS_COMP_SCALE, ElectronicProduct s57, ElectronicProduct s101, Polygon fullCoverage, Polygon coverage, S100FC.S101.SimpleAttributes.verticalDatum vdat, S100FC.S101.SimpleAttributes.verticalDatum sdat)[] products = [];
 
             using var metadataAFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
 
@@ -106,7 +124,7 @@ namespace S100Framework.Applications
                             version = "3.1",
                         },
                         maximumDisplayScale = null,
-                        optimumDisplayScale = current.CSCL!.Value,
+                        optimumDisplayScale = optimumDisplayScaleConverter(current.CSCL!.Value),
                         //minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
                     };
 
@@ -125,7 +143,7 @@ namespace S100Framework.Applications
                             version = S100FC.S101.Summary.Version.ToString(),
                         },
                         maximumDisplayScale = null,
-                        optimumDisplayScale = current.CSCL!.Value,
+                        optimumDisplayScale = optimumDisplayScaleConverter(current.CSCL!.Value),
                         //minimumDisplayScale = minimumDisplayScaleConverter(current.CSCL!.Value)
                     };
 
@@ -151,7 +169,7 @@ namespace S100Framework.Applications
                     electronicProduct57.verticalDatum = sdat!.value;
                     electronicProduct101.verticalDatum = sdat!.value;
 
-                    products = [.. products, (globalid, dsnm57, current.CSCL!.Value!, electronicProduct57, electronicProduct101, coverageFull, coverage, vdat, sdat)];
+                    products = [.. products, (globalid, dsnm57, optimumDisplayScaleConverter(current.CSCL!.Value), current.CSCL!.Value, electronicProduct57, electronicProduct101, coverageFull, coverage, vdat, sdat)];
                 }
             }
 
@@ -162,7 +180,7 @@ namespace S100Framework.Applications
             for (int i = 0; i < scales.Length; i++) {
                 var optimumDisplayScale = scales[i];
 
-                var _minimum = i == 0 ? minimumDisplayScale : scales[i - 1];
+                var _minimum = i == 0 ? minimumDisplayScaleConverter(minimumDisplayScale) : scales[i - 1];
 
                 foreach (var product in products.Where(e => e.optimumDisplayScale == optimumDisplayScale)) {
 
@@ -178,7 +196,7 @@ namespace S100Framework.Applications
                     product.s101.maximumDisplayScale = product.s101.optimumDisplayScale / 2;
 
                     var m_cscl = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
-                        WhereClause = $"(PLTS_COMP_SCALE = {product.optimumDisplayScale}) AND fcsubtype = 20",
+                        WhereClause = $"(PLTS_COMP_SCALE = {product.PLTS_COMP_SCALE}) AND fcsubtype = 20",
                         SpatialRelationship = SpatialRelationship.Contains,
                         FilterGeometry = product.coverage,
                     });
@@ -192,11 +210,11 @@ namespace S100Framework.Applications
 
                             coverages = [.. coverages, new S101ProductCoverage(
                                 product.s101.datasetName!,
-                                e.CSCALE!.Value,
+                                product.s101.optimumDisplayScale!.Value,    //e.CSCALE!.Value,
                                 new DataCoverage{
                                     minimumDisplayScale = product.s101.minimumDisplayScale,
-                                    optimumDisplayScale = e.CSCALE!.Value,
-                                    maximumDisplayScale = e.CSCALE!.Value/2,
+                                    optimumDisplayScale = optimumDisplayScaleConverter(e.CSCALE!.Value),
+                                    maximumDisplayScale = optimumDisplayScaleConverter(e.CSCALE!.Value)/2,
                                 },
                                 product.vdat,
                                 product.sdat,
@@ -309,6 +327,7 @@ namespace S100Framework.Applications
             }
         }
 
+#if LEGACY
         private static void S57_ProductCoverage_Full_Legacy(Geodatabase source, Geodatabase target128, QueryFilter filter, int minimumDisplayScale2, ref S101ProductCoverage[] converages, string datasets, Action<S101ProductCoverage[]> createProductCoverages) {
             JsonSerializerOptions jsonSerializerOptions128 = new JsonSerializerOptions {
                 WriteIndented = false,
@@ -719,6 +738,6 @@ namespace S100Framework.Applications
             //}
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }
-
+#endif
     }
 }

@@ -4746,7 +4746,7 @@ namespace S100Framework.Applications
             };
 
             if (drval2.HasValue)
-                instance.depthRangeMaximumValue = drval2.GetValueOrDefault();
+                instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
 
             if (!string.IsNullOrEmpty(current.SORDAT())) {
                 if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
