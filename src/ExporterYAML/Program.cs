@@ -270,7 +270,8 @@ namespace S100Framework.Applications
                             SpatialQueryFilter[] spatialQueryFilters = [];
 
                             using var datacoverageSearch = surface.Search(new SpatialQueryFilter {
-                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND attributeBindings LIKE '%\"minimumDisplayScale\":%{electricProduct.minimumDisplayScale}%'",
+                                //WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND attributeBindings LIKE '%\"minimumDisplayScale\":%{electricProduct.minimumDisplayScale}%'",
+                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {current["nominalscale"]}",
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Contains,
                             }, true);
@@ -529,8 +530,13 @@ namespace S100Framework.Applications
                                 Action build = code switch {
                                     >= 8000 => () => {
                                         using var buffer = polyline.CreateRowBuffer();
+                                        var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
+                                        var maxLength = fields["message"].Length;
+
                                         for (int i = 0; i < array.Length; i++) {
-                                            buffer["message"] = $"{i}: {array[i].message}";
+                                            var message = $"{i}: {array[i].message}";
+                                            if (message.Length <= maxLength)
+                                                buffer["message"] = message;
                                             buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
                                             using var f = polyline.CreateRow(buffer);
                                         }
@@ -539,8 +545,13 @@ namespace S100Framework.Applications
 
                                     >= 7000 => () => {
                                         using var buffer = polyline.CreateRowBuffer();
-                                        for (int i = 0; i < array.Length; i++) {
-                                            buffer["message"] = $"{array[i].message}";
+                                        var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
+                                        var maxLength = fields["message"].Length;
+
+                                        for (int i = 0; i < array.Length; i++) {                                            
+                                            var message = $"{array[i].message}";
+                                            if (message.Length <= maxLength)
+                                                buffer["message"] = message;
                                             buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
                                             using var f = polyline.CreateRow(buffer);
                                         }
@@ -590,10 +601,15 @@ namespace S100Framework.Applications
                                         using var f = polygon.CreateRow(buffer);
                                     }
                                     ,
-                                    _ => () => {
+                                    _ => () => {                                        
                                         using var buffer = polyline.CreateRowBuffer();
+                                        var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
+                                        var maxLength = fields["message"].Length;
+                                        
                                         for (int i = 0; i < array.Length; i++) {
-                                            buffer["message"] = $"{i}: {array[i].message}";
+                                            var message = $"{i}: {array[i].message}";
+                                            if (message.Length <= maxLength)
+                                                buffer["message"] = message;
                                             buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
                                             using var f = polyline.CreateRow(buffer);
                                         }
