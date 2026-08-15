@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
+    using ArcGIS.Core.Data.UtilityNetwork.Trace;
     using ArcGIS.Core.Geometry;
     using S100FC.S101.InformationTypes;
     using S100FC.S101.SimpleAttributes;
@@ -76,7 +77,7 @@ namespace S100Framework.Applications
             { "COALNE", (current, buffer) => { return COALNE(current, buffer); } },
             { "CTNARE", (current, buffer) => { return CTNARE(current, buffer); } },
             { "FSHFAC", (current, buffer) => { return FSHFAC(current, buffer); } },
-            { "OBSTRN", (current, buffer) => { return OBSTRN(current, buffer); } },
+            //{ "OBSTRN", (current, buffer) => { return OBSTRN(current, buffer); } },
             { "WATTUR", (current, buffer) => { return WATTUR(current, buffer); } },
             { "WRECKS", (current, buffer) => { return WRECKS(current, buffer); } },
             { "OILBAR", (current, buffer) => { return OILBAR(current, buffer); } },
@@ -1834,7 +1835,7 @@ namespace S100Framework.Applications
             return instance;
         }
 
-        private static FeatureType OBSTRN(Feature current, RowBuffer buffer) {
+        private static FeatureType OBSTRN(Feature current, RowBuffer buffer, QueryFilter filter) {
             if (!string.IsNullOrEmpty(current.INFORM()) && regexDam.IsMatch(current.INFORM()!)) {
                 var instance = new Dam();
 
@@ -2049,7 +2050,7 @@ namespace S100Framework.Applications
                 if (current.WATLEV_HasValue()) {
                     if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
                         instance.waterLevelEffect = waterLevelEffect;
-                }
+                }               
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
@@ -2058,6 +2059,28 @@ namespace S100Framework.Applications
                         throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                }
+
+                /*      30.1 default clearance depth
+                        The attribute default clearance depth must be populated with a value, which must not be an empty (null) value, 
+                        only if the attribute value of sounding for the feature instance is populated with an empty (null) value and 
+                        the attribute height, if an allowable attribute for the feature, is not populated.
+
+                        The value for default clearance depth is determined from the attribute depth range minimum value for the surrounding 
+                        encoded Depth Area(s) or Dredged Area (see clauses 11.4 and 11.7) in accordance with the Tables below. 
+                        For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
+                        range minimum value of the shoalest of the depth areas covering the feature.
+                */
+                if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
+                    var surrindingDepth = ImporterNIS.GetSurrunding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause);
+                    if (surrindingDepth.HasValue) {
+                        if (surrindingDepth.Value.FcSubtype == 5) {  // DRGARE
+                            instance.defaultClearanceDepth = surrindingDepth.Value.DRVAL1!.Value;
+                        }
+                        if (surrindingDepth.Value.FcSubtype == 1) {  // DEPARE
+                            instance.defaultClearanceDepth = surrindingDepth.Value.DRVAL1!.Value;
+                        }
+                    }
                 }
 
                 var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());

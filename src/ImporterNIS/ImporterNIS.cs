@@ -257,7 +257,7 @@ namespace S100Framework.Applications
                     var query = new QueryFilter {
                         WhereClause = $"upper(ps) = 'S-128'",
                     };
-                    
+
                     foreach (var featureClass in electronicProducts.GetDefinitions<FeatureClassDefinition>()) {
                         using var _ = electronicProducts.OpenDataset<FeatureClass>(featureClass.GetName());
 
@@ -274,7 +274,7 @@ namespace S100Framework.Applications
                         var count = _.GetCount(query);
                         Store((electronicProducts) => {
                             _.DeleteRows(query);
-                        }, electronicProducts);                        
+                        }, electronicProducts);
                     }
 
                     Store((d) => S57_ProductCoverage_Full(source, electronicProducts, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter, (products) => {
@@ -764,7 +764,7 @@ namespace S100Framework.Applications
                             Logger.Current.Information($"Converting Soundings");
                             Store((destination) => S57_SoundingsP(source, destination, QueryFilter), destination);
 
-                            Logger.Current.Information($"Converting Tides And Variations");                            
+                            Logger.Current.Information($"Converting Tides And Variations");
                             Store((destination) => S57_TidesAndVariations(
                                 "TidesAndVariationsA",
                                 (tableName) => source.OpenDataset<FeatureClass>(source.GetName(tableName)),
@@ -1068,15 +1068,21 @@ namespace S100Framework.Applications
 
                                 string[] natureOfConstruction = ["1", "2", "6", "7"];
                                 if (values.Any(e => natureOfConstruction.Contains(e))) {
-                                    var c = values.Where(e => natureOfConstruction.Contains(e)).Distinct().Select(e => e switch {
-                                        "1" => 1,
-                                        "2" => 2,
-                                        "6" => 6,
-                                        "7" => 7,
-                                        "-32767" => default(int?),
-                                        _ => throw new NotImplementedException(),
-                                    });
-                                    instance.natureOfConstruction = [.. c];
+                                    var distinct = values.Where(e => natureOfConstruction.Contains(e)).Distinct().ToArray();
+                                    if (distinct.Any()) {
+                                        int?[] _natureOfConstruction = [];
+                                        for (int i = 0; i < distinct.Count(); i++) {
+                                            _natureOfConstruction = [.._natureOfConstruction, distinct[i] switch {
+                                                "1" => 1,
+                                                "2" => 2,
+                                                "6" => 6,
+                                                "7" => 7,
+                                                "-32767" => null,
+                                                _ => throw new NotImplementedException(),
+                                            }];
+                                        }
+                                        instance.natureOfConstruction = _natureOfConstruction;                                        
+                                    }
                                 }
                             }
 
@@ -1947,14 +1953,14 @@ namespace S100Framework.Applications
             if (colorPattern.Contains(",")) {
                 Logger.Current.Error($"Multiple colorPatterns not supported in S-101 ({colorPattern})!");
             }
-            var colourPat = colorPattern switch {
+            int? colourPat = colorPattern switch {
                 "1" => 1,   //colourPattern.HorizontalStripes,
                 "2" => 2,   //colourPattern.VerticalStripes,
                 "3" => 3,   //colourPattern.DiagonalStripes,
                 "4" => 4,   //colourPattern.Squared,
                 "5" => 5,   //colourPattern.StripesDirectionUnknown,
                 "6" => 6,   //colourPattern.BorderStripe,
-                "-32767" => default,
+                "-32767" => null,
 
                 "3,4" => 3, //US
 
@@ -2027,7 +2033,7 @@ namespace S100Framework.Applications
                         "17" => 17,   //status.Unwatched,
                         "18" => 18,   //status.ExistenceDoubtful,
                                       //"28" => ??, // TODO: what to do? STATUS 28
-                        "-32767" => default,
+                        "-32767" => null,
                         _ => throw new IndexOutOfRangeException(),
                     };
                     if (e.HasValue) {

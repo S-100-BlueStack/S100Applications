@@ -79,7 +79,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::5": { // OBSTRN_Obstruction
-                            var instance = ImporterNIS.Build("OBSTRN", feature, buffer);
+                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -149,7 +149,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::15": { // OBSTRN_Obstruction
-                            var instance = ImporterNIS.Build("OBSTRN", feature, buffer);
+                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -167,7 +167,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::20": { // OBSTRN_Obstruction
-                            var instance = ImporterNIS.Build("OBSTRN", feature, buffer);
+                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
