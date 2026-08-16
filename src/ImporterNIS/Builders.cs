@@ -79,7 +79,7 @@ namespace S100Framework.Applications
             { "FSHFAC", (current, buffer) => { return FSHFAC(current, buffer); } },
             //{ "OBSTRN", (current, buffer) => { return OBSTRN(current, buffer); } },
             { "WATTUR", (current, buffer) => { return WATTUR(current, buffer); } },
-            { "WRECKS", (current, buffer) => { return WRECKS(current, buffer); } },
+            //{ "WRECKS", (current, buffer) => { return WRECKS(current, buffer); } },
             { "OILBAR", (current, buffer) => { return OILBAR(current, buffer); } },
             //{ "UWTROC", (current, buffer) => { return UWTROC(current, buffer); } },
             { "LAKARE", (current, buffer) => { return LAKARE(current, buffer); } },
@@ -104,7 +104,7 @@ namespace S100Framework.Applications
             { "RECTRC", (current, buffer) => { return RECTRC(current, buffer); } },
             { "TSELNE", (current, buffer) => { return TSELNE(current, buffer); } },
             { "TSSBND", (current, buffer) => { return TSSBND(current, buffer); } },
-          
+
         };
 
         private static readonly Regex regexWaterwayDistance = new Regex(@"(Waterway distance =)\s(?<value>\d+)\s(?<unit>\D+)", RegexOptions.IgnoreCase);
@@ -386,7 +386,7 @@ namespace S100Framework.Applications
                 instance.periodicDateRange = periodicDateRange;
             }
 
-            if (current.QUASOU_HasValue()) {                
+            if (current.QUASOU_HasValue()) {
                 var qualityOfVerticalMeasurement = EnumHelper.GetEnumValues(current.QUASOU(), instance.attributeBindingDefinition("qualityOfVerticalMeasurement")!.permitedValues!);
                 if (qualityOfVerticalMeasurement is not null && qualityOfVerticalMeasurement.Any())
                     instance.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
@@ -404,7 +404,7 @@ namespace S100Framework.Applications
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
             }
 
-            if (current.TRAFIC_HasValue()) {                
+            if (current.TRAFIC_HasValue()) {
                 if (EnumHelper.GetEnumValue(current.TRAFIC(), out int? trafficFlow, instance.attributeBindingDefinition("trafficFlow")!.permitedValues!))
                     instance.trafficFlow = trafficFlow;
             }
@@ -757,7 +757,7 @@ namespace S100Framework.Applications
         private static FerryRoute FERYRT(Feature current, RowBuffer buffer) {
             var instance = new FerryRoute();
 
-            if (current.CATFRY_HasValue()) {                
+            if (current.CATFRY_HasValue()) {
                 var categoryOfFerry = EnumHelper.GetEnumValues(current.CATFRY(), instance.attributeBindingDefinition("categoryOfFerry")!.permitedValues!);
                 if (categoryOfFerry is not null)
                     instance.categoryOfFerry = categoryOfFerry;
@@ -1538,17 +1538,19 @@ namespace S100Framework.Applications
             bool coveredByDredgedArea = false;
             decimal? leastDepth = null;
 
-            var surrindingDepth = ImporterNIS.GetSurrunding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause);
-            if (surrindingDepth.HasValue) {
-                leastDepth = surrindingDepth.Value.DRVAL1.HasValue ? surrindingDepth.Value.DRVAL1.Value : null;
-                if (surrindingDepth.Value.FcSubtype == 15) {  // UNSARE
+            var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+            if (surroundingDepths.Any()) {
+                var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+                
+                leastDepth = surroundingDepth.DRVAL1.HasValue ? surroundingDepth.DRVAL1.Value : null;
+                if (surroundingDepth.FcSubtype == 15) {  // UNSARE
                     coveredByUnsurveyedArea = true;
                 }
-                if (surrindingDepth.Value.FcSubtype == 5) {  // DRGARE
+                if (surroundingDepth.FcSubtype == 5) {  // DRGARE
                     coveredByDredgedArea = true;
                     instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
                 }
-                if (surrindingDepth.Value.FcSubtype == 1) {  // DEPARE
+                if (surroundingDepth.FcSubtype == 1) {  // DEPARE
                     instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
                 }
 
@@ -1706,7 +1708,7 @@ namespace S100Framework.Applications
             return instance;
         }
 
-        private static Wreck WRECKS(Feature current, RowBuffer buffer) {
+        private static Wreck WRECKS(Feature current, RowBuffer buffer, QueryFilter filter) {
             var instance = new Wreck();
 
             // action point #42 Attributes converted correctly but the combination of both is prohibited in S-101 (DCEG 13.5). Ignore/ drop CATWRK when VALSOU is populated on conversion.
@@ -1779,6 +1781,30 @@ namespace S100Framework.Applications
                     throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
 
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+            }
+
+            /*      30.1 default clearance depth
+                    The attribute default clearance depth must be populated with a value, which must not be an empty (null) value, 
+                    only if the attribute value of sounding for the feature instance is populated with an empty (null) value and 
+                    the attribute height, if an allowable attribute for the feature, is not populated.
+
+                    The value for default clearance depth is determined from the attribute depth range minimum value for the surrounding 
+                    encoded Depth Area(s) or Dredged Area (see clauses 11.4 and 11.7) in accordance with the Tables below. 
+                    For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
+                    range minimum value of the shoalest of the depth areas covering the feature.
+            */
+            if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
+                var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+                if (surroundingDepths.Any()) {
+                    var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+
+                    if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+                        instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                    }
+                    if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+                        instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                    }
+                }
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2050,7 +2076,7 @@ namespace S100Framework.Applications
                 if (current.WATLEV_HasValue()) {
                     if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
                         instance.waterLevelEffect = waterLevelEffect;
-                }               
+                }
 
                 if (current.PLTS_COMP_SCALE_HasValue()) {
                     string subtype = "";
@@ -2072,16 +2098,22 @@ namespace S100Framework.Applications
                         range minimum value of the shoalest of the depth areas covering the feature.
                 */
                 if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
-                    var surrindingDepth = ImporterNIS.GetSurrunding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause);
-                    if (surrindingDepth.HasValue) {
-                        if (surrindingDepth.Value.FcSubtype == 5) {  // DRGARE
-                            instance.defaultClearanceDepth = surrindingDepth.Value.DRVAL1!.Value;
+                    int[] fcsubtypes = [1, 5];
+
+                    var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+                    surroundingDepths = surroundingDepths.Where(e => fcsubtypes.Contains(e.FcSubtype)).ToList();
+                    if (surroundingDepths.Any()) {
+                        var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+
+                        if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
                         }
-                        if (surrindingDepth.Value.FcSubtype == 1) {  // DEPARE
-                            instance.defaultClearanceDepth = surrindingDepth.Value.DRVAL1!.Value;
+                        if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
                         }
                     }
                 }
+
 
                 var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
                 instance.information = [.. result.information];
@@ -2377,12 +2409,12 @@ namespace S100Framework.Applications
 
             if (current.CONVIS_HasValue()) {
                 if (EnumHelper.GetEnumValue(current.CONVIS(), out int? visualProminence, instance.attributeBindingDefinition("visualProminence")!.permitedValues!))
-                    instance.visualProminence = visualProminence;                
+                    instance.visualProminence = visualProminence;
             }
 
             if (current.WATLEV_HasValue()) {
                 if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
-                    instance.waterLevelEffect = waterLevelEffect;                
+                    instance.waterLevelEffect = waterLevelEffect;
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -3036,8 +3068,8 @@ namespace S100Framework.Applications
 
                     instance.categoryOfCable = 10; //categoryOfCable.TelecommunicationsCable;
                 }
-                else if (EnumHelper.GetEnumValue(current.CATCBL(), out int? categoryOfCable, instance.attributeBindingDefinition("categoryOfCable")!.permitedValues!)) { 
-                        instance.categoryOfCable = categoryOfCable;
+                else if (EnumHelper.GetEnumValue(current.CATCBL(), out int? categoryOfCable, instance.attributeBindingDefinition("categoryOfCable")!.permitedValues!)) {
+                    instance.categoryOfCable = categoryOfCable;
                 }
             }
 
@@ -4756,19 +4788,11 @@ namespace S100Framework.Applications
         }
 
         private static DredgedArea DRGARE(Feature current, RowBuffer buffer) {
-            var drval1 = current.DRVAL1() ?? default;
-            var drval2 = current.DRVAL2() ?? default(decimal?);
-            var sordat = current.SORDAT() ?? default;
-
-            var restrn = current.RESTRN() ?? default;
-            var quasou = current.QUASOU() ?? default;
-            var tecsou = current.TECSOU() ?? default;
-
             var instance = new DredgedArea {
-                depthRangeMinimumValue = drval1,
+                depthRangeMinimumValue = current.DRVAL1(),
             };
 
-            if (drval2.HasValue)
+            if (current.DRVAL2_HasValue())
                 instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
 
             if (!string.IsNullOrEmpty(current.SORDAT())) {
@@ -4800,14 +4824,14 @@ namespace S100Framework.Applications
             //    instance.qualityOfVerticalMeasurement = EnumHelper.GetEnumValue<qualityOfVerticalMeasurement>(current);
             //}
 
-            if (!string.IsNullOrEmpty(restrn)) {
-                var restriction = EnumHelper.GetEnumValues(restrn);
+            if (current.RESTRN_HasValue()) {
+                var restriction = EnumHelper.GetEnumValues(current.RESTRN());
                 if (restriction is not null && restriction.Any())
                     instance.restriction = restriction;
             }
 
-            if (!string.IsNullOrEmpty(tecsou)) {
-                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(tecsou);
+            if (current.TECSOU_HasValue()) {
+                var techniqueOfVerticalMeasurement = EnumHelper.GetEnumValues(current.TECSOU());
                 if (techniqueOfVerticalMeasurement is not null && techniqueOfVerticalMeasurement.Any())
                     instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
             }

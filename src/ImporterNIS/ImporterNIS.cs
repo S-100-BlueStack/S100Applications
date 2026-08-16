@@ -189,9 +189,9 @@ namespace S100Framework.Applications
             _converterRegistry.Register<AidsToNavigationP, LightAirObstruction>(Converters.CreateLightAirObstruction);
             _converterRegistry.Register<AidsToNavigationP, LightFogDetector>(Converters.CreateLightFogDetector);
             _converterRegistry.Register<AidsToNavigationP, Daymark>(Converters.CreateDaymark);
-            _converterRegistry.Register<DangersP, Obstruction>(Converters.CreateObstruction);
-            _converterRegistry.Register<DangersA, Obstruction>(Converters.CreateObstruction);
-            _converterRegistry.Register<DangersL, Obstruction>(Converters.CreateObstruction);
+            //_converterRegistry.Register<DangersP, Obstruction>(Converters.CreateObstruction);
+            //_converterRegistry.Register<DangersA, Obstruction>(Converters.CreateObstruction);
+            //_converterRegistry.Register<DangersL, Obstruction>(Converters.CreateObstruction);
 
             _converterRegistry.Register<AidsToNavigationP, Retroreflector>(Converters.CreateRetroreflector);
             _converterRegistry.Register<CulturalFeaturesA, LightSectored>(Converters.CreateLightSectored);
@@ -1081,7 +1081,7 @@ namespace S100Framework.Applications
                                                 _ => throw new NotImplementedException(),
                                             }];
                                         }
-                                        instance.natureOfConstruction = _natureOfConstruction;                                        
+                                        instance.natureOfConstruction = _natureOfConstruction;
                                     }
                                 }
                             }
@@ -1428,28 +1428,34 @@ namespace S100Framework.Applications
 
         const string DE9IM_Contains = "T*****FF*";
 
-        internal static (int FcSubtype, decimal? DRVAL1)? GetSurrunding_DepthArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
-            (string tablename, SpatialRelationship relationship)[] dictionary = [
-                    ("depthsa", SpatialRelationship.Within),
+        internal static IEnumerable<(int FcSubtype, decimal? DRVAL1)> GetSurrounding_DepthArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
+            (string tablename, SpatialRelationship relationship, string description)[] dictionary = [                    
+                    ("depthsa", SpatialRelationship.Relation, "T*****T**"),
+                    ("depthsa", SpatialRelationship.Relation, "T********"),
                 ];
             var definitions = geodatabase.GetDefinitions<FeatureClassDefinition>().Select(e => e.GetName().ToLowerInvariant());
+            var hits = new HashSet<long>();
+
             foreach (var e in dictionary) {
                 using var danger = geodatabase.OpenDataset<FeatureClass>(definitions.Single(d => d.EndsWith(e.tablename)));
 
                 using var search = danger.Search(new SpatialQueryFilter {
                     WhereClause = $"({queryFilter})",
                     SpatialRelationship = e.relationship,
+                    SpatialRelationshipDescription = e.description,
                     FilterGeometry = shape,
                 }, false);
 
-                var hit = search.MoveNext();
-                if (hit) {
+                while (search.MoveNext()) {
                     var f = (Feature)search.Current;
-                    return (f.FCSubtype(), f.DRVAL1());
+                    var _ = f.GetObjectID();
+                    if (hits.Contains(_)) continue;
+                    hits.Add(_);
+                    yield return (f.FCSubtype(), f.DRVAL1());
+                    f.Dispose();
                 }
             }
-
-            return null;
+            yield break;
         }
 
         internal static bool IsCoveredByUNSARE_UnsurveyedArea(Geometry shape) {

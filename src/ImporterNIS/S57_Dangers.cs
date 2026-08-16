@@ -198,7 +198,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::25": { // WRECKS_Wreck
-                            var instance = (Wreck)ImporterNIS.Build("WRECKS", feature, buffer);
+                            var instance = ImporterNIS.WRECKS(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -238,7 +238,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::45": { // WRECKS_Wreck
-                            var instance = (Wreck)ImporterNIS.Build("WRECKS", feature, buffer);
+                            var instance = ImporterNIS.WRECKS(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
