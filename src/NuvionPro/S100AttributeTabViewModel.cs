@@ -123,7 +123,7 @@ namespace NuvionPro
                 case nameof(this.PS):
                     this.PS_Inspector(inspector);
                     this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
-
+                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
                     this.Code = default;
                     break;
 
@@ -240,6 +240,9 @@ namespace NuvionPro
             var model = base.Model;
 
             if (!inspector.HasAttributes)
+                return;
+
+            if (inspector.MapMember is null)
                 return;
 
             var primitime = inspector.Shape?.GeometryType switch {
@@ -571,7 +574,22 @@ namespace NuvionPro
 
         public bool _psSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("attributebindings")) ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
 
-        public bool _codeSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("ps")) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+        public bool _codeSelectorIsEnabled {
+            get {
+                if (this.Inspector is null) return false;
+
+                if (this.Inspector.IsNull("ps")) {
+                    if (this.PS is null) return false;
+                    return true;
+                }
+                if (this.Inspector.IsNull("attributebindings")) {
+                    return true;
+                }
+
+                return "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+            }
+        }
+        //=> (this.Inspector is null || this.Inspector.IsNull("ps")) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());        
 
         public bool _createButtonIsEnabled => (this.Inspector is null || (this.PS is null || string.IsNullOrEmpty(this.Code))) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
     }
