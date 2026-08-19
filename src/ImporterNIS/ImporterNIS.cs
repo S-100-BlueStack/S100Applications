@@ -1137,6 +1137,8 @@ namespace S100Framework.Applications
                                         }
                                     }
                                 }
+                                else
+                                    instance.categoryOfOpeningBridge = null;    //  UNKNOWN
                             }
                             else {
                                 instance.openingBridge = false;
