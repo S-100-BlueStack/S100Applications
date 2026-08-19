@@ -62,7 +62,7 @@ namespace S100Framework.Applications
             { "M_NPUB", (current, buffer) => { return M_NPUB(current, buffer); } },
             { "M_NSYS", (current, buffer) => { return M_NSYS(current, buffer); } },
             //{ "M_QUAL", (current, buffer) => { return M_QUAL(current, buffer); } },
-            { "M_SREL", (current, buffer) => { return M_SREL(current, buffer); } },            
+            { "M_SREL", (current, buffer) => { return M_SREL(current, buffer); } },
             { "DEPARE", (current, buffer) => { return DEPARE(current, buffer); } },
             { "UNSARE", (current, buffer) => { return UNSARE(current, buffer); } },
             { "DEPCNT", (current, buffer) => { return DEPCNT(current, buffer); } },
@@ -988,7 +988,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1396,7 +1396,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1507,7 +1507,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1556,69 +1556,102 @@ namespace S100Framework.Applications
                 instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
             }
 
-            bool allCoveringDepthRangeMinimumValuesAreKnown = instance.surroundingDepth is not null;
+            //  Table 30.2 - Values for default clearance depth – Underwater/Awash Rock features
+            var expsou = current.EXPSOU_HasValue() ? current.EXPSOU() : null;
+            var height = current.HEIGHT_HasValue() ? current.HEIGHT() : null;
+            var watlev = current.WATLEV_HasValue() ? current.WATLEV() : null;
+            var valsou = current.VALSOU_HasValue() ? current.VALSOU() : null;
 
-            bool unknownDepthCoveredByUnsurveyedArea = coveredByUnsurveyedArea && (current.VALSOU_HasValue() && current.VALSOU() == -32767m);
-
-            bool depthDredgedAreaWhereDepthMinimumValueIsUnknown = coveredByDredgedArea && !(instance.surroundingDepth is not null && instance.surroundingDepth.HasValue);
-
-            bool expositionOfSoundingIsUnknown = current.EXPSOU() is -32767;
-
-            if (allCoveringDepthRangeMinimumValuesAreKnown) {
-                if (!(current.VALSOU_HasValue() && current.VALSOU() != -32767m)) {
-                    if (current.EXPSOU_HasValue() && (current.EXPSOU() == 1 || current.EXPSOU() == 3) &&
-                        (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                        (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                        instance.defaultClearanceDepth = instance.surroundingDepth;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                        instance.defaultClearanceDepth = 0.1m;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
-
-                        instance.defaultClearanceDepth = 0m;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
-
-                        instance.defaultClearanceDepth = -15m;
-                    }
-                    else {
-                        ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
-                    }
+            if (leastDepth.HasValue) {
+                if (
+                    (valsou.HasValue && valsou.Value != -32767m)
+                    ) {
+                    //  / (null)
                 }
-            }
-            else if (unknownDepthCoveredByUnsurveyedArea || depthDredgedAreaWhereDepthMinimumValueIsUnknown) {
-                if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                   (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+                else if (
+                        (expsou.HasValue && (expsou.Value == 1 || expsou.Value == 3)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
+                    instance.defaultClearanceDepth = leastDepth!.Value;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
                     instance.defaultClearanceDepth = 0.1m;
                 }
-                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                   (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+                else if (
+                        (!expsou.HasValue) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
+                    instance.expositionOfSounding = null;
+                    instance.defaultClearanceDepth = 0.1m;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 5)
+                    ) {
                     instance.defaultClearanceDepth = 0m;
                 }
-                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                        (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+                else if (
+                        (!expsou.HasValue) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 5)
+                    ) {
+                    instance.expositionOfSounding = null;
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                    ) {
+                    instance.defaultClearanceDepth = -15m;
+                }
+                else if (
+                        (!expsou.HasValue) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                    ) {
+                    instance.expositionOfSounding = null;
                     instance.defaultClearanceDepth = -15m;
                 }
                 else {
-                    ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
+                    //  Hit me with a baseball bat
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
                 }
-
             }
             else {
-                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
+                if (
+                        (valsou.HasValue && valsou.Value != -32767m) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
+                    instance.defaultClearanceDepth = 0.1m;
+                }
+                else if (
+                        (valsou.HasValue && valsou.Value != -32767m) &&
+                        (watlev.HasValue && watlev.Value == 5)
+                    ) {
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if (
+                        (valsou.HasValue && valsou.Value != -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                    ) {
+                    instance.defaultClearanceDepth = -15m;
+                }
+                else {
+                    //  Hit me with a baseball bat
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                }
             }
 
             if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
+                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (UWTROC#{objectid})", current.GetObjectID());
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1672,7 +1705,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1743,7 +1776,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1782,30 +1815,6 @@ namespace S100Framework.Applications
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
 
-            /*      30.1 default clearance depth
-                    The attribute default clearance depth must be populated with a value, which must not be an empty (null) value, 
-                    only if the attribute value of sounding for the feature instance is populated with an empty (null) value and 
-                    the attribute height, if an allowable attribute for the feature, is not populated.
-
-                    The value for default clearance depth is determined from the attribute depth range minimum value for the surrounding 
-                    encoded Depth Area(s) or Dredged Area (see clauses 11.4 and 11.7) in accordance with the Tables below. 
-                    For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
-                    range minimum value of the shoalest of the depth areas covering the feature.
-            */
-            //if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
-            //    var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
-            //    if (surroundingDepths.Any()) {
-            //        var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
-
-            //        if (surroundingDepth.FcSubtype == 5) {  // DRGARE
-            //            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
-            //        }
-            //        if (surroundingDepth.FcSubtype == 1) {  // DEPARE
-            //            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
-            //        }
-            //    }
-            //}
-
             bool coveredByUnsurveyedArea = false;
             bool coveredByDredgedArea = false;
             decimal? leastDepth = null;
@@ -1829,69 +1838,148 @@ namespace S100Framework.Applications
                 instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
             }
 
-            bool allCoveringDepthRangeMinimumValuesAreKnown = instance.surroundingDepth is not null;
+            //  Table 30.3 - Values for default clearance depth – Wreck features
+            var catwrk = current.CATWRK_HasValue() ? current.CATWRK() : null;
+            var expsou = current.EXPSOU_HasValue() ? current.EXPSOU() : null;
+            var height = current.HEIGHT_HasValue() ? current.HEIGHT() : null;
+            var valsou = current.VALSOU_HasValue() ? current.VALSOU() : null;
+            var watlev = current.WATLEV_HasValue() ? current.WATLEV() : null;
 
-            bool unknownDepthCoveredByUnsurveyedArea = coveredByUnsurveyedArea && (current.VALSOU_HasValue() && current.VALSOU() == -32767m);
-
-            bool depthDredgedAreaWhereDepthMinimumValueIsUnknown = coveredByDredgedArea && !(instance.surroundingDepth is not null && instance.surroundingDepth.HasValue);
-
-            bool expositionOfSoundingIsUnknown = current.EXPSOU() is -32767;
-
-            if (allCoveringDepthRangeMinimumValuesAreKnown) {
-                if (!(current.VALSOU_HasValue() && current.VALSOU() != -32767m)) {
-                    if (current.EXPSOU_HasValue() && (current.EXPSOU() == 1 || current.EXPSOU() == 3) &&
-                        (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                        (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                        instance.defaultClearanceDepth = instance.surroundingDepth;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                        instance.defaultClearanceDepth = 0.1m;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
-
-                        instance.defaultClearanceDepth = 0m;
-                    }
-                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
-
-                        instance.defaultClearanceDepth = -15m;
-                    }
-                    else {
-                        ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
-                    }
+            if (leastDepth.HasValue) {
+                if (
+                    (catwrk.HasValue && (catwrk.Value == 4 || catwrk.Value == 5)) &&
+                    (height.HasValue && height.Value != -32676m) &&
+                    (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2 || watlev.Value == -32767))
+                    ) {
+                    //  / (null)
                 }
-            }
-            else if (unknownDepthCoveredByUnsurveyedArea || depthDredgedAreaWhereDepthMinimumValueIsUnknown) {
-                if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                   (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-                    instance.defaultClearanceDepth = 0.1m;
+                else if (
+                        (valsou.HasValue && valsou.Value != -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 4 || watlev.Value == 5 || watlev.Value == -32767))
+                    ) {
+                    //  / (null)
                 }
-                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                   (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+                else if (
+                        (expsou.HasValue && (expsou.Value == 1 || expsou.Value == 3)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
+                    instance.defaultClearanceDepth = leastDepth;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 1 || expsou.Value == 3)) &&
+                        (watlev.HasValue && watlev.Value == 3)
+                    ) {
+                    instance.defaultClearanceDepth = leastDepth;
+                }
+                else if (
+                        (catwrk.HasValue && catwrk.Value == 1) &&
+                        (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2 || watlev.Value == 4 || watlev.Value == 5 || watlev.Value == -32767))
+                    ) {
+                    //  20.1 or {Least Depth – 66} (whichever value is larger)
+                    var _ = leastDepth!.Value - 66m;
+                    instance.defaultClearanceDepth = 20.1m > _ ? 20.1m : _;
+                }
+                else if (
+                        (catwrk.HasValue && catwrk.Value == 1) &&
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    ) {
+                    //  20.1 or {Least Depth – 66} (whichever value is larger)
+                    var _ = leastDepth!.Value - 66m;
+                    instance.defaultClearanceDepth = 20.1m > _ ? 20.1m : _;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
+                    ) {
                     instance.defaultClearanceDepth = 0m;
                 }
-                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                        (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+                else if (
+                        (!expsou.HasValue) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
+                    ) {
+                    instance.expositionOfSounding = null;
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if (
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767m))
+                    ) {
+                    instance.defaultClearanceDepth = 15m;
+                }
+                else if (
+                        (!expsou.HasValue) &&
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767m))
+                    ) {
+                    instance.expositionOfSounding = null;
+                    instance.defaultClearanceDepth = 15m;
+                }
+                else if (
+                        (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767)) &&
+                        (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2 || watlev.Value == 4 || watlev.Value == 5 || watlev.Value == -32767m))
+                    ) {
+                    instance.defaultClearanceDepth = 15m;
+                }
+                else if (
+                        (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767)) &&
+                        (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    ) {
+                    instance.defaultClearanceDepth = 15m;
+                }
+                else {
+                    //  Hit me with a baseball bat
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                }
+            }
+            else {
+                if (
+                        (catwrk.HasValue && catwrk.Value == 1) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == -32767))
+                    ) {
+                    instance.defaultClearanceDepth = 20.1m;
+                }
+                else if (
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
+                    ) {
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if (
+                        (valsou.HasValue && valsou.Value == -32767m) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                    ) {
+                    instance.defaultClearanceDepth = -15m;
+                }
+                else if (
+                        (catwrk.HasValue && catwrk.Value == -32767) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
+                    ) {
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if (
+                        (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5)) &&
+                        (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
+                    ) {
+                    instance.defaultClearanceDepth = -15m;
+                }
+                else if (
+                        (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767)) &&
+                        (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                    ) {
                     instance.defaultClearanceDepth = -15m;
                 }
                 else {
-                    ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
+                    //  Hit me with a baseball bat
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
                 }
-
-            }
-            else {
-                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
             }
 
             if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
+                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (WRECKS#{objectid})", current.GetObjectID());
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2034,7 +2122,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2136,7 +2224,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2174,16 +2262,6 @@ namespace S100Framework.Applications
                     instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
                 }
 
-                /*      30.1 default clearance depth
-                        The attribute default clearance depth must be populated with a value, which must not be an empty (null) value, 
-                        only if the attribute value of sounding for the feature instance is populated with an empty (null) value and 
-                        the attribute height, if an allowable attribute for the feature, is not populated.
-
-                        The value for default clearance depth is determined from the attribute depth range minimum value for the surrounding 
-                        encoded Depth Area(s) or Dredged Area (see clauses 11.4 and 11.7) in accordance with the Tables below. 
-                        For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
-                        range minimum value of the shoalest of the depth areas covering the feature.
-                */
 
                 bool coveredByUnsurveyedArea = false;
                 bool coveredByDredgedArea = false;
@@ -2208,69 +2286,144 @@ namespace S100Framework.Applications
                     instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
                 }
 
-                bool allCoveringDepthRangeMinimumValuesAreKnown = instance.surroundingDepth is not null;
+                //  Table 30.1 - Values for default clearance depth – Obstruction features
+                var catobs = current.CATOBS_HasValue() ? current.CATOBS() : null;
+                var expsou = current.EXPSOU_HasValue() ? current.EXPSOU() : null;
+                var height = current.HEIGHT_HasValue() ? current.HEIGHT() : null;
+                var valsou = current.VALSOU_HasValue() ? current.VALSOU() : null;
+                var watlev = current.WATLEV_HasValue() ? current.WATLEV() : null;
 
-                bool unknownDepthCoveredByUnsurveyedArea = coveredByUnsurveyedArea && (current.VALSOU_HasValue() && current.VALSOU() == -32767m);
 
-                bool depthDredgedAreaWhereDepthMinimumValueIsUnknown = coveredByDredgedArea && !(instance.surroundingDepth is not null && instance.surroundingDepth.HasValue);
-
-                bool expositionOfSoundingIsUnknown = current.EXPSOU() is -32767;
-
-                if (allCoveringDepthRangeMinimumValuesAreKnown) {
-                    if (!(current.VALSOU_HasValue() && current.VALSOU() != -32767m)) {
-                        if (current.EXPSOU_HasValue() && (current.EXPSOU() == 1 || current.EXPSOU() == 3) &&
-                            (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                            (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                            instance.defaultClearanceDepth = instance.surroundingDepth;
-                        }
-                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                           (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
-
-                            instance.defaultClearanceDepth = 0.1m;
-                        }
-                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                           (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
-
-                            instance.defaultClearanceDepth = 0m;
-                        }
-                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
-                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                           (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
-
-                            instance.defaultClearanceDepth = -15m;
-                        }
-                        else {
-                            ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
-                        }
+                if (leastDepth.HasValue) {
+                    if (
+                            (height.HasValue && height.Value != -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2))
+                        ) {
+                        //  / (null)
                     }
-                }
-                else if (unknownDepthCoveredByUnsurveyedArea || depthDredgedAreaWhereDepthMinimumValueIsUnknown) {
-                    if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+                    else if (
+                            (height.HasValue && height.Value == -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2 || watlev.Value == 7))
+                        ) {
+                        //  / (null)
+                    }
+                    else if (
+                            (valsou.HasValue && valsou.Value != -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 4 || watlev.Value == 5 || watlev.Value == -32767))
+                        ) {
+                        //  / (null)
+                    }
+                    else if (
+                            (expsou.HasValue && (expsou.Value == 1 || expsou.Value == 3)) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 3)
+                        ) {
+                        instance.defaultClearanceDepth = leastDepth;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value == 6) &&
+                            (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                            (valsou.HasValue && valsou.Value == -32767m)
+                        ) {
                         instance.defaultClearanceDepth = 0.1m;
                     }
-                    else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                       (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+                    else if (
+                            (catobs.HasValue && catobs.Value == 6) &&
+                            (!expsou.HasValue) &&
+                            (valsou.HasValue && valsou.Value == -32767m)
+                        ) {
+                        instance.expositionOfSounding = null;
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (
+                            (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 3)
+                        ) {
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (
+                            (!expsou.HasValue) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 3)
+                        ) {
+                        instance.expositionOfSounding = null;
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 5)
+                        ) {
                         instance.defaultClearanceDepth = 0m;
                     }
-                    else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
-                            (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (!expsou.HasValue) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 5)
+                        ) {
+                        instance.expositionOfSounding = null;
+                        instance.defaultClearanceDepth = 0m;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                        ) {
+                        instance.defaultClearanceDepth = -15m;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (!expsou.HasValue) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                        ) {
+                        instance.expositionOfSounding = null;
                         instance.defaultClearanceDepth = -15m;
                     }
                     else {
-                        ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
+                        //  Hit me with a baseball bat
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
                     }
-
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
+                    if (
+                            (catobs.HasValue && catobs.Value == 6) &&
+                            (valsou.HasValue && valsou.Value == -32767m)
+                        ) {
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 3)
+                        ) {
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && watlev.Value == 5)
+                        ) {
+                        instance.defaultClearanceDepth = 0m;
+                    }
+                    else if (
+                            (catobs.HasValue && catobs.Value != 6) &&
+                            (valsou.HasValue && valsou.Value == -32767m) &&
+                            (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
+                        ) {
+                        instance.defaultClearanceDepth = -15m;
+                    }
+                    else {
+                        //  Hit me with a baseball bat
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                    }
                 }
 
                 if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                    Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
+                    Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OBSTRN#{objectid})", current.GetObjectID());
                 }
 
 
@@ -2316,7 +2469,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2378,7 +2531,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2552,7 +2705,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2642,7 +2795,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2755,7 +2908,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -3269,7 +3422,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -3391,7 +3544,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -3412,14 +3565,14 @@ namespace S100Framework.Applications
                 instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
             }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM(), current.PUBREF());
             var informations = result.information.ToArray();
 
             if (current.PUBREF_HasValue()) {
-                informations = [..informations, new information {
-                                    language = "eng",
-                                    headline = "-32767".Equals(current.PUBREF()) ? null : current.PUBREF()!.Trim(),
-                                }];
+                //informations = [..informations, new information {
+                //                    language = "eng",
+                //                    headline = "-32767".Equals(current.PUBREF()) ? null : current.PUBREF()!.Trim(),
+                //                }];
             }
 
             if (informations.Any())
