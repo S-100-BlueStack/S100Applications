@@ -49,7 +49,7 @@ namespace S100Framework.Applications
             { "SNDWAV", (current, buffer) => { return SNDWAV(current, buffer); } },
             { "SBDARE", (current, buffer) => { return SBDARE(current, buffer); } },
             { "SWPARE", (current, buffer) => { return SWPARE(current, buffer); } },
-            { "PIPSOL", (current, buffer) => { return PIPSOL(current, buffer); } },
+            //{ "PIPSOL", (current, buffer) => { return PIPSOL(current, buffer); } },
             { "SUBTLN", (current, buffer) => { return SUBTLN(current, buffer); } },
             { "RADRNG", (current, buffer) => { return RADRNG(current, buffer); } },
             { "STSLNE", (current, buffer) => { return STSLNE(current, buffer); } },
@@ -62,8 +62,7 @@ namespace S100Framework.Applications
             { "M_NPUB", (current, buffer) => { return M_NPUB(current, buffer); } },
             { "M_NSYS", (current, buffer) => { return M_NSYS(current, buffer); } },
             //{ "M_QUAL", (current, buffer) => { return M_QUAL(current, buffer); } },
-            { "M_SREL", (current, buffer) => { return M_SREL(current, buffer); } },
-            { "M_VDAT", (current, buffer) => { return M_VDAT(current, buffer); } },
+            { "M_SREL", (current, buffer) => { return M_SREL(current, buffer); } },            
             { "DEPARE", (current, buffer) => { return DEPARE(current, buffer); } },
             { "UNSARE", (current, buffer) => { return UNSARE(current, buffer); } },
             { "DEPCNT", (current, buffer) => { return DEPCNT(current, buffer); } },
@@ -1541,7 +1540,7 @@ namespace S100Framework.Applications
             var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
             if (surroundingDepths.Any()) {
                 var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
-                
+
                 leastDepth = surroundingDepth.DRVAL1.HasValue ? surroundingDepth.DRVAL1.Value : null;
                 if (surroundingDepth.FcSubtype == 15) {  // UNSARE
                     coveredByUnsurveyedArea = true;
@@ -1618,8 +1617,8 @@ namespace S100Framework.Applications
                 Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
             }
 
-            if (!instance.valueOfSounding.HasValue && instance.attributeBindings.Count(e => e.S100FC_code.Equals("defaultClearanceDepth")) == 0) {
-                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.OBJECTID);
+            if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
+                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1793,18 +1792,106 @@ namespace S100Framework.Applications
                     For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
                     range minimum value of the shoalest of the depth areas covering the feature.
             */
-            if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
-                var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
-                if (surroundingDepths.Any()) {
-                    var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+            //if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
+            //    var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+            //    if (surroundingDepths.Any()) {
+            //        var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
 
-                    if (surroundingDepth.FcSubtype == 5) {  // DRGARE
-                        instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+            //        if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+            //            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+            //        }
+            //        if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+            //            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+            //        }
+            //    }
+            //}
+
+            bool coveredByUnsurveyedArea = false;
+            bool coveredByDredgedArea = false;
+            decimal? leastDepth = null;
+
+            var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+            if (surroundingDepths.Any()) {
+                var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+
+                leastDepth = surroundingDepth.DRVAL1.HasValue ? surroundingDepth.DRVAL1.Value : null;
+                if (surroundingDepth.FcSubtype == 15) {  // UNSARE
+                    coveredByUnsurveyedArea = true;
+                }
+                if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+                    coveredByDredgedArea = true;
+                    instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+                }
+                if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+                    instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+                }
+
+                instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+            }
+
+            bool allCoveringDepthRangeMinimumValuesAreKnown = instance.surroundingDepth is not null;
+
+            bool unknownDepthCoveredByUnsurveyedArea = coveredByUnsurveyedArea && (current.VALSOU_HasValue() && current.VALSOU() == -32767m);
+
+            bool depthDredgedAreaWhereDepthMinimumValueIsUnknown = coveredByDredgedArea && !(instance.surroundingDepth is not null && instance.surroundingDepth.HasValue);
+
+            bool expositionOfSoundingIsUnknown = current.EXPSOU() is -32767;
+
+            if (allCoveringDepthRangeMinimumValuesAreKnown) {
+                if (!(current.VALSOU_HasValue() && current.VALSOU() != -32767m)) {
+                    if (current.EXPSOU_HasValue() && (current.EXPSOU() == 1 || current.EXPSOU() == 3) &&
+                        (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                        (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+
+                        instance.defaultClearanceDepth = instance.surroundingDepth;
                     }
-                    if (surroundingDepth.FcSubtype == 1) {  // DEPARE
-                        instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                       (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                       (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+
+                        instance.defaultClearanceDepth = 0m;
+                    }
+                    else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                       (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                       (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+
+                        instance.defaultClearanceDepth = -15m;
+                    }
+                    else {
+                        ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
                     }
                 }
+            }
+            else if (unknownDepthCoveredByUnsurveyedArea || depthDredgedAreaWhereDepthMinimumValueIsUnknown) {
+                if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                   (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+                    instance.defaultClearanceDepth = 0.1m;
+                }
+                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                   (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+                    instance.defaultClearanceDepth = 0m;
+                }
+                else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                        (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+                    instance.defaultClearanceDepth = -15m;
+                }
+                else {
+                    ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
+                }
+
+            }
+            else {
+                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
+            }
+
+            if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
+                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2097,21 +2184,93 @@ namespace S100Framework.Applications
                         For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
                         range minimum value of the shoalest of the depth areas covering the feature.
                 */
-                if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
-                    int[] fcsubtypes = [1, 5];
 
-                    var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
-                    surroundingDepths = surroundingDepths.Where(e => fcsubtypes.Contains(e.FcSubtype)).ToList();
-                    if (surroundingDepths.Any()) {
-                        var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+                bool coveredByUnsurveyedArea = false;
+                bool coveredByDredgedArea = false;
+                decimal? leastDepth = null;
 
-                        if (surroundingDepth.FcSubtype == 1) {  // DEPARE
-                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+                if (surroundingDepths.Any()) {
+                    var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+
+                    leastDepth = surroundingDepth.DRVAL1.HasValue ? surroundingDepth.DRVAL1.Value : null;
+                    if (surroundingDepth.FcSubtype == 15) {  // UNSARE
+                        coveredByUnsurveyedArea = true;
+                    }
+                    if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+                        coveredByDredgedArea = true;
+                        instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+                    }
+                    if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+                        instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+                    }
+
+                    instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
+                }
+
+                bool allCoveringDepthRangeMinimumValuesAreKnown = instance.surroundingDepth is not null;
+
+                bool unknownDepthCoveredByUnsurveyedArea = coveredByUnsurveyedArea && (current.VALSOU_HasValue() && current.VALSOU() == -32767m);
+
+                bool depthDredgedAreaWhereDepthMinimumValueIsUnknown = coveredByDredgedArea && !(instance.surroundingDepth is not null && instance.surroundingDepth.HasValue);
+
+                bool expositionOfSoundingIsUnknown = current.EXPSOU() is -32767;
+
+                if (allCoveringDepthRangeMinimumValuesAreKnown) {
+                    if (!(current.VALSOU_HasValue() && current.VALSOU() != -32767m)) {
+                        if (current.EXPSOU_HasValue() && (current.EXPSOU() == 1 || current.EXPSOU() == 3) &&
+                            (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                            (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+
+                            instance.defaultClearanceDepth = instance.surroundingDepth;
                         }
-                        if (surroundingDepth.FcSubtype == 5) {  // DRGARE
-                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                           (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+
+                            instance.defaultClearanceDepth = 0.1m;
+                        }
+                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                           (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+
+                            instance.defaultClearanceDepth = 0m;
+                        }
+                        else if (((current.EXPSOU_HasValue() && current.EXPSOU() == 2) || expositionOfSoundingIsUnknown || (!current.EXPSOU_HasValue())) &&
+                           (current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                           (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+
+                            instance.defaultClearanceDepth = -15m;
+                        }
+                        else {
+                            ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
                         }
                     }
+                }
+                else if (unknownDepthCoveredByUnsurveyedArea || depthDredgedAreaWhereDepthMinimumValueIsUnknown) {
+                    if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                       (current.WATLEV_HasValue() && (current.WATLEV() == 3))) {
+                        instance.defaultClearanceDepth = 0.1m;
+                    }
+                    else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                       (current.WATLEV_HasValue() && (current.WATLEV() == 5))) {
+                        instance.defaultClearanceDepth = 0m;
+                    }
+                    else if ((current.VALSOU_HasValue() && current.VALSOU() == -32767m) &&
+                            (current.WATLEV_HasValue() && (current.WATLEV() == 4 || current.WATLEV() == -32767m))) {
+                        instance.defaultClearanceDepth = -15m;
+                    }
+                    else {
+                        ;// Logger.Current.DataError(current.OBJECTID.Value, tableName, longname, $"Cannot convert defaultCleareanceDepth for underwater awash rock. Check S-101 Annex - A.");
+                    }
+
+                }
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot set default clearance depth. Check loader.");
+                }
+
+                if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
+                    Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OID:{objectid})", current.GetObjectID());
                 }
 
 
@@ -2444,87 +2603,194 @@ namespace S100Framework.Applications
 
 
 
-        private static PipelineSubmarineOnLand PIPSOL(Feature current, RowBuffer buffer) {
-            var instance = new PipelineSubmarineOnLand();
+        private static FeatureType PIPSOL(Feature current, RowBuffer buffer, QueryFilter filter) {
+            var shape = current.GetShape();
 
-            if (current.BURDEP_HasValue()) {
-                instance.buriedDepth = current.BURDEP() != -32767m ? current.BURDEP() : null;
-            }
+            if (shape.GeometryType == GeometryType.Point) {
+                var instance = new Obstruction();
 
-            if (current.CATPIP_HasValue()) {
-                var categoryOfPipelinePipe = EnumHelper.GetEnumValues(current.CATPIP());
-                if (categoryOfPipelinePipe is not null && categoryOfPipelinePipe.Any())
-                    instance.categoryOfPipelinePipe = categoryOfPipelinePipe;
-            }
-
-            if (current.CONDTN_HasValue()) {
-                instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
-            }
-
-            if (current.DRVAL1_HasValue()) {
-                instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
-            }
-
-            if (current.DRVAL2_HasValue()) {
-                instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
-            }
-
-            var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
-            if (featureName is not null)
-                instance.featureName = featureName;
-
-            DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
-            if (dateRange != default) {
-                instance.fixedDateRange = dateRange;
-            }
-
-            // TODO: multiplicityOfFeatures
-
-            if (current.PRODCT_HasValue()) {
-                var product = EnumHelper.GetEnumValues(current.PRODCT());
-                if (product is not null && product.Any())
-                    instance.product = product;
-            }
-            if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
-                    instance.reportedDate = reportedDate;
+                if (current.CONDTN_HasValue()) {
+                    instance.condition = ImporterNIS.GetCondition(current.CONDTN()!.Value)?.value;
                 }
-                else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+                if (featureName is not null)
+                    instance.featureName = featureName;
+
+                if (current.HEIGHT_HasValue()) {
+                    instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
                 }
+
+                var inform = current.INFORM();
+                if (!string.IsNullOrEmpty(inform) && regexMaximumDraughtPermitted.IsMatch(inform)) {
+                    var _value = regexMaximumDraughtPermitted.Match(inform).Groups["value"]?.Value;
+
+                    if (decimal.TryParse(_value, out decimal value)) {
+                        instance.maximumPermittedDraught = value;
+                    }
+                }
+
+                if (current.PRODCT_HasValue()) {
+                    var product = EnumHelper.GetEnumValues(current.PRODCT());
+                    if (product is not null && product.Any())
+                        instance.product = product;
+                }
+
+                // TODO: QualityOfVerticalMeasurement
+                if (current.SORDAT_HasValue()) {
+                    if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                        instance.reportedDate = reportedDate;
+                    }
+                    else {
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    }
+                }
+
+                if (current.STATUS_HasValue()) {
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
+                }
+
+                if (current.VERLEN_HasValue()) {
+                    instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
+                }
+
+                if (current.PLTS_COMP_SCALE_HasValue()) {
+                    string subtype = "";
+
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                    instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                }
+
+                /*      30.1 default clearance depth
+                        The attribute default clearance depth must be populated with a value, which must not be an empty (null) value, 
+                        only if the attribute value of sounding for the feature instance is populated with an empty (null) value and 
+                        the attribute height, if an allowable attribute for the feature, is not populated.
+
+                        The value for default clearance depth is determined from the attribute depth range minimum value for the surrounding 
+                        encoded Depth Area(s) or Dredged Area (see clauses 11.4 and 11.7) in accordance with the Tables below. 
+                        For an area feature covered by more than one depth area, the default clearance depth is determined based on the depth 
+                        range minimum value of the shoalest of the depth areas covering the feature.
+                */
+                if (!instance.height.HasValue && !instance.valueOfSounding.HasValue) {
+                    int[] fcsubtypes = [1, 5];
+
+                    var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
+                    surroundingDepths = surroundingDepths.Where(e => fcsubtypes.Contains(e.FcSubtype)).ToList();
+                    if (surroundingDepths.Any()) {
+                        var surroundingDepth = surroundingDepths.OrderByDescending(e => e.DRVAL1!.Value).Last();
+
+                        if (surroundingDepth.FcSubtype == 1) {  // DEPARE
+                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                        }
+                        if (surroundingDepth.FcSubtype == 5) {  // DRGARE
+                            instance.defaultClearanceDepth = surroundingDepth.DRVAL1!.Value;
+                        }
+                    }
+                    else
+                        instance.defaultClearanceDepth = -15m;
+                }
+
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                return instance;
             }
+            else {
+                var instance = new PipelineSubmarineOnLand();
 
-            // TODO: restriction
+                if (current.BURDEP_HasValue()) {
+                    instance.buriedDepth = current.BURDEP() != -32767m ? current.BURDEP() : null;
+                }
 
-            if (current.STATUS_HasValue()) {
-                var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
-                if (status is not null && status.Any())
-                    instance.status = status;
+                if (current.CATPIP_HasValue()) {
+                    var categoryOfPipelinePipe = EnumHelper.GetEnumValues(current.CATPIP());
+                    if (categoryOfPipelinePipe is not null && categoryOfPipelinePipe.Any())
+                        instance.categoryOfPipelinePipe = categoryOfPipelinePipe;
+                }
+
+                if (current.CONDTN_HasValue()) {
+                    instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
+                }
+
+                if (current.DRVAL1_HasValue()) {
+                    instance.depthRangeMinimumValue = current.DRVAL1() != -32767m ? current.DRVAL1() : null;
+                }
+
+                if (current.DRVAL2_HasValue()) {
+                    instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
+                }
+
+                var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
+                if (featureName is not null)
+                    instance.featureName = featureName;
+
+                DateHelper.TryGetFixedDateRange(current.DATSTA(), current.DATEND(), out var dateRange);
+                if (dateRange != default) {
+                    instance.fixedDateRange = dateRange;
+                }
+
+                // TODO: multiplicityOfFeatures
+
+                if (current.PRODCT_HasValue()) {
+                    var product = EnumHelper.GetEnumValues(current.PRODCT());
+                    if (product is not null && product.Any())
+                        instance.product = product;
+                }
+                if (current.SORDAT_HasValue()) {
+                    if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
+                        instance.reportedDate = reportedDate;
+                    }
+                    else {
+                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
+                    }
+                }
+
+                // TODO: restriction
+
+                if (current.STATUS_HasValue()) {
+                    var status = EnumHelper.GetEnumValues(current.STATUS(), instance.attributeBindingDefinition("status")!.permitedValues!);
+                    if (status is not null && status.Any())
+                        instance.status = status;
+                }
+
+                if (current.PLTS_COMP_SCALE_HasValue()) {
+                    string subtype = "";
+
+                    if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
+                        throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
+
+                    instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
+                }
+
+                var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+                instance.information = [.. result.information];
+                instance.SetInformationBindings(result.InformationBindings.ToArray());
+
+                buffer["ps"] = ps101;
+                buffer["code"] = instance.GetType().Name;
+                buffer["attributebindings"] = instance.Flatten();
+                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                SetShape(buffer, current.SHAPE());
+                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                return instance;
             }
-
-            if (current.PLTS_COMP_SCALE_HasValue()) {
-                string subtype = "";
-
-                if (!Subtypes.Instance.TryGetSubtype(current.TableName(), current.FCSubtype(), out subtype))
-                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSubtype()}");
-
-                instance.scaleMinimum = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE()!.Value, isRelatedToStructure: false);
-            }
-
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = [.. result.information];
-            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-            buffer["ps"] = ps101;
-            buffer["code"] = instance.GetType().Name;
-            buffer["attributebindings"] = instance.Flatten();
-            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
-
-            return instance;
         }
 
         private static SubmarineTransitLane SUBTLN(Feature current, RowBuffer buffer) {
@@ -3470,7 +3736,7 @@ namespace S100Framework.Applications
             }
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
-            instance.SetInformationBindings(result.InformationBindings.ToArray());
+            instance.SetInformationBindings([.. result.InformationBindings, .. informationBindings]);
 
             buffer["ps"] = ps101;
             buffer["code"] = instance.GetType().Name;
@@ -3587,36 +3853,36 @@ namespace S100Framework.Applications
             return instance;
         }
 
-        private static VerticalDatumOfData M_VDAT(Feature current, RowBuffer buffer) {
-            var instance = new VerticalDatumOfData();
+        //private static VerticalDatumOfData M_VDAT(Feature current, RowBuffer buffer) {
+        //    var instance = new VerticalDatumOfData();
 
-            var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT(), current.SHAPE()!);
-            if (verticalDatum != null) {
-                var update = true;
-                foreach (var elm in VerticalDatums.Instance.Touch(current.SHAPE()!)) {
-                    if (elm.Item2.value == verticalDatum.value) {
-                        update = false;
-                    }
-                }
-                if (update)
-                    instance.verticalDatum = verticalDatum.value;
-            }
+        //    var verticalDatum = ImporterNIS.GetVerticalDatum(current.VERDAT(), current.SHAPE()!);
+        //    if (verticalDatum != null) {
+        //        var update = true;
+        //        foreach (var elm in VerticalDatums.Instance.Touch(current.SHAPE()!)) {
+        //            if (elm.Item2.value == verticalDatum.value) {
+        //                update = false;
+        //            }
+        //        }
+        //        if (update)
+        //            instance.verticalDatum = verticalDatum.value;
+        //    }
 
-            var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
-            instance.information = [.. result.information];
-            instance.SetInformationBindings(result.InformationBindings.ToArray());
+        //    var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
+        //    instance.information = [.. result.information];
+        //    instance.SetInformationBindings(result.InformationBindings.ToArray());
 
-            buffer["ps"] = ps101;
-            buffer["code"] = instance.GetType().Name;
-            buffer["attributebindings"] = instance.Flatten();
-            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+        //    buffer["ps"] = ps101;
+        //    buffer["code"] = instance.GetType().Name;
+        //    buffer["attributebindings"] = instance.Flatten();
+        //    buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+        //    buffer["sourceIdentifier"] = instance.sourceIdentifier;
+        //    SetShape(buffer, current.SHAPE());
+        //    SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-            return instance;
-        }
+        //    return instance;
+        //}
 
         private static DepthArea DEPARE(Feature current, RowBuffer buffer) {
             var instance = new DepthArea();

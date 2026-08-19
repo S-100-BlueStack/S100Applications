@@ -10,6 +10,7 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static void S101_SoundingDatum(Geodatabase source, Geodatabase target, QueryFilter filter, S101ProductCoverage[] coverages) {
+            return;
             using var metadataA = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
 
             //  M_SDAT

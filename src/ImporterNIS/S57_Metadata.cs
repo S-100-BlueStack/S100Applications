@@ -136,23 +136,25 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "metadataa::55": { // M_VDAT_VerticalDatumOfData
-                            var instance = (VerticalDatumOfData)ImporterNIS.Build("M_VDAT", feature, buffer);
+                            // Handled by S101_VerticalDatumOfData
 
-                            using var featureN = featureClass.CreateRow(buffer);
-                            var name = featureN.UID();
+                            //var instance = (VerticalDatumOfData)ImporterNIS.Build("M_VDAT", feature, buffer);
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            }
-                            ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                            //using var featureN = featureClass.CreateRow(buffer);
+                            //var name = featureN.UID();
 
-                            if (instance.verticalDatum is not null) {
-                                VerticalDatums.Instance.Add(current.SHAPE()!.Clone(), instance.verticalDatum);
-                            }
-                            else {
-                                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM()!, $"M_VDAT_VerticalDatumOfData has no VERDAT");
-                            }
+                            //if (FeatureRelations.Instance.HasSlaves(globalid)) {
+                            //    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
+                            //}
+                            //ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
+                            //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+
+                            //if (instance.verticalDatum is not null) {
+                            //    VerticalDatums.Instance.Add(current.SHAPE()!.Clone(), instance.verticalDatum);
+                            //}
+                            //else {
+                            //    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM()!, $"M_VDAT_VerticalDatumOfData has no VERDAT");
+                            //}
                         }
                         break;
                     default:

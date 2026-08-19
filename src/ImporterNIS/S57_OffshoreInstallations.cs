@@ -99,7 +99,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsl::5": { // PIPSOL_PipelineSubmarineOnLand
-                            var instance = (PipelineSubmarineOnLand)ImporterNIS.Build("PIPSOL", feature, buffer);
+                            var instance = (PipelineSubmarineOnLand)ImporterNIS.PIPSOL(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -129,7 +129,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsp::10": { // PIPSOL_PipelineSubmarineOnLand
-                            var instance = (PipelineSubmarineOnLand)ImporterNIS.Build("PIPSOL", current, buffer);
+                            var instance = (Obstruction)ImporterNIS.PIPSOL(current, buffer,filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

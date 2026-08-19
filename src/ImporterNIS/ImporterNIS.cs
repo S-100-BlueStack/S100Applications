@@ -3,11 +3,11 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
-
-
 //using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
 using ImporterNIS.Singletons;
+using Microsoft.AspNetCore.Http.HttpResults;
+using NetTopologySuite.Utilities;
 using S100FC;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
@@ -25,8 +25,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using VortexLoader;
+using VortexLoader.Singletons;
 using static S100Framework.Applications.VortexLoader;
-
 using IO = System.IO;
 
 [assembly: InternalsVisibleTo("TestNisImporter")]
@@ -278,6 +278,8 @@ namespace S100Framework.Applications
                     }
 
                     Store((d) => S57_ProductCoverage_Full(source, electronicProducts, QueryFilter, minimumDisplayScale, ref s101ProductCoverages, filter, (products) => {
+                        using var metadataAFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
+
                         void CreateProducts(Geodatabase target101) {
                             using (var featureClass = target101.OpenDataset<FeatureClass>(target101.GetName("surface"))) {
                                 using var buffer = featureClass.CreateRowBuffer();
@@ -300,26 +302,121 @@ namespace S100Framework.Applications
                                 }
 
                                 foreach (var c in products) {
-                                    var vdat = new VerticalDatumOfData {
-                                        verticalDatum = c.VDAT?.value,
-                                    };
-
-                                    buffer["code"] = vdat.GetType().Name;
-                                    buffer["attributebindings"] = vdat.Flatten();
-                                    buffer["informationbindings"] = "[]";
-                                    buffer["featurebindings"] = "[]";
-                                    //buffer["specificusage"] = c.specificUsage;
-                                    buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
-                                    buffer["sourceIdentifier"] = vdat.sourceIdentifier;
+                                    (VerticalDatumOfData VerticalDatum, Polygon Shape)[] verticalDatums = [];
 
                                     foreach (var p in c.Coverage.Split()) {
-                                        SetShape(buffer, p);
+                                        var m_vdat = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
+                                            WhereClause = $"(PLTS_COMP_SCALE = {c.PLTS_COMP_SCALE}) AND fcsubtype = 55",
+                                            SpatialRelationship = SpatialRelationship.Contains,
+                                            FilterGeometry = p,
+                                        });
+
+                                        var _geometry = (Polygon)p.Clone();
+                                        if (m_vdat.Any()) {
+                                            Polygon[] polygons = [];
+                                            foreach (var __m_vdat in m_vdat) {
+                                                verticalDatums = [.. verticalDatums, (new VerticalDatumOfData {
+                                                    verticalDatum = GetVerticalDatum(__m_vdat.VERDAT!.Value, __m_vdat.Shape!)!.value,
+                                                }, (Polygon)__m_vdat.Shape!.Clone())];
+                                                polygons = [.. polygons, (Polygon)__m_vdat.Shape!.Clone()];
+                                            }
+
+                                            var union = GeometryEngine.Instance.Union(polygons);
+
+                                            var difference = GeometryEngine.Instance.Difference(_geometry, union);
+
+                                            if (difference is Polygon polygon) {
+                                                foreach (var part in polygon.Split()) {
+                                                    verticalDatums = [.. verticalDatums, (new VerticalDatumOfData {
+                                                        verticalDatum = c.VDAT!.value,
+                                                    }, part)];
+                                                }
+                                            }
+                                            else
+                                                System.Diagnostics.Debugger.Break();
+                                        }
+                                        else {
+                                            foreach (var part in _geometry.Split()) {
+                                                verticalDatums = [.. verticalDatums, (new VerticalDatumOfData {
+                                                    verticalDatum = c.VDAT!.value,
+                                                }, part)];
+                                            }
+                                        }
+                                    }
+
+                                    foreach (var s in verticalDatums) {
+                                        buffer["code"] = s.VerticalDatum.GetType().Name;
+                                        buffer["attributebindings"] = s.VerticalDatum.Flatten();
+                                        buffer["informationbindings"] = "[]";
+                                        buffer["featurebindings"] = "[]";
+                                        buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
+                                        buffer["sourceIdentifier"] = s.VerticalDatum.sourceIdentifier;
+
+                                        SetShape(buffer, s.Shape);
                                         using var featureN = featureClass.CreateRow(buffer);
                                         var name = featureN.UID();
 
-                                        VerticalDatums.Instance.Add(p, vdat.verticalDatum);
+                                        VerticalDatums.Instance.Add(s.Shape, s.VerticalDatum.verticalDatum);
+                                    }
+                                }
 
-                                        SoundingDatums.Instance.Add(p, c.SDAT!);
+                                foreach (var c in products) {
+                                    (SoundingDatum SoundingDatum, Polygon Shape)[] soundingDatums = [];
+
+                                    foreach (var p in c.Coverage.Split()) {
+                                        var m_sdat = Geometries.Features<MetaDataA>(metadataAFeatureClass, new SpatialQueryFilter {
+                                            WhereClause = $"(PLTS_COMP_SCALE = {c.PLTS_COMP_SCALE}) AND fcsubtype = 45",
+                                            SpatialRelationship = SpatialRelationship.Contains,
+                                            FilterGeometry = p,
+                                        });
+                                        
+                                        var _geometry = (Polygon)p.Clone();
+
+                                        if (m_sdat.Any()) {
+                                            Polygon[] polygons = [];
+                                            foreach (var __m_sdat in m_sdat) {
+                                                soundingDatums = [.. soundingDatums, (new SoundingDatum {
+                                                    verticalDatum = GetSoundingDatum(__m_sdat.VERDAT!.Value, __m_sdat.Shape!)!.value,
+                                                }, (Polygon)__m_sdat.Shape!.Clone())];
+                                                polygons = [.. polygons, (Polygon)__m_sdat.Shape!.Clone()];
+                                            }
+
+                                            var union = GeometryEngine.Instance.Union(polygons);
+
+                                            var difference = GeometryEngine.Instance.Difference(_geometry, union);
+
+                                            if (difference is Polygon polygon) {
+                                                foreach (var part in polygon.Split()) {
+                                                    soundingDatums = [.. soundingDatums, (new SoundingDatum {
+                                                    verticalDatum = c.SDAT!.value,
+                                                }, part)];
+                                                }
+                                            }
+                                            else
+                                                System.Diagnostics.Debugger.Break();
+                                        }
+                                        else {
+                                            foreach (var part in _geometry.Split()) {
+                                                soundingDatums = [.. soundingDatums, (new SoundingDatum {
+                                                    verticalDatum = c.SDAT!.value,
+                                                }, part)];
+                                            }
+                                        }
+                                    }
+
+                                    foreach(var s in soundingDatums) {
+                                        buffer["code"] = s.SoundingDatum.GetType().Name;
+                                        buffer["attributebindings"] = s.SoundingDatum.Flatten();
+                                        buffer["informationbindings"] = "[]";
+                                        buffer["featurebindings"] = "[]";
+                                        buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
+                                        buffer["sourceIdentifier"] = s.SoundingDatum.sourceIdentifier;
+
+                                        SetShape(buffer, s.Shape);
+                                        using var featureN = featureClass.CreateRow(buffer);
+                                        var name = featureN.UID();
+
+                                        SoundingDatums.Instance.Add(s.Shape, s.SoundingDatum.verticalDatum);
                                     }
                                 }
                             }
