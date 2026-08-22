@@ -73,10 +73,10 @@
         "editable" : true,
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.pointset",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.pointset",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -491,10 +491,10 @@
         "editable" : true,
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -889,10 +889,10 @@
         "editable" : true,
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -1216,10 +1216,10 @@
         "editable" : true,
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -1758,10 +1758,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -4520,10 +4520,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -6179,10 +6179,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -7350,10 +7350,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -8930,10 +8930,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -9690,10 +9690,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -10374,10 +10374,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -12001,10 +12001,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -14865,10 +14865,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -21545,10 +21545,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -22665,10 +22665,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -24309,10 +24309,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -25950,10 +25950,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -27839,10 +27839,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -28632,10 +28632,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -31218,10 +31218,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -33666,10 +33666,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -37599,10 +37599,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -38141,10 +38141,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -38824,10 +38824,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -39366,10 +39366,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -39927,10 +39927,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -40412,10 +40412,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -40910,10 +40910,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -41408,10 +41408,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -41913,10 +41913,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -42405,10 +42405,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -42879,10 +42879,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -43354,10 +43354,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -43848,10 +43848,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -44381,10 +44381,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -44856,10 +44856,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -45331,10 +45331,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -45806,10 +45806,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -46288,10 +46288,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -46773,10 +46773,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -47272,10 +47272,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -47771,10 +47771,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -48299,10 +48299,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -49020,10 +49020,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -49550,10 +49550,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -50431,10 +50431,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -50934,10 +50934,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -51471,10 +51471,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -51973,10 +51973,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -52476,10 +52476,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -52979,10 +52979,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -53561,10 +53561,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -54065,10 +54065,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -54568,10 +54568,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -55073,10 +55073,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -55613,10 +55613,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -56109,10 +56109,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -56631,10 +56631,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -57105,10 +57105,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -57578,10 +57578,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -58594,10 +58594,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -59095,10 +59095,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -59586,10 +59586,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -60228,10 +60228,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -60731,10 +60731,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -61234,10 +61234,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -61890,10 +61890,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -62393,10 +62393,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -62895,10 +62895,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -63437,10 +63437,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -63939,10 +63939,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -64483,10 +64483,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.point",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.point",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -65013,10 +65013,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -65595,10 +65595,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -66096,10 +66096,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -66606,10 +66606,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -67107,10 +67107,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -67611,10 +67611,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -68115,10 +68115,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -68619,10 +68619,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -69123,10 +69123,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -69627,10 +69627,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -70170,10 +70170,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -70674,10 +70674,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -71178,10 +71178,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -71667,10 +71667,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -72237,10 +72237,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -72770,10 +72770,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -73271,10 +73271,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -73766,10 +73766,10 @@
         },
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.pointset",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.pointset",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -74343,10 +74343,10 @@
         },
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -74902,10 +74902,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -75437,10 +75437,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -75961,10 +75961,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -76471,10 +76471,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -76971,10 +76971,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -77469,10 +77469,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -77967,10 +77967,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -78465,10 +78465,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -79004,10 +79004,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -79487,10 +79487,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -79998,10 +79998,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -80481,10 +80481,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -80965,10 +80965,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -81540,10 +81540,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -82079,10 +82079,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -82570,10 +82570,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.curve",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.curve",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -83069,10 +83069,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -83568,10 +83568,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -84066,10 +84066,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -84571,10 +84571,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -85077,10 +85077,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -85596,10 +85596,10 @@
         },
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -86311,10 +86311,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -86824,10 +86824,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -87329,10 +87329,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -87840,10 +87840,10 @@
         ],
         "dataConnection" : {
           "type" : "CIMFeatureDatasetDataConnection",
-          "featureDataset" : "S100.features",
-          "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-          "workspaceFactory" : "SDE",
-          "dataset" : "S100.surface",
+          "featureDataset" : "main.features",
+          "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+          "workspaceFactory" : "SQLite",
+          "dataset" : "main.surface",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -88777,9 +88777,9 @@
       "editable" : true,
       "dataConnection" : {
         "type" : "CIMStandardDataConnection",
-        "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-        "workspaceFactory" : "SDE",
-        "dataset" : "S100.informationtype",
+        "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+        "workspaceFactory" : "SQLite",
+        "dataset" : "main.informationtype",
         "datasetType" : "esriDTTable"
       },
       "autoGenerateRowTemplates" : true,
@@ -88866,9 +88866,9 @@
       "editable" : true,
       "dataConnection" : {
         "type" : "CIMStandardDataConnection",
-        "workspaceConnectionString" : "SERVER=ncps-sql101041.prod.sitad.dk;INSTANCE=sde:sqlserver:ncps-sql101041.prod.sitad.dk;DBCLIENT=sqlserver;DB_CONNECTION_PROPERTIES=ncps-sql101041.prod.sitad.dk;DATABASE=s100ed16_s101;VERSION=sde.DEFAULT;AUTHENTICATION_MODE=OSA",
-        "workspaceFactory" : "SDE",
-        "dataset" : "S100.featuretype",
+        "workspaceConnectionString" : "DATABASE=s101.geodatabase",
+        "workspaceFactory" : "SQLite",
+        "dataset" : "main.featuretype",
         "datasetType" : "esriDTTable"
       },
       "autoGenerateRowTemplates" : true,
