@@ -1,5 +1,5 @@
 ﻿<ArcGIS defaultAssembly="NuvionPro.dll" defaultNamespace="NuvionPro" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-  <AddInInfo id="{e88a79e5-f75d-4324-b52a-38eca2a1f9a1}" version="3.7.1901.22" desktopVersion="3.7">
+  <AddInInfo id="{e88a79e5-f75d-4324-b52a-38eca2a1f9a1}" version="3.7.1901.23" desktopVersion="3.7">
     <Name>NuvionPro</Name>
     <Description>The project aimed to implement the S-100 standard within ArcGIS Pro to improve the creation, management, and dissemination of electronic navigational charts (ENCs) in compliance with the International Hydrographic Organization's (IHO) S-100 framework. The implementation of S-100 standards in ArcGIS Pro facilitates the transition from traditional paper charts to modern digital navigational tools, enhancing safety and efficiency in maritime navigation.</Description>
     <Image>Images\Logo.png</Image>
@@ -34,6 +34,27 @@
         <button id="NuvionPro_ButtonHarbour" caption="Navigational Purpose Harbour" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="5"></button>
         <button id="NuvionPro_ButtonBerthing" caption="Navigational Purpose Berthing" className="NuvionPro.Commands.ButtonHarbour" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="6"></button>
         <button id="NuvionPro_ButtonClear" caption="Clear" className="NuvionPro.Commands.ButtonClear" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/FilterRemove16.png" largeImage="GenericButtonBlue32" keytip="0"></button>
+
+        <dynamicMenu caption="Nominal Scale" className="NuvionPro.Commands.DynamicMenuNominalScale" id="NuvionPro_DynamicMenuNominalScale" largeImage="pack://application:,,,/ProTestApp;component/Images/MenuImage32.png" smallImage="pack://application:,,,/ProTestApp;component/Images/MenuImage16.png">
+          <!--<tooltip heading="Heading" image="pack://application:,,,/Acme;component/Images/MenuImage16.png">Some text</tooltip>-->
+        </dynamicMenu>
+        <button id="NuvionPro_Button1000" caption="1:1.000" className="NuvionPro.Commands.Button1000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="1"></button>
+        <button id="NuvionPro_Button2000" caption="1:2.000" className="NuvionPro.Commands.Button2000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="2"></button>
+        <button id="NuvionPro_Button3000" caption="1:3.000" className="NuvionPro.Commands.Button3000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="3"></button>
+        <button id="NuvionPro_Button4000" caption="1:4.000" className="NuvionPro.Commands.Button4000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="4"></button>
+        <button id="NuvionPro_Button8000" caption="1:8.000" className="NuvionPro.Commands.Button8000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="5"></button>
+        <button id="NuvionPro_Button12000" caption="1:12.000" className="NuvionPro.Commands.Button12000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="6"></button>
+        <button id="NuvionPro_Button22000" caption="1:22.000" className="NuvionPro.Commands.Button22000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="7"></button>
+        <button id="NuvionPro_Button45000" caption="1:45.000" className="NuvionPro.Commands.Button45000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="8"></button>
+        <button id="NuvionPro_Button90000" caption="1:90.000" className="NuvionPro.Commands.Button90000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="9"></button>
+        <button id="NuvionPro_Button180000" caption="1:180.000" className="NuvionPro.Commands.Button180000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="10"></button>
+        <button id="NuvionPro_Button350000" caption="1:350.000" className="NuvionPro.Commands.Button350000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="11"></button>
+        <button id="NuvionPro_Button700000" caption="1:700.000" className="NuvionPro.Commands.Button700000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="12"></button>
+        <button id="NuvionPro_Button1500000" caption="1:1.500.000" className="NuvionPro.Commands.Button1500000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="13"></button>
+        <button id="NuvionPro_Button3500000" caption="1:3.500.000" className="NuvionPro.Commands.Button3500000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="14"></button>
+        <button id="NuvionPro_Button10000000" caption="1:10.000.000" className="NuvionPro.Commands.Button10000000" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/AddFilter16.png" keytip="15"></button>
+        <button id="NuvionPro_ButtonClearNominalScale" caption="Clear" className="NuvionPro.Commands.ButtonClear" loadOnClick="false" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/FilterRemove16.png" largeImage="GenericButtonBlue32" keytip="0"></button>
+        
         <tool id="NuvionPro_PickReportTool" caption="PickReportTool" className="PickReportTool" loadOnClick="true" smallImage="GenericButtonRed16" largeImage="GenericButtonRed32" condition="esri_mapping_mapPane">
           <tooltip heading="Tooltip Heading">Tooltip text<disabledText /></tooltip>
         </tool>
@@ -50,11 +71,19 @@
     <updateModule refID="esri_mapping">
       <menus>
         <updateMenu refID="esri_mapping_layerContextMenu">
-          <insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_editing_table_openTablePaneButton" separator="false" />
+          <!--<insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_editing_table_openTablePaneButton" separator="false" />-->
+          <deleteButton refID="NuvionPro_DynamicMenuSpecificUsage"/>
         </updateMenu>
         <updateMenu refID="esri_mapping_groupLayerContextMenu">
-          <insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_mapping_addDataToGroupLayerButton" separator="false" />
+          <!--<insertButton refID="NuvionPro_DynamicMenuSpecificUsage" insert="before" placeWith="esri_mapping_addDataToGroupLayerButton" separator="false" />-->
+          <deleteButton refID="NuvionPro_DynamicMenuSpecificUsage"/>
         </updateMenu>
+        <updateMenu refID="esri_mapping_layerContextMenu">
+          <insertButton refID="NuvionPro_DynamicMenuNominalScale" insert="before" placeWith="esri_editing_table_openTablePaneButton" separator="false" />
+        </updateMenu>
+        <updateMenu refID="esri_mapping_groupLayerContextMenu">
+          <insertButton refID="NuvionPro_DynamicMenuNominalScale" insert="before" placeWith="esri_mapping_addDataToGroupLayerButton" separator="false" />
+        </updateMenu>        
       </menus>
     </updateModule>
   </modules>
