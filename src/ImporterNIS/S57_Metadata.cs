@@ -189,11 +189,13 @@ namespace S100Framework.Applications
             foreach (var e in informationAreas.GroupBy(e => (e.SORDAT, e.PICREP, e.OBJNAM, e.NOBJNM, e.PLTS_COMP_SCALE, e.Shape.ToJson()))) {
                 var _ = e.First();
 
-                //if (e.Any(i => i.ObjectID == 233 || i.ObjectID == 234)) System.Diagnostics.Debugger.Break();
-
                 var instance = ImporterNIS.M_NPUB(_.SORDAT, _.PICREP, _.OBJNAM, _.NOBJNM);
 
-                if (_.PLTS_COMP_SCALE.HasValue) {
+                //if (_.PLTS_COMP_SCALE.HasValue) {
+                //    instance.scaleMinimum = _.scaleMinimum;
+                //}
+
+                if (_.scaleMinimum.HasValue) {
                     instance.scaleMinimum = _.scaleMinimum;
                 }
 
