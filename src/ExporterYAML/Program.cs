@@ -840,7 +840,7 @@ namespace S100Framework.Applications
                                     }
 
                                     foreach (var uid in features) {
-                                        if ("F10400000368".Equals(uid)) System.Diagnostics.Debugger.Break();
+                                        //if ("F10400000368".Equals(uid)) System.Diagnostics.Debugger.Break();
 
                                         // Only map geometry, and keep name seperate so foids remain unique
                                         var geometry = uid;
