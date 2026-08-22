@@ -984,11 +984,11 @@ namespace S100Framework.Applications
                 instance.featureName = featureName;
 
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1392,11 +1392,11 @@ namespace S100Framework.Applications
                 instance.featureName = featureName;
 
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1503,11 +1503,11 @@ namespace S100Framework.Applications
             }
 
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1558,7 +1558,6 @@ namespace S100Framework.Applications
 
             //  Table 30.2 - Values for default clearance depth – Underwater/Awash Rock features
             var expsou = current.EXPSOU_HasValue() ? current.EXPSOU() : null;
-            var height = current.HEIGHT_HasValue() ? current.HEIGHT() : null;
             var watlev = current.WATLEV_HasValue() ? current.WATLEV() : null;
             var valsou = current.VALSOU_HasValue() ? current.VALSOU() : null;
 
@@ -1622,7 +1621,7 @@ namespace S100Framework.Applications
                 }
                 else {
                     //  Hit me with a baseball bat
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                 }
             }
             else {
@@ -1646,12 +1645,12 @@ namespace S100Framework.Applications
                 }
                 else {
                     //  Hit me with a baseball bat
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                 }
             }
 
             if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (UWTROC#{objectid})", current.GetObjectID());
+                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1701,11 +1700,11 @@ namespace S100Framework.Applications
             }
 
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1772,11 +1771,11 @@ namespace S100Framework.Applications
                 instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
             }
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -1932,7 +1931,7 @@ namespace S100Framework.Applications
                 }
                 else {
                     //  Hit me with a baseball bat
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                 }
             }
             else {
@@ -1974,7 +1973,7 @@ namespace S100Framework.Applications
                 }
                 else {
                     //  Hit me with a baseball bat
-                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth WRECKS! catwrk:{catwrk}, expsou:{expsou}, height:{height}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                 }
             }
 
@@ -2122,7 +2121,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2220,11 +2219,11 @@ namespace S100Framework.Applications
 
                 // TODO: QualityOfVerticalMeasurement
                 if (current.SORDAT_HasValue()) {
-                    if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                    if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2386,7 +2385,7 @@ namespace S100Framework.Applications
                     }
                     else {
                         //  Hit me with a baseball bat
-                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                     }
                 }
                 else {
@@ -2418,7 +2417,7 @@ namespace S100Framework.Applications
                     }
                     else {
                         //  Hit me with a baseball bat
-                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, watlev:{watlev}, valsou:{valsou}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth OBSTRN! catobs:{catobs}, expsou:{expsou}, height:{height}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
                     }
                 }
 
@@ -2465,11 +2464,11 @@ namespace S100Framework.Applications
                 instance.periodicDateRange = periodicDateRange;
             }
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2527,11 +2526,11 @@ namespace S100Framework.Applications
             }
 
             if (current.SORDAT_HasValue()) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2705,7 +2704,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -2791,11 +2790,11 @@ namespace S100Framework.Applications
 
                 // TODO: QualityOfVerticalMeasurement
                 if (current.SORDAT_HasValue()) {
-                    if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+                    if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -2908,7 +2907,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -3422,7 +3421,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -3544,7 +3543,7 @@ namespace S100Framework.Applications
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -3568,13 +3567,6 @@ namespace S100Framework.Applications
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM(), current.PUBREF());
             var informations = result.information.ToArray();
 
-            if (current.PUBREF_HasValue()) {
-                //informations = [..informations, new information {
-                //                    language = "eng",
-                //                    headline = "-32767".Equals(current.PUBREF()) ? null : current.PUBREF()!.Trim(),
-                //                }];
-            }
-
             if (informations.Any())
                 instance.information = informations;
             instance.SetInformationBindings(result.InformationBindings.ToArray());
@@ -3590,6 +3582,27 @@ namespace S100Framework.Applications
 
             return instance;
         }
+
+        private static InformationArea M_NPUB(string? SORDAT, string? PICREP, string? OBJNAM, string? NOBJNM) {
+            var instance = new InformationArea();
+
+            if (!string.IsNullOrEmpty(SORDAT)) {
+                if (DateHelper.TryConvertSordat(SORDAT!, out var reportedDate)) {
+                    instance.reportedDate = reportedDate;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(PICREP)) {
+                instance.pictorialRepresentation = FixFilename(PICREP!);
+            }
+
+            var featureName = GetFeatureName(OBJNAM, NOBJNM);
+            if (featureName is not null)
+                instance.featureName = featureName;
+
+            return instance;
+        }
+
 
         private static FeatureType M_NSYS(Feature current, RowBuffer buffer) {
             if (current.ORIENT_HasValue()) {
@@ -4313,7 +4326,7 @@ namespace S100Framework.Applications
                         instance.reportedDate = reportedDate;
                     }
                     else {
-                        Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                        Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                     }
                 }
 
@@ -5214,13 +5227,13 @@ namespace S100Framework.Applications
             if (current.DRVAL2_HasValue())
                 instance.depthRangeMaximumValue = current.DRVAL2() != -32767m ? current.DRVAL2() : null;
 
-            if (!string.IsNullOrEmpty(current.SORDAT())) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.dredgedDate = reportedDate;
                 }
-            }
-            else {
-                Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                else {
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                }
             }
 
 
@@ -5523,12 +5536,12 @@ namespace S100Framework.Applications
 
             // TODO: product
 
-            if (!string.IsNullOrEmpty(current.SORDAT())) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 
@@ -5927,12 +5940,12 @@ namespace S100Framework.Applications
             if (current.CONRAD_HasValue()) {
                 instance.radarConspicuous = current.CONRAD() == 2 ? false : true;
             }
-            if (!string.IsNullOrEmpty(current.SORDAT())) {
-                if (DateHelper.TryConvertSordat(current.SORDAT(), out var reportedDate)) {
+            if (current.SORDAT_HasValue()) {
+                if (DateHelper.TryConvertSordat(current.SORDAT()!, out var reportedDate)) {
                     instance.reportedDate = reportedDate;
                 }
                 else {
-                    Logger.Current.DataError(current.GetObjectID(), current.GetType().Name, current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
+                    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT()}");
                 }
             }
 

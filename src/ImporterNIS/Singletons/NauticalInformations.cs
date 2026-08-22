@@ -3,6 +3,8 @@ using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
+using S100FC.S128.SimpleAttributes;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications.Singletons
@@ -104,10 +106,10 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
+        public static informationBinding<AdditionalInformation> CreateAdditionalInformation(NauticalInformation nauticalInformation) {
+            return CreateInformationType(_destination!, nauticalInformation);
+        }
 
-        /// <summary>
-        /// Adds a polygon geometry to the collection.
-        /// </summary>
         public informationBinding<AdditionalInformation> Add(string fileName, NauticalInformation nauticalInformation) {
             if (fileName == null)
                 throw new ArgumentNullException(nameof(fileName));
@@ -122,10 +124,9 @@ namespace S100Framework.Applications.Singletons
             }
 
             return this._nauticalBindings[fileName];
-
         }
 
-        private static informationBinding<AdditionalInformation> CreateInformationType(Geodatabase target, NauticalInformation nauticalInformation) {
+        internal static informationBinding<AdditionalInformation> CreateInformationType(Geodatabase target, NauticalInformation nauticalInformation) {
             using var informationTypeTable = target.OpenDataset<Table>(target.GetName("informationtype"));
             using var bufferInformationType = informationTypeTable.CreateRowBuffer();
 
@@ -172,7 +173,7 @@ namespace S100Framework.Applications.Singletons
 
                         foreach (var info in nauticalInformation.information) {
                             if (hash.Contains(info!.fileReference!)) continue;
-                            
+
                             hash.Add(info!.fileReference!);
                             var supportFile = new S100BlueStack.Settings.SupportFile {
                                 FileName = info!.fileReference!

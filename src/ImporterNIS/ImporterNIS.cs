@@ -369,7 +369,7 @@ namespace S100Framework.Applications
                                             SpatialRelationship = SpatialRelationship.Contains,
                                             FilterGeometry = p,
                                         });
-                                        
+
                                         var _geometry = (Polygon)p.Clone();
 
                                         if (m_sdat.Any()) {
@@ -404,7 +404,7 @@ namespace S100Framework.Applications
                                         }
                                     }
 
-                                    foreach(var s in soundingDatums) {
+                                    foreach (var s in soundingDatums) {
                                         buffer["code"] = s.SoundingDatum.GetType().Name;
                                         buffer["attributebindings"] = s.SoundingDatum.Flatten();
                                         buffer["informationbindings"] = "[]";
@@ -1026,6 +1026,14 @@ namespace S100Framework.Applications
                 }
             }
 
+            //  M_NPUB
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Building M_NPUB");
+
+                using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
+
+            }
+
             //  Bridges
             using (var destination = createTargetGeodatabase()) {
                 Logger.Current.Information($"Building bridges");
@@ -1263,6 +1271,11 @@ namespace S100Framework.Applications
 
                             var scale = parts.Select(e => e.Item2!.PLTS_COMP_SCALE!.Value).Distinct();
                             if (scale.Count() > 1) System.Diagnostics.Debugger.Break();
+
+                            if (true == instance.openingBridge) {
+                                if (!instance.attributeBindings.Any(e => e.S100FC_code.Equals("categoryOfOpeningBridge")))
+                                    instance.categoryOfOpeningBridge = null;
+                            }
 
                             bufferBridge["code"] = instance.GetType().Name;
                             bufferBridge["attributebindings"] = instance.Flatten();
@@ -1528,7 +1541,7 @@ namespace S100Framework.Applications
         const string DE9IM_Contains = "T*****FF*";
 
         internal static IEnumerable<(int FcSubtype, decimal? DRVAL1)> GetSurrounding_DepthArea(Geometry shape, Geodatabase geodatabase, string queryFilter) {
-            (string tablename, SpatialRelationship relationship, string description)[] dictionary = [                    
+            (string tablename, SpatialRelationship relationship, string description)[] dictionary = [
                     ("depthsa", SpatialRelationship.Relation, "T*****T**"),
                     ("depthsa", SpatialRelationship.Relation, "T********"),
                 ];
@@ -2383,6 +2396,198 @@ namespace S100Framework.Applications
             return result;
         }
 
+#if null
+        internal static InformationResult BindNauticalInformationFrom(long sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
+
+            //if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
+
+            if (pubref is not null)
+                pubref = pubref.Trim();
+
+            InformationResult result = new();
+
+            //var createNauticalInformation = (string fileReference, string language) => {
+            //    return new NauticalInformation {
+            //        information = [
+            //        new information() {
+            //            fileReference = FixFilename(fileReference) ?? default,
+            //            language = language
+            //        }]
+            //    };
+            //};
+
+
+            //if (!string.IsNullOrEmpty(pubref)) {
+            //    createNauticalInformation = (string fileReference, string language) => {
+            //        return new NauticalInformation {
+            //            information = [
+            //                new information() {
+            //                fileReference = FixFilename(fileReference) ?? default,
+            //                language = language,
+            //                headline = pubref.Equals("-32767") ? null : pubref,
+            //            }]
+            //        };
+            //    };
+            //}
+
+            NauticalInformation nauticalInformation = new NauticalInformation();
+
+            var createInformation = (string fileReference, string language) => {
+                return new information() {
+                    fileReference = FixFilename(fileReference) ?? default,
+                    language = language
+                };
+            };
+
+
+            if (!string.IsNullOrEmpty(pubref)) {
+                createInformation = (string fileReference, string language) => {
+                    return new information() {
+                        fileReference = FixFilename(fileReference) ?? default,
+                        language = language,
+                        headline = pubref.Equals("-32767") ? null : pubref,
+                    };
+                };
+            }
+
+            if (!string.IsNullOrEmpty(ntxtds)) {
+                // TODO: make information binding -> Nautical Information - binding.
+                if (!string.IsNullOrEmpty(ntxtds) && ntxtds.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
+
+                    var file = IO.Directory.GetFiles(_notesPath, $"{ntxtds}", SearchOption.AllDirectories).FirstOrDefault();
+                    if (string.IsNullOrEmpty(file))
+                        Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ntxtds] {ntxtds}");
+                    else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                        Logger.Current.Warning("{tablename}::{objectid} ntxds {file}", sourceTableName, sourceObjectid, file);
+
+                    string fileReference = ntxtds;
+                    string language = "eng";
+
+                    var instance = createInformation(fileReference, language);
+                    nauticalInformation.information = [.. nauticalInformation.information, instance];
+                    //result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
+                }
+                else if (!string.IsNullOrEmpty(ntxtds)) {
+                    string language = "eng";
+
+                    var instance = new information {
+                        language = language,
+                        text = ntxtds?.Trim(),
+                    };
+                    result.information.Add(instance);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(txtdsc)) {
+                // TODO: make information binding -> Nautical Information - binding.
+                if (!string.IsNullOrEmpty(txtdsc) && txtdsc.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
+                    var file = IO.Directory.GetFiles(_notesPath, $"{txtdsc}", SearchOption.AllDirectories).FirstOrDefault();
+                    if (string.IsNullOrEmpty(file))
+                        Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [txtdsc] {txtdsc}");
+                    else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                        Logger.Current.Warning("{tablename}::{objectid} txtdsc {file}", sourceTableName, sourceObjectid, file);
+
+
+                    string fileReference = txtdsc;
+                    string language = "eng";
+
+                    var instance = createInformation(fileReference, language);
+                    nauticalInformation.information = [.. nauticalInformation.information, instance];
+                    //result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
+                }
+                else if (!string.IsNullOrEmpty(txtdsc)) {
+                    string fileReference = txtdsc;
+                    string language = "eng";
+
+                    var instance = new information {
+                        language = language,
+                        text = txtdsc?.Trim(),
+                    };
+                    result.information.Add(instance);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(inform)) {
+                //https://geodatastyrelsen.atlassian.net/wiki/spaces/SOEKORT/pages/4404478463/S-65+Annex+B+Appendix+A+-+Impact+analysis
+                // Separate discrete information populated in INFORM using a standard separator such as semicolon “;”.
+
+                string[] informs = inform != null ? inform.Split(';') : Array.Empty<string>();
+
+                foreach (var value in informs) {
+                    if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
+                        var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
+                        if (string.IsNullOrEmpty(file))
+                            Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [inform] {inform}");
+                        else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                            Logger.Current.Warning("{tablename}::{objectid} inform {file}", sourceTableName, sourceObjectid, file);
+
+                        string fileReference = value;
+                        string language = "eng";
+
+                        var instance = createInformation(fileReference, language);
+                        nauticalInformation.information = [.. nauticalInformation.information, instance];
+                        //result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
+                    }
+                    else if (!string.IsNullOrEmpty(value)) {
+                        string fileReference = value;
+                        string language = "eng";
+
+                        var instance = new information {
+                            language = language,
+                            text = value?.Trim(),
+                        };
+                        result.information.Add(instance);
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ninform)) {
+                // https://geodatastyrelsen.atlassian.net/wiki/spaces/SOEKORT/pages/4404478463/S-65+Annex+B+Appendix+A+-+Impact+analysis
+                // Separate discrete information populated in INFORM using a standard separator such as semicolon “;”.
+                if (!string.IsNullOrEmpty(ninform)) {
+
+                    string[] ninfoms = ninform != null ? ninform.Split(';') : Array.Empty<string>();
+
+                    foreach (var value in ninfoms) {
+
+                        if (!string.IsNullOrEmpty(value) && value.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)) {
+                            var file = IO.Directory.GetFiles(_notesPath, $"{value}", SearchOption.AllDirectories).FirstOrDefault();
+                            if (string.IsNullOrEmpty(file))
+                                Logger.Current.Error($"{sourceTableName}::{sourceObjectid} [ninform] {ninform}");
+                            else if (file.Contains("Retired", StringComparison.CurrentCultureIgnoreCase))
+                                Logger.Current.Warning("{tablename}::{objectid} ninfoms {file}", sourceTableName, sourceObjectid, file);
+
+
+                            string fileReference = value;
+                            string language = "dan";
+
+                            var instance = createInformation(fileReference, language);
+                            nauticalInformation.information = [.. nauticalInformation.information, instance];
+                            //result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
+                        }
+                        else if (!string.IsNullOrEmpty(value)) {
+                            string fileReference = value;
+                            string language = "dan";
+
+                            var instance = new information {
+                                language = language,
+                                text = value?.Trim(),
+                            };
+                            result.information.Add(instance);
+                        }
+                    }
+                }
+            }
+
+            if (nauticalInformation.information.Any()) {
+                if (nauticalInformation.information.Count() > 1) System.Diagnostics.Debugger.Break();
+                var additionalInformation = NauticalInformations.CreateAdditionalInformation(nauticalInformation);
+                result.InformationBindings.Add(additionalInformation);
+            }
+
+            return result;
+        }
+#endif
         internal static string?[] GetCommunicationChannel(string input) {
             var result = new List<string>();
             if (string.IsNullOrWhiteSpace(input)) return [];
