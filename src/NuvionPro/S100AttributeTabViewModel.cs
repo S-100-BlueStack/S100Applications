@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Editing.Attributes;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Internal.Core;
 using ArcGIS.Desktop.Mapping;
 using S100FC;
 using S100Framework.WPF.ViewModel;
@@ -116,20 +117,20 @@ namespace NuvionPro
                     return; // SKIP ALL OTHERS
 
                 case nameof(this.SelectedProperty):
-                    this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
-                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this.PS_SelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
                     break;
 
                 case nameof(this.PS):
                     this.PS_Inspector(inspector);
-                    this.NotifyPropertyChanged(() => this._psSelectorIsEnabled);
-                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this.PS_SelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
                     this.Code = default;
                     break;
 
                 case nameof(this.Code):
                     this.Code_Inspector(inspector);
-                    this.NotifyPropertyChanged(() => this._codeSelectorIsEnabled);
+                    this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
                     break;
             }
             this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
@@ -572,9 +573,17 @@ namespace NuvionPro
             set => this.SetProperty(ref this._isEditingEnabled, value);
         }
 
-        public bool _psSelectorIsEnabled => (this.Inspector is null || this.Inspector.IsNull("attributebindings")) ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+        public bool PS_SelectorIsEnabled {
+            get {
+                if (this.Inspector is null) return true;
 
-        public bool _codeSelectorIsEnabled {
+                if (this.Inspector.IsNull("attributebindings")) return true;
+
+                return "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+            }
+        }
+
+        public bool CODE_SelectorIsEnabled {
             get {
                 if (this.Inspector is null) return false;
 

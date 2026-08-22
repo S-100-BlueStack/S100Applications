@@ -37,7 +37,7 @@
                 <TextBlock Margin="5,0,5,0" Text="PS" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <ComboBox x:Name="_psSelector" DockPanel.Dock="Right"
                           HorizontalAlignment="Stretch" 
-                          IsEnabled="{Binding _psSelectorIsEnabled, Mode=OneWay}"
+                          IsEnabled="{Binding PS_SelectorIsEnabled, Mode=OneWay}"
                           ItemsSource="{Binding FeatureCatalogues}"
                           DisplayMemberPath="ID"
                           SelectedItem="{Binding PS, UpdateSourceTrigger=PropertyChanged}" >
@@ -48,7 +48,7 @@
                 <TextBlock Margin="5,0,5,0" Text="Code" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <ComboBox x:Name="_codeSelector" DockPanel.Dock="Right"
                           HorizontalAlignment="Stretch" 
-                          IsEnabled="{Binding _codeSelectorIsEnabled, Mode=OneWay}"
+                          IsEnabled="{Binding CODE_SelectorIsEnabled, Mode=OneWay}"
                           ItemsSource="{Binding Codes}" 
                           SelectedItem="{Binding Code, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
