@@ -41722,11 +41722,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DataCoverage'",
-        "definitionExpressionName" : "LandArea",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "LandArea",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DataCoverage'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -73599,11 +73599,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Sounding'",
-        "definitionExpressionName" : "Sounding",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Sounding",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Sounding'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -74146,11 +74146,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Obstruction'",
-        "definitionExpressionName" : "DepthArea",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "DepthArea",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Obstruction'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -75246,11 +75246,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DredgedArea'",
-        "definitionExpressionName" : "Lake",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Lake",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DredgedArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -75770,11 +75770,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'UnsurveyedArea'",
-        "definitionExpressionName" : "Lake",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Lake",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'UnsurveyedArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -81888,11 +81888,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Lake'",
-        "definitionExpressionName" : "Lake",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Lake",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Lake'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -82878,11 +82878,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'River'",
-        "definitionExpressionName" : "Lake",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Lake",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'River'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -84380,11 +84380,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'SlopingGround'",
-        "definitionExpressionName" : "SlopingGround",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "SlopingGround",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'SlopingGround'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -85399,11 +85399,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'DepthArea'",
-        "definitionExpressionName" : "DepthArea",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "DepthArea",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'DepthArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -86120,11 +86120,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'Vegetation'",
-        "definitionExpressionName" : "Vegetation",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Vegetation",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'Vegetation'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -86633,11 +86633,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LandRegion'",
-        "definitionExpressionName" : "Lake",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "Lake",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LandRegion'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
@@ -87138,11 +87138,11 @@
       "featureTable" : {
         "type" : "CIMFeatureTable",
         "definitionExpression" : "ps = 'S-101' And code = 'LandArea'",
-        "definitionExpressionName" : "LandArea",
+        "definitionExpressionName" : "Default",
         "definitionFilterChoices" : [
           {
             "type" : "CIMDefinitionFilter",
-            "name" : "LandArea",
+            "name" : "Default",
             "definitionExpression" : "ps = 'S-101' And code = 'LandArea'",
             "searchOrder" : "esriSearchOrderSpatial"
           }
