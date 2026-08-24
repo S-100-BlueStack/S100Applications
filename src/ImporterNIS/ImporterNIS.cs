@@ -1961,6 +1961,8 @@ namespace S100Framework.Applications
                 rhythmOfLight.signalPeriod = current.SIGPER == -32767m ? null : current.SIGPER.Value;
             //if (signalSequences.Any())
             //    rhythmOfLight.signalSequence = signalSequences.ToArray();
+
+            //if (0m == rhythmOfLight.signalPeriod) System.Diagnostics.Debugger.Break();
             return rhythmOfLight;
         }
 
@@ -2080,9 +2082,10 @@ namespace S100Framework.Applications
                 "6" => 6,   //colourPattern.BorderStripe,
                 "-32767" => null,
 
-                "3,4" => 3, //US
+                "3,4" => null, //US
+                "6,4" => null, //US
 
-                _ => throw new IndexOutOfRangeException($"Colourpattern value is not legal {colorPattern}")
+                _ => null,  //throw new IndexOutOfRangeException($"Colourpattern value is not legal {colorPattern}")
             };
             return colourPat;
         }
@@ -2193,14 +2196,14 @@ namespace S100Framework.Applications
 
 
 
-        public static condition GetCondition(int conditionValue) {
+        public static condition? GetCondition(int conditionValue) {
             return conditionValue switch {
-                1 => 1,    // under construction
-                2 => 2,    // ruined
-                3 => 3,    // under reclamation
-                5 => 5,    // planned construction
-                -32767 => (condition)(-1),                        // unknown or no condition
-                _ => throw new IndexOutOfRangeException("Invalid condition value.")  // Invalid condition value
+                1 => 1,         // under construction
+                2 => 2,         // ruined
+                3 => 3,         // under reclamation
+                5 => 5,         // planned construction
+                -32767 => null, // unknown or no condition
+                _ => throw new IndexOutOfRangeException("Invalid condition value.")
             };
         }
 
@@ -2235,6 +2238,7 @@ namespace S100Framework.Applications
             return null;
         }
 
+#if true
         internal static InformationResult BindNauticalInformationFrom(long sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
 
             //if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
@@ -2309,8 +2313,6 @@ namespace S100Framework.Applications
 
                     var instance = createNauticalInformation(fileReference, language);
                     result.InformationBindings.Add(NauticalInformations.Instance.Add(instance.information[0]!.fileReference!, instance));
-
-                    // information.Add(instance);
                 }
                 else if (!string.IsNullOrEmpty(txtdsc)) {
                     string fileReference = txtdsc;
@@ -2396,7 +2398,8 @@ namespace S100Framework.Applications
             return result;
         }
 
-#if null
+#endif
+#if false
         internal static InformationResult BindNauticalInformationFrom(long sourceObjectid, string? sourceTableName, string? ntxtds, string? txtdsc, string? inform, string? ninform, string? pubref) {
 
             //if (System.Diagnostics.Debugger.IsAttached && "DKNOT101.TXT".Equals(inform, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();

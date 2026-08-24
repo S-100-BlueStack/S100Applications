@@ -110,7 +110,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::10": { // OILBAR_OilBarrier
-                            var instance = (OilBarrier)ImporterNIS.Build("OILBAR_", feature, buffer);
+                            var instance = (OilBarrier)ImporterNIS.Build("OILBAR", feature, buffer);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

@@ -848,6 +848,8 @@ namespace TestNisImporter
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL5")];
 
             roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed16_balticsea\s57")];
+            roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\S-101_NOAA\s57")];
+        
 
             var python = new StringBuilder();
 

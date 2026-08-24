@@ -1334,15 +1334,22 @@ namespace S100Framework.Applications
         private static LandRegion LNDRGN(Feature current, RowBuffer buffer) {
             var instance = new LandRegion();
 
+            bool hasCATLND = false;
+            bool hasFeatureName = false;
+
             if (current.CATLND_HasValue()) {
                 var categoryOfLandRegion = EnumHelper.GetEnumValues(current.CATLND(), instance.attributeBindingDefinition("categoryOfLandRegion")!.permitedValues!);
-                if (categoryOfLandRegion is not null && categoryOfLandRegion.Any())
+                if (categoryOfLandRegion is not null && categoryOfLandRegion.Any()) {
                     instance.categoryOfLandRegion = categoryOfLandRegion;
+                    hasCATLND = true;
+                }
             }
 
             var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());
-            if (featureName is not null)
+            if (featureName is not null) {
                 instance.featureName = featureName;
+                hasFeatureName = true;
+            }
 
             if (current.NATSUR_HasValue()) {
                 var natureOfSurface = EnumHelper.GetEnumValues(current.NATSUR(), instance.attributeBindingDefinition("natureOfSurface")!.permitedValues!);
@@ -1650,7 +1657,7 @@ namespace S100Framework.Applications
             }
 
             if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
+                //Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM() ?? "Unknown LNAM", $"defaultClearanceDepth UWTROC! expsou:{expsou}, valsou:{valsou}, watlev:{watlev}, leastDepth:{leastDepth}");
             }
 
             if (current.PLTS_COMP_SCALE_HasValue()) {
@@ -1887,6 +1894,16 @@ namespace S100Framework.Applications
                     var _ = leastDepth!.Value - 66m;
                     instance.defaultClearanceDepth = 20.1m > _ ? 20.1m : _;
                 }
+                else if (   //  GST
+                        (catwrk.HasValue && catwrk.Value == 1)
+                        //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    ) {
+                    instance.expositionOfSounding = null;
+
+                    //  20.1 or {Least Depth – 66} (whichever value is larger)
+                    var _ = leastDepth!.Value - 66m;
+                    instance.defaultClearanceDepth = 20.1m > _ ? 20.1m : _;
+                }
                 else if (
                         (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m)) &&
                         (valsou.HasValue && valsou.Value == -32767m) &&
@@ -1894,7 +1911,7 @@ namespace S100Framework.Applications
                     ) {
                     instance.defaultClearanceDepth = 0m;
                 }
-                else if (
+                else if (   //  GST
                         (!expsou.HasValue) &&
                         (valsou.HasValue && valsou.Value == -32767m) &&
                         (watlev.HasValue && (watlev.Value == 3 || watlev.Value == 5))
@@ -1909,7 +1926,7 @@ namespace S100Framework.Applications
                     ) {
                     instance.defaultClearanceDepth = 15m;
                 }
-                else if (
+                else if (   //  GST
                         (!expsou.HasValue) &&
                         (valsou.HasValue && valsou.Value == -32767m) &&
                         (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767m))
@@ -1927,6 +1944,13 @@ namespace S100Framework.Applications
                         (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767)) &&
                         (expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
                     ) {
+                    instance.defaultClearanceDepth = 15m;
+                }
+                else if (   //  GST
+                        (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767))
+                        //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    ) {
+                    instance.expositionOfSounding = null;
                     instance.defaultClearanceDepth = 15m;
                 }
                 else {
@@ -1978,7 +2002,7 @@ namespace S100Framework.Applications
             }
 
             if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (WRECKS#{objectid})", current.GetObjectID());
+                //Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (WRECKS#{objectid})", current.GetObjectID());
             }
 
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
@@ -2180,7 +2204,7 @@ namespace S100Framework.Applications
                 }
 
                 if (current.CONDTN_HasValue()) {
-                    instance.condition = ImporterNIS.GetCondition(current.CONDTN()!.Value)?.value;
+                    instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
                 }
 
                 if (current.EXPSOU_HasValue()) {
@@ -2326,7 +2350,7 @@ namespace S100Framework.Applications
                         ) {
                         instance.defaultClearanceDepth = 0.1m;
                     }
-                    else if (
+                    else if (   //  GST
                             (catobs.HasValue && catobs.Value == 6) &&
                             (!expsou.HasValue) &&
                             (valsou.HasValue && valsou.Value == -32767m)
@@ -2341,7 +2365,7 @@ namespace S100Framework.Applications
                         ) {
                         instance.defaultClearanceDepth = 0.1m;
                     }
-                    else if (
+                    else if (   //  GST
                             (!expsou.HasValue) &&
                             (valsou.HasValue && valsou.Value == -32767m) &&
                             (watlev.HasValue && watlev.Value == 3)
@@ -2357,7 +2381,7 @@ namespace S100Framework.Applications
                         ) {
                         instance.defaultClearanceDepth = 0m;
                     }
-                    else if (
+                    else if (   //  GST
                             (catobs.HasValue && catobs.Value != 6) &&
                             (!expsou.HasValue) &&
                             (valsou.HasValue && valsou.Value == -32767m) &&
@@ -2374,14 +2398,14 @@ namespace S100Framework.Applications
                         ) {
                         instance.defaultClearanceDepth = -15m;
                     }
-                    else if (
-                            (catobs.HasValue && catobs.Value != 6) &&
-                            (!expsou.HasValue) &&
+                    else if (   //  GST
+                            !(catobs.HasValue && catobs.Value == 6) &&
+                            //(!expsou.HasValue) &&
                             (valsou.HasValue && valsou.Value == -32767m) &&
                             (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
                         ) {
-                        instance.expositionOfSounding = null;
-                        instance.defaultClearanceDepth = -15m;
+                            instance.expositionOfSounding = null;
+                            instance.defaultClearanceDepth = -15m;
                     }
                     else {
                         //  Hit me with a baseball bat
@@ -2422,7 +2446,7 @@ namespace S100Framework.Applications
                 }
 
                 if (!instance.valueOfSounding.HasValue && !instance.defaultClearanceDepth.HasValue) {
-                    Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OBSTRN#{objectid})", current.GetObjectID());
+                    //Logger.Current.Error("!instance.valueOfSounding.HasValue && !defaultClearanceDepth (OBSTRN#{objectid})", current.GetObjectID());
                 }
 
 
@@ -2762,7 +2786,7 @@ namespace S100Framework.Applications
                 var instance = new Obstruction();
 
                 if (current.CONDTN_HasValue()) {
-                    instance.condition = ImporterNIS.GetCondition(current.CONDTN()!.Value)?.value;
+                    instance.condition = GetCondition(current.CONDTN()!.Value)?.value;
                 }
 
                 var featureName = GetFeatureName(current.OBJNAM(), current.NOBJNM());

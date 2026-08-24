@@ -78,7 +78,7 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    case "metadataa::30": { // M_NPUB_NauticalPublicationInformation
+                    case "metadataa::30": { // M_NPUB_NauticalPublicationInformation                            
                             var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
 
                             informationAreas = [.. informationAreas, (
@@ -202,7 +202,8 @@ namespace S100Framework.Applications
                 information[] informations = [];
                 informationBinding[] informationBindings = [];
 
-                foreach (var i in e) {
+                //foreach (var i in e) {
+                foreach (var i in e.Take(1)) {  //TEST, TEST, TEST
                     var result = ImporterNIS.AddInformation(i.ObjectID, tableName, i.NTXTDS, i.TXTDSC, i.INFORM, i.NINFOM, i.PUBREF);
                     informations = [.. informations, .. result.information];
                     informationBindings = [.. informationBindings, .. result.InformationBindings];
