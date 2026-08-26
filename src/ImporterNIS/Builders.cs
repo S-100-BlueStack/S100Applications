@@ -1896,7 +1896,7 @@ namespace S100Framework.Applications
                 }
                 else if (   //  GST
                         (catwrk.HasValue && catwrk.Value == 1)
-                        //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
                     ) {
                     instance.expositionOfSounding = null;
 
@@ -1948,7 +1948,7 @@ namespace S100Framework.Applications
                 }
                 else if (   //  GST
                         (catwrk.HasValue && (catwrk.Value == 2 || catwrk.Value == 3 || catwrk.Value == 4 || catwrk.Value == 5 || catwrk.Value == -32767))
-                        //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
+                    //(expsou.HasValue && (expsou.Value == 2 || expsou.Value == -32767m))
                     ) {
                     instance.expositionOfSounding = null;
                     instance.defaultClearanceDepth = 15m;
@@ -2216,9 +2216,9 @@ namespace S100Framework.Applications
                 if (featureName is not null)
                     instance.featureName = featureName;
 
-                if (current.HEIGHT_HasValue()) {
-                    instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
-                }
+                //if (current.HEIGHT_HasValue()) {
+                //    instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
+                //}
 
                 var inform = current.INFORM();
                 if (!string.IsNullOrEmpty(inform) && regexMaximumDraughtPermitted.IsMatch(inform)) {
@@ -2263,9 +2263,9 @@ namespace S100Framework.Applications
                         instance.techniqueOfVerticalMeasurement = techniqueOfVerticalMeasurement;
                 }
 
-                if (current.VALSOU_HasValue()) {
-                    instance.valueOfSounding = current.VALSOU() != -32767m ? current.VALSOU() : null;
-                }
+                //if (current.VALSOU_HasValue()) {
+                //    instance.valueOfSounding = current.VALSOU() != -32767m ? current.VALSOU() : null;
+                //}
 
                 if (current.VERLEN_HasValue()) {
                     instance.verticalLength = current.VERLEN() != -32767m ? current.VERLEN() : null;
@@ -2316,8 +2316,35 @@ namespace S100Framework.Applications
                 var valsou = current.VALSOU_HasValue() ? current.VALSOU() : null;
                 var watlev = current.WATLEV_HasValue() ? current.WATLEV() : null;
 
+                if ((valsou.HasValue && valsou.Value == -32767m) && (height.HasValue && height.Value == -32767m))
+                    System.Diagnostics.Debugger.Break();
+
+                if (current.VALSOU_HasValue()) {
+                    if (!(watlev.HasValue && watlev.Value == 7)) { //  GST
+                        instance.valueOfSounding = current.VALSOU() != -32767m ? current.VALSOU() : null;
+                    }
+                }
+
+                if (current.HEIGHT_HasValue()) {
+                    if (!current.VALSOU_HasValue())    //  Exactly one of the attributes height or value of sounding must be populated.
+                        instance.height = current.HEIGHT() != -32767m ? current.HEIGHT() : null;
+                    else if (watlev.HasValue && watlev.Value == 7) { //  GST
+                        instance.height = null;
+                    }
+                }
+                else if (watlev.HasValue && watlev.Value == 7) { //  GST
+                    instance.height = null;
+                }
+
+
 
                 if (leastDepth.HasValue) {
+                    //if ((!catobs.HasValue && !expsou.HasValue && !height.HasValue) && (watlev.HasValue && watlev.Value == 7)) { //  GST
+                    //    instance.height = null;
+                    //}
+                    //else if ((catobs.HasValue && catobs.Value == 10) && (!expsou.HasValue && !height.HasValue) && (watlev.HasValue && watlev.Value == 7)) { //  GST
+                    //    instance.height = null;
+                    //}
                     if (
                             (height.HasValue && height.Value != -32767m) &&
                             (watlev.HasValue && (watlev.Value == 1 || watlev.Value == 2))
@@ -2404,8 +2431,8 @@ namespace S100Framework.Applications
                             (valsou.HasValue && valsou.Value == -32767m) &&
                             (watlev.HasValue && (watlev.Value == 4 || watlev.Value == -32767))
                         ) {
-                            instance.expositionOfSounding = null;
-                            instance.defaultClearanceDepth = -15m;
+                        instance.expositionOfSounding = null;
+                        instance.defaultClearanceDepth = -15m;
                     }
                     else {
                         //  Hit me with a baseball bat
@@ -2413,6 +2440,12 @@ namespace S100Framework.Applications
                     }
                 }
                 else {
+                    //if ((!catobs.HasValue && !expsou.HasValue && !height.HasValue) && (watlev.HasValue && watlev.Value == 7)) { //  GST
+                    //    instance.height = null;
+                    //}
+                    //else if ((catobs.HasValue && catobs.Value == 10) && (!expsou.HasValue && !height.HasValue) && (watlev.HasValue && watlev.Value == 7)) { //  GST
+                    //    instance.height = null;
+                    //}
                     if (
                             (catobs.HasValue && catobs.Value == 6) &&
                             (valsou.HasValue && valsou.Value == -32767m)

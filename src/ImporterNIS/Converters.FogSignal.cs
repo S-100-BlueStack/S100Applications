@@ -51,7 +51,7 @@ namespace S100Framework.Applications
             }
 
             if (current.SIGPER != default) {
-                instance.signalPeriod = current.SIGPER == -32767m ? null : current.SIGPER;
+                instance.signalPeriod = current.SIGPER == -32767m ? null : current.SIGPER == 0 ? null : current.SIGPER;
             }
 
             if (current.SIGSEQ != default) {

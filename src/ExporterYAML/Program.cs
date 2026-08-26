@@ -263,7 +263,7 @@ namespace S100Framework.Applications
 
                             datasets.Add((new Dataset {
                                 CellName = $"{electricProduct!.datasetName!}.000",
-                                Comment = "Not for navigation!",
+                                Comment = "S-101 Geodatastyrelsen Test Dataset",
                                 Edition = 1,
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",

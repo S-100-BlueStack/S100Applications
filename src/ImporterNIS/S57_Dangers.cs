@@ -79,6 +79,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::5": { // OBSTRN_Obstruction
+                            //if (objectid == 5) System.Diagnostics.Debugger.Break();
                             var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
@@ -148,7 +149,7 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
-                    case "dangersa::15": { // OBSTRN_Obstruction
+                    case "dangersa::15": { // OBSTRN_Obstruction                            
                             var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
