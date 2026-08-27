@@ -16,7 +16,6 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
-    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.6" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
   </ItemGroup>
@@ -40,6 +39,7 @@
     <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues.ProductSpecifications\S100Framework.Catalogues.ProductSpecifications.csproj" />
     <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues\S100Framework.Catalogues.csproj" />
     <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Topology\S100Framework.Topology.csproj" />
+    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.YAML\S100Framework.YAML.csproj" />
   </ItemGroup>
 
   <ItemGroup>
