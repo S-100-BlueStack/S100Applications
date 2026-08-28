@@ -133,7 +133,7 @@ namespace NuvionPro
                     this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
                     break;
             }
-            this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
+            this.NotifyPropertyChanged(() => this.CREATE_ButtonIsEnabled);
         }
 
         private void PS_Inspector(Inspector inspector) {
@@ -461,7 +461,7 @@ namespace NuvionPro
 
                 this.IsVisible = this.SelectedProperty is null ? Visibility.Collapsed : Visibility.Visible;
 
-                this.NotifyPropertyChanged(() => this._createButtonIsEnabled);
+                this.NotifyPropertyChanged(() => this.CREATE_ButtonIsEnabled);
             }
             catch (System.Exception ex) {
                 DiagnosticHelper.Error(ex);
@@ -571,15 +571,16 @@ namespace NuvionPro
         public Boolean IsEditingEnabled {
             get => this._isEditingEnabled;
             set => this.SetProperty(ref this._isEditingEnabled, value);
-        }
+        }        
 
         public bool PS_SelectorIsEnabled {
             get {
                 if (this.Inspector is null) return true;
+                
+                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings")) 
+                    return true;
 
-                if (this.Inspector.IsNull("attributebindings")) return true;
-
-                return "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+                return false;   // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
             }
         }
 
@@ -591,16 +592,27 @@ namespace NuvionPro
                     if (this.PS is null) return false;
                     return true;
                 }
-                if (this.Inspector.IsNull("attributebindings")) {
-                    return true;
-                }
+                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
+                    return true;                
 
-                return "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+                return false;   // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
             }
         }
         //=> (this.Inspector is null || this.Inspector.IsNull("ps")) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());        
 
-        public bool _createButtonIsEnabled => (this.Inspector is null || (this.PS is null || string.IsNullOrEmpty(this.Code))) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+        public bool CREATE_ButtonIsEnabled {
+            get {
+                if (this.Inspector is null) return false;
+
+                if (this.PS is null || string.IsNullOrEmpty(this.Code))
+                    return false;
+
+                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
+                    return true;
+
+                return false;
+            }
+        }
     }
 }
 

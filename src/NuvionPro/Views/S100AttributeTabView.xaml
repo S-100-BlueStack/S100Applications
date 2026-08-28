@@ -56,7 +56,7 @@
 
 
             <Button Grid.Column="2" x:Name="_createButton" Margin="8,0,2,0"
-                        IsEnabled="{Binding _createButtonIsEnabled}"
+                        IsEnabled="{Binding CREATE_ButtonIsEnabled}"
                         Background="Transparent" 
                         BorderBrush="Transparent"                         
                         ToolTip="Create Object Type" 
