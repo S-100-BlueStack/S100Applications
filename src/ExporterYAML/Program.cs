@@ -223,32 +223,17 @@ namespace S100Framework.Applications
 
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
-                            var whereClause = "upper(ps) = 'S-101'";
-
                             SpatialQueryFilter[] spatialQueryFilters = [];
 
+                            foreach(var e in source.S101_QueryDataCoverage(shape, Convert.ToInt64(current["nominalscale"]))) {
+                                spatialQueryFilters = [.. spatialQueryFilters, e.Filter];
+                            }
+
                             using var datacoverageSearch = surface.Search(new SpatialQueryFilter {
-                                //WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND attributeBindings LIKE '%\"minimumDisplayScale\":%{electricProduct.minimumDisplayScale}%'",
                                 WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {current["nominalscale"]}",
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Contains,
                             }, true);
-
-                            while (datacoverageSearch.MoveNext()) {
-                                var f = (ArcGIS.Core.Data.Feature)datacoverageSearch.Current;
-
-                                var dataCoverage = (S100FC.S101.FeatureTypes.DataCoverage)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(f["attributebindings"])!, typeof(S100FC.S101.FeatureTypes.DataCoverage));
-
-                                var spatialQueryFilter = new SpatialQueryFilter {
-                                    WhereClause = whereClause + $" AND nominalscale = {dataCoverage.optimumDisplayScale}",
-                                    FilterGeometry = f.GetShape().Clone(),
-                                    SpatialRelationship = SpatialRelationship.Relation,
-                                    SpatialRelationshipDescription = "UNKNOWN",
-                                    SubFields = "OBJECTID,UID,GLOBALID,CODE,SHAPE",
-                                };
-
-                                spatialQueryFilters = [.. spatialQueryFilters, spatialQueryFilter];
-                            }
 
                             if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
 
@@ -405,23 +390,10 @@ namespace S100Framework.Applications
 
                         var definitions = source.GetDefinitions<FeatureClassDefinition>();
 
-                        (string tableName, SpatialRelationship SpatialRelationship, string SpatialRelationshipDescription)[] spatialRelationships = [                                
-                                ("surface", SpatialRelationship.Relation,"T********"),
-                                ("surface", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
-                                ("surface", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
-
-                                ("curve", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
-                                ("curve", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
-
-                                ("point", SpatialRelationship.Relation,Matrix.DE9IM_Contains),                                
-
-                                ("pointset", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
-                                ("pointset", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
-                            ];
-
                         //var dictionarySelect = new Dictionary<string, HashSet<long>>();                       
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
+
                         var result = source.BuildTopology(spatialFilters, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
                             return;
