@@ -182,13 +182,6 @@ namespace S100Framework.Applications
 
                 var featureCatalogue = S100FC.Catalogues.FeatureCatalogue.Catalogues.Single(e => e.ProductID.Equals("S-101"));
 
-
-
-
-
-
-
-
                 var datasets = new List<(Dataset Dataset, SpatialQueryFilter[] Filters)>();
                 {
                     using Geodatabase source = createGeodatabase();
@@ -426,105 +419,12 @@ namespace S100Framework.Applications
                                 ("pointset", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
                             ];
 
-                        var dictionarySelect = new Dictionary<string, HashSet<long>>();
-
-                        IEnumerable<(long objectid, string UID, string code, ArcGIS.Core.Geometry.Geometry shape)> FeatureQuery(string tablename, string whereclause) {
-                            using var featureClass = source.OpenDataset<FeatureClass>(definitions.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals(tablename)).GetName());
-
-                            if (!dictionarySelect.ContainsKey(tablename.ToLowerInvariant()))
-                                dictionarySelect.Add(tablename.ToLowerInvariant(), new HashSet<long>());
-
-                            HashSet<long> hits = [];
-
-                            var clipGeometry = GeometryEngine.Instance.Union(spatialFilters.Select(e => e.FilterGeometry));
-
-                            var clip = (ArcGIS.Core.Geometry.Geometry g) => {
-                                if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
-
-                                if (GeometryEngine.Instance.Disjoint(g, clipGeometry)) return g;
-
-                                if (!GeometryEngine.Instance.Relate(g, clipGeometry, S100FC.Topology.Matrix.DE9IM_Crosses)) return g;
-
-                                var difference = GeometryEngine.Instance.Intersection(g, clipGeometry);
-
-                                if (difference is ArcGIS.Core.Geometry.Polygon polygon) {
-                                    if (polygon.ExteriorRingCount > 1) {
-                                        ArcGIS.Core.Geometry.Polygon[] polygons = [];
-                                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
-                                        for (int i = 1; i < polygon.PartCount; i++) {
-                                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
-                                            if (p.Area < 0)
-                                                segments = [.. segments, polygon.Parts[i]];
-                                            else {
-                                                var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                                polygons = [.. polygons, _];
-                                                segments = [polygon.Parts[i]];
-                                            }
-                                        }
-                                        if (segments.Any()) {
-                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
-                                            polygons = [.. polygons, _];
-                                        }
-                                        return g = PolygonBuilderEx.CreatePolygon(polygons);
-                                    }
-                                    else {
-                                        return polygon;
-                                    }
-                                }
-                                else
-                                    System.Diagnostics.Debugger.Break();
-
-                                return g;
-                            };
-
-                            foreach (var f in spatialFilters) {
-
-                                var backupClause = (string)f.WhereClause.Clone();
-                                var backupGeometry = f.FilterGeometry.Clone();
-
-                                f.WhereClause = $"({f.WhereClause}) AND ({whereclause})";
-                                f.FilterGeometry = f.FilterGeometry;
-
-                                foreach (var spatialRelationship in spatialRelationships.Where(e => e.tableName.Equals(tablename, StringComparison.InvariantCultureIgnoreCase))) {
-                                    //f.SpatialRelationshipDescription = de9im;
-                                    //f.SpatialRelationship = SpatialRelationship.Intersects;
-                                    //f.SpatialRelationshipDescription = string.Empty;
-                                    f.SpatialRelationship = spatialRelationship.SpatialRelationship;
-                                    f.SpatialRelationshipDescription = spatialRelationship.SpatialRelationshipDescription;
-
-                                    var lookup = hits.ToLookup(e => e);
-
-                                    using var cursor = featureClass.Search(f, true);
-                                    while (cursor.MoveNext()) {
-                                        var _ = (ArcGIS.Core.Data.Feature)cursor.Current;
-                                        var objectid = _.GetObjectID();
-                                        var code = Convert.ToString(_["code"])!;
-
-                                        //if ("DataCoverage".Equals(code, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
-                                        if (lookup.Contains(objectid)) continue;
-
-                                        hits.Add(objectid);
-                                        var shape = _.GetShape();
-                                        shape = clip(shape);
-                                        if (shape.IsEmpty) continue;
-
-                                        yield return (objectid, Convert.ToString(_["UID"])!, code, shape);
-                                    }
-                                }
-                                f.FilterGeometry = backupGeometry;
-                                f.WhereClause = backupClause;
-                            }
-
-                            dictionarySelect[tablename.ToLowerInvariant()] = [.. dictionarySelect[tablename.ToLowerInvariant()], .. hits];
-
-                            yield break;
-                        }
-
+                        //var dictionarySelect = new Dictionary<string, HashSet<long>>();                       
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
-                        var result = source.BuildTopology(FeatureQuery, interceptor: (code, arg, append) => {
+                        var result = source.BuildTopology(spatialFilters, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
-
+                            return;
                             var persist = code switch {
                                 9999 => false,
                                 9000 => false,
@@ -682,14 +582,9 @@ namespace S100Framework.Applications
 
                         }, loggerFactory)!;
 
-                        foreach(var feature in FeatureQuery("point", "1=1")) {
-
-                        }
-                        foreach (var feature in FeatureQuery("pointset", "1=1")) {
-
-                        }
-
                         var topology = result.matrix;
+
+                        var selection = result.selection;
 
                         if (System.Diagnostics.Debugger.IsAttached) {
                             IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
@@ -818,7 +713,7 @@ namespace S100Framework.Applications
 
                             {
                                 using var cursor = fc.Search(new QueryFilter {
-                                    WhereClause = $"OBJECTID IN ({string.Join(',', dictionarySelect[tableName.ToLowerInvariant()])})",
+                                    WhereClause = $"OBJECTID IN ({string.Join(',', selection[tableName.ToLowerInvariant()])})",
                                     SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings,SHAPE",
                                 }, true);
 
