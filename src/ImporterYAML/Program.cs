@@ -109,7 +109,7 @@ namespace S100Framework.Applications
 
                             //IO.Directory.Delete(target, true);
 
-                            fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed12.gdb.zip"), IO.Path.GetFullPath(target), null);
+                            fastZip.ExtractZip(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed16.gdb.zip"), IO.Path.GetFullPath(target), null);
                         }
                     };
 

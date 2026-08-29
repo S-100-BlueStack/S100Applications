@@ -21,7 +21,7 @@
     <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.19" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
     <PackageReference Include="S100Framework.Topology" Version="4.4.0" />
-    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.7" />
+    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.8" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
   </ItemGroup>

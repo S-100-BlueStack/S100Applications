@@ -28,12 +28,11 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.26" />
-    <PackageReference Include="S100Framework.Catalogues" Version="3.1.19" />
-    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.18" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.27" />
+    <PackageReference Include="S100Framework.Catalogues" Version="3.1.20" />
+    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.19" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
-    <PackageReference Include="S100Framework.Topology" Version="4.3.4" />
-    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.6" />
+    <PackageReference Include="S100Framework.YAML" Version="3.7.1901.8" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.ExceptionData" Version="1.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
@@ -50,6 +49,9 @@
 
   <ItemGroup>
     <None Update="s100ed12.gdb.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="s100ed16.gdb.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="s100edX.gdb.zip">
