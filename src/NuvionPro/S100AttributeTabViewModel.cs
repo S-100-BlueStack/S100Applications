@@ -69,6 +69,10 @@ namespace NuvionPro
 
                 if (inspector != default) {
                     await QueuedTask.Run(() => {
+                        if (!("UNKNOWN".Equals(this.SelectedProperty.UID)))
+                            return;
+
+
                         var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                         if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
@@ -94,6 +98,7 @@ namespace NuvionPro
                             inspector["featurebindings"] = "[]";
 
                         inspector.Apply();
+
                     }, TaskCreationOptions.None);
                 }
             });
@@ -576,11 +581,21 @@ namespace NuvionPro
         public bool PS_SelectorIsEnabled {
             get {
                 if (this.Inspector is null) return true;
-                
-                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings")) 
+
+                if (this.Inspector.IsNull("ps")) {
+                    //if (this.PS is null) return false;
+                    return true;
+                }
+
+                if (this.SelectedProperty is null || !("unknown".Equals(this.SelectedProperty.UID)))
+                    return false;
+
+                if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
+                    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) 
                     return true;
 
-                return false;   // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+                return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
             }
         }
 
@@ -589,28 +604,56 @@ namespace NuvionPro
                 if (this.Inspector is null) return false;
 
                 if (this.Inspector.IsNull("ps")) {
-                    if (this.PS is null) return false;
-                    return true;
+                    if (!(this.PS is null)) {
+                        return true; 
+                    }
+                    return false;
                 }
-                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
-                    return true;                
 
-                return false;   // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
+                if (this.SelectedProperty is null || !("unknown".Equals(this.SelectedProperty.UID)))
+                    return false;
+
+                if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
+                    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
+                    return true;
+
+                return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
             }
         }
         //=> (this.Inspector is null || this.Inspector.IsNull("ps")) ? false : this.Inspector.IsNull("attributebindings") ? true : "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());        
 
         public bool CREATE_ButtonIsEnabled {
             get {
-                if (this.Inspector is null) return false;
+                if (this.Inspector is null) return true;
 
-                if (this.PS is null || string.IsNullOrEmpty(this.Code))
+                
+                if (this.PS is not null && !(string.IsNullOrEmpty(this.Code))) { 
+                    if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
+                        "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                        "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) {
+                        if (this.SelectedProperty is null || !("UNKNOWN".Equals(this.SelectedProperty.UID))) {
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+
+                    }
                     return false;
+                }
 
-                if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
-                    return true;
 
-                return false;
+
+                //if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
+                //    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                //    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
+                //    return false;
+
+                //if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
+                //    return true;
+
+                return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
             }
         }
     }
