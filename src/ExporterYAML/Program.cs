@@ -2,6 +2,7 @@
 using ArcGIS.Core.Geometry;
 using CommandLine;
 using Microsoft.Extensions.Logging;
+using NetTopologySuite.Geometries;
 using S100BlueStack.Settings;
 using S100FC;
 using S100FC.S101;
@@ -9,10 +10,12 @@ using S100FC.S101.SimpleAttributes;
 using S100FC.S128.FeatureTypes;
 using S100FC.Topology;
 using S100FC.YAML;
+using S100Framework.Topology.Geometry;
 using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Dataset = S100FC.YAML.Dataset;
 using Esri = ArcGIS.Core.Hosting.Host;
 using IO = System.IO;
@@ -28,6 +31,12 @@ namespace S100Framework.Applications
 
         const string DE9IM_Contains = S100FC.Topology.Matrix.DE9IM_Contains;
         const string DE9IM_Crosses = S100FC.Topology.Matrix.DE9IM_Crosses;
+
+        static readonly PrecisionModel precisionModel = new PrecisionModel(10000000);    //ENC
+
+        static readonly GeometryFactory factory = new GeometryFactory(precisionModel, srid: 4326); // Or PrecisionModels.Floating        
+
+
 
         public class Options
         {
@@ -184,14 +193,14 @@ namespace S100Framework.Applications
 
                 var datasets = new List<(Dataset Dataset, SpatialQueryFilter[] Filters)>();
                 {
-                    using Geodatabase source = createGeodatabase();
+                    using Geodatabase database = createGeodatabase();
 
-                    var syntax = source.GetSQLSyntax();
+                    var syntax = database.GetSQLSyntax();
 
-                    var definitionTables = source.GetDefinitions<TableDefinition>();
-                    var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
+                    var definitionTables = database.GetDefinitions<TableDefinition>();
+                    var definitionFeatures = database.GetDefinitions<FeatureClassDefinition>();
 
-                    using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
+                    using var surface = database.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
                     if (!string.IsNullOrEmpty(wildcard)) {
                         using var cursor = surface.Search(new QueryFilter {
@@ -211,47 +220,7 @@ namespace S100Framework.Applications
                         }
                     }
 
-                    foreach (var ds in datasetNames) {
-                        using var cursor = surface.Search(new QueryFilter {
-                            WhereClause = string.IsNullOrEmpty(ds) ? "upper(ps) = 'S-128'" : $"upper(ps) = 'S-128' and attributeBindings LIKE '%\"datasetName\":%\"{ds.ToUpperInvariant()}\"%'",
-                        }, true);
-
-                        while (cursor.MoveNext()) {
-                            var current = (ArcGIS.Core.Data.Feature)cursor.Current;
-
-                            var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
-
-                            var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
-
-                            SpatialQueryFilter[] spatialQueryFilters = [];
-
-                            foreach(var e in source.S101_QueryDataCoverage(shape, Convert.ToInt64(current["nominalscale"]))) {
-                                spatialQueryFilters = [.. spatialQueryFilters, e.Filter];
-                            }
-
-                            using var datacoverageSearch = surface.Search(new SpatialQueryFilter {
-                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {current["nominalscale"]}",
-                                FilterGeometry = shape,
-                                SpatialRelationship = SpatialRelationship.Contains,
-                            }, true);
-
-                            if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
-
-                            verticalDatum datum = electricProduct.verticalDatum ?? 44;
-
-                            datasets.Add((new Dataset {
-                                CellName = $"{electricProduct!.datasetName!}.000",
-                                Comment = "S-101 Geodatastyrelsen Test Dataset",
-                                Edition = 1,
-                                ENCVer = "INT.IHO.S-101.2.0",
-                                FCVer = "2.0",
-                                VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                                //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                            }, spatialQueryFilters));
-                        }
-                    }
-
-                    using var config = source.OpenDataset<Table>(definitionTables.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("configuration")).GetName());
+                    using var config = database.OpenDataset<Table>(definitionTables.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("configuration")).GetName());
                     {
                         using var cursor = config.Search(new QueryFilter {
                             WhereClause = "upper(ps) = 'S-128.NUVIONPRO' AND code = 'ProductCatalogue'"
@@ -286,80 +255,54 @@ namespace S100Framework.Applications
                         }
 
                     }
-                }
 
+                    foreach (var ds in datasetNames) {
+                        using var cursor = surface.Search(new QueryFilter {
+                            WhereClause = string.IsNullOrEmpty(ds) ? "upper(ps) = 'S-128'" : $"upper(ps) = 'S-128' and attributeBindings LIKE '%\"datasetName\":%\"{ds.ToUpperInvariant()}\"%'",
+                        }, true);
 
-                //  TEST
-                {
-                    using Geodatabase source = createGeodatabase();
+                        while (cursor.MoveNext()) {
+                            var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                    var syntax = source.GetSQLSyntax();
+                            var electronicProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
-                    var definitionTables = source.GetDefinitions<TableDefinition>();
-                    var definitionFeatures = source.GetDefinitions<FeatureClassDefinition>();
+                            long nominalscale = electronicProduct.optimumDisplayScale!.Value;
 
-                    using var surface = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
+                            var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
-                    foreach (var e in datasets) {
-                        int hit = 0;
-                        //foreach (var f in e.Filters) {
-                        //    string[] de9ims = [Matrix.DE9IM_Contains, Matrix.DE9IM_Crosses];
-                        //    foreach (var de9im in de9ims) {
-                        //        f.SpatialRelationshipDescription = de9im;
-                        //        using var featureSearch = surface.Search(f, true);
-                        //        while (featureSearch.MoveNext()) {
-                        //            var _ = featureSearch.Current.GetObjectID();
-                        //            if ("NavigationalSystemOfMarks".Equals(featureSearch.Current["code"]))
-                        //                hit += 1;
-                        //        }
-                        //    }
-                        //}
+                            SpatialQueryFilter[] spatialQueryFilters = [];
 
-                        //if (hit == 0) {
-                        //    var f = e.Filters[0];
+                            using var source = createSource()!;
 
-                        //    f.SpatialRelationship = SpatialRelationship.Intersects;
-                        //    f.SpatialRelationshipDescription = string.Empty;
+                            foreach (var e in source.S101_QueryDataCoverage(shape, nominalscale)) {
+                                spatialQueryFilters = [.. spatialQueryFilters, e.Filter];
+                            }
 
-                        //    using var featureSearch = surface.Search(f, true);
-                        //    while (featureSearch.MoveNext()) {
-                        //        var _ = featureSearch.Current.GetObjectID();
-                        //        if ("NavigationalSystemOfMarks".Equals(featureSearch.Current["code"]))
-                        //            hit += 1;
-                        //    }
+                            using var surface101 = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
-                        //    System.Diagnostics.Debugger.Break();
-                        //}
+                            using var datacoverageSearch = surface101.Search(new SpatialQueryFilter {
+                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {nominalscale}",
+                                FilterGeometry = shape,
+                                SpatialRelationship = SpatialRelationship.Contains,
+                            }, true);
 
-                        //long[] dataCoverages = [1, 2];
-                        //foreach (var objectid in dataCoverages) {
-                        //    using var datacoverageSearch = surface.Search(new QueryFilter {
-                        //        WhereClause = $"OBJECTID = {objectid}",
-                        //    }, false);
+                            if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
 
-                        //    datacoverageSearch.MoveNext();
+                            verticalDatum datum = electronicProduct.verticalDatum ?? 44;
 
-                        //    var shape = ((ArcGIS.Core.Data.Feature)datacoverageSearch.Current).GetShape();
-
-                        //    using var featureSearch = surface.Search(new SpatialQueryFilter {
-                        //        WhereClause = $"upper(ps) = 'S-101' AND code = 'NavigationalSystemOfMarks'",
-                        //        FilterGeometry = shape,
-                        //        SpatialRelationshipDescription = DE9IM_Contains,
-                        //        SpatialRelationship = SpatialRelationship.Relation,
-                        //    }, true);
-
-                        //    int hit = 0;
-                        //    while (featureSearch.MoveNext()) {
-                        //        var _ = featureSearch.Current.GetObjectID();
-                        //        hit += 1;
-                        //    }
-
-                        //}
+                            datasets.Add((new Dataset {
+                                CellName = $"{electronicProduct!.datasetName!}.000",
+                                Comment = "S-101 Geodatastyrelsen Test Dataset",
+                                Edition = 1,
+                                ENCVer = "INT.IHO.S-101.2.0",
+                                FCVer = "2.0",
+                                VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                                //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
+                            }, spatialQueryFilters));
+                        }
                     }
                 }
 
-
-                //Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
                 //  TEST, TEST, TEST, TEST, TEST, 
                 S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
@@ -390,13 +333,187 @@ namespace S100Framework.Applications
 
                         var definitions = source.GetDefinitions<FeatureClassDefinition>();
 
-                        //var dictionarySelect = new Dictionary<string, HashSet<long>>();                       
+                        (string tableName, SpatialRelationship SpatialRelationship, string SpatialRelationshipDescription)[] spatialRelationships = [
+                                ("surface", SpatialRelationship.Relation,"T********"),
+                                ("surface", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
+                                ("surface", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
+
+                                ("curve", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
+                                ("curve", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
+
+                                ("point", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
+
+                                ("pointset", SpatialRelationship.Relation,Matrix.DE9IM_Contains),
+                                ("pointset", SpatialRelationship.Relation,Matrix.DE9IM_Crosses),
+                            ];
+
+                        var dictionarySelect = new Dictionary<string, HashSet<long>>();
+
+                        IEnumerable<(long objectid, string UID, string code, ArcGIS.Core.Geometry.Geometry shape)> FeatureQuery(string tablename, string whereclause) {
+                            using var featureClass = source.OpenDataset<FeatureClass>(definitions.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals(tablename)).GetName());
+
+                            if (!dictionarySelect.ContainsKey(tablename.ToLowerInvariant()))
+                                dictionarySelect.Add(tablename.ToLowerInvariant(), new HashSet<long>());
+
+                            if ("surface".Equals(tablename)) {
+                                //  F10400000540,F10400000539
+
+                                using var cursor = featureClass.Search(new QueryFilter {
+                                    WhereClause = "UID IN ('F10400000540','F10400000539')",
+                                }, true);
+
+                                (string UID, ArcGIS.Core.Geometry.Polygon shape)[] shapes = [];
+                                while (cursor.MoveNext()) {
+                                    shapes = [.. shapes, (Convert.ToString(cursor.Current["UID"])!, (ArcGIS.Core.Geometry.Polygon)((ArcGIS.Core.Data.Feature)cursor.Current).GetShape().Clone())];
+                                }
+
+                                System.Diagnostics.Debugger.Break();
+
+                                var exteriorRing1 = shapes[0].shape.GetExteriorRing(0);
+                                var coordinates1 = exteriorRing1.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
+
+                                var ex1 = factory.CreateLinearRing([.. coordinates1, coordinates1[0]]);
+
+                                var exteriorRing2 = shapes[1].shape.GetExteriorRing(0);
+                                var coordinates2 = exteriorRing2.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
+
+                                var ex2 = factory.CreateLinearRing([.. coordinates2, coordinates2[0]]);
+
+                                var resultCompare = LinearRingBoundaryAligner.AlignNearlyCoincidentRings(ex1, ex2, factory);
+
+                                if (resultCompare.First.EqualsExact(resultCompare.Second)) {
+
+                                }
+
+                                (LineString lineString, string message)[] array = [
+                                    (resultCompare.First,shapes[0].UID),
+                                    (resultCompare.Second,shapes[1].UID),
+                                    ];                                
+
+                                Func<Geodatabase> debugInstanceCreator = () => {
+                                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
+                                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
+                                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                                    }
+                                    return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+                                };
+                                using var debugInstance = debugInstanceCreator();
+                                var defnitions = debugInstance.GetDefinitions<FeatureClassDefinition>().ToDictionary(e => e.GetName().ToLowerInvariant().Split('.')[^1], e => e.GetName());
+
+                                var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
+
+                                using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
+
+                                using var buffer = polyline.CreateRowBuffer();
+                                var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
+                                var maxLength = fields["message"].Length;
+
+                                for (int i = 0; i < array.Length; i++) {
+                                    var message = $"{i}: {array[i].message}";
+                                    if (message.Length <= maxLength)
+                                        buffer["message"] = message;
+                                    buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
+                                    using var f = polyline.CreateRow(buffer);
+                                }
+
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            HashSet<long> hits = [];
+
+                            var clipGeometry = GeometryEngine.Instance.Union(spatialFilters.Select(e => e.FilterGeometry));
+
+                            var clip = (ArcGIS.Core.Geometry.Geometry g) => {
+                                if (g is ArcGIS.Core.Geometry.Polyline polyline) return polyline;
+
+                                if (GeometryEngine.Instance.Disjoint(g, clipGeometry)) return g;
+
+                                if (!GeometryEngine.Instance.Relate(g, clipGeometry, S100FC.Topology.Matrix.DE9IM_Crosses)) return g;
+
+                                var difference = GeometryEngine.Instance.Intersection(g, clipGeometry);
+
+                                if (difference is ArcGIS.Core.Geometry.Polygon polygon) {
+                                    if (polygon.ExteriorRingCount > 1) {
+                                        ArcGIS.Core.Geometry.Polygon[] polygons = [];
+                                        ReadOnlySegmentCollection[] segments = [polygon.Parts[0]];
+                                        for (int i = 1; i < polygon.PartCount; i++) {
+                                            var p = PolygonBuilderEx.CreatePolygon(polygon.Parts[i]);
+                                            if (p.Area < 0)
+                                                segments = [.. segments, polygon.Parts[i]];
+                                            else {
+                                                var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                                polygons = [.. polygons, _];
+                                                segments = [polygon.Parts[i]];
+                                            }
+                                        }
+                                        if (segments.Any()) {
+                                            var _ = PolygonBuilderEx.CreatePolygon(segments);
+                                            polygons = [.. polygons, _];
+                                        }
+                                        return g = PolygonBuilderEx.CreatePolygon(polygons);
+                                    }
+                                    else {
+                                        return polygon;
+                                    }
+                                }
+                                else
+                                    System.Diagnostics.Debugger.Break();
+
+                                return g;
+                            };
+
+                            foreach (var f in spatialFilters) {
+
+                                var backupClause = (string)f.WhereClause.Clone();
+                                var backupGeometry = f.FilterGeometry.Clone();
+
+                                f.WhereClause = $"({f.WhereClause}) AND ({whereclause})";
+                                f.FilterGeometry = f.FilterGeometry;
+
+                                foreach (var spatialRelationship in spatialRelationships.Where(e => e.tableName.Equals(tablename, StringComparison.InvariantCultureIgnoreCase))) {
+                                    //f.SpatialRelationshipDescription = de9im;
+                                    //f.SpatialRelationship = SpatialRelationship.Intersects;
+                                    //f.SpatialRelationshipDescription = string.Empty;
+                                    f.SpatialRelationship = spatialRelationship.SpatialRelationship;
+                                    f.SpatialRelationshipDescription = spatialRelationship.SpatialRelationshipDescription;
+
+                                    var lookup = hits.ToLookup(e => e);
+
+                                    using var cursor = featureClass.Search(f, true);
+                                    while (cursor.MoveNext()) {
+                                        var _ = (ArcGIS.Core.Data.Feature)cursor.Current;
+                                        var objectid = _.GetObjectID();
+                                        var code = Convert.ToString(_["code"])!;
+
+                                        //if ("DataCoverage".Equals(code, StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();
+                                        if (lookup.Contains(objectid)) continue;
+
+                                        hits.Add(objectid);
+                                        var shape = _.GetShape();
+                                        shape = clip(shape);
+                                        if (shape.IsEmpty) continue;
+
+                                        yield return (objectid, Convert.ToString(_["UID"])!, code, shape);
+                                    }
+                                }
+                                f.FilterGeometry = backupGeometry;
+                                f.WhereClause = backupClause;
+                            }
+
+                            dictionarySelect[tablename.ToLowerInvariant()] = [.. dictionarySelect[tablename.ToLowerInvariant()], .. hits];
+
+                            yield break;
+                        }
+
+                        S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
+
+                        S100FC.Topology.Matrix.Factory = S100FC.Topology.Reloaded.Factory = factory;
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
 
-                        var result = source.BuildTopology(spatialFilters, interceptor: (code, arg, append) => {
+                        var result = source.BuildTopology(FeatureQuery, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
-                            return;
+
                             var persist = code switch {
                                 9999 => false,
                                 9000 => false,
@@ -556,7 +673,7 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
-                        var selection = result.selection;
+                        var selection = dictionarySelect;// result.selection;
 
                         if (System.Diagnostics.Debugger.IsAttached) {
                             IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
@@ -675,7 +792,7 @@ namespace S100Framework.Applications
                             if (!supported) {
                                 logger.LogInformation("Unsupported table detected: {tableName}", tableName);
                                 continue;
-                            }                            
+                            }
 
                             using var fc = source.OpenDataset<FeatureClass>(def.GetName());
 
