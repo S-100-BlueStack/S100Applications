@@ -78,7 +78,7 @@ namespace S100Framework.Applications
                 using var productDefinitionsTable = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
                 using var productCoverageFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
 
-                var whereclause = $"({filter.WhereClause.Replace("PLTS_COMP_SCALE", "CSCL")})";
+                var whereclause = $"({filter.WhereClause.Replace("PLTS_COMP_SCALE", "CSCL")})".Replace(" AND (Shape IS NOT NULL))",string.Empty).Substring(1);
 
                 using var productDefinitions = productDefinitionsTable.Search(new QueryFilter {
                     WhereClause = $"({whereclause}) AND (EXPORTTYPE IS NULL OR EXPORTTYPE <> 'Cancel')",

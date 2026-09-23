@@ -355,69 +355,69 @@ namespace S100Framework.Applications
                             if (!dictionarySelect.ContainsKey(tablename.ToLowerInvariant()))
                                 dictionarySelect.Add(tablename.ToLowerInvariant(), new HashSet<long>());
 
-                            if ("surface".Equals(tablename)) {
-                                //  F10400000540,F10400000539
+                            //if ("surface".Equals(tablename)) {
+                            //    //  F10400000540,F10400000539
 
-                                using var cursor = featureClass.Search(new QueryFilter {
-                                    WhereClause = "UID IN ('F10400000540','F10400000539')",
-                                }, true);
+                            //    using var cursor = featureClass.Search(new QueryFilter {
+                            //        WhereClause = "UID IN ('F10400000540','F10400000539')",
+                            //    }, true);
 
-                                (string UID, ArcGIS.Core.Geometry.Polygon shape)[] shapes = [];
-                                while (cursor.MoveNext()) {
-                                    shapes = [.. shapes, (Convert.ToString(cursor.Current["UID"])!, (ArcGIS.Core.Geometry.Polygon)((ArcGIS.Core.Data.Feature)cursor.Current).GetShape().Clone())];
-                                }
+                            //    (string UID, ArcGIS.Core.Geometry.Polygon shape)[] shapes = [];
+                            //    while (cursor.MoveNext()) {
+                            //        shapes = [.. shapes, (Convert.ToString(cursor.Current["UID"])!, (ArcGIS.Core.Geometry.Polygon)((ArcGIS.Core.Data.Feature)cursor.Current).GetShape().Clone())];
+                            //    }
 
-                                System.Diagnostics.Debugger.Break();
+                            //    System.Diagnostics.Debugger.Break();
 
-                                var exteriorRing1 = shapes[0].shape.GetExteriorRing(0);
-                                var coordinates1 = exteriorRing1.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
+                            //    var exteriorRing1 = shapes[0].shape.GetExteriorRing(0);
+                            //    var coordinates1 = exteriorRing1.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
 
-                                var ex1 = factory.CreateLinearRing([.. coordinates1, coordinates1[0]]);
+                            //    var ex1 = factory.CreateLinearRing([.. coordinates1, coordinates1[0]]);
 
-                                var exteriorRing2 = shapes[1].shape.GetExteriorRing(0);
-                                var coordinates2 = exteriorRing2.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
+                            //    var exteriorRing2 = shapes[1].shape.GetExteriorRing(0);
+                            //    var coordinates2 = exteriorRing2.Parts[0].Select(segment => new NetTopologySuite.Geometries.Coordinate(segment.StartPoint.X, segment.StartPoint.Y)).ToArray();
 
-                                var ex2 = factory.CreateLinearRing([.. coordinates2, coordinates2[0]]);
+                            //    var ex2 = factory.CreateLinearRing([.. coordinates2, coordinates2[0]]);
 
-                                var resultCompare = LinearRingBoundaryAligner.AlignNearlyCoincidentRings(ex1, ex2, factory);
+                            //    var resultCompare = LinearRingBoundaryAligner.AlignNearlyCoincidentRings(ex1, ex2, factory);
 
-                                if (resultCompare.First.EqualsExact(resultCompare.Second)) {
+                            //    if (resultCompare.First.EqualsExact(resultCompare.Second)) {
 
-                                }
+                            //    }
 
-                                (LineString lineString, string message)[] array = [
-                                    (resultCompare.First,shapes[0].UID),
-                                    (resultCompare.Second,shapes[1].UID),
-                                    ];                                
+                            //    (LineString lineString, string message)[] array = [
+                            //        (resultCompare.First,shapes[0].UID),
+                            //        (resultCompare.Second,shapes[1].UID),
+                            //        ];                                
 
-                                Func<Geodatabase> debugInstanceCreator = () => {
-                                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
-                                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
-                                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
-                                    }
-                                    return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
-                                };
-                                using var debugInstance = debugInstanceCreator();
-                                var defnitions = debugInstance.GetDefinitions<FeatureClassDefinition>().ToDictionary(e => e.GetName().ToLowerInvariant().Split('.')[^1], e => e.GetName());
+                            //    Func<Geodatabase> debugInstanceCreator = () => {
+                            //        foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
+                            //            if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
+                            //            System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                            //        }
+                            //        return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+                            //    };
+                            //    using var debugInstance = debugInstanceCreator();
+                            //    var defnitions = debugInstance.GetDefinitions<FeatureClassDefinition>().ToDictionary(e => e.GetName().ToLowerInvariant().Split('.')[^1], e => e.GetName());
 
-                                var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
+                            //    var spatialReference = SpatialReferenceBuilder.CreateSpatialReference(4326);
 
-                                using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
+                            //    using var polyline = debugInstance.OpenDataset<FeatureClass>(defnitions["linestring"]);
 
-                                using var buffer = polyline.CreateRowBuffer();
-                                var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
-                                var maxLength = fields["message"].Length;
+                            //    using var buffer = polyline.CreateRowBuffer();
+                            //    var fields = buffer.GetFields().ToDictionary(e => e.Name, e => e);
+                            //    var maxLength = fields["message"].Length;
 
-                                for (int i = 0; i < array.Length; i++) {
-                                    var message = $"{i}: {array[i].message}";
-                                    if (message.Length <= maxLength)
-                                        buffer["message"] = message;
-                                    buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
-                                    using var f = polyline.CreateRow(buffer);
-                                }
+                            //    for (int i = 0; i < array.Length; i++) {
+                            //        var message = $"{i}: {array[i].message}";
+                            //        if (message.Length <= maxLength)
+                            //            buffer["message"] = message;
+                            //        buffer["shape"] = ConvertToArcGISPolyline(array[i].lineString, spatialReference);
+                            //        using var f = polyline.CreateRow(buffer);
+                            //    }
 
-                                System.Diagnostics.Debugger.Break();
-                            }
+                            //    System.Diagnostics.Debugger.Break();
+                            //}
 
                             HashSet<long> hits = [];
 
@@ -800,10 +800,10 @@ namespace S100Framework.Applications
 
                             var hashSet = new HashSet<long>();
 
-                            {
+                            if (selection.ContainsKey(tableName.ToLowerInvariant())) {
                                 using var cursor = fc.Search(new QueryFilter {
                                     WhereClause = $"OBJECTID IN ({string.Join(',', selection[tableName.ToLowerInvariant()])})",
-                                    SubFields = "OBJECTID,UID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings,SHAPE",
+                                    SubFields = "OBJECTID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings,SHAPE",
                                 }, true);
 
                                 while (cursor.MoveNext()) {
@@ -813,7 +813,7 @@ namespace S100Framework.Applications
                                     if (hashSet.Contains(oid)) continue;
                                     hashSet.Add(oid);
 
-                                    var _uid = Convert.ToString(current["UID"])!;
+                                    var _uid = current.UID();// Convert.ToString(current["UID"])!;
 
                                     if (collapse.Contains(_uid)) continue;
 
