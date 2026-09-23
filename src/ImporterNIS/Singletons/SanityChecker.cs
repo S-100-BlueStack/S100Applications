@@ -109,7 +109,7 @@ namespace S100Framework.Applications.Singletons
 
                 using var cursor = table.Search(new QueryFilter() {
                     WhereClause = "1=1",
-                    SubFields = "OBJECTID,UID,attributebindings"
+                    SubFields = "OBJECTID,attributebindings"
                 }, true);
 
                 while (cursor.MoveNext()) {

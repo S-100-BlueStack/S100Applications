@@ -1293,9 +1293,10 @@ namespace S100Framework.Applications
                             string[] aggregation = [nameof(SpanFixed), nameof(SpanOpening), nameof(Pontoon), nameof(PylonBridgeSupport)];
 
                             foreach (var uid in ids) {
+                                var guid = Guid.Parse($"{uid.Split("::")[^1]}");
                                 using var cursor = surface.CreateUpdateCursor(new QueryFilter {
-                                    WhereClause = $"GlobalID = '{uid}'"
-                                }, true);
+                                    WhereClause = $"GlobalID = '{guid:B}'"
+                                }, false);
                                 cursor.MoveNext();
 
                                 using var current = cursor.Current;
