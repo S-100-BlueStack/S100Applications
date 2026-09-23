@@ -300,23 +300,25 @@ namespace S100Framework.Applications
                     var s101 = featureClass.CreateRow(buffer);
                     var s101UID = s101.UID();
 
-                    var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
-                        role = "theReference",
-                        roleType = "association",
-                        featureId = s101UID,
-                        featureType = product.s101.S100FC_code,
-                    };
-                    ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
+                    //var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
+                    //    role = "theReference",
+                    //    roleType = "association",
+                    //    featureId = s101UID,
+                    //    featureType = product.s101.S100FC_code,
+                    //    Primitive = Primitives.surface,
+                    //};
+                    //((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS57theReference.association!).categoryOfProductMapping = 1;  //  Higher Priority Alternative
 
-                    featureBinding[] featureBindingsS57 = [productMappingS57theReference];
-                    s57["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS57, jsonSerializerOptions128);
-                    s57.Store();
+                    //featureBinding[] featureBindingsS57 = [productMappingS57theReference];
+                    //s57["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS57, jsonSerializerOptions128);
+                    //s57.Store();
 
                     var productMappingS101theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {
                         role = "theReference",
                         roleType = "association",
                         featureId = s57UID,
                         featureType = product.s57.S100FC_code,
+                        Primitive = Primitives.surface,
                     };
                     ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theReference.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
 
