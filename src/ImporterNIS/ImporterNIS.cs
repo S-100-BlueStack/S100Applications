@@ -1078,8 +1078,8 @@ namespace S100Framework.Applications
                             "pylonbridgesupport" => AttributeFlattenExtensions.Unflatten<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"]), typeof(PylonBridgeSupport)),
                             _ => throw new NotImplementedException(),
                         };
-                        hashFeatureType.Add(Convert.ToString(f["UID"])!, featureType);
-                        hashGeometry.Add(Convert.ToString(f["UID"])!, (Polygon)f.GetShape().Clone());
+                        hashFeatureType.Add(f.UID(), featureType);
+                        hashGeometry.Add(f.UID(), (Polygon)f.GetShape().Clone());
                     }
 
                     var geometries = hashGeometry.Select(e => (e.Key, e.Value)).ToArray();
@@ -1294,7 +1294,7 @@ namespace S100Framework.Applications
 
                             foreach (var uid in ids) {
                                 using var cursor = surface.CreateUpdateCursor(new QueryFilter {
-                                    WhereClause = $"UID = '{uid}'"
+                                    WhereClause = $"GlobalID = '{uid}'"
                                 }, true);
                                 cursor.MoveNext();
 
@@ -1358,7 +1358,7 @@ namespace S100Framework.Applications
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
 
-                                var uid = Convert.ToString(current["UID"])!;
+                                var uid = current.UID();
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
@@ -1374,7 +1374,7 @@ namespace S100Framework.Applications
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
 
-                                var uid = Convert.ToString(current["UID"])!;
+                                var uid = current.UID();
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
