@@ -247,7 +247,7 @@ namespace S100Framework.Applications
             S101ProductCoverage[] s101ProductCoverages = [];
             //using (var destination = createTargetGeodatabase()) 
             {
-                QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale}) AND (Shape IS NOT NULL)";
 
                 using (Geodatabase source = createGeodatabase()) {
                     Logger.Current.Information($"Converting Product Coverages");
@@ -440,21 +440,21 @@ namespace S100Framework.Applications
             foreach (var scale in scalesCompilation) {
                 if (!clip) {
                     if (Array.IndexOf(scalesCompilation, scale) == 0) {
-                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                        QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}) AND (Shape IS NOT NULL)";
                         Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                     else {
-                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
+                        QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}) AND (Shape IS NOT NULL)";
                         Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                 }
                 else {
                     if (Array.IndexOf(scalesCompilation, scale) == 0) {
-                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}";
+                        QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}) AND (Shape IS NOT NULL)";
                         Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                     else {
-                        QueryFilter.WhereClause = $"PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}";
+                        QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}) AND (Shape IS NOT NULL)";
                         Logger.Current.Verbose(QueryFilter.WhereClause);
 
                         Polygon[] clipping = [];
@@ -471,7 +471,7 @@ namespace S100Framework.Applications
                                     var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                     var spatialFilter = new SpatialQueryFilter {
-                                        WhereClause = "UPPER(ps) = 'S-101'",
+                                        WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                         FilterGeometry = queryPolygonProjected,
                                         SpatialRelationship = SpatialRelationship.Contains
                                     };
@@ -485,7 +485,7 @@ namespace S100Framework.Applications
                                     var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                     var spatialFilter = new SpatialQueryFilter {
-                                        WhereClause = "UPPER(ps) = 'S-101'",
+                                        WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                         FilterGeometry = queryPolygonProjected,
                                         SpatialRelationship = SpatialRelationship.Contains
                                     };
@@ -503,7 +503,7 @@ namespace S100Framework.Applications
                                         var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                         var spatialFilter = new SpatialQueryFilter {
-                                            WhereClause = "UPPER(ps) = 'S-101'",
+                                            WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                             FilterGeometry = queryPolygonProjected,
                                             SpatialRelationship = SpatialRelationship.IndexIntersects
                                         };
@@ -571,7 +571,7 @@ namespace S100Framework.Applications
                                             }
 
                                             featureClass.DeleteRows(new SpatialQueryFilter {
-                                                WhereClause = "UPPER(ps) = 'S-101'",
+                                                WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                                 FilterGeometry = queryPolygonProjected,
                                                 SpatialRelationship = SpatialRelationship.Contains
                                             });
@@ -586,7 +586,7 @@ namespace S100Framework.Applications
                                         var queryPolygonProjected = (Polygon)GeometryEngine.Instance.Project(queryPolygon, targetSR);
 
                                         var spatialFilter = new SpatialQueryFilter {
-                                            WhereClause = "UPPER(ps) = 'S-101'",
+                                            WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                             FilterGeometry = queryPolygonProjected,
                                             SpatialRelationship = SpatialRelationship.IndexIntersects
                                         };
@@ -679,7 +679,7 @@ namespace S100Framework.Applications
                                             }
 
                                             featureClass.DeleteRows(new SpatialQueryFilter {
-                                                WhereClause = "UPPER(ps) = 'S-101'",
+                                                WhereClause = "UPPER(ps) = 'S-101' AND (Shape IS NOT NULL)",
                                                 FilterGeometry = queryPolygonProjected,
                                                 SpatialRelationship = SpatialRelationship.Contains
                                             });
