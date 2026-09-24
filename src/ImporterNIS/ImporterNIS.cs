@@ -1316,6 +1316,7 @@ namespace S100Framework.Applications
                                      },
                                      featureType = nameof(Bridge),
                                      featureId = name,
+                                     Primitive = Primitives.surface,
                                 }];
 
                                 current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);

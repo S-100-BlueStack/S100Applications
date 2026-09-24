@@ -73,9 +73,11 @@ namespace ArcGIS.Core.Data
         };
 
         //public static string Crc32(this Feature feature) => $"{System.IO.Hashing.Crc32.HashToUInt32(feature.GetGlobalID().ToByteArray())}";
-        public static string UID(this Feature feature) => $"{Prefix(feature.GetTable().GetName())}::{feature.GetGlobalID():N}";   // Convert.ToString(feature["UID"])!;
+        //public static string UID(this Feature feature) => $"{Prefix(feature.GetTable().GetName())}::{feature.GetGlobalID():N}";   // Convert.ToString(feature["UID"])!;
+        public static string UID(this Feature feature) => $"{feature.GetGlobalID():B}";   // Convert.ToString(feature["UID"])!;
 
         //public static string Crc32(this Row row) => $"{System.IO.Hashing.Crc32.HashToUInt32(row.GetGlobalID().ToByteArray())}";
-        public static string UID(this Row row) => $"{Prefix(row.GetTable().GetName())}::{row.GetGlobalID():N}";   // Convert.ToString(row["UID"])!;
+        //public static string UID(this Row row) => $"{Prefix(row.GetTable().GetName())}::{row.GetGlobalID():N}";   // Convert.ToString(row["UID"])!;
+        public static string UID(this Row row) => $"{row.GetGlobalID():B}";   // Convert.ToString(row["UID"])!;
     }
 }

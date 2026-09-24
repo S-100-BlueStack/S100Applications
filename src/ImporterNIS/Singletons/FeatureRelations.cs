@@ -1211,6 +1211,13 @@ namespace S100Framework.Applications.Singletons
                     //featureBindingPrimary.role = bindingDefinitionPrimary.role;
                     //featureBindingPrimary.roleType = bindingDefinitionPrimary.roleType.ToString();
                     featureBindingPrimary.featureType = relation!.Slave!.S101Type.Name;
+                    featureBindingPrimary.Primitive = s101SlaveFeature.TableName().ToLowerInvariant() switch {
+                        "point" => Primitives.point,
+                        "pointset" => Primitives.pointSet,
+                        "curve" => Primitives.curve,
+                        "surface" => Primitives.surface,
+                        _ => throw new InvalidOperationException(),
+                    };
 
                     primaryBindings.Add(featureBindingPrimary);
                 }
@@ -1233,6 +1240,13 @@ namespace S100Framework.Applications.Singletons
                     //featureBindingForeign.role = bindingDefinitionForeign.role;
                     //featureBindingForeign.roleType = bindingDefinitionForeign.roleType.ToString();
                     featureBindingForeign.featureType = relation!.Master!.S101Type.Name;
+                    featureBindingForeign.Primitive = s101MasterFeature.TableName().ToLowerInvariant() switch {
+                        "point" => Primitives.point,
+                        "pointset" => Primitives.pointSet,
+                        "curve" => Primitives.curve,
+                        "surface" => Primitives.surface,
+                        _ => throw new InvalidOperationException(),
+                    };
 
                     foreignBindings.Add(featureBindingForeign);
                 }
