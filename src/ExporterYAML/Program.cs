@@ -92,7 +92,7 @@ namespace S100Framework.Applications
             //Log.Information("exporter.exe {args}", string.Join(' ', args));
 
             using var loggerFactory = LoggerFactory.Create(builder => {
-                builder.SetMinimumLevel(LogLevel.Trace);
+                builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 //builder.AddSimpleConsole(options => {
                 //    options.SingleLine = true;  // merges category+eventid+message onto one line                    
                 //});
@@ -215,7 +215,7 @@ namespace S100Framework.Applications
                                 datasetNames = [.. datasetNames, electricProduct.datasetName!];
                             }
                             catch (System.Exception ex) {
-                                logger.LogError(ex, "Can't deserialize {UID}!", current["UID"]);
+                                logger.LogError(ex, "Can't deserialize {UID}!", current.UID());
                             }
                         }
                     }
@@ -493,7 +493,7 @@ namespace S100Framework.Applications
                                         shape = clip(shape);
                                         if (shape.IsEmpty) continue;
 
-                                        yield return (objectid, Convert.ToString(_["UID"])!, code, shape);
+                                        yield return (objectid, _.UID(), code, shape);
                                     }
                                 }
                                 f.FilterGeometry = backupGeometry;
@@ -704,7 +704,7 @@ namespace S100Framework.Applications
                             while (informationCursor.MoveNext()) {
                                 var current = informationCursor.Current;
 
-                                var name = Convert.ToString(current["UID"]);
+                                var name = Guid.Parse(current.UID()).ToStableUInt64();
                                 var code = current["code"].ToString()!;
                                 //var json = current["attributebindings"].ToString()!;
 
@@ -717,7 +717,7 @@ namespace S100Framework.Applications
 
                                 var information = new S100FC.YAML.Information {
                                     Name = code,
-                                    ID = name,
+                                    ID = $"{name}",
                                     Attributes = (S100FC.InformationType)instance!
                                 };
                                 informationTypes.Add(information);
@@ -725,7 +725,7 @@ namespace S100Framework.Applications
                                 var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
                                 foreach (var filename in filenames) {
-                                    supportFiles.TryAdd(name, filename);
+                                    supportFiles.TryAdd(current.UID(), filename);
                                 }
                             }
                         }
@@ -743,7 +743,7 @@ namespace S100Framework.Applications
                             while (featureCursor.MoveNext()) {
                                 var current = featureCursor.Current;
 
-                                var name = Convert.ToString(current["UID"])!;
+                                var name = Guid.Parse(current.UID()).ToStableUInt64();
                                 var code = current["code"].ToString()!;
                                 //var json = current["json"].ToString()!;
 
@@ -754,7 +754,7 @@ namespace S100Framework.Applications
                                 var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
                                 //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
 
-                                var foid = $"110:{name.Substring(1)}:1";       // Point: 110 
+                                var foid = $"110:{name}:1";       // Point: 110 
 
                                 var feature = new S100FC.YAML.Feature {
                                     Prim = Primitive.NoGeometry,
@@ -768,7 +768,7 @@ namespace S100Framework.Applications
                                 var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
                                 foreach (var filename in filenames) {
-                                    supportFiles.TryAdd(name, filename);
+                                    supportFiles.TryAdd(current.UID(), filename);
                                 }
                             }
                         }
@@ -848,8 +848,10 @@ namespace S100Framework.Applications
 
                                         var code = Convert.ToString(current["code"]);
 
-                                        var foid = uid.Contains(':') ? $"110:{uid.Substring(1)}" : $"110:{uid.Substring(1)}:1";
+                                        var split = uid.Split(':');
 
+                                        //var foid = $"110:{Guid.Parse(uid).ToStableUInt64()}:1";// : $"110:{Guid.Parse(uid).ToStableUInt64()}:1";
+                                        var foid = uid.Contains(':') ? $"110:{Guid.Parse(split[0]).ToStableUInt64()}:{split[^1]}" : $"110:{Guid.Parse(uid).ToStableUInt64()}:1";// : $"110:{Guid.Parse(uid).ToStableUInt64()}:1";
 
                                         try {
                                             var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true) ?? default;
@@ -897,7 +899,7 @@ namespace S100Framework.Applications
                                                         var asso = new S100FC.YAML.Association {
                                                             Name = binding.association!.S100FC_code,
                                                             Role = binding.role,
-                                                            To = binding.informationId!,
+                                                            To = $"{Guid.Parse(binding.informationId).ToStableUInt64()}",
                                                         };
 
                                                         // Special case for SpatialAssociation. Add to dictionary for later processing.
@@ -909,7 +911,7 @@ namespace S100Framework.Applications
 
                                                         var newEntry = informationsTypesAdded.Add(binding.informationId!);
                                                         if (newEntry) {
-                                                            dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals(binding.informationId!)));
+                                                            dataset!.AddInformation(informationTypes.Single(e => e.ID!.Equals($"{Guid.Parse(binding.informationId).ToStableUInt64()}")));
 
                                                             if (supportFiles.TryGetValue(binding.informationId!, out var filename)) {
 
@@ -945,12 +947,12 @@ namespace S100Framework.Applications
                                                         var asso = new S100FC.YAML.Association {
                                                             Name = binding.association!.S100FC_code,
                                                             Role = binding.role,
-                                                            To = $"110:{binding.featureId!.Substring(1)}:1"
+                                                            To = $"110:{Guid.Parse(binding.featureId!).ToStableUInt64()}:1"
                                                         };
 
                                                         feature?.AddFeatureAssociation(asso);
 
-                                                        var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{binding.featureId.Substring(1)}:1"));
+                                                        var noGeometry = featureTypes.SingleOrDefault(e => e.Foid.Equals($"110:{Guid.Parse(binding.featureId!).ToStableUInt64()}:1"));
                                                         if (noGeometry != null && !featureTypesAdded.Contains(binding.featureId)) {
                                                             featureTypesAdded.Add(binding.featureId);
                                                             dataset?.AddFeature(noGeometry);
