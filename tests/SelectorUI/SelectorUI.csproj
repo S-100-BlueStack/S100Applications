@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="3.1.8" />
+    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
