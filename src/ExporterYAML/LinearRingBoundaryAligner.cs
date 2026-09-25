@@ -1,11 +1,7 @@
 #nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Valid;
-using S100Framework.Topology.Geometry;
 
 namespace S100Framework.Topology.Geometry
 {
