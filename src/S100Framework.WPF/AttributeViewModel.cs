@@ -22,7 +22,8 @@ namespace S100Framework.WPF.ViewModel
         public string UID { get; set; } = UID;
         public string InformationType { get; set; } = informationType;
 
-        public override string ToString() => $"{this.InformationType}:{this.UID}";
+        //public override string ToString() => $"{this.InformationType}:{this.UID}";
+        public override string ToString() => $"{this.UID}";
     }
 
     public class FeatureTypeID(string featureType, string UID)
@@ -30,7 +31,8 @@ namespace S100Framework.WPF.ViewModel
         public string UID { get; set; } = UID;
         public string FeatureType { get; set; } = featureType;
 
-        public override string ToString() => $"{this.FeatureType}:{this.UID}";
+        //public override string ToString() => $"{this.FeatureType}:{this.UID}";
+        public override string ToString() => $"{this.UID}";
     }
 
     public delegate void AddError(string propertyName, string errorMessage);

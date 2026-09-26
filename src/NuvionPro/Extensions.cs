@@ -14,7 +14,7 @@ namespace ArcGIS.Desktop.Editing.Attributes
 
         }
 
-        public static string UID(this Inspector inspector) => Convert.ToString(inspector["UID"]);
+        public static string UID(this Inspector inspector) => $"{Guid.Parse((string)inspector["GlobalID"]):B}";
     }
 }
 

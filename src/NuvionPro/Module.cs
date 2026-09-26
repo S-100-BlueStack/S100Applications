@@ -139,7 +139,7 @@ namespace NuvionPro
                 if (IO.File.Exists(constraints)) {
                     featureCatalogue.Constraints = [.. XDocument.Load(constraints).Descendants("Rule")];
                 }
-                this._featureCatalogues = [.. this._featureCatalogues,];
+                this._featureCatalogues = [.. this._featureCatalogues, featureCatalogue];
             }
 
             //var rules = XDocument.Load(System.IO.Path.Combine(path, "GeospatialInformationRegistry", "constraints.xml"));

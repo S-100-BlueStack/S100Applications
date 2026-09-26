@@ -69,10 +69,6 @@ namespace NuvionPro
 
                 if (inspector != default) {
                     await QueuedTask.Run(() => {
-                        if (!("UNKNOWN".Equals(this.SelectedProperty.UID)))
-                            return;
-
-
                         var sourceidentifier = this.SelectedProperty.GetElement(this.Code).GetSourceIdentifier();
 
                         if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
@@ -305,15 +301,28 @@ namespace NuvionPro
 
                 var ps = this.Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);
 
-                var update = (this.PS is null && ps is null) || (this.PS is not null && ps is null) || (!ps.Equals(this.PS?.ID));
-                if (update) {
-                    if (ps is null)
-                        this.PS = default;
+                //var update = (this.PS is null && ps is null) || (this.PS is not null && ps is null) || (!ps.Equals(this.PS?.ID));
+                //if (update) {
+                //    if (ps is null)
+                //        this.PS = default;
+                //    else {
+                //        var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
+                //        if (_ is not null) {
+                //            this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
+                //        }
+                //    }
+                //}
+
+                if (ps is null)
+                    this.PS = default;
+                else {
+                    var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
+                    if (_ is not null) {
+                        this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
+                    }
                     else {
-                        var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
-                        if (_ is not null) {
-                            this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
-                        }
+                        this.SelectedProperty = null;
+                        return;
                     }
                 }
 
@@ -371,7 +380,7 @@ namespace NuvionPro
                                     }, true);
 
                                     while (cursor.MoveNext()) {
-                                        result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                        result = [.. result, $"{cursor.Current.GetGlobalID():B}"];
                                     }
                                 }
                                 return result;
@@ -385,7 +394,7 @@ namespace NuvionPro
                             if (e.UIDs.Any()) {
                                 await QueuedTask.Run(() => {
                                     var query = new QueryFilter {
-                                        WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                        WhereClause = $"GlobalID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
                                     };
                                     foreach (var layer in mapView.Map.StandaloneTables) {
                                         layer.Select(query, SelectionCombinationMethod.Add);
@@ -414,7 +423,7 @@ namespace NuvionPro
                                         }, true);
 
                                         while (cursor.MoveNext()) {
-                                            result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                            result = [.. result, $"{cursor.Current.GetGlobalID():B}"];
                                         }
                                     }
                                 }
@@ -427,7 +436,7 @@ namespace NuvionPro
                                     }, true);
 
                                     while (cursor.MoveNext()) {
-                                        result = [.. result, Convert.ToString(cursor.Current["UID"])];
+                                        result = [.. result, $"{cursor.Current.GetGlobalID():B}"];
                                     }
                                 }
                                 return result;
@@ -441,7 +450,7 @@ namespace NuvionPro
                             if (e.UIDs.Any()) {
                                 await QueuedTask.Run(() => {
                                     var query = new QueryFilter {
-                                        WhereClause = $"UID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
+                                        WhereClause = $"GlobalID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
                                     };
                                     foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
                                         layer.Select(query, SelectionCombinationMethod.Add);
@@ -576,23 +585,30 @@ namespace NuvionPro
         public Boolean IsEditingEnabled {
             get => this._isEditingEnabled;
             set => this.SetProperty(ref this._isEditingEnabled, value);
-        }        
+        }
 
         public bool PS_SelectorIsEnabled {
             get {
+                if (this.Inspector is null) return false;
+
+                if (!this.Inspector.IsNull("code")) return false;
+
+                return this.PS is null;
+
                 if (this.Inspector is null) return true;
 
                 if (this.Inspector.IsNull("ps")) {
                     //if (this.PS is null) return false;
                     return true;
                 }
+                return false;
 
-                if (this.SelectedProperty is null || !("unknown".Equals(this.SelectedProperty.UID)))
+                if (this.SelectedProperty is null)
                     return false;
 
                 if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
                     "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
-                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) 
+                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
                     return true;
 
                 return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
@@ -603,15 +619,25 @@ namespace NuvionPro
             get {
                 if (this.Inspector is null) return false;
 
+                if (!this.Inspector.IsNull("code")) return false;
+
+                if (this.PS is null)
+                    return false;
+                return this.Codes.Any();
+
+                return this.PS != null;
+
+                if (this.Inspector is null) return false;
+
                 if (this.Inspector.IsNull("ps")) {
-                    if (!(this.PS is null)) {
-                        return true; 
-                    }
+                    //if (!(this.PS is null)) {
+                    //    return true; 
+                    //}
                     return false;
                 }
-
-                if (this.SelectedProperty is null || !("unknown".Equals(this.SelectedProperty.UID)))
-                    return false;
+                if (this.Inspector.IsNull("code"))
+                    return true;
+                return false;
 
                 if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
                     "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
@@ -627,8 +653,16 @@ namespace NuvionPro
             get {
                 if (this.Inspector is null) return true;
 
-                
-                if (this.PS is not null && !(string.IsNullOrEmpty(this.Code))) { 
+                if (this.PS is null)
+                    return false;
+                if (this.Code is null)
+                    return false;
+
+                if (this.Inspector.IsNull("ps") || this.Inspector.IsNull("ps"))
+                    return true;
+                return false;
+
+                if (this.PS is not null && !(string.IsNullOrEmpty(this.Code))) {
                     if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
                         "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
                         "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) {
