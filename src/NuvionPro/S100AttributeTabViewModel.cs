@@ -371,7 +371,7 @@ namespace NuvionPro
                             return await QueuedTask.Run(() => {
                                 string[] result = [];
 
-                                foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("informationtype"))) {
+                                foreach (var layer in MapView.Active.Map.GetStandaloneTablesAsFlattenedList().Where(table => table.Name.EndsWith("informationtype"))) {
                                     var selection = layer.GetSelection();
                                     if (selection.GetCount() == 0) continue;
 
@@ -396,7 +396,7 @@ namespace NuvionPro
                                     var query = new QueryFilter {
                                         WhereClause = $"GlobalID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
                                     };
-                                    foreach (var layer in mapView.Map.StandaloneTables) {
+                                    foreach (var layer in mapView.Map.GetStandaloneTablesAsFlattenedList()) {
                                         layer.Select(query, SelectionCombinationMethod.Add);
                                     }
                                 }, TaskCreationOptions.None);
@@ -427,7 +427,7 @@ namespace NuvionPro
                                         }
                                     }
                                 }
-                                foreach (var layer in MapView.Active.Map.StandaloneTables.Where(table => table.Name.EndsWith("featuretype"))) {
+                                foreach (var layer in MapView.Active.Map.GetStandaloneTablesAsFlattenedList().Where(table => table.Name.EndsWith("featuretype"))) {
                                     var selection = layer.GetSelection();
                                     if (selection.GetCount() == 0) continue;
 
@@ -452,10 +452,10 @@ namespace NuvionPro
                                     var query = new QueryFilter {
                                         WhereClause = $"GlobalID IN ({string.Join(',', e.UIDs.Select(e => $"'{e.UID}'"))})",
                                     };
-                                    foreach (var layer in mapView.Map.Layers.OfType<FeatureLayer>()) {
+                                    foreach (var layer in mapView.Map.GetLayersAsFlattenedList().OfType<FeatureLayer>()) {
                                         layer.Select(query, SelectionCombinationMethod.Add);
                                     }
-                                    foreach (var layer in mapView.Map.StandaloneTables) {
+                                    foreach (var layer in mapView.Map.GetStandaloneTablesAsFlattenedList()) {
                                         layer.Select(query, SelectionCombinationMethod.Add);
                                     }
                                 });
