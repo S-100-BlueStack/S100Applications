@@ -508,7 +508,7 @@ namespace S100Framework.Applications
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
 
-                        var result = source.BuildTopology(FeatureQuery, interceptor: (code, arg, append) => {
+                        var result = source.BuildTopology(spa, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
 
                             var persist = code switch {
@@ -797,7 +797,7 @@ namespace S100Framework.Applications
 
                             var hashSet = new HashSet<long>();
 
-                            if (selection.ContainsKey(tableName.ToLowerInvariant())) {
+                            if (selection.ContainsKey(tableName.ToLowerInvariant()) && selection[tableName.ToLowerInvariant()].Any()) {
                                 using var cursor = fc.Search(new QueryFilter {
                                     WhereClause = $"OBJECTID IN ({string.Join(',', selection[tableName.ToLowerInvariant()])})",
                                     SubFields = "OBJECTID,GLOBALID,CODE,attributeBindings,informationBindings,featureBindings,SHAPE",
