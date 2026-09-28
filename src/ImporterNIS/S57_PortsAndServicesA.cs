@@ -415,7 +415,7 @@ namespace S100Framework.Applications
                             // TODO: horizontalClearanceLength
 
                             if (current.HORCLR.HasValue) {
-                                instance.horizontalClearanceWidth = current.HORCLR.Value;
+                                instance.horizontalClearanceWidth = current.HORCLR.HasValue && current.HORCLR.Value != -32767m ? current.HORCLR!.Value : default(decimal?);
                             }
 
                             // TODO: interoperabilityIdentifier
@@ -488,17 +488,17 @@ namespace S100Framework.Applications
                             // TODO: horizontalClearanceLength
 
                             if (current.HORCLR.HasValue) {
-                                instance.horizontalClearanceWidth = current.HORCLR.Value;
+                                instance.horizontalClearanceWidth = current.HORCLR.HasValue && current.HORCLR.Value != -32767m ? current.HORCLR!.Value : default(decimal?);
                             }
 
                             // TODO: interoperabilityIdentifier
 
                             if (current.HORLEN.HasValue) {
-                                instance.horizontalLength = current.HORLEN.Value;
+                                instance.horizontalLength = current.HORLEN.HasValue && current.HORLEN.Value != -32767m ? current.HORLEN!.Value : default(decimal?);
                             }
 
                             if (current.HORWID.HasValue) {
-                                instance.horizontalWidth = current.HORWID.Value;
+                                instance.horizontalWidth = current.HORWID.HasValue && current.HORWID.Value != -32767m ? current.HORWID!.Value : default(decimal?);
                             }
 
                             // TODO: maximumPermittedDraught
@@ -684,21 +684,21 @@ namespace S100Framework.Applications
                                 // TODO: HorizontalClearanceLength
 
                                 if (current.HORCLR.HasValue) {
-                                    instance.horizontalClearanceWidth = current.HORCLR.Value;
+                                    instance.horizontalClearanceWidth = current.HORCLR.HasValue && current.HORCLR.Value != -32767m ? current.HORCLR!.Value : default(decimal?);
                                 }
 
                                 if (current.HORLEN.HasValue) {
-                                    instance.horizontalLength = current.HORLEN.Value;
+                                    instance.horizontalLength = current.HORLEN.HasValue && current.HORLEN.Value != -32767m ? current.HORLEN!.Value : default(decimal?);
                                 }
 
                                 if (current.HORWID.HasValue) {
-                                    instance.horizontalWidth = current.HORWID.Value;
+                                    instance.horizontalWidth = current.HORWID.HasValue && current.HORWID.Value != -32767m ? current.HORWID!.Value : default(decimal?);
                                 }
 
                                 // TODO: InteroperabilityIdentifier
 
                                 if (current.LIFCAP.HasValue) {
-                                    instance.liftingCapacity = current.LIFCAP.Value;
+                                    instance.liftingCapacity = current.LIFCAP.HasValue && current.LIFCAP.Value != -32767m ? current.LIFCAP!.Value : default(decimal?);
                                 }
 
                                 // TODO: MaximumPermitedDraught - not converted no inform info in GST
