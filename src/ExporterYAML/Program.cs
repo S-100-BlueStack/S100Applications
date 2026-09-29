@@ -508,7 +508,7 @@ namespace S100Framework.Applications
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
 
-                        var result = source.BuildTopology(spatialFilters, interceptor: (code, arg, append) => {
+                        var result = source.BuildTopology(e.Filters, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
 
                             var persist = code switch {
