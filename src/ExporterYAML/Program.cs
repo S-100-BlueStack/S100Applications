@@ -670,7 +670,7 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
-                        var selection = dictionarySelect;// result.selection;
+                        var selection = result.selection;
 
                         if (System.Diagnostics.Debugger.IsAttached) {
                             IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
@@ -806,6 +806,8 @@ namespace S100Framework.Applications
                                 while (cursor.MoveNext()) {
                                     var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
+                                    if ("DataCoverage".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();                                    
+
                                     var oid = current.GetObjectID();
                                     if (hashSet.Contains(oid)) continue;
                                     hashSet.Add(oid);
@@ -842,6 +844,9 @@ namespace S100Framework.Applications
                                         }
                                         else if (prim == Primitive.Surface || prim == Primitive.Curve)
                                             continue;
+                                        else {
+                                            geometry = $"P{Guid.Parse(uid).ToStableUInt64()}";
+                                        }
 
                                         var code = Convert.ToString(current["code"]);
 
@@ -1006,7 +1011,8 @@ namespace S100Framework.Applications
                         foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
                             if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
                             if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
-                            dataset?.AddGeometry(geometry, name!);
+                            //dataset?.AddGeometry(geometry, name!);
+                            dataset?.AddGeometry(geometry, $"P{Guid.Parse(name).ToStableUInt64()}");
                             logger.LogTrace("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
                         }
 
