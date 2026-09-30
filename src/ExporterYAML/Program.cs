@@ -806,7 +806,7 @@ namespace S100Framework.Applications
                                 while (cursor.MoveNext()) {
                                     var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                                    if ("DataCoverage".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();                                    
+                                    //if ("DataCoverage".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();                                    
 
                                     var oid = current.GetObjectID();
                                     if (hashSet.Contains(oid)) continue;
