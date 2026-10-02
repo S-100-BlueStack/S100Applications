@@ -75,7 +75,7 @@ namespace S100FC.Applications
 
                 var match = Regex.Match(dataset.CellName, @"101DK00(\d)");
                 //int? usageBand = match.Success ? int.Parse(match.Groups[1].Value) : null;
-                int nominalscale = 0;
+                int compilationscale = 0;
 
                 var foreignFoids = new Dictionary<string, string>();
 
@@ -136,7 +136,7 @@ namespace S100FC.Applications
                     }
 
                     // Set Usageband
-                    buffer["nominalscale"] = nominalscale;
+                    buffer["compilationscale"] = compilationscale;
                     buffer["ps"] = productSpecification;
                     buffer["code"] = feature.Name;
                     buffer["attributebindings"] = flatten;

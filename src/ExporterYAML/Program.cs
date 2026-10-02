@@ -263,7 +263,7 @@ namespace S100Framework.Applications
 
                             var electronicProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
-                            long nominalscale = electronicProduct.optimumDisplayScale!.Value;
+                            long compilationscale = electronicProduct.optimumDisplayScale!.Value;
 
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
@@ -271,14 +271,14 @@ namespace S100Framework.Applications
 
                             using var source = createSource()!;
 
-                            foreach (var e in source.S101_QueryDataCoverage(shape, nominalscale)) {
+                            foreach (var e in source.S101_QueryDataCoverage(shape, compilationscale)) {
                                 spatialQueryFilters = [.. spatialQueryFilters, e.Filter];
                             }
 
                             using var surface101 = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
                             using var datacoverageSearch = surface101.Search(new SpatialQueryFilter {
-                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {nominalscale}",
+                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND compilationscale = {compilationscale}",
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Contains,
                             }, true);
@@ -670,7 +670,7 @@ namespace S100Framework.Applications
 
                         var topology = result.matrix;
 
-                        var selection = dictionarySelect;// result.selection;
+                        var selection = result.selection;
 
                         if (System.Diagnostics.Debugger.IsAttached) {
                             IO.File.WriteAllLines($"{datasetName}.wkt", topology.NetworkTopology);
@@ -806,6 +806,8 @@ namespace S100Framework.Applications
                                 while (cursor.MoveNext()) {
                                     var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
+                                    //if ("DataCoverage".Equals(Convert.ToString(current["code"]), StringComparison.InvariantCultureIgnoreCase)) System.Diagnostics.Debugger.Break();                                    
+
                                     var oid = current.GetObjectID();
                                     if (hashSet.Contains(oid)) continue;
                                     hashSet.Add(oid);
@@ -842,6 +844,9 @@ namespace S100Framework.Applications
                                         }
                                         else if (prim == Primitive.Surface || prim == Primitive.Curve)
                                             continue;
+                                        else {
+                                            geometry = $"P{Guid.Parse(uid).ToStableUInt64()}";
+                                        }
 
                                         var code = Convert.ToString(current["code"]);
 
@@ -1006,7 +1011,8 @@ namespace S100Framework.Applications
                         foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
                             if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
                             if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
-                            dataset?.AddGeometry(geometry, name!);
+                            //dataset?.AddGeometry(geometry, name!);
+                            dataset?.AddGeometry(geometry, $"P{Guid.Parse(name).ToStableUInt64()}");
                             logger.LogTrace("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
                         }
 

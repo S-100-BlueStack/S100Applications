@@ -4,6 +4,7 @@ using ArcGIS.Core.Internal.Threading.Tasks;
 using NetTopologySuite.Algorithm;
 using S100Framework.Applications;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using IO = System.IO;
@@ -849,7 +850,6 @@ namespace TestNisImporter
 
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed16_balticsea\s57")];
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\S-101_NOAA\s57")];
-        
 
             var python = new StringBuilder();
 
@@ -868,7 +868,7 @@ namespace TestNisImporter
                         if (enc.Name.Contains("cancel", StringComparison.InvariantCultureIgnoreCase)) continue;
                         if (!string.IsNullOrEmpty(filter) && !enc.Name.Contains(filter)) continue;
 
-                        var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, true);
+                        var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
 
                         python.AppendLine(command);
                     }
@@ -881,12 +881,20 @@ namespace TestNisImporter
         private static string ImportS57ToGeodatabase(DirectoryInfo folder, string connection, Func<string, bool> filter, bool updates) {
             var tasks = new List<string>();
 
+            var delete = new StringBuilder();
+
             var regex = new Regex(@"\d{3}$");
 
+            //if (folder.GetDirectories().Count() > 1) System.Diagnostics.Debugger.Break();
+
             if (!folder.GetFiles("*.000", SearchOption.TopDirectoryOnly).Any()) {
+                //foreach (var f in folder.GetDirectories().OrderByDescending(e => e.Name).Skip(1)) {
+                //    delete.AppendLine($"del /F /Q {f.FullName}");
+                //}
+
                 folder = folder.GetDirectories().OrderByDescending(e => e.Name).First();
             }
-
+            
             foreach (var file in folder.GetFiles("*.000").OrderBy(e => IO.Path.GetFileNameWithoutExtension(e.FullName))) {
                 var name = IO.Path.GetFileNameWithoutExtension(file.FullName);
 

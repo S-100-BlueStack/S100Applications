@@ -192,7 +192,7 @@ namespace S100Framework.Applications
                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);  //System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), jsonSerializerOptions);
 
                     ImporterNIS.SetShape(buffer, shape);
-                    ImporterNIS.SetUsageBand(buffer, PLTS_COMP_SCALE);
+                    ImporterNIS.SetCompilationScale(buffer, PLTS_COMP_SCALE);
 
                     using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
@@ -239,7 +239,7 @@ namespace S100Framework.Applications
                         }
 
                         ImporterNIS.SetShape(buffer, shape);
-                        ImporterNIS.SetUsageBand(buffer, relatedObject.S57Object!.PLTS_COMP_SCALE!.Value);
+                        ImporterNIS.SetCompilationScale(buffer, relatedObject.S57Object!.PLTS_COMP_SCALE!.Value);
 
                         using var featureN = featureClass.CreateRow(buffer);
                         var equipmentName = featureN.UID();
@@ -310,7 +310,7 @@ namespace S100Framework.Applications
 
 
                     ImporterNIS.SetShape(buffer, s57master.Shape);
-                    ImporterNIS.SetUsageBand(buffer, s57master!.PLTS_COMP_SCALE!.Value);
+                    ImporterNIS.SetCompilationScale(buffer, s57master!.PLTS_COMP_SCALE!.Value);
 
                     using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();
@@ -364,7 +364,7 @@ namespace S100Framework.Applications
                     }
 
                     ImporterNIS.SetShape(buffer, relatedObject.S57Object.Shape);
-                    ImporterNIS.SetUsageBand(buffer, relatedObject.S57Object.PLTS_COMP_SCALE!.Value);
+                    ImporterNIS.SetCompilationScale(buffer, relatedObject.S57Object.PLTS_COMP_SCALE!.Value);
 
                     using var featureN = featureClass.CreateRow(buffer);
                     var equipmentName = featureN.UID();

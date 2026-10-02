@@ -286,7 +286,7 @@ namespace S100Framework.Applications
                     buffer["featurebindings"] = "[]";
                     //buffer["specificusage"] = product.s57.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s57.sourceIdentifier;
-                    buffer["nominalscale"] = product.s57.optimumDisplayScale;
+                    buffer["compilationscale"] = product.s57.optimumDisplayScale;
                     var s57 = featureClass.CreateRow(buffer);
                     var s57UID = s57.UID();
 
@@ -296,7 +296,7 @@ namespace S100Framework.Applications
                     buffer["featurebindings"] = "[]";
                     //buffer["specificusage"] = product.s101.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s101.sourceIdentifier;
-                    buffer["nominalscale"] = product.s101.optimumDisplayScale;
+                    buffer["compilationscale"] = product.s101.optimumDisplayScale;
                     var s101 = featureClass.CreateRow(buffer);
                     var s101UID = s101.UID();
 

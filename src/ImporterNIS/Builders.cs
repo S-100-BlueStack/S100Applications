@@ -147,7 +147,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -172,7 +172,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -197,7 +197,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -227,7 +227,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -257,7 +257,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -296,7 +296,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -334,7 +334,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -434,7 +434,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -495,7 +495,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -585,7 +585,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -666,7 +666,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -705,7 +705,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -748,7 +748,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -802,7 +802,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -860,7 +860,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -892,7 +892,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -943,7 +943,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1018,7 +1018,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1080,7 +1080,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1116,7 +1116,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1170,7 +1170,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1236,7 +1236,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1273,7 +1273,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1326,7 +1326,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1382,7 +1382,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1431,7 +1431,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1481,7 +1481,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1680,7 +1680,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -1741,7 +1741,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2016,7 +2016,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2054,7 +2054,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2124,7 +2124,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -2191,7 +2191,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -2494,7 +2494,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -2559,7 +2559,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2611,7 +2611,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2685,7 +2685,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2805,7 +2805,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -2914,7 +2914,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -2996,7 +2996,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -3027,7 +3027,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3057,7 +3057,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3078,7 +3078,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3099,7 +3099,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3140,7 +3140,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3172,7 +3172,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3236,7 +3236,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3273,7 +3273,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3309,7 +3309,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3343,7 +3343,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3385,7 +3385,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3423,7 +3423,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3520,7 +3520,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3587,7 +3587,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3635,7 +3635,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -3693,7 +3693,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -3718,7 +3718,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -3970,7 +3970,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4073,7 +4073,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4130,7 +4130,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4149,7 +4149,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4183,7 +4183,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4246,7 +4246,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4280,7 +4280,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4315,7 +4315,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -4353,7 +4353,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 return instance;
             }
@@ -4433,7 +4433,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, mappoint);
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                 // TODO: Handle Spatialquality
                 //if (quapos != default && quapos == 4) {
@@ -4487,7 +4487,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, mappoint);
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
         }
@@ -4563,7 +4563,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4647,7 +4647,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4706,7 +4706,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -4740,7 +4740,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else if (!string.IsNullOrEmpty(current.INFORM()) && regexMarinePollutionRegulationsArea.IsMatch(current.INFORM()!)) {
@@ -4757,7 +4757,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else if (!string.IsNullOrEmpty(current.INFORM()) && regexVesselTrafficServiceArea.IsMatch(current.INFORM()!)) {
@@ -4787,7 +4787,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else {
@@ -4831,7 +4831,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
         }
@@ -4928,7 +4928,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
 
@@ -5008,7 +5008,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
             else {
@@ -5094,7 +5094,7 @@ namespace S100Framework.Applications
 
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, current.SHAPE());
-                SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+                SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
                 return instance;
             }
         }
@@ -5175,7 +5175,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -5287,7 +5287,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -5386,7 +5386,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }
@@ -5465,7 +5465,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -5566,7 +5566,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -5672,7 +5672,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -5742,7 +5742,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -5874,7 +5874,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -5961,7 +5961,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6094,7 +6094,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6172,7 +6172,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6238,7 +6238,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6313,7 +6313,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6392,7 +6392,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6466,7 +6466,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6536,7 +6536,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6622,7 +6622,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6687,7 +6687,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
 
@@ -6744,7 +6744,7 @@ namespace S100Framework.Applications
 
             buffer["sourceIdentifier"] = instance.sourceIdentifier;
             SetShape(buffer, current.SHAPE());
-            SetUsageBand(buffer, current.PLTS_COMP_SCALE()!.Value);
+            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
             return instance;
         }
     }

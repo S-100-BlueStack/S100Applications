@@ -23,9 +23,9 @@ namespace S100Framework.Applications
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var buffer = featureClass.CreateRowBuffer();
 
-            //using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
-            using var featureClassTopo = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-            using var bufferTopo = featureClassTopo.CreateRowBuffer();
+            //using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("topo_surface"));
+            //using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
+            //using var buffer = featureClass.CreateRowBuffer();
 
             using var cursor = portsAndServicesA.Search(filter, true);
             int recordCount = 0;
@@ -154,7 +154,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -227,7 +227,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -366,7 +366,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -447,7 +447,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -541,7 +541,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -632,7 +632,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -767,16 +767,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                bufferTopo["ps"] = ps101;
-                                bufferTopo["code"] = instance.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
 
 
-                                bufferTopo["attributebindings"] = instance.Flatten();
-                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
@@ -870,7 +870,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1010,7 +1010,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1033,16 +1033,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                bufferTopo["ps"] = ps101;
-                                bufferTopo["code"] = instance.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
 
 
-                                bufferTopo["attributebindings"] = instance.Flatten();
-                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
@@ -1104,7 +1104,7 @@ namespace S100Framework.Applications
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1233,7 +1233,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1314,7 +1314,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1446,7 +1446,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1553,7 +1553,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1662,7 +1662,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1750,7 +1750,7 @@ namespace S100Framework.Applications
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                             SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -1839,7 +1839,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetUsageBand(buffer, current.PLTS_COMP_SCALE!.Value);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
@@ -1884,16 +1884,16 @@ namespace S100Framework.Applications
 
                                 // TODO: InteroperabilityIdentifier
 
-                                bufferTopo["ps"] = ps101;
-                                bufferTopo["code"] = instance.GetType().Name;
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
 
 
-                                bufferTopo["attributebindings"] = instance.Flatten();
-                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-                                SetShape(bufferTopo, current.SHAPE); bufferTopo["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetTopoUsageBand(bufferTopo, current.PLTS_COMP_SCALE!.Value);
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
