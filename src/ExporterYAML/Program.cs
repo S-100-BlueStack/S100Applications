@@ -263,7 +263,7 @@ namespace S100Framework.Applications
 
                             var electronicProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
 
-                            long nominalscale = electronicProduct.optimumDisplayScale!.Value;
+                            long compilationscale = electronicProduct.optimumDisplayScale!.Value;
 
                             var shape = (ArcGIS.Core.Geometry.Polygon)current.GetShape().Clone();
 
@@ -271,14 +271,14 @@ namespace S100Framework.Applications
 
                             using var source = createSource()!;
 
-                            foreach (var e in source.S101_QueryDataCoverage(shape, nominalscale)) {
+                            foreach (var e in source.S101_QueryDataCoverage(shape, compilationscale)) {
                                 spatialQueryFilters = [.. spatialQueryFilters, e.Filter];
                             }
 
                             using var surface101 = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
                             using var datacoverageSearch = surface101.Search(new SpatialQueryFilter {
-                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND nominalscale = {nominalscale}",
+                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND compilationscale = {compilationscale}",
                                 FilterGeometry = shape,
                                 SpatialRelationship = SpatialRelationship.Contains,
                             }, true);

@@ -291,7 +291,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = "[]";
                                     buffer["featurebindings"] = "[]";
                                     //buffer["specificusage"] = c.specificUsage;
-                                    buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
+                                    buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                     buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
 
                                     foreach (var p in c.Coverage.Split()) {
@@ -349,7 +349,7 @@ namespace S100Framework.Applications
                                         buffer["attributebindings"] = s.VerticalDatum.Flatten();
                                         buffer["informationbindings"] = "[]";
                                         buffer["featurebindings"] = "[]";
-                                        buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
+                                        buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                         buffer["sourceIdentifier"] = s.VerticalDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
@@ -409,7 +409,7 @@ namespace S100Framework.Applications
                                         buffer["attributebindings"] = s.SoundingDatum.Flatten();
                                         buffer["informationbindings"] = "[]";
                                         buffer["featurebindings"] = "[]";
-                                        buffer["nominalscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
+                                        buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                         buffer["sourceIdentifier"] = s.SoundingDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
@@ -1042,22 +1042,22 @@ namespace S100Framework.Applications
 
                 var whereClause = $"ps = '{ps101}' AND code IN ('SpanFixed','SpanOpening','Pontoon','PylonBridgeSupport')";
 
-                int[] nominalscales = [];
+                int[] compilationscales = [];
                 {
                     using var cursor = surface.Search(new QueryFilter {
                         PrefixClause = "Distinct",
                         WhereClause = whereClause,
-                        SubFields = "nominalscale",
-                        PostfixClause = "ORDER BY nominalscale DESC",
+                        SubFields = "compilationscale",
+                        PostfixClause = "ORDER BY compilationscale DESC",
                     }, true);
 
                     while (cursor.MoveNext()) {
-                        var _ = Convert.ToInt32(cursor.Current["nominalscale"]);
-                        nominalscales = [.. nominalscales, _];
+                        var _ = Convert.ToInt32(cursor.Current["compilationscale"]);
+                        compilationscales = [.. compilationscales, _];
                     }
                 }
 
-                foreach (var nominalscale in nominalscales.OrderDescending()) {
+                foreach (var compilationscale in compilationscales.OrderDescending()) {
                     var hashGeometry = new Dictionary<string, Polygon>();
 
                     //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
@@ -1065,7 +1065,7 @@ namespace S100Framework.Applications
                     var hashFeatureType = new Dictionary<string, FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
-                        WhereClause = whereClause + $" AND nominalscale = {nominalscale}",
+                        WhereClause = whereClause + $" AND compilationscale = {compilationscale}",
                     }, true);
 
                     while (cursor.MoveNext()) {
@@ -1282,7 +1282,7 @@ namespace S100Framework.Applications
                             bufferBridge["featureBindings"] = "[]";
                             bufferBridge["informationbindings"] = "[]";
                             //bufferBridge["specificusage"] = usage;
-                            bufferBridge["nominalscale"] = optimumDisplayScaleConverter(scale.First()) ?? 10000000;
+                            bufferBridge["compilationscale"] = optimumDisplayScaleConverter(scale.First()) ?? 10000000;
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
 
                             SetShape(bufferBridge, polygon);
@@ -1336,26 +1336,26 @@ namespace S100Framework.Applications
 
                     var whereClause = $"ps = '{ps101}' AND code IN ('NavigationalSystemOfMarks')";
 
-                    int[] nominalscales = [];
+                    int[] compilationscales = [];
                     {
                         using var cursor = surface.Search(new QueryFilter {
                             PrefixClause = "Distinct",
                             WhereClause = whereClause,
-                            SubFields = "nominalscale",
-                            PostfixClause = "ORDER BY nominalscale DESC",
+                            SubFields = "compilationscale",
+                            PostfixClause = "ORDER BY compilationscale DESC",
                         }, true);
 
                         while (cursor.MoveNext()) {
-                            var _ = Convert.ToInt32(cursor.Current["nominalscale"]);
-                            nominalscales = [.. nominalscales, _];
+                            var _ = Convert.ToInt32(cursor.Current["compilationscale"]);
+                            compilationscales = [.. compilationscales, _];
                         }
                     }
 
-                    foreach (var nominalscale in nominalscales.OrderDescending()) {
+                    foreach (var compilationscale in compilationscales.OrderDescending()) {
                         (string UID, int? marksNavigationalSystemOf, Polygon shape)[] navigationalSystemOfMarks = [];
 
                         using (var cursor = surface.Search(new QueryFilter {
-                            WhereClause = whereClause + $" AND nominalscale = {nominalscale}",
+                            WhereClause = whereClause + $" AND compilationscale = {compilationscale}",
                         }, true)) {
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
@@ -1371,7 +1371,7 @@ namespace S100Framework.Applications
                         }
 
                         using (var cursor = surface.CreateUpdateCursor(new QueryFilter {
-                            WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND nominalscale = {nominalscale}",
+                            WhereClause = $"ps = '{ps101}' AND code IN ('LocalDirectionOfBuoyage') AND compilationscale = {compilationscale}",
                         }, false)) {
                             while (cursor.MoveNext()) {
                                 var current = (Feature)cursor.Current;
@@ -1900,16 +1900,10 @@ namespace S100Framework.Applications
             };
         }
 
-        internal static void SetTopoUsageBand(RowBuffer buffer, int scale) {
+        internal static void SetCompilationScale(RowBuffer buffer, int scale) {
             var _ = SpecificUsage(scale);
             //buffer["specificusage"] = _;
-            buffer["nominalscale"] = optimumDisplayScaleConverter(scale) ?? 10000000;
-        }
-
-        internal static void SetUsageBand(RowBuffer buffer, int scale) {
-            var _ = SpecificUsage(scale);
-            //buffer["specificusage"] = _;
-            buffer["nominalscale"] = optimumDisplayScaleConverter(scale) ?? 10000000;
+            buffer["compilationscale"] = optimumDisplayScaleConverter(scale) ?? 10000000;
         }
 
         /// <summary>

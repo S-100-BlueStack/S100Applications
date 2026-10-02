@@ -220,7 +220,7 @@ namespace S100Framework.Applications
                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                 SetShape(buffer, _.Shape);
-                SetUsageBand(buffer, _.PLTS_COMP_SCALE!.Value);
+                SetCompilationScale(buffer, _.PLTS_COMP_SCALE!.Value);
 
                 using var featureN = featureClass.CreateRow(buffer);
                 var name = featureN.UID();
