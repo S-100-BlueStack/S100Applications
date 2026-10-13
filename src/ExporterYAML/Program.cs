@@ -291,6 +291,7 @@ namespace S100Framework.Applications
                                 CellName = $"{electronicProduct!.datasetName!}.000",
                                 Comment = "S-101 Geodatastyrelsen Test Dataset",
                                 Edition = 1,
+                                //Update = 0,
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",
                                 VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
@@ -1085,6 +1086,11 @@ namespace S100Framework.Applications
                             else {
                                 commandline += $" -C {datasetName}";
 
+                                if (IO.Directory.Exists(IO.Path.Combine(output, datasetName)))
+                                    IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
+                                if (IO.Directory.Exists(IO.Path.Combine(output, $"{datasetName}_ROOT")))
+                                    IO.Directory.Delete(IO.Path.Combine(output, $"{datasetName}_ROOT"), true);
+
                                 var p = new Process();
                                 p.StartInfo.CreateNoWindow = true;
                                 p.StartInfo.UseShellExecute = false;
@@ -1109,7 +1115,8 @@ namespace S100Framework.Applications
                                     return p.ExitCode;
                                 }
 
-                                IO.Directory.Move(IO.Path.Combine(output, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
+                                IO.Directory.Move(IO.Path.Combine(output, datasetName, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
+                                IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
                             }
                         }
 
