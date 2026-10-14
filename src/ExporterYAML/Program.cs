@@ -1120,8 +1120,8 @@ namespace S100Framework.Applications
                                     return p.ExitCode;
                                 }
 
-                                IO.Directory.Move(IO.Path.Combine(output, datasetName, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
-                                IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
+                                //IO.Directory.Move(IO.Path.Combine(output, datasetName, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
+                                //IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
                             }
                         }
 

@@ -23,7 +23,7 @@ namespace S100Framework.Applications
         public record S101ProductCoverage(string Name, int PLTS_COMP_SCALE, DataCoverage DataCoverage, S100FC.S101.SimpleAttributes.verticalDatum? VDAT, S100FC.S101.SimpleAttributes.verticalDatum? SDAT, Polygon Coverage, int specificUsage);
 
         private static int? optimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
-            >= 10000000 => null,
+            >= 10000000 => 10000000,
             >= 3500000 => 3500000,
             >= 1500000 => 1500000,
             >= 700000 => 700000,
@@ -42,7 +42,7 @@ namespace S100Framework.Applications
         };
 
         private static int? minimumDisplayScaleConverter(int optimumDisplayScale) => optimumDisplayScale switch {
-            >= 10000000 => null,
+            >= 10000000 => 10000000,
             >= 3500000 => 10000000,
             >= 1500000 => 3500000,
             >= 700000 => 1500000,
