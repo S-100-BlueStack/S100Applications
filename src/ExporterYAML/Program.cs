@@ -287,7 +287,7 @@ namespace S100Framework.Applications
 
                             verticalDatum datum = electronicProduct.verticalDatum ?? 44;
 
-                            datasets.Add((new Dataset {
+                            var dataset = new Dataset {
                                 CellName = $"{electronicProduct!.datasetName!}.000",
                                 Comment = "S-101 Geodatastyrelsen Test Dataset",
                                 Edition = 1,
@@ -295,8 +295,13 @@ namespace S100Framework.Applications
                                 ENCVer = "INT.IHO.S-101.2.0",
                                 FCVer = "2.0",
                                 VerticalDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                                //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",
-                            }, spatialQueryFilters));
+                                //SoundingDatum = $"{datum.listedValues.Single(e => e.code == datum.value).label},{datum.value}", // "Baltic Sea Chart Datum 2000,44",                                
+                            };
+                            dataset.Metadata.PrivateKey = Environment.GetEnvironmentVariable("Metadata.PrivateKey");
+                            dataset.Metadata.Certificate = Environment.GetEnvironmentVariable("Metadata.Certificate");
+                            dataset.Metadata.NavigationPurpose = "transit";
+
+                            datasets.Add((dataset, spatialQueryFilters));
                         }
                     }
                 }
@@ -1065,7 +1070,7 @@ namespace S100Framework.Applications
                                 p.Exited += (s, e) => {
                                 };
 
-                                logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                logger.LogDebug("\"{filename}\" {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                 p.Start();
                                 p.WaitForExit();
@@ -1104,7 +1109,7 @@ namespace S100Framework.Applications
                                 p.Exited += (s, e) => {
                                 };
 
-                                logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                logger.LogDebug("\"{filename}\" {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                 p.Start();
                                 p.WaitForExit();
@@ -1144,7 +1149,7 @@ namespace S100Framework.Applications
                                         ;
                                     };
 
-                                    logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                    logger.LogDebug("\"{filename}\" {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                     p.Start();
                                     p.WaitForExit();
@@ -1161,7 +1166,7 @@ namespace S100Framework.Applications
                                         p.StartInfo.Arguments = s57Compiler;
                                         p.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(output);
 
-                                        logger.LogDebug("{filename} {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
+                                        logger.LogDebug("\"{filename}\" {arguments}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
                                         p.Start();
                                         p.WaitForExit();

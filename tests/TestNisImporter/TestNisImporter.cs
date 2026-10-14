@@ -1,6 +1,7 @@
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Internal.Threading.Tasks;
+using ArcGIS.Desktop.Internal.Framework;
 using NetTopologySuite.Algorithm;
 using S100Framework.Applications;
 using System.Globalization;
@@ -787,7 +788,7 @@ namespace TestNisImporter
             var python = new StringBuilder();
 
             foreach (var root in roots) {
-                foreach(var enc in root.EnumerateDirectories()) {
+                foreach (var enc in root.EnumerateDirectories()) {
                     python.Append($"arcpy.maritime.ExportGeodatabaseToS57(" + Environment.NewLine +
                                  "    in_source_gdb=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s101.geodatabase\"," + Environment.NewLine +
                                 $"    product=r\"{enc.Name}\"," + Environment.NewLine +
@@ -824,7 +825,7 @@ namespace TestNisImporter
                                  "    export_type=\"NEW_EDITION\"," + Environment.NewLine +
                                 $"    output_location=r\"C:\\Users\\B061450\\source\\repos\\Geodatastyrelsen\\S-100\\noaa\\s100\\s101\\{IO.Path.GetFileNameWithoutExtension(enc.Name)}\"," + Environment.NewLine +
                                  "    sample_export=\"OFFICIAL_EXPORT\"," + Environment.NewLine +
-                                 "    suppress_exchange_set=\"SUPPRESS_EXCHANGE_SET\"" + Environment.NewLine +                                
+                                 "    suppress_exchange_set=\"SUPPRESS_EXCHANGE_SET\"" + Environment.NewLine +
                                 ")" + Environment.NewLine);
                 }
             }
@@ -848,6 +849,19 @@ namespace TestNisImporter
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL4"),
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL5")];
 
+            roots = [
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK1"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK2"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK3"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK4"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK5"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL1"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL2"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL3"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL4"),
+                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL5")];
+
+
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed16_balticsea\s57")];
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\S-101_NOAA\s57")];
 
@@ -870,11 +884,11 @@ namespace TestNisImporter
 
                         var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
 
+                        if (string.IsNullOrEmpty(command)) continue;
                         python.AppendLine(command);
                     }
                 }
             }
-
             this._output.WriteLine(python.ToString());
         }
 
@@ -888,13 +902,14 @@ namespace TestNisImporter
             //if (folder.GetDirectories().Count() > 1) System.Diagnostics.Debugger.Break();
 
             if (!folder.GetFiles("*.000", SearchOption.TopDirectoryOnly).Any()) {
-                //foreach (var f in folder.GetDirectories().OrderByDescending(e => e.Name).Skip(1)) {
-                //    delete.AppendLine($"del /F /Q {f.FullName}");
-                //}
+                foreach (var f in folder.GetDirectories().OrderByDescending(e => e.Name).Skip(1)) {
+                    delete.AppendLine($"del /F /Q {f.FullName}");
+                }
 
                 folder = folder.GetDirectories().OrderByDescending(e => e.Name).First();
             }
-            
+            //return delete.ToString();
+
             foreach (var file in folder.GetFiles("*.000").OrderBy(e => IO.Path.GetFileNameWithoutExtension(e.FullName))) {
                 var name = IO.Path.GetFileNameWithoutExtension(file.FullName);
 

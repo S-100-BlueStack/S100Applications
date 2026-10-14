@@ -212,10 +212,6 @@ namespace S100Framework.Applications
 
             //  Truncate geodatabase
             using (Geodatabase destination = createTargetGeodatabase()) {
-                var query = new QueryFilter {
-                    WhereClause = $"1=1",
-                };
-
                 var featureClasses = destination.GetDefinitions<FeatureClassDefinition>();
 
                 foreach (var featureClass in featureClasses) {
@@ -223,7 +219,16 @@ namespace S100Framework.Applications
 
                     Store((destination) => {
                         Logger.Current.Information($"Deleting data from destination: {_.GetName()}");
-                        _.DeleteRows(query);
+
+                        using (var seach = _.Search(new QueryFilter {
+                            WhereClause = "1=1",
+                            SubFields = "OBJECTID",
+                        }, false)) {
+                            while (seach.MoveNext()) {
+                                seach.Current.Delete();
+                            }
+                        }
+
                     }, destination);
                 }
 
@@ -236,7 +241,15 @@ namespace S100Framework.Applications
 
                     Store((destination) => {
                         Logger.Current.Information($"Deleting data from destination: {_.GetName()}");
-                        _.DeleteRows(query);
+
+                        using (var seach = _.Search(new QueryFilter {
+                            WhereClause = "1=1",
+                            SubFields = "OBJECTID",
+                        }, false)) {
+                            while (seach.MoveNext()) {
+                                seach.Current.Delete();
+                            }
+                        }
                     }, destination);
                 }
             }
@@ -254,16 +267,18 @@ namespace S100Framework.Applications
 
                     using var electronicProducts = createGeodatabaseElectronicProduct();
 
-                    var query = new QueryFilter {
-                        WhereClause = $"upper(ps) = 'S-128'",
-                    };
-
                     foreach (var featureClass in electronicProducts.GetDefinitions<FeatureClassDefinition>()) {
                         using var _ = electronicProducts.OpenDataset<FeatureClass>(featureClass.GetName());
 
-                        var count = _.GetCount(query);
                         Store((electronicProducts) => {
-                            _.DeleteRows(query);
+                            using (var seach = _.Search(new QueryFilter {
+                                WhereClause = $"upper(ps) = 'S-128'",
+                                SubFields = "OBJECTID",
+                            }, false)) {
+                                while (seach.MoveNext()) {
+                                    seach.Current.Delete();
+                                }
+                            }
                         }, electronicProducts);
                     }
                     foreach (var table in electronicProducts.GetDefinitions<TableDefinition>()) {
@@ -271,9 +286,15 @@ namespace S100Framework.Applications
 
                         using var _ = electronicProducts.OpenDataset<Table>(table.GetName());
 
-                        var count = _.GetCount(query);
                         Store((electronicProducts) => {
-                            _.DeleteRows(query);
+                            using (var seach = _.Search(new QueryFilter {
+                                WhereClause = $"upper(ps) = 'S-128'",
+                                SubFields = "OBJECTID",
+                            }, false)) {
+                                while (seach.MoveNext()) {
+                                    seach.Current.Delete();
+                                }
+                            }
                         }, electronicProducts);
                     }
 
