@@ -65,8 +65,6 @@ namespace S100Framework.Applications
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
             Func<Geodatabase> createGeodatabaseElectronicProduct = () => { throw new NotImplementedException(); };
 
-
-
             // default value - overwritten by args
             //var s128 = true;
 
@@ -253,6 +251,8 @@ namespace S100Framework.Applications
                     }, destination);
                 }
             }
+
+            ConversionAnalytics.Initialize();
 
         __skip_truncate:
             long[] scalesCompilation = [];
@@ -714,8 +714,6 @@ namespace S100Framework.Applications
 
                 using (var destination = createTargetGeodatabase()) {
                     using (Geodatabase source = createGeodatabase()) {
-                        ConversionAnalytics.Initialize();
-
                         Logger.Current.Information($"Loading subtypes codes to subtype name");
                         Subtypes.Initialize(source);
 
@@ -1013,6 +1011,11 @@ namespace S100Framework.Applications
                             Logger.Current.Information($"Converting Aids to Navigation");
                             Store((destination) => S57_AidsToNavigationP(source, destination, QueryFilter), destination);
 
+                            Logger.Current.Information($"Converting User Defined Features");
+                            Store((destination) => S57_UserDefinedFeaturesP(source, destination, QueryFilter), destination);
+
+                            
+
                             Logger.Current.Information($"Converting Note files");
                             Store((destination) => NauticalInformations.Instance.Flush(destination), destination);
 
@@ -1055,9 +1058,54 @@ namespace S100Framework.Applications
 
             }
 
+            //  Traffic Separation Scheme Aggregation
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Traffic separation schemes...");
+
+                using (Geodatabase source = createGeodatabase()) {
+                    Dictionary<Guid, (string OBJNAM, string NOBJNM)> collections = [];
+
+                    using var plts_collections = source.OpenDataset<Table>(source.GetName("PLTS_COLLECTIONS"));
+                    using var plts_frel = source.OpenDataset<Table>(source.GetName("PLTS_FREL"));
+
+                    using (var search = plts_collections.Search(new QueryFilter {
+                        WhereClause = "FCSubType = 1",  //  C_AGGR_Aggregation
+                    }, true)) {
+                        while (search.MoveNext()) {
+                            var current = search.Current;
+
+                            var noid = Guid.Parse(Convert.ToString(current["NOID"])!);
+                            var objnam = Convert.ToString(current["OBJNAM"]) ?? string.Empty;
+                            var nobjnm = Convert.ToString(current["NOBJNM"]) ?? string.Empty;
+
+                            collections.Add(noid, (objnam, nobjnm));
+                        }
+                    }
+
+                    using(var search = plts_frel.Search(new QueryFilter {
+                        WhereClause = "upper(SRC_SUB) = 'C_AGGR_AGGREGATION'"
+                    }, true)) {
+                        while (search.MoveNext()) {
+                            var current = search.Current;
+
+                            var dest_fc = Convert.ToString(current["DEST_FC"])!;
+                            var dest_uid = Guid.Parse(Convert.ToString(current["DEST_UID"])!);
+
+                            var oids = ConversionAnalytics.Instance.GetOIDs(dest_fc, dest_uid);
+                            
+
+                        }
+                    }
+
+                    foreach(var c_aggr in collections) {
+                        var feature = new TrafficSeparationScheme();
+                    }
+                }
+            }
+
             //  Bridges
             using (var destination = createTargetGeodatabase()) {
-                Logger.Current.Information($"Building bridges");
+                Logger.Current.Information($"Building bridges...");
 
                 using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 

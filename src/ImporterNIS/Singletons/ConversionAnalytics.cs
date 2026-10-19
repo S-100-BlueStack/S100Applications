@@ -19,6 +19,9 @@
             return this._convertedS57Objects.ContainsKey(globalid);
         }
 
+        public string[] GetOIDs(string tableName, Guid uuid) {
+            return [.. this._tableNameToConvertedS57Objects[tableName.ToLower()][uuid]];
+        }
 
         /// <summary>
         /// 
