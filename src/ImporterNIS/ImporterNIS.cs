@@ -3,11 +3,8 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
-//using ArcGIS.Desktop.Internal.Mapping;
 using CommandLine;
 using ImporterNIS.Singletons;
-using Microsoft.AspNetCore.Http.HttpResults;
-using NetTopologySuite.Utilities;
 using S100FC;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
@@ -64,8 +61,6 @@ namespace S100Framework.Applications
 
             Func<Geodatabase> createGeodatabase = () => { throw new NotImplementedException(); };
             Func<Geodatabase> createGeodatabaseElectronicProduct = () => { throw new NotImplementedException(); };
-
-
 
             // default value - overwritten by args
             //var s128 = true;
@@ -253,6 +248,8 @@ namespace S100Framework.Applications
                     }, destination);
                 }
             }
+
+            ConversionAnalytics.Initialize();
 
         __skip_truncate:
             long[] scalesCompilation = [];
@@ -714,8 +711,6 @@ namespace S100Framework.Applications
 
                 using (var destination = createTargetGeodatabase()) {
                     using (Geodatabase source = createGeodatabase()) {
-                        ConversionAnalytics.Initialize();
-
                         Logger.Current.Information($"Loading subtypes codes to subtype name");
                         Subtypes.Initialize(source);
 
@@ -1013,6 +1008,11 @@ namespace S100Framework.Applications
                             Logger.Current.Information($"Converting Aids to Navigation");
                             Store((destination) => S57_AidsToNavigationP(source, destination, QueryFilter), destination);
 
+                            Logger.Current.Information($"Converting User Defined Features");
+                            Store((destination) => S57_UserDefinedFeaturesP(source, destination, QueryFilter), destination);
+
+
+
                             Logger.Current.Information($"Converting Note files");
                             Store((destination) => NauticalInformations.Instance.Flush(destination), destination);
 
@@ -1055,9 +1055,158 @@ namespace S100Framework.Applications
 
             }
 
+            //  Traffic Separation Scheme Aggregation
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Traffic separation schemes...");
+
+                using (Geodatabase source = createGeodatabase()) {
+                    Dictionary<Guid, (string OBJNAM, string NOBJNM)> collections = [];
+
+                    using var naturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName("NaturalFeaturesA"));
+
+                    // naturalFeaturesA: FCSubType = 25 SEAARE_SeaAreaNamedWaterArea
+
+                    using var plts_collections = source.OpenDataset<Table>(source.GetName("PLTS_COLLECTIONS"));
+                    using var plts_frel = source.OpenDataset<Table>(source.GetName("PLTS_FREL"));
+
+                    using (var search = plts_collections.Search(new QueryFilter {
+                        WhereClause = "FCSubType = 1",  //  C_AGGR_Aggregation
+                    }, true)) {
+                        while (search.MoveNext()) {
+                            var current = search.Current;
+
+                            var noid = Guid.Parse(Convert.ToString(current["NOID"])!);
+                            var objnam = Convert.ToString(current["OBJNAM"]) ?? string.Empty;
+                            var nobjnm = Convert.ToString(current["NOBJNM"]) ?? string.Empty;
+
+                            collections.Add(noid, (objnam, nobjnm));
+                        }
+                    }
+
+                    var regexTss = new Regex(@"(^TSS )|(^Traffic Separation Scheme )", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+                    string[] errors = [];
+
+                    foreach (var c_aggr in collections) {
+                        Store((d) => {
+                            using var surface = d.OpenDataset<FeatureClass>(d.GetName("surface"));
+                            using var featuretype = d.OpenDataset<Table>(d.GetName("featuretype"));
+
+                            var instance = new TrafficSeparationScheme();
+
+                            var key = $"{c_aggr.Key:B}".ToUpperInvariant();
+
+                            //if("{777AA18E-F33A-4D84-97D4-032ADC48C958}".Equals(key)) System.Diagnostics.Debugger.Break();
+
+                            string[] uids = [];
+
+                            using (var search = plts_frel.Search(new QueryFilter {
+                                WhereClause = $"upper(SRC_SUB) = 'C_AGGR_AGGREGATION' AND SRC_UID = '{key}'"
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    var current = search.Current;
+
+                                    var dest_fc = Convert.ToString(current["DEST_FC"])!;
+                                    var dest_uid = Guid.Parse(Convert.ToString(current["DEST_UID"])!);
+
+                                    var oids = ConversionAnalytics.Instance.GetOIDs(dest_fc, dest_uid);
+
+                                    uids = [.. uids, .. oids];
+                                }
+                            }
+
+                            if (!uids.Any()) System.Diagnostics.Debugger.Break();
+
+                            var trafficSeparationSchemeAggregation = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
+
+                            featureBinding[] featureBindings = [];
+
+                            Polygon? shape = null;
+                            int compilationscale = 10000000;
+
+                            using (var search = surface.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    var current = (Feature)search.Current;
+
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if ("SeaAreaNamedWaterArea".Equals(code)) {
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+
+                                        if (seaAreaNamedWaterArea.featureName.Any()) {
+                                            instance.featureName = [];
+                                            foreach (var e in seaAreaNamedWaterArea.featureName) {
+                                                instance.featureName = [.. instance.featureName, new featureName {
+                                                    name = regexTss.Replace(e.name!, string.Empty),
+                                                    language=e.language,
+                                                    nameUsage = e.nameUsage,
+                                                }];
+                                            }
+                                        }
+                                        shape = (Polygon)current.GetShape().Clone();
+                                        compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    }
+                                    else if (trafficSeparationSchemeAggregation.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                             roleType = "association",
+                                             role = "theComponent",
+                                             association = new association{
+                                                 S100FC_code = nameof(TrafficSeparationSchemeAggregation),
+                                             },
+                                             featureType = code,
+                                             featureId = name,
+                                             Primitive = Primitives.surface,
+                                        }];
+                                    }
+                                }
+                            }
+
+                            if (!instance.featureName.Any()) {
+                                errors = [.. errors, $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})"];
+                                //System.Diagnostics.Debugger.Break();
+                            }
+
+                            if (shape is not null) {
+                                using var buffer = surface.CreateRowBuffer();
+                                buffer["ps"] = ps101;
+
+                                buffer["code"] = instance.GetType().Name;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                buffer["informationbindings"] = "[]";
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetShape(buffer, shape!);
+
+                                var featureN = surface.CreateRow(buffer);
+                                var name = featureN.UID();
+                            }
+                            else {
+                                using var buffer = featuretype.CreateRowBuffer();
+                                buffer["ps"] = ps101;
+
+                                buffer["code"] = instance.GetType().Name;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                buffer["informationbindings"] = "[]";
+                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+
+                                var featureN = featuretype.CreateRow(buffer);
+                                var name = featureN.UID();
+                            }
+                        }, destination);
+                    }
+
+                    ;
+                }
+            }
+
             //  Bridges
             using (var destination = createTargetGeodatabase()) {
-                Logger.Current.Information($"Building bridges");
+                Logger.Current.Information($"Building bridges...");
 
                 using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 
