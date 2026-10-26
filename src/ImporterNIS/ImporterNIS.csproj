@@ -60,6 +60,8 @@
     <None Remove="s100ed13.geodatabase" />
     <None Remove="s100ed14.geodatabase" />
     <None Remove="s100ed15.geodatabase" />
+    <None Remove="s100ed16.geodatabase" />
+    <None Remove="s100ed17.geodatabase" />
     <None Remove="s100ed8.gdb.zip" />
     <None Remove="s100ed9.gdb.zip" />
     <None Remove="s100edX.gdb.zip" />
@@ -98,10 +100,7 @@
     <None Update="coverage.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="s100ed16.geodatabase">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="s100ed17.geodatabase">
+    <None Update="s100ed18.geodatabase">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="scamin.gdb.zip">

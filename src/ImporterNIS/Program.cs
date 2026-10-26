@@ -140,7 +140,7 @@ namespace S100Framework.Applications
                             foreach (var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target)!, $"*{name}*.geodatabase*")) {
                                 IO.File.Delete(IO.Path.GetFullPath(f));
                             }
-                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed17.geodatabase"), IO.Path.GetFullPath(target), true);
+                            IO.File.Copy(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "s100ed18.geodatabase"), IO.Path.GetFullPath(target), true);
                         }
                     };
 
