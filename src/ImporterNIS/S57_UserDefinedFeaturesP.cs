@@ -14,6 +14,8 @@ namespace S100Framework.Applications
         private static void S57_UserDefinedFeaturesP(Geodatabase source, Geodatabase target, QueryFilter filter) {
             var tableName = "UserDefinedFeaturesP";
 
+            using var metadataa = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA"));
+
             using var aidstonavigationp = source.OpenDataset<FeatureClass>(source.GetName(tableName));
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("point"));
@@ -77,15 +79,36 @@ namespace S100Framework.Applications
                             var clsdef = Convert.ToString(current.CLSDEF)?.Trim()?.ToLowerInvariant();
                             var clsnam = Convert.ToString(current.CLSNAM)?.Trim()?.ToLowerInvariant();
 
+                            int virtualAtonPortLateral = 5;
+                            int virtualAtonStarboardLateral = 6;
+
+                            using (var search = metadataa.Search(new SpatialQueryFilter {
+                                WhereClause = "FCSubType = 35",  //  M_NSYS
+                                SpatialRelationship = SpatialRelationship.Within,
+                                FilterGeometry = current.SHAPE,
+                            }, true)) {
+                                search.MoveNext();
+
+                                var marsys = Convert.ToInt32(search.Current["marsys"]);
+                                if (marsys == 1) {
+                                    virtualAtonPortLateral = 5;
+                                    virtualAtonStarboardLateral = 6;
+                                }
+                                else if (marsys == 2) {
+                                    virtualAtonPortLateral = 7;
+                                    virtualAtonStarboardLateral = 8;
+                                }
+                                else
+                                    System.Diagnostics.Debugger.Break();
+                            }
+
                             int? virtualAISAidToNavigationType = (clsdef, clsnam) switch {
                                 ("a virtual object which indicates navigable water lies northwards", "virtual aton, north cardinal") => 1,
                                 ("a virtual object which indicates navigable water lies eastwards", "virtual aton, east cardinal") => 2,
                                 ("a virtual object which indicates navigable water lies southwards", "virtual aton, south cardinal") => 3,
                                 ("a virtual object which indicates navigable water lies westhwards", "virtual aton, west cardinal") => 4,
-                                ("a virtual object marking the port side of a channel", "virtual aton, port lateral") => 5,
-                                ("a virtual object marking the starboard side of a channel", "virtual aton, starboard lateral") => 6,
-                                //("a virtual object marking the port side of a channel", "virtual aton, port lateral") => 7,
-                                //("a virtual object marking the starboard side of a channel", "virtual aton, starboard lateral") => 8,
+                                ("a virtual object marking the port side of a channel", "virtual aton, port lateral") => virtualAtonPortLateral,
+                                ("a virtual object marking the starboard side of a channel", "virtual aton, starboard lateral") => virtualAtonStarboardLateral,
                                 ("a virtual object marking an isolated danger", "virtual aton, isolated danger") => 9,
                                 ("a virtual object marking safe water", "virtual aton, safe water") => 10,
                                 ("a virtual object used to mark an area or feature referred to in nautical documents", "virtual aton, special purpose") => 11,
