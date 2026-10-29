@@ -754,7 +754,7 @@ namespace TestNisImporter
                     this._output.WriteLine($"layer.name = r\"{gpkg.Name.Split('.')[0]}\"");
                 }
             }
-        }
+        }        
 
         [Fact]
         public void BuildImportS100CellScripts() {

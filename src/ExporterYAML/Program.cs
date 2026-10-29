@@ -1015,8 +1015,10 @@ namespace S100Framework.Applications
 
                         // Geometries
                         foreach (var (geometry, name) in geometries.OrderBy(e => e.geometry.GeometryType)) {
-                            if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
-                            if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
+                            //if (geometry.GeometryType == GeometryType.Polygon) continue;    // Skip polygons after topology
+                            //if (geometry.GeometryType == GeometryType.Polyline) continue;    // Skip curves after topology
+
+                            if (geometry.GeometryType != GeometryType.Multipoint) continue;    // Skip curves after topology
                             //dataset?.AddGeometry(geometry, name!);
                             dataset?.AddGeometry(geometry, $"P{Guid.Parse(name).ToStableUInt64()}");
                             logger.LogTrace("Adding {geometryType} with ID: {name}", geometry.GeometryType, name);
@@ -1120,9 +1122,9 @@ namespace S100Framework.Applications
                                     return p.ExitCode;
                                 }
 
-                                IO.Directory.Move(IO.Path.Combine(output, datasetName, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
-                                IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
-                                IO.Directory.Move(IO.Path.Combine(output, $"{datasetName}_ROOT"), IO.Path.Combine(output, datasetName));
+                                //IO.Directory.Move(IO.Path.Combine(output, datasetName, "S100_ROOT"), IO.Path.Combine(output, $"{datasetName}_ROOT"));
+                                //IO.Directory.Delete(IO.Path.Combine(output, datasetName), true);
+                                //IO.Directory.Move(IO.Path.Combine(output, $"{datasetName}_ROOT"), IO.Path.Combine(output, datasetName));
                             }
                         }
 
