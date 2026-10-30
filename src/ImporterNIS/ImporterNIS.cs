@@ -6,6 +6,7 @@ using ArcGIS.Core.Geometry;
 using CommandLine;
 using ImporterNIS.Singletons;
 using S100FC;
+using S100FC.Catalogues;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureAssociation;
@@ -185,7 +186,7 @@ namespace S100Framework.Applications
             _converterRegistry.Register<AidsToNavigationP, LightAirObstruction>(Converters.CreateLightAirObstruction);
             _converterRegistry.Register<AidsToNavigationP, LightFogDetector>(Converters.CreateLightFogDetector);
             _converterRegistry.Register<AidsToNavigationP, Daymark>(Converters.CreateDaymark);
-            //_converterRegistry.Register<DangersP, Obstruction>(Converters.CreateObstruction);
+            _converterRegistry.Register<DangersP, Obstruction>(Converters.CreateObstruction);
             //_converterRegistry.Register<DangersA, Obstruction>(Converters.CreateObstruction);
             //_converterRegistry.Register<DangersL, Obstruction>(Converters.CreateObstruction);
 
@@ -1091,14 +1092,26 @@ namespace S100Framework.Applications
                     foreach (var c_aggr in collections) {
                         Store((d) => {
                             using var point = d.OpenDataset<FeatureClass>(d.GetName("point"));
+                            using var curve = d.OpenDataset<FeatureClass>(d.GetName("curve"));
                             using var surface = d.OpenDataset<FeatureClass>(d.GetName("surface"));
                             using var featuretype = d.OpenDataset<Table>(d.GetName("featuretype"));
-
-                            var instance = new TrafficSeparationScheme();
 
                             var key = $"{c_aggr.Key:B}".ToUpperInvariant();
 
                             //if("{777AA18E-F33A-4D84-97D4-032ADC48C958}".Equals(key)) System.Diagnostics.Debugger.Break();
+
+                            var aggregationTrafficSeparationScheme = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationDeepWaterRoute = DeepWaterRoute.featureBindingsDefinitions.Single(e => "DeepWaterRouteAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationRangeSystemAggregation = RangeSystem.featureBindingsDefinitions.Single(e => "RangeSystemAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationFairwayAuxiliary = Fairway.featureBindingsDefinitions.Single(e => "FairwayAuxiliary".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationRoofedStructureAggregation = StructureOverNavigableWater.featureBindingsDefinitions.Single(e => "RoofedStructureAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationMooringTrotAggregation = MooringTrot.featureBindingsDefinitions.Single(e => "MooringTrotAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationTwoWayRouteAggregation = TwoWayRoute.featureBindingsDefinitions.Single(e => "TwoWayRouteAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationCautionAreaAssociation = CautionArea.featureBindingsDefinitions.Single(e => "CautionAreaAssociation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationASLAggregation = ArchipelagicSeaLane.featureBindingsDefinitions.Single(e => "ASLAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            //var aggregationAidsToNavigationAssociation = .featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationPilotageDistrictAssociation = PilotageDistrict.featureBindingsDefinitions.Single(e => "PilotageDistrictAssociation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationIslandAggregation = IslandGroup.featureBindingsDefinitions.Single(e => "IslandAggregation".Equals(e.association) && "association".Equals(e.roleType));
 
                             string[] uids = [];
 
@@ -1119,25 +1132,85 @@ namespace S100Framework.Applications
 
                             if (!uids.Any()) System.Diagnostics.Debugger.Break();
 
-                            var trafficSeparationSchemeAggregations = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var isTrafficSeparationScheme = false;
+                            var isDeepWaterRoute = false;
+                            var isRangeSystemAggregation = false;
+                            var isFairwayAuxiliary = false;
+                            var isRoofedStructureAggregation = false;
+                            var isMooringTrotAggregation = false;
+                            var isTwoWayRouteAggregation = false;
+                            var isCautionAreaAssociation = false;
+                            var isASLAggregation = false;
+                            var isPilotageDistrictAssociation = false;
+                            var isIslandAggregation = false;
 
-                            var aidsToNavigationAssociations = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
+                            using (var search = curve.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                                SubFields = "OBJECTID,GlobalID, code"
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    var current = (Feature)search.Current;
 
-                            featureBinding[] featureBindings = [];
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
 
-                            Polygon? shape = null;
-                            int compilationscale = 10000000;
-
-                            var isTrafficSeparationSchemeAggregation = false;
-                            var any = false;
+                                    isTrafficSeparationScheme |= aggregationTrafficSeparationScheme.featureTypes.Contains(code);
+                                    isDeepWaterRoute |= aggregationDeepWaterRoute.featureTypes.Contains(code);
+                                    isRangeSystemAggregation |= aggregationRangeSystemAggregation.featureTypes.Contains(code);
+                                    isFairwayAuxiliary |= aggregationFairwayAuxiliary.featureTypes.Contains(code);
+                                    isRoofedStructureAggregation |= aggregationRoofedStructureAggregation.featureTypes.Contains(code);
+                                    isMooringTrotAggregation |= aggregationMooringTrotAggregation.featureTypes.Contains(code);
+                                    isTwoWayRouteAggregation |= aggregationTwoWayRouteAggregation.featureTypes.Contains(code);
+                                    isCautionAreaAssociation |= aggregationCautionAreaAssociation.featureTypes.Contains(code);
+                                    isASLAggregation |= aggregationASLAggregation.featureTypes.Contains(code);
+                                    isPilotageDistrictAssociation |= aggregationPilotageDistrictAssociation.featureTypes.Contains(code);
+                                    isIslandAggregation |= aggregationIslandAggregation.featureTypes.Contains(code);
+                                }
+                            }
 
                             using (var search = surface.Search(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
-                            }, true)) {                                
+                                SubFields = "OBJECTID,GlobalID, code"
+                            }, true)) {
                                 while (search.MoveNext()) {
-                                    any = true;
                                     var current = (Feature)search.Current;
 
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
+
+                                    isTrafficSeparationScheme |= aggregationTrafficSeparationScheme.featureTypes.Contains(code);
+                                    isDeepWaterRoute |= aggregationDeepWaterRoute.featureTypes.Contains(code);
+                                    isRangeSystemAggregation |= aggregationRangeSystemAggregation.featureTypes.Contains(code);
+                                    isFairwayAuxiliary |= aggregationFairwayAuxiliary.featureTypes.Contains(code);
+                                    isRoofedStructureAggregation |= aggregationRoofedStructureAggregation.featureTypes.Contains(code);
+                                    isMooringTrotAggregation |= aggregationMooringTrotAggregation.featureTypes.Contains(code);
+                                    isTwoWayRouteAggregation |= aggregationTwoWayRouteAggregation.featureTypes.Contains(code);
+                                    isCautionAreaAssociation |= aggregationCautionAreaAssociation.featureTypes.Contains(code);
+                                    isASLAggregation |= aggregationASLAggregation.featureTypes.Contains(code);
+                                    isPilotageDistrictAssociation |= aggregationPilotageDistrictAssociation.featureTypes.Contains(code);
+                                    isIslandAggregation |= aggregationIslandAggregation.featureTypes.Contains(code);
+                                }
+                            }
+
+                            S100FC.FeatureType? instance = null;
+
+                            Func<Feature, featureBinding[], featureBinding[]> callbackFeatureBindings = (current, featureBindings) => {
+                                return featureBindings;
+                            };
+
+                            Func<string, Row, featureBinding[], featureBinding[]> callbackUpdate = (featureId, current, featureBindings) => {
+                                return featureBindings;
+                            };
+
+                            if (isDeepWaterRoute && !isTrafficSeparationScheme) {
+                                var deepWaterRoute = new DeepWaterRoute();
+                                instance = deepWaterRoute;
+
+                                var aidsToNavigationAssociations = DeepWaterRoute.featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
+
+                                Primitives primitive = Primitives.noGeometry;
+
+                                callbackFeatureBindings = (current, featureBindings) => {
                                     var name = current.UID();
                                     var code = Convert.ToString(current["code"]);
 
@@ -1145,46 +1218,37 @@ namespace S100Framework.Applications
                                         var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
-                                            instance.featureName = [];
+                                            deepWaterRoute.featureName = [];
                                             foreach (var e in seaAreaNamedWaterArea.featureName) {
-                                                instance.featureName = [.. instance.featureName, new featureName {
+                                                deepWaterRoute.featureName = [.. deepWaterRoute.featureName, new featureName {
                                                     name = regexTss.Replace(e.name!, string.Empty),
                                                     language=e.language,
                                                     nameUsage = e.nameUsage,
                                                 }];
                                             }
+
+                                            primitive = current.GetShape().GeometryType switch {
+                                                GeometryType.Point => Primitives.point,
+                                                GeometryType.Multipoint => Primitives.pointSet,
+                                                GeometryType.Polyline => Primitives.curve,
+                                                GeometryType.Polygon => Primitives.surface,
+                                                _ => throw new InvalidOperationException(),
+                                            };
                                         }
-                                        shape = (Polygon)current.GetShape().Clone();
-                                        compilationscale = Convert.ToInt32(current["compilationscale"]);
                                     }
-                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
-                                        isTrafficSeparationSchemeAggregation = true;
+
+                                    if (aggregationDeepWaterRoute.featureTypes.Contains(code)) {
                                         featureBindings = [.. featureBindings, new featureBinding {
                                              roleType = "association",
                                              role = "theComponent",
                                              association = new association{
-                                                 S100FC_code = nameof(TrafficSeparationSchemeAggregation),
+                                                 S100FC_code = nameof(DeepWaterRouteAggregation),
                                              },
                                              featureType = code,
                                              featureId = name,
                                              Primitive = Primitives.surface,
                                         }];
                                     }
-                                }
-                            }
-
-                            using (var search = point.Search(new QueryFilter {
-                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
-                            }, true)) {
-                                while (search.MoveNext()) {
-                                    any = true;
-                                    var current = (Feature)search.Current;
-
-                                    var name = current.UID();
-                                    var code = Convert.ToString(current["code"]);
-
-                                    if (code.StartsWith("lat", StringComparison.InvariantCultureIgnoreCase))
-                                        ;
 
                                     if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
                                         featureBindings = [.. featureBindings, new featureBinding {
@@ -1198,37 +1262,184 @@ namespace S100Framework.Applications
                                              Primitive = Primitives.point,
                                         }];
                                     }
+
+                                    return featureBindings;
+                                };
+
+                                callbackUpdate = (featureId, current, featureBindings) => {
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                            roleType = "aggregation",
+                                            role = "theCollection",
+                                            association = new association {
+                                                S100FC_code = nameof(AidsToNavigationAssociation),
+                                            },
+                                            featureType = nameof(TrafficSeparationScheme),
+                                            featureId = featureId,
+                                            Primitive = primitive,
+                                        }];
+                                    }
+                                    else if (aggregationDeepWaterRoute.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                            roleType = "aggregation",
+                                            role = "theCollection",
+                                            association = new association {
+                                                S100FC_code = nameof(DeepWaterRouteAggregation),
+                                            },
+                                            featureType = nameof(DeepWaterRoute),
+                                            featureId = featureId,
+                                            Primitive = primitive,
+                                        }];
+                                    }
+
+                                    return featureBindings;
+                                };
+
+                            }
+                            else if (isRangeSystemAggregation) {
+                                return;
+                            }
+                            else if (isTrafficSeparationScheme) {
+                                var trafficSeparationScheme = new TrafficSeparationScheme();
+                                instance = trafficSeparationScheme;
+
+                                var aidsToNavigationAssociations = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
+
+                                Primitives primitive = Primitives.noGeometry;
+
+                                callbackFeatureBindings = (current, featureBindings) => {
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if ("SeaAreaNamedWaterArea".Equals(code)) {
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+
+                                        if (seaAreaNamedWaterArea.featureName.Any()) {
+                                            trafficSeparationScheme.featureName = [];
+                                            foreach (var e in seaAreaNamedWaterArea.featureName) {
+                                                trafficSeparationScheme.featureName = [.. trafficSeparationScheme.featureName, new featureName {
+                                                    name = regexTss.Replace(e.name!, string.Empty),
+                                                    language=e.language,
+                                                    nameUsage = e.nameUsage,
+                                                }];
+                                            }
+
+                                            primitive = current.GetShape().GeometryType switch {
+                                                GeometryType.Point => Primitives.point,
+                                                GeometryType.Multipoint => Primitives.pointSet,
+                                                GeometryType.Polyline => Primitives.curve,
+                                                GeometryType.Polygon => Primitives.surface,
+                                                _ => throw new InvalidOperationException(),
+                                            };
+                                        }
+                                    }
+
+                                    if (aggregationTrafficSeparationScheme.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                             roleType = "association",
+                                             role = "theComponent",
+                                             association = new association{
+                                                 S100FC_code = nameof(TrafficSeparationSchemeAggregation),
+                                             },
+                                             featureType = code,
+                                             featureId = name,
+                                             Primitive = Primitives.surface,
+                                        }];
+                                    }
+
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                             roleType = "association",
+                                             role = "theComponent",
+                                             association = new association{
+                                                 S100FC_code = nameof(AidsToNavigationAssociation),
+                                             },
+                                             featureType = code,
+                                             featureId = name,
+                                             Primitive = Primitives.point,
+                                        }];
+                                    }
+
+                                    return featureBindings;
+                                };
+
+                                callbackUpdate = (featureId, current, featureBindings) => {
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                            roleType = "aggregation",
+                                            role = "theCollection",
+                                            association = new association {
+                                                S100FC_code = nameof(AidsToNavigationAssociation),
+                                            },
+                                            featureType = nameof(TrafficSeparationScheme),
+                                            featureId = featureId,
+                                            Primitive = primitive,
+                                        }];
+                                    }
+                                    else if (aggregationTrafficSeparationScheme.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                            roleType = "aggregation",
+                                            role = "theCollection",
+                                            association = new association {
+                                                S100FC_code = nameof(TrafficSeparationSchemeAggregation),
+                                            },
+                                            featureType = nameof(TrafficSeparationScheme),
+                                            featureId = featureId,
+                                            Primitive = primitive,
+                                        }];
+                                    }
+
+                                    return featureBindings;
+                                };
+                            }
+                            else {
+                                return;
+                            }
+
+                            featureBinding[] featureBindings = [];
+
+                            var any = false;
+
+                            Polygon? shape = null;
+                            int compilationscale = 10000000;
+
+                            using (var search = surface.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    any = true;
+                                    var current = (Feature)search.Current;
+
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if ("SeaAreaNamedWaterArea".Equals(code)) {
+                                        shape = (Polygon)current.GetShape().Clone();
+                                        compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    }
+
+                                    featureBindings = callbackFeatureBindings(current, featureBindings);
                                 }
                             }
 
-                            if (!isTrafficSeparationSchemeAggregation)
-                                return; // This isn't a  traffic separation scheme aggregate
+                            using (var search = point.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    any = true;
+                                    var current = (Feature)search.Current;
 
-                            if (!any) System.Diagnostics.Debugger.Break();
-
-
-                            if (!instance.featureName.Any()) {
-                                errors = [.. errors, $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})"];
-                                //System.Diagnostics.Debugger.Break();
+                                    featureBindings = callbackFeatureBindings(current, featureBindings);
+                                }
                             }
 
-                            var featureBindingTrafficSeparationScheme = new featureBinding {
-                                roleType = "aggregation",
-                                role = "theCollection",
-                                association = new association {
-                                    S100FC_code = nameof(TrafficSeparationSchemeAggregation),
-                                },
-                                featureType = nameof(TrafficSeparationScheme),
-                            };
+                            if (!any) return;
 
-                            var featureBindingAidsToNavigationAssociation = new featureBinding {
-                                roleType = "aggregation",
-                                role = "theCollection",
-                                association = new association {
-                                    S100FC_code = nameof(AidsToNavigationAssociation),
-                                },
-                                featureType = nameof(TrafficSeparationScheme),
-                            };
+                            string? featureId = null;                            
 
                             if (shape is not null) {
                                 using var buffer = surface.CreateRowBuffer();
@@ -1243,11 +1454,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, shape!);
 
                                 var featureN = surface.CreateRow(buffer);
-
-                                featureBindingTrafficSeparationScheme.featureId = featureN.UID();
-                                featureBindingTrafficSeparationScheme.Primitive = Primitives.surface;
-                                featureBindingAidsToNavigationAssociation.featureId = featureN.UID();
-                                featureBindingAidsToNavigationAssociation.Primitive = Primitives.surface;
+                                featureId = featureN.UID();
                             }
                             else {
                                 using var buffer = featuretype.CreateRowBuffer();
@@ -1260,15 +1467,12 @@ namespace S100Framework.Applications
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                                 var featureN = featuretype.CreateRow(buffer);
-
-                                featureBindingTrafficSeparationScheme.featureId = featureN.UID();
-                                featureBindingTrafficSeparationScheme.Primitive = Primitives.noGeometry;
-                                featureBindingAidsToNavigationAssociation.featureId = featureN.UID();
-                                featureBindingAidsToNavigationAssociation.Primitive = Primitives.noGeometry;
+                                featureId = featureN.UID();
                             }
                             ;
-                            using(var search = point.CreateUpdateCursor(new QueryFilter {
-                                WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e=>$"'{e.featureId}'"))})"
+
+                            using (var search = point.CreateUpdateCursor(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e => $"'{e.featureId}'"))})"
                             }, true)) {
                                 while (search.MoveNext()) {
                                     var code = Convert.ToString(search.Current["code"]);
@@ -1278,16 +1482,31 @@ namespace S100Framework.Applications
                                     if (_ is null)
                                         _ = [];
 
-                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
-                                        _ = [.. _, featureBindingAidsToNavigationAssociation];
-                                    }
-                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
-                                        _ = [.. _, featureBindingTrafficSeparationScheme];
-                                    }
+                                    _ = callbackUpdate(featureId, search.Current, _);
+
                                     search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
                                     search.Update(search.Current);
                                 }
                             }
+
+                            using (var search = curve.CreateUpdateCursor(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e => $"'{e.featureId}'"))})"
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    var code = Convert.ToString(search.Current["code"]);
+
+                                    var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
+                                    var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                    if (_ is null)
+                                        _ = [];
+
+                                    _ = callbackUpdate(featureId, search.Current, _);
+
+                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
+                                    search.Update(search.Current);
+                                }
+                            }
+
                             using (var search = surface.CreateUpdateCursor(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e => $"'{e.featureId}'"))})"
                             }, true)) {
@@ -1299,12 +1518,7 @@ namespace S100Framework.Applications
                                     if (_ is null)
                                         _ = [];
 
-                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
-                                        _ = [.. _, featureBindingAidsToNavigationAssociation];
-                                    }
-                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
-                                        _ = [.. _, featureBindingTrafficSeparationScheme];
-                                    }                                    
+                                    _ = callbackUpdate(featureId, search.Current, _);
 
                                     search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
                                     search.Update(search.Current);
@@ -1346,7 +1560,7 @@ namespace S100Framework.Applications
 
                     //var hashGeometryBridgesupport = new Dictionary<string, Polygon>();
 
-                    var hashFeatureType = new Dictionary<string, FeatureType>();
+                    var hashFeatureType = new Dictionary<string, S100FC.FeatureType>();
 
                     using var cursor = surface.Search(new QueryFilter {
                         WhereClause = whereClause + $" AND compilationscale = {compilationscale}",
@@ -1355,7 +1569,7 @@ namespace S100Framework.Applications
                     while (cursor.MoveNext()) {
                         var f = (Feature)cursor.Current;
 
-                        FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
+                        S100FC.FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
                             "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
                             "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"]), typeof(SpanOpening)),
                             "pontoon" => AttributeFlattenExtensions.Unflatten<Pontoon>(Convert.ToString(f["attributeBindings"]), typeof(Pontoon)),
