@@ -1119,9 +1119,9 @@ namespace S100Framework.Applications
 
                             if (!uids.Any()) System.Diagnostics.Debugger.Break();
 
-                            var trafficSeparationSchemeAggregation = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
+                            var trafficSeparationSchemeAggregations = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
 
-                            var aidsToNavigationAssociation = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
+                            var aidsToNavigationAssociations = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "AidsToNavigationAssociation".Equals(e.association) && "association".Equals(e.roleType));
 
                             featureBinding[] featureBindings = [];
 
@@ -1157,7 +1157,7 @@ namespace S100Framework.Applications
                                         shape = (Polygon)current.GetShape().Clone();
                                         compilationscale = Convert.ToInt32(current["compilationscale"]);
                                     }
-                                    else if (trafficSeparationSchemeAggregation.featureTypes.Contains(code)) {
+                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
                                         isTrafficSeparationSchemeAggregation = true;
                                         featureBindings = [.. featureBindings, new featureBinding {
                                              roleType = "association",
@@ -1183,8 +1183,10 @@ namespace S100Framework.Applications
                                     var name = current.UID();
                                     var code = Convert.ToString(current["code"]);
 
-                                    if (aidsToNavigationAssociation.featureTypes.Contains(code)) {
-                                        //isTrafficSeparationSchemeAggregation = true;
+                                    if (code.StartsWith("lat", StringComparison.InvariantCultureIgnoreCase))
+                                        ;
+
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
                                         featureBindings = [.. featureBindings, new featureBinding {
                                              roleType = "association",
                                              role = "theComponent",
@@ -1219,6 +1221,15 @@ namespace S100Framework.Applications
                                 featureType = nameof(TrafficSeparationScheme),
                             };
 
+                            var featureBindingAidsToNavigationAssociation = new featureBinding {
+                                roleType = "aggregation",
+                                role = "theCollection",
+                                association = new association {
+                                    S100FC_code = nameof(AidsToNavigationAssociation),
+                                },
+                                featureType = nameof(TrafficSeparationScheme),
+                            };
+
                             if (shape is not null) {
                                 using var buffer = surface.CreateRowBuffer();
                                 buffer["ps"] = ps101;
@@ -1232,8 +1243,11 @@ namespace S100Framework.Applications
                                 SetShape(buffer, shape!);
 
                                 var featureN = surface.CreateRow(buffer);
+
                                 featureBindingTrafficSeparationScheme.featureId = featureN.UID();
                                 featureBindingTrafficSeparationScheme.Primitive = Primitives.surface;
+                                featureBindingAidsToNavigationAssociation.featureId = featureN.UID();
+                                featureBindingAidsToNavigationAssociation.Primitive = Primitives.surface;
                             }
                             else {
                                 using var buffer = featuretype.CreateRowBuffer();
@@ -1246,22 +1260,31 @@ namespace S100Framework.Applications
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                                 var featureN = featuretype.CreateRow(buffer);
+
                                 featureBindingTrafficSeparationScheme.featureId = featureN.UID();
                                 featureBindingTrafficSeparationScheme.Primitive = Primitives.noGeometry;
+                                featureBindingAidsToNavigationAssociation.featureId = featureN.UID();
+                                featureBindingAidsToNavigationAssociation.Primitive = Primitives.noGeometry;
                             }
                             ;
                             using(var search = point.CreateUpdateCursor(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e=>$"'{e.featureId}'"))})"
                             }, true)) {
                                 while (search.MoveNext()) {
+                                    var code = Convert.ToString(search.Current["code"]);
+
                                     var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
                                     var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
                                     if (_ is null)
                                         _ = [];
 
-                                    _ = [.. _, featureBindingTrafficSeparationScheme];
-
-                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);                                    
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
+                                        _ = [.. _, featureBindingAidsToNavigationAssociation];
+                                    }
+                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
+                                        _ = [.. _, featureBindingTrafficSeparationScheme];
+                                    }
+                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
                                     search.Update(search.Current);
                                 }
                             }
@@ -1269,12 +1292,19 @@ namespace S100Framework.Applications
                                 WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e => $"'{e.featureId}'"))})"
                             }, true)) {
                                 while (search.MoveNext()) {
+                                    var code = Convert.ToString(search.Current["code"]);
+
                                     var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
                                     var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
                                     if (_ is null)
                                         _ = [];
 
-                                    _ = [.. _, featureBindingTrafficSeparationScheme];
+                                    if (aidsToNavigationAssociations.featureTypes.Contains(code)) {
+                                        _ = [.. _, featureBindingAidsToNavigationAssociation];
+                                    }
+                                    else if (trafficSeparationSchemeAggregations.featureTypes.Contains(code)) {
+                                        _ = [.. _, featureBindingTrafficSeparationScheme];
+                                    }                                    
 
                                     search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
                                     search.Update(search.Current);
