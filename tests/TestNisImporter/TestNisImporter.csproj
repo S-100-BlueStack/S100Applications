@@ -25,11 +25,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="JsonFlatten" Version="1.0.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-    <PackageReference Include="S100Framework.Catalogues.Extensions" Version="3.7.1901.5" />
-    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="4.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageReference Include="S100Framework.Catalogues.Extensions" Version="3.7.1901.6" />
+    <PackageReference Include="S100Framework.Catalogues.ProductSpecifications" Version="4.1.1" />
     <PackageReference Include="S100Framework.GML" Version="3.1.8" />
-    <PackageReference Include="xunit.v3" Version="4.0.1" />
+    <PackageReference Include="xunit.v3" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
