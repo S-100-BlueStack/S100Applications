@@ -115,12 +115,11 @@ namespace S100Framework.Applications
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
-
-
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
                             buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-                            SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);

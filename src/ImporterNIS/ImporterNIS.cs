@@ -1057,9 +1057,9 @@ namespace S100Framework.Applications
 
             }
 
-            //  Traffic Separation Scheme Aggregation
+            //  Aggregations
             using (var destination = createTargetGeodatabase()) {
-                Logger.Current.Information($"Traffic separation schemes...");
+                Logger.Current.Information($"Aggregations...");
 
                 using (Geodatabase source = createGeodatabase()) {
                     Dictionary<Guid, (string OBJNAM, string NOBJNM)> collections = [];
@@ -1103,7 +1103,7 @@ namespace S100Framework.Applications
                             var aggregationTrafficSeparationScheme = TrafficSeparationScheme.featureBindingsDefinitions.Single(e => "TrafficSeparationSchemeAggregation".Equals(e.association) && "association".Equals(e.roleType));
                             var aggregationDeepWaterRoute = DeepWaterRoute.featureBindingsDefinitions.Single(e => "DeepWaterRouteAggregation".Equals(e.association) && "association".Equals(e.roleType));
                             var aggregationRangeSystemAggregation = RangeSystem.featureBindingsDefinitions.Single(e => "RangeSystemAggregation".Equals(e.association) && "association".Equals(e.roleType));
-                            var aggregationFairwayAuxiliary = Fairway.featureBindingsDefinitions.Single(e => "FairwayAuxiliary".Equals(e.association) && "association".Equals(e.roleType));
+                            var aggregationFairwayAggregation = FairwaySystem.featureBindingsDefinitions.Single(e => "FairwayAggregation".Equals(e.association) && "association".Equals(e.roleType));
                             var aggregationRoofedStructureAggregation = StructureOverNavigableWater.featureBindingsDefinitions.Single(e => "RoofedStructureAggregation".Equals(e.association) && "association".Equals(e.roleType));
                             var aggregationMooringTrotAggregation = MooringTrot.featureBindingsDefinitions.Single(e => "MooringTrotAggregation".Equals(e.association) && "association".Equals(e.roleType));
                             var aggregationTwoWayRouteAggregation = TwoWayRoute.featureBindingsDefinitions.Single(e => "TwoWayRouteAggregation".Equals(e.association) && "association".Equals(e.roleType));
@@ -1126,7 +1126,7 @@ namespace S100Framework.Applications
 
                                     var oids = ConversionAnalytics.Instance.GetOIDs(dest_fc, dest_uid);
 
-                                    uids = [.. uids, .. oids];
+                                    uids = [.. uids, .. oids.Where(e => !e.Equals("ATTRIBUTE. NO NAME AVAILABLE", StringComparison.InvariantCultureIgnoreCase))];
                                 }
                             }
 
@@ -1135,7 +1135,7 @@ namespace S100Framework.Applications
                             var isTrafficSeparationScheme = false;
                             var isDeepWaterRoute = false;
                             var isRangeSystemAggregation = false;
-                            var isFairwayAuxiliary = false;
+                            var isFairwayAggregation = false;
                             var isRoofedStructureAggregation = false;
                             var isMooringTrotAggregation = false;
                             var isTwoWayRouteAggregation = false;
@@ -1143,6 +1143,8 @@ namespace S100Framework.Applications
                             var isASLAggregation = false;
                             var isPilotageDistrictAssociation = false;
                             var isIslandAggregation = false;
+
+                            string[] aggregationCodes = [];
 
                             using (var search = curve.Search(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
@@ -1152,12 +1154,14 @@ namespace S100Framework.Applications
                                     var current = (Feature)search.Current;
 
                                     var name = current.UID();
-                                    var code = Convert.ToString(current["code"]);
+                                    var code = Convert.ToString(current["code"])!;
+
+                                    aggregationCodes = [.. aggregationCodes, code];
 
                                     isTrafficSeparationScheme |= aggregationTrafficSeparationScheme.featureTypes.Contains(code);
                                     isDeepWaterRoute |= aggregationDeepWaterRoute.featureTypes.Contains(code);
                                     isRangeSystemAggregation |= aggregationRangeSystemAggregation.featureTypes.Contains(code);
-                                    isFairwayAuxiliary |= aggregationFairwayAuxiliary.featureTypes.Contains(code);
+                                    isFairwayAggregation |= aggregationFairwayAggregation.featureTypes.Contains(code);
                                     isRoofedStructureAggregation |= aggregationRoofedStructureAggregation.featureTypes.Contains(code);
                                     isMooringTrotAggregation |= aggregationMooringTrotAggregation.featureTypes.Contains(code);
                                     isTwoWayRouteAggregation |= aggregationTwoWayRouteAggregation.featureTypes.Contains(code);
@@ -1176,12 +1180,14 @@ namespace S100Framework.Applications
                                     var current = (Feature)search.Current;
 
                                     var name = current.UID();
-                                    var code = Convert.ToString(current["code"]);
+                                    var code = Convert.ToString(current["code"])!;
+
+                                    aggregationCodes = [.. aggregationCodes, code];
 
                                     isTrafficSeparationScheme |= aggregationTrafficSeparationScheme.featureTypes.Contains(code);
                                     isDeepWaterRoute |= aggregationDeepWaterRoute.featureTypes.Contains(code);
                                     isRangeSystemAggregation |= aggregationRangeSystemAggregation.featureTypes.Contains(code);
-                                    isFairwayAuxiliary |= aggregationFairwayAuxiliary.featureTypes.Contains(code);
+                                    isFairwayAggregation |= aggregationFairwayAggregation.featureTypes.Contains(code);
                                     isRoofedStructureAggregation |= aggregationRoofedStructureAggregation.featureTypes.Contains(code);
                                     isMooringTrotAggregation |= aggregationMooringTrotAggregation.featureTypes.Contains(code);
                                     isTwoWayRouteAggregation |= aggregationTwoWayRouteAggregation.featureTypes.Contains(code);
@@ -1191,6 +1197,34 @@ namespace S100Framework.Applications
                                     isIslandAggregation |= aggregationIslandAggregation.featureTypes.Contains(code);
                                 }
                             }
+
+                            using (var search = point.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                                SubFields = "OBJECTID,GlobalID, code"
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    var current = (Feature)search.Current;
+
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"])!;
+
+                                    aggregationCodes = [.. aggregationCodes, code];
+
+                                    isTrafficSeparationScheme |= aggregationTrafficSeparationScheme.featureTypes.Contains(code);
+                                    isDeepWaterRoute |= aggregationDeepWaterRoute.featureTypes.Contains(code);
+                                    isRangeSystemAggregation |= aggregationRangeSystemAggregation.featureTypes.Contains(code);
+                                    isFairwayAggregation |= aggregationFairwayAggregation.featureTypes.Contains(code);
+                                    isRoofedStructureAggregation |= aggregationRoofedStructureAggregation.featureTypes.Contains(code);
+                                    isMooringTrotAggregation |= aggregationMooringTrotAggregation.featureTypes.Contains(code);
+                                    isTwoWayRouteAggregation |= aggregationTwoWayRouteAggregation.featureTypes.Contains(code);
+                                    isCautionAreaAssociation |= aggregationCautionAreaAssociation.featureTypes.Contains(code);
+                                    isASLAggregation |= aggregationASLAggregation.featureTypes.Contains(code);
+                                    isPilotageDistrictAssociation |= aggregationPilotageDistrictAssociation.featureTypes.Contains(code);
+                                    isIslandAggregation |= aggregationIslandAggregation.featureTypes.Contains(code);
+                                }
+                            }
+
+                            aggregationCodes = [.. aggregationCodes.Distinct()];
 
                             S100FC.FeatureType? instance = null;
 
@@ -1202,7 +1236,12 @@ namespace S100Framework.Applications
                                 return featureBindings;
                             };
 
+                            if (isTwoWayRouteAggregation)
+                                ;
+
                             if (isDeepWaterRoute && !isTrafficSeparationScheme) {
+                                Logger.Current.Information($"DeepWaterRouteAggregation: {key}");
+
                                 var deepWaterRoute = new DeepWaterRoute();
                                 instance = deepWaterRoute;
 
@@ -1298,10 +1337,88 @@ namespace S100Framework.Applications
                                 };
 
                             }
-                            else if (isRangeSystemAggregation) {
+                            else if (isTwoWayRouteAggregation) {
+                                Logger.Current.Information($"TwoWayRouteAggregation: {key}");
                                 return;
                             }
+                            else if (isFairwayAggregation) {
+                                Logger.Current.Information($"FairwayAggregation: {key}");
+                                return;
+                            }
+                            else if (isRangeSystemAggregation) {
+                                Logger.Current.Information($"RangeSystemAggregation: {key}");
+
+                                var rangeSystem = new RangeSystem();
+                                instance = rangeSystem;
+
+                                Primitives primitive = Primitives.noGeometry;
+
+                                callbackFeatureBindings = (current, featureBindings) => {
+                                    var name = current.UID();
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if ("SeaAreaNamedWaterArea".Equals(code)) {
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+
+                                        if (seaAreaNamedWaterArea.featureName.Any()) {
+                                            rangeSystem.featureName = [];
+                                            foreach (var e in seaAreaNamedWaterArea.featureName) {
+                                                rangeSystem.featureName = [.. rangeSystem.featureName, new featureName {
+                                                    name = regexTss.Replace(e.name!, string.Empty),
+                                                    language=e.language,
+                                                    nameUsage = e.nameUsage,
+                                                }];
+                                            }
+
+                                            primitive = current.GetShape().GeometryType switch {
+                                                GeometryType.Point => Primitives.point,
+                                                GeometryType.Multipoint => Primitives.pointSet,
+                                                GeometryType.Polyline => Primitives.curve,
+                                                GeometryType.Polygon => Primitives.surface,
+                                                _ => throw new InvalidOperationException(),
+                                            };
+                                        }
+                                    }
+
+                                    if (aggregationRangeSystemAggregation.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                             roleType = "association",
+                                             role = "theComponent",
+                                             association = new association{
+                                                 S100FC_code = nameof(RangeSystemAggregation),
+                                             },
+                                             featureType = code,
+                                             featureId = name,
+                                             Primitive = Primitives.surface,
+                                        }];
+                                    }
+
+                                    return featureBindings;
+                                };
+
+                                callbackUpdate = (featureId, current, featureBindings) => {
+                                    var code = Convert.ToString(current["code"]);
+
+                                    if (aggregationDeepWaterRoute.featureTypes.Contains(code)) {
+                                        featureBindings = [.. featureBindings, new featureBinding {
+                                            roleType = "aggregation",
+                                            role = "theCollection",
+                                            association = new association {
+                                                S100FC_code = nameof(RangeSystemAggregation),
+                                            },
+                                            featureType = nameof(RangeSystem),
+                                            featureId = featureId,
+                                            Primitive = primitive,
+                                        }];
+                                    }
+
+                                    return featureBindings;
+                                };
+
+                            }
                             else if (isTrafficSeparationScheme) {
+                                Logger.Current.Information($"TrafficSeparationSchemeAggregation: {key}");
+
                                 var trafficSeparationScheme = new TrafficSeparationScheme();
                                 instance = trafficSeparationScheme;
 
@@ -1426,6 +1543,17 @@ namespace S100Framework.Applications
                                 }
                             }
 
+                            using (var search = curve.Search(new QueryFilter {
+                                WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
+                            }, true)) {
+                                while (search.MoveNext()) {
+                                    any = true;
+                                    var current = (Feature)search.Current;
+
+                                    featureBindings = callbackFeatureBindings(current, featureBindings);
+                                }
+                            }
+
                             using (var search = point.Search(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
                             }, true)) {
@@ -1439,7 +1567,7 @@ namespace S100Framework.Applications
 
                             if (!any) return;
 
-                            string? featureId = null;                            
+                            string? featureId = null;
 
                             if (shape is not null) {
                                 using var buffer = surface.CreateRowBuffer();

@@ -191,7 +191,7 @@ namespace S100Framework.Applications
 
             buffer["ps"] = ps101;
             buffer["code"] = spatialQuality101.S100FC_code;
-
+            buffer["sourceIdentifier"] = spatialQuality101.sourceIdentifier;
             buffer["attributebindings"] = spatialQuality101.Flatten();
 
             var informationTypeRow = informationTypeTable.CreateRow(buffer);

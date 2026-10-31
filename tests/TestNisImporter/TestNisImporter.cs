@@ -850,16 +850,20 @@ namespace TestNisImporter
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\GL\GL5")];
 
             roots = [
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK1"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK2"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK3"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK4"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK5"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL1"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL2"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL3"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL4"),
-                new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL5")];
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK3"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK4")];
+
+            //roots = [
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK1"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK2"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK3"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK4"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK5"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL1"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL2"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL3"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL4"),
+            //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL5")];
 
 
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed16_balticsea\s57")];
