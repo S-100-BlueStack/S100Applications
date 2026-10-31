@@ -10,7 +10,7 @@ using System.Text;
 
 namespace NuvionPro.Commands
 {
-    internal abstract class NominalScaleFilter : Button
+    internal abstract class CompilationScaleFilter : Button
     {
         protected abstract int SpecificUsage { get; }
 
@@ -24,8 +24,8 @@ namespace NuvionPro.Commands
                     var featureLayer = (FeatureLayer)layer;
 
                     var fields = featureLayer.GetFieldDescriptions();
-                    if (fields.Any(e => e.Name.Equals("nominalscale", StringComparison.InvariantCultureIgnoreCase)))
-                        NominalScaleFilter.SetDefinitionQuery(featureLayer, SpecificUsage, Name);
+                    if (fields.Any(e => e.Name.Equals("compilationscale", StringComparison.InvariantCultureIgnoreCase)))
+                        CompilationScaleFilter.SetDefinitionQuery(featureLayer, SpecificUsage, Name);
                 }
                 else if (layer is GroupLayer) {
                     var groupLayer = (GroupLayer)layer;
@@ -34,15 +34,15 @@ namespace NuvionPro.Commands
                             var featureLayer = (FeatureLayer)l;
 
                             var fields = featureLayer.GetFieldDescriptions();
-                            if (fields.Any(e => e.Name.Equals("nominalscale", StringComparison.InvariantCultureIgnoreCase)))
-                                NominalScaleFilter.SetDefinitionQuery(featureLayer, SpecificUsage, Name);
+                            if (fields.Any(e => e.Name.Equals("compilationscale", StringComparison.InvariantCultureIgnoreCase)))
+                                CompilationScaleFilter.SetDefinitionQuery(featureLayer, SpecificUsage, Name);
                         }
                     }
                 }
             });
         }
 
-        private static void SetDefinitionQuery(FeatureLayer layer, int nominalscale, string name) {
+        private static void SetDefinitionQuery(FeatureLayer layer, int compilationscale, string name) {
             var queries = layer.DefinitionQueries;
 
             var query = string.Empty;
@@ -75,7 +75,7 @@ namespace NuvionPro.Commands
                 }
             }
 
-            var whereClause = $"nominalscale = {nominalscale} OR nominalscale = 0";
+            var whereClause = $"compilationscale = {compilationscale} OR compilationscale >= 0";
 
             if (queries.Any(e => e.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
                 layer.SetActiveDefinitionQuery(name);
@@ -89,91 +89,91 @@ namespace NuvionPro.Commands
         }
     }
 
-    internal class Button1000 : NominalScaleFilter
+    internal class Button1000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 1000;
 
         protected override string Name => "1:1.000";
     }
-    internal class Button2000 : NominalScaleFilter
+    internal class Button2000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 2000;
 
         protected override string Name => "1:2.000";
     }
-    internal class Button3000 : NominalScaleFilter
+    internal class Button3000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 3000;
 
         protected override string Name => "1:3.000";
     }
-    internal class Button4000 : NominalScaleFilter
+    internal class Button4000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 4000;
 
         protected override string Name => "1:4.000";
     }
-    internal class Button8000 : NominalScaleFilter
+    internal class Button8000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 8000;
 
         protected override string Name => "1:8.000";
     }
-    internal class Button12000 : NominalScaleFilter
+    internal class Button12000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 12000;
 
         protected override string Name => "1:12.000";
     }
-    internal class Button22000 : NominalScaleFilter
+    internal class Button22000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 22000;
 
         protected override string Name => "1:22.000";
     }
-    internal class Button45000 : NominalScaleFilter
+    internal class Button45000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 1;
 
         protected override string Name => "Navigational Purpose Overview";
     }
-    internal class Button90000 : NominalScaleFilter
+    internal class Button90000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 90000;
 
         protected override string Name => "1:90.000";
     }
-    internal class Button180000 : NominalScaleFilter
+    internal class Button180000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 180000;
 
         protected override string Name => "1:180.000";
     }
-    internal class Button350000 : NominalScaleFilter
+    internal class Button350000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 350000;
 
         protected override string Name => "1:350.000";
     }
-    internal class Button700000 : NominalScaleFilter
+    internal class Button700000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 700000;
 
         protected override string Name => "1:700.000";
     }
-    internal class Button1500000 : NominalScaleFilter
+    internal class Button1500000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 1500000;
 
         protected override string Name => "1:1.500.000";
     }
-    internal class Button3500000 : NominalScaleFilter
+    internal class Button3500000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 3500000;
 
         protected override string Name => "1:3.500.000";
     }
-    internal class Button10000000 : NominalScaleFilter
+    internal class Button10000000 : CompilationScaleFilter
     {
         protected override int SpecificUsage => 10000000;
 
@@ -189,23 +189,23 @@ namespace NuvionPro.Commands
                 if (layer is FeatureLayer) {
                     var featureLayer = (FeatureLayer)layer;
 
-                    ClearNominalScaleDefinitionQuery(featureLayer);
+                    ClearCompilationScaleDefinitionQuery(featureLayer);
                 }
                 else if (layer is GroupLayer) {
                     var groupLayer = (GroupLayer)layer;
                     foreach (var l in groupLayer.GetLayersAsFlattenedList()) {
                         if (l is FeatureLayer) {
                             var featureLayer = (FeatureLayer)l;
-                            ClearNominalScaleDefinitionQuery(featureLayer);
+                            ClearCompilationScaleDefinitionQuery(featureLayer);
                         }
                     }
                 }
             });
         }
 
-        private void ClearNominalScaleDefinitionQuery(FeatureLayer layer) {
+        private void ClearCompilationScaleDefinitionQuery(FeatureLayer layer) {
             var fields = layer.GetFieldDescriptions();
-            if (!fields.Any(e => e.Name.Equals("nominalscale", StringComparison.InvariantCultureIgnoreCase)))
+            if (!fields.Any(e => e.Name.Equals("compilationscale", StringComparison.InvariantCultureIgnoreCase)))
                 return;
 
             var queries = layer.DefinitionQueries;
@@ -220,12 +220,12 @@ namespace NuvionPro.Commands
                 }
             }
             catch (System.InvalidOperationException ex) {
-                Logger.Current.Error(ex, "ClearNominalScaleDefinitionQuery({layer})", layer.Name);
+                Logger.Current.Error(ex, "ClearCompilationScaleDefinitionQuery({layer})", layer.Name);
             }
         }
     }
 
-    internal class DynamicMenuNominalScale : DynamicMenu
+    internal class DynamicMenuCompilationScale : DynamicMenu
     {
         protected override void OnPopup() {
             var layer = MapView.Active.GetSelectedLayers().ToList().FirstOrDefault();
@@ -247,7 +247,7 @@ namespace NuvionPro.Commands
             this.AddReference("NuvionPro_Button1500000");
             this.AddReference("NuvionPro_Button3500000");
             this.AddReference("NuvionPro_Button10000000");            
-            this.AddReference("NuvionPro_ButtonClearNominalScale");
+            this.AddReference("NuvionPro_ButtonClearCompilationScale");
         }
 
         protected override void OnUpdate() {
