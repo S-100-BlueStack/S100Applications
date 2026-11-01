@@ -965,7 +965,7 @@ namespace S100Framework.Applications
 
             //  Aggregations
             using (var destination = createTargetGeodatabase()) {
-                Logger.Current.Information($"Aggregations...");
+                Logger.Current.Information($"Building aggregations...");
 
                 using (Geodatabase source = createGeodatabase()) {
                     Dictionary<Guid, (string OBJNAM, string NOBJNM)> collections = [];
@@ -1003,6 +1003,8 @@ namespace S100Framework.Applications
                             using var featuretype = d.OpenDataset<Table>(d.GetName("featuretype"));
 
                             var key = $"{c_aggr.Key:B}".ToUpperInvariant();
+
+                            //if ("{4D776A32-6F87-4D34-A462-AB6D3AC332D2}".Equals(key)) System.Diagnostics.Debugger.Break();
 
                             //if("{777AA18E-F33A-4D84-97D4-032ADC48C958}".Equals(key)) System.Diagnostics.Debugger.Break();
 
@@ -1146,7 +1148,7 @@ namespace S100Framework.Applications
                                 ;
 
                             if (isDeepWaterRoute && !isTrafficSeparationScheme) {
-                                Logger.Current.Information($"DeepWaterRouteAggregation: {key}");
+                                //Logger.Current.Information($"DeepWaterRouteAggregation: {key} ({string.Join(',', aggregationCodes)})");
 
                                 var deepWaterRoute = new DeepWaterRoute();
                                 instance = deepWaterRoute;
@@ -1244,15 +1246,15 @@ namespace S100Framework.Applications
 
                             }
                             else if (isTwoWayRouteAggregation) {
-                                Logger.Current.Information($"TwoWayRouteAggregation: {key}");
+                                Logger.Current.Information($"TwoWayRouteAggregation: {key} ({string.Join(',', aggregationCodes)})");
                                 return;
                             }
                             else if (isFairwayAggregation) {
-                                Logger.Current.Information($"FairwayAggregation: {key}");
+                                Logger.Current.Information($"FairwayAggregation: {key} ({string.Join(',', aggregationCodes)})");
                                 return;
                             }
                             else if (isRangeSystemAggregation) {
-                                Logger.Current.Information($"RangeSystemAggregation: {key}");
+                                //Logger.Current.Information($"RangeSystemAggregation: {key} ({string.Join(',', aggregationCodes)})");
 
                                 var rangeSystem = new RangeSystem();
                                 instance = rangeSystem;
@@ -1323,7 +1325,7 @@ namespace S100Framework.Applications
 
                             }
                             else if (isTrafficSeparationScheme) {
-                                Logger.Current.Information($"TrafficSeparationSchemeAggregation: {key}");
+                                //Logger.Current.Information($"TrafficSeparationSchemeAggregation: {key} ({string.Join(',', aggregationCodes)})");
 
                                 var trafficSeparationScheme = new TrafficSeparationScheme();
                                 instance = trafficSeparationScheme;
@@ -1420,6 +1422,7 @@ namespace S100Framework.Applications
                                 };
                             }
                             else {
+                                Logger.Current.Information($"Unknown Aggregation: {key} ({string.Join(',', aggregationCodes)})");
                                 return;
                             }
 
@@ -1427,7 +1430,11 @@ namespace S100Framework.Applications
 
                             var any = false;
 
-                            Polygon? shape = null;
+                            Polygon? shapeSeaAreaNamedWaterArea = null;
+
+                            Polygon[] shapeSurfaces = [];
+                            Polyline[] shapeCurves = [];
+
                             int compilationscale = 10000000;
 
                             using (var search = surface.Search(new QueryFilter {
@@ -1441,11 +1448,17 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        shape = (Polygon)current.GetShape().Clone();
+                                        //if (shapeSeaAreaNamedWaterArea is not null)
+                                        //    System.Diagnostics.Debugger.Break();
+                                        shapeSeaAreaNamedWaterArea = (Polygon)current.GetShape().Clone();
                                         compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    }
+                                    else {
+                                        shapeSurfaces = [.. shapeSurfaces, (Polygon)current.GetShape().Clone()];
                                     }
 
                                     featureBindings = callbackFeatureBindings(current, featureBindings);
+
                                 }
                             }
 
@@ -1455,6 +1468,8 @@ namespace S100Framework.Applications
                                 while (search.MoveNext()) {
                                     any = true;
                                     var current = (Feature)search.Current;
+
+                                    shapeCurves = [.. shapeCurves, (Polyline)current.GetShape().Clone()];
 
                                     featureBindings = callbackFeatureBindings(current, featureBindings);
                                 }
@@ -1475,7 +1490,7 @@ namespace S100Framework.Applications
 
                             string? featureId = null;
 
-                            if (shape is not null) {
+                            if (shapeSeaAreaNamedWaterArea is not null) {
                                 using var buffer = surface.CreateRowBuffer();
                                 buffer["ps"] = ps101;
 
@@ -1485,12 +1500,55 @@ namespace S100Framework.Applications
                                 buffer["informationbindings"] = "[]";
                                 buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                SetShape(buffer, shape!);
+                                SetShape(buffer, shapeSeaAreaNamedWaterArea);
 
                                 var featureN = surface.CreateRow(buffer);
                                 featureId = featureN.UID();
                             }
+                            else if (shapeSurfaces.Any()) {
+                                var shape = (Polygon)GeometryEngine.Instance.Union(shapeSurfaces);
+
+                                if (!instance.permittedPrimitives.Contains(Primitives.surface))
+                                    System.Diagnostics.Debugger.Break();
+
+                                using var buffer = surface.CreateRowBuffer();
+                                buffer["ps"] = ps101;
+
+                                buffer["code"] = instance.GetType().Name;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                buffer["informationbindings"] = "[]";
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetShape(buffer, shape);
+
+                                var featureN = surface.CreateRow(buffer);
+                                featureId = featureN.UID();
+                            }
+                            else if (shapeCurves.Any()) {
+                                var shape = (Polyline)GeometryEngine.Instance.Union(shapeCurves);
+
+                                if (!instance.permittedPrimitives.Contains(Primitives.curve))
+                                    System.Diagnostics.Debugger.Break();
+
+                                using var buffer = curve.CreateRowBuffer();
+                                buffer["ps"] = ps101;
+
+                                buffer["code"] = instance.GetType().Name;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                buffer["informationbindings"] = "[]";
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetShape(buffer, shape);
+
+                                var featureN = curve.CreateRow(buffer);
+                                featureId = featureN.UID();
+                            }
                             else {
+                                if (!instance.permittedPrimitives.Contains(Primitives.noGeometry))
+                                    System.Diagnostics.Debugger.Break();
+
                                 using var buffer = featuretype.CreateRowBuffer();
                                 buffer["ps"] = ps101;
 
@@ -1505,6 +1563,7 @@ namespace S100Framework.Applications
                             }
                             ;
 
+                            //  Update featurebindings
                             using (var search = point.CreateUpdateCursor(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', featureBindings.Select(e => $"'{e.featureId}'"))})"
                             }, true)) {
@@ -1565,6 +1624,7 @@ namespace S100Framework.Applications
                     ;
                 }
             }
+
 
             //  Bridges
             using (var destination = createTargetGeodatabase()) {
