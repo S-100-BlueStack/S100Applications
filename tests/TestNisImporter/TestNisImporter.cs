@@ -851,7 +851,8 @@ namespace TestNisImporter
 
             roots = [
                 new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK3"),
-                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK4")];
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK4"),
+                new IO.DirectoryInfo(@"\\nas.gst.dk\ncps\production\indigo\ENC\Approved\DK\DK5")];
 
             //roots = [
             //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\DK\DK1"),
@@ -886,7 +887,7 @@ namespace TestNisImporter
                         if (enc.Name.Contains("cancel", StringComparison.InvariantCultureIgnoreCase)) continue;
                         if (!string.IsNullOrEmpty(filter) && !enc.Name.Contains(filter)) continue;
 
-                        var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, false);
+                        var command = ImportS57ToGeodatabase(enc, "geodatabase.gdb", (e) => true, true);
 
                         if (string.IsNullOrEmpty(command)) continue;
                         python.AppendLine(command);

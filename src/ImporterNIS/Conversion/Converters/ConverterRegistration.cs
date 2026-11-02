@@ -35,7 +35,7 @@ namespace S100Framework.Applications
     {
         private static void RegisterConverters()
         {
-            _converterRegistry.Register<AidsToNavigationP, CardinalBeacon>(Converters.CreateCardinalBeacon);
+            //_converterRegistry.Register<AidsToNavigationP, CardinalBeacon>(Converters.CreateCardinalBeacon);
             _converterRegistry.Register<AidsToNavigationP, RadarTransponderBeacon>(Converters.CreateRadarTransponderBeacon);
             _converterRegistry.Register<AidsToNavigationP, LightAllAround>(Converters.CreateLightAllAround);
             _converterRegistry.Register<CulturalFeaturesP, LightSectored>(Converters.CreateLightSectored);

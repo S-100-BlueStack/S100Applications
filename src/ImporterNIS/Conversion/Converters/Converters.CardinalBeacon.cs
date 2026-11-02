@@ -82,9 +82,9 @@ namespace S100Framework.Applications
                     instance.status = status;
             }
 
-            var topmark = ImporterNIS.relatedEquipment?.GetTopMark<CardinalBeacon>(current);
-            if (topmark != null) {
-                instance.topmark = topmark;
+            var _ = ImporterNIS.relatedEquipment?.GetTopMark<CardinalBeacon>(current);
+            if (_ != null) {
+                instance.topmark = _.Value.topmark;
             }
 
             if (current.VERLEN.HasValue) {

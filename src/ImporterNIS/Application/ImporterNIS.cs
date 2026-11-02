@@ -363,25 +363,22 @@ namespace S100Framework.Applications
 
             scalesCompilation = s101ProductCoverages.Select(e => (long)e.PLTS_COMP_SCALE).Distinct().OrderByDescending(e => e).ToArray();
 
+            //  Building query filters
             foreach (var scale in scalesCompilation) {
                 if (!clip) {
                     if (Array.IndexOf(scalesCompilation, scale) == 0) {
                         QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}) AND (Shape IS NOT NULL)";
-                        Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                     else {
                         QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}) AND (Shape IS NOT NULL)";
-                        Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                 }
                 else {
                     if (Array.IndexOf(scalesCompilation, scale) == 0) {
                         QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {minimumDisplayScale}) AND (Shape IS NOT NULL)";
-                        Logger.Current.Verbose(QueryFilter.WhereClause);
                     }
                     else {
                         QueryFilter.WhereClause = $"(PLTS_COMP_SCALE >= {scale} AND PLTS_COMP_SCALE < {scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1]}) AND (Shape IS NOT NULL)";
-                        Logger.Current.Verbose(QueryFilter.WhereClause);
 
                         Polygon[] clipping = [];
                         foreach (var e in s101ProductCoverages.Where(e => e.PLTS_COMP_SCALE >= scale && e.PLTS_COMP_SCALE < scalesCompilation[Array.IndexOf(scalesCompilation, scale) - 1])) {
@@ -618,6 +615,8 @@ namespace S100Framework.Applications
                 }
 
                 using (var destination = createTargetGeodatabase()) {
+                    Logger.Current.Verbose("WhereClause: {whereclause}", QueryFilter.WhereClause);
+
                     using (Geodatabase source = createGeodatabase()) {
                         Logger.Current.Debug($"Loading subtypes codes to subtype name");
                         Subtypes.Initialize(source);
@@ -637,8 +636,7 @@ namespace S100Framework.Applications
                         relatedEquipment = new RelatedEquipment(source, destination);
 
                         if (skinOfEarthOnly) {
-                            Logger.Current.Information($"Skin of the earth");
-                            Logger.Current.Verbose($"WhereClause: {QueryFilter.WhereClause}");
+                            Logger.Current.Information($"Skin of the earth");                            
 
                             var whereClause = QueryFilter.WhereClause.Clone();
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";
@@ -670,8 +668,6 @@ namespace S100Framework.Applications
                                 (buffer, shape) => SetShape(buffer, shape)), destination);
                         }
                         else {
-                            Logger.Current.Verbose($"WhereClause: {QueryFilter.WhereClause}");
-
                             Logger.Current.Debug($"Converting Metadata");
                             Store((destination) => S57_Metadata(
                                 "MetadataA",

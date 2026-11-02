@@ -24,7 +24,7 @@ namespace S100Framework.Applications
             this._target = target;
         }
 
-        internal topmark? GetTopMark<TType>(AidsToNavigationP structure) where TType : S100FC.FeatureType {
+        internal (topmark topmark, Guid relatedId)? GetTopMark<TType>(AidsToNavigationP structure) where TType : S100FC.FeatureType {
             var topmarks = FeatureRelations.Instance.GetRelated<AidsToNavigationP>(typeof(topmark), structure.GLOBALID);
 
             if (topmarks == null || topmarks.Count() == 0) {
@@ -71,9 +71,9 @@ namespace S100Framework.Applications
                     topmark.topmarkDaymarkShape = EnumHelper.GetEnumValue(relatedTopmark.TOPSHP.Value);
                 }
 
-                ConversionAnalytics.Instance.AddConverted("AidsToNavigationP", relatedTopmark.GLOBALID, "ATTRIBUTE. NO NAME AVAILABLE");
+                //ConversionAnalytics.Instance.AddConverted("AidsToNavigationP", relatedTopmark.GLOBALID, "ATTRIBUTE. NO NAME AVAILABLE");
 
-                return topmark;
+                return (topmark, relatedTopmark.GLOBALID);
             }
             return null;
         }
