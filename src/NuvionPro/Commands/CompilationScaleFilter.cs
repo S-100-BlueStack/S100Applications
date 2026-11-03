@@ -75,7 +75,7 @@ namespace NuvionPro.Commands
                 }
             }
 
-            var whereClause = $"compilationscale = {compilationscale} OR compilationscale >= 0";
+            var whereClause = $"compilationscale = {compilationscale} OR compilationscale <= 0";
 
             if (queries.Any(e => e.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
                 layer.SetActiveDefinitionQuery(name);
