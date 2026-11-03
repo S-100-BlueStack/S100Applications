@@ -911,7 +911,7 @@ namespace TestNisImporter
                     delete.AppendLine($"del /F /Q {f.FullName}");
                 }
 
-                folder = folder.GetDirectories().OrderByDescending(e => e.Name).First();
+                folder = folder.GetDirectories().OrderByDescending(e => int.Parse(e.Name)).First();
             }
             //return delete.ToString();
 
