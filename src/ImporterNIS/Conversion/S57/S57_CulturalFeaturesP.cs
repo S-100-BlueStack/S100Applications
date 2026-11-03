@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
@@ -14,6 +15,21 @@ namespace S100Framework.Applications
 
             using var culturalFeaturesP = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(culturalFeaturesP);
+
+            Polygon[] features = [];
+            using (var PortsAndServicesA = source.OpenDataset<FeatureClass>(source.GetName("PortsAndServicesA"))) {
+                using (var search = PortsAndServicesA.Search(new QueryFilter {
+                    WhereClause = $"({filter.WhereClause}) AND FCSubType = 80"    // PONTON_Pontoon
+                }, true)) {
+                    while (search.MoveNext()) {
+                        var f = (Feature)search.Current;
+                        var polygon = (Polygon)f.GetShape().Clone();
+                        features = [.. features, polygon];
+                    }
+                }
+            }
+
+            Geometry? pontoons = features.Any() ? GeometryEngine.Instance.Union(features) : null;
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("point"));
 
@@ -191,7 +207,9 @@ namespace S100Framework.Applications
                                 feature at the position of the building in ECDIS Base display.Data Producers should consider removing
                                 these features from their S-101 data during the conversion process.
                             */
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
                             buffer["ps"] = ps101;
@@ -311,7 +329,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
                             buffer["ps"] = ps101;
@@ -647,7 +666,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
                             buffer["ps"] = ps101;

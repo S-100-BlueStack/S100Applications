@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
 using ImporterNIS.Singletons;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
@@ -19,46 +20,22 @@ namespace S100Framework.Applications
             var tableName = "CulturalFeaturesA";
 
             using var culturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
-            Subtypes.Instance.RegisterSubtypes(culturalFeaturesA);
+            Subtypes.Instance.RegisterSubtypes(culturalFeaturesA);            
 
-            // Bridges - Store an aggregation per bridge
-            //if (createBridgesAndRelations) {
-            //    using var featureTypeBridge = target.OpenDataset<FeatureClass>(target.GetName("surface"));
-            //    using var bufferBridge = featureTypeBridge.CreateRowBuffer();
-
-            //    Bridges.Initialize(source, target, filter);
-
-            //    foreach (var bridge in Bridges.Instance.BridgeElements()) {
-            //        var instance = new Bridge();
-
-
-            //        bufferBridge["ps"] = ps101;
-            //        bufferBridge["code"] = instance.GetType().Name;
-            //        bufferBridge["attributebindings"] = instance.Flatten();
-
-            //        SetShape(bufferBridge, bridge.DissolvedGeometry);
-            //        SetUsageBand(bufferBridge, bridge.PLTS_COMP_SCALE);
-
-            //        var featureN = featureTypeBridge.CreateRow(bufferBridge);
-            //        var name = featureN.UID();
-
-            //        bridge.Name = name;
-
-            //        //// Create association to use in bridge relations
-            //        //var featureAssociationBuffer = featureAssociation.CreateRowBuffer();
-
-            //        //featureAssociationBuffer["ps"] = ImporterNIS.ps101;
-            //        //featureAssociationBuffer["code"] = "BridgeAggregation";
-            //        //featureAssociation
-
-            //        //var association = featureAssociation.CreateRow(featureAssociationBuffer);
-            //        //string featureAssociationName = association.Crc32();
-            //        //bridge.BridgeAggregationName = featureAssociationName;
-
-            //        //ConversionAnalytics.Instance.AddConverted("DerivedBridgeElement", Guid.Empty, name);
-
-            //    }
-            //}
+            Polygon[] features = [];
+            using (var PortsAndServicesA = source.OpenDataset<FeatureClass>(source.GetName("PortsAndServicesA"))) {
+                using (var search = PortsAndServicesA.Search(new QueryFilter {
+                    WhereClause = $"({filter.WhereClause}) AND FCSubType = 80"    // PONTON_Pontoon
+                }, true)) {
+                    while (search.MoveNext()) {
+                        var f = (Feature)search.Current;
+                        var polygon = (Polygon)f.GetShape().Clone();
+                        features = [.. features, polygon];
+                    }
+                }
+            }
+            
+            Geometry? pontoons = features.Any() ? GeometryEngine.Instance.Union(features) : null;
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
             using var buffer = featureClass.CreateRowBuffer();
@@ -528,7 +505,8 @@ namespace S100Framework.Applications
                                 feature at the position of the building in ECDIS Base display.Data Producers should consider removing
                                 these features from their S-101 data during the conversion process.
                             */
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -647,7 +625,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -986,7 +965,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
 
@@ -1138,8 +1118,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
-
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;

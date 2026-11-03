@@ -17,6 +17,21 @@ namespace S100Framework.Applications
             using var culturalFeaturesL = source.OpenDataset<FeatureClass>(source.GetName(tableName));
             Subtypes.Instance.RegisterSubtypes(culturalFeaturesL);
 
+            Polygon[] features = [];
+            using (var PortsAndServicesA = source.OpenDataset<FeatureClass>(source.GetName("PortsAndServicesA"))) {
+                using (var search = PortsAndServicesA.Search(new QueryFilter {
+                    WhereClause = $"({filter.WhereClause}) AND FCSubType = 80"    // PONTON_Pontoon
+                }, true)) {
+                    while (search.MoveNext()) {
+                        var f = (Feature)search.Current;
+                        var polygon = (Polygon)f.GetShape().Clone();
+                        features = [.. features, polygon];
+                    }
+                }
+            }
+
+            Geometry? pontoons = features.Any() ? GeometryEngine.Instance.Union(features) : null;
+
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("curve"));
 
             using var buffer = featureClass.CreateRowBuffer();
@@ -673,7 +688,8 @@ namespace S100Framework.Applications
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
 
-                            instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
+                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
 
 
