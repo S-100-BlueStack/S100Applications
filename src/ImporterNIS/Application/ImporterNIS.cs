@@ -974,7 +974,7 @@ namespace S100Framework.Applications
                     using var plts_frel = source.OpenDataset<Table>(source.GetName("PLTS_FREL"));
 
                     using (var search = plts_collections.Search(new QueryFilter {
-                        WhereClause = "FCSubType = 1",  //  C_AGGR_Aggregation
+                        WhereClause = $"FCSubType = 1 AND (PLTS_COMP_SCALE >= {maximumDisplayScale} AND PLTS_COMP_SCALE < {minimumDisplayScale})",  //  C_AGGR_Aggregation
                     }, true)) {
                         while (search.MoveNext()) {
                             var current = search.Current;
@@ -1431,7 +1431,7 @@ namespace S100Framework.Applications
                             Polygon[] shapeSurfaces = [];
                             Polyline[] shapeCurves = [];
 
-                            int compilationscale = 10000000;
+                            int? compilationscale = null;
 
                             using (var search = surface.Search(new QueryFilter {
                                 WhereClause = $"GlobalID IN ({string.Join(',', uids.Select(e => $"'{e.ToUpper()}'"))})",
@@ -1443,11 +1443,17 @@ namespace S100Framework.Applications
                                     var name = current.UID();
                                     var code = Convert.ToString(current["code"]);
 
+                                    var _compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    if (compilationscale is null)
+                                        compilationscale = _compilationscale;
+                                    else if (compilationscale != _compilationscale)
+                                        System.Diagnostics.Debugger.Break();
+
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
                                         //if (shapeSeaAreaNamedWaterArea is not null)
                                         //    System.Diagnostics.Debugger.Break();
                                         shapeSeaAreaNamedWaterArea = (Polygon)current.GetShape().Clone();
-                                        compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                        //compilationscale = Convert.ToInt32(current["compilationscale"]);
                                     }
                                     else {
                                         shapeSurfaces = [.. shapeSurfaces, (Polygon)current.GetShape().Clone()];
@@ -1465,8 +1471,13 @@ namespace S100Framework.Applications
                                     any = true;
                                     var current = (Feature)search.Current;
 
-                                    shapeCurves = [.. shapeCurves, (Polyline)current.GetShape().Clone()];
+                                    var _compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    if (compilationscale is null)
+                                        compilationscale = _compilationscale;
+                                    else if (compilationscale != _compilationscale)
+                                        System.Diagnostics.Debugger.Break();
 
+                                    shapeCurves = [.. shapeCurves, (Polyline)current.GetShape().Clone()];
                                     featureBindings = callbackFeatureBindings(current, featureBindings);
                                 }
                             }
@@ -1478,6 +1489,12 @@ namespace S100Framework.Applications
                                     any = true;
                                     var current = (Feature)search.Current;
 
+                                    var _compilationscale = Convert.ToInt32(current["compilationscale"]);
+                                    if (compilationscale is null)
+                                        compilationscale = _compilationscale;
+                                    else if (compilationscale != _compilationscale)
+                                        System.Diagnostics.Debugger.Break();
+
                                     featureBindings = callbackFeatureBindings(current, featureBindings);
                                 }
                             }
@@ -1485,6 +1502,8 @@ namespace S100Framework.Applications
                             if (!any) return;
 
                             string? featureId = null;
+
+                            if (!compilationscale.HasValue) compilationscale = 10000000;
 
                             if (shapeSeaAreaNamedWaterArea is not null) {
                                 using var buffer = surface.CreateRowBuffer();
@@ -1494,7 +1513,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
                                 buffer["informationbindings"] = "[]";
-                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shapeSeaAreaNamedWaterArea);
 
@@ -1514,7 +1533,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
                                 buffer["informationbindings"] = "[]";
-                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shape);
 
@@ -1534,7 +1553,7 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
                                 buffer["informationbindings"] = "[]";
-                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale) ?? 10000000;
+                                buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shape);
 

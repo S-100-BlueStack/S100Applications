@@ -43,7 +43,7 @@ namespace S100Framework.Applications
         [Option('u', "maximumDisplayScale", Default = 0, Required = false)]
         public int? MaximumDisplayScale { get; set; }
 
-        [Option("initialize-target", Default = true, HelpText = "Create a NEW mobile geodatabase from the bundled template.")]
+        [Option("initialize-target", Default = false, HelpText = "Create a NEW mobile geodatabase from the bundled template.")]
         public bool InitializeTarget { get; set; }
     }
 

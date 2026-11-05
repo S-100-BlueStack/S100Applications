@@ -116,14 +116,14 @@ namespace S100Framework.Applications.Singletons
             if (nauticalInformation == null)
                 throw new ArgumentNullException(nameof(nauticalInformation));
 
-            if (!this._nauticalInformations.ContainsKey(fileName)) {
-                this._nauticalInformations.Add(fileName, nauticalInformation);
+            if (!this._nauticalInformations.ContainsKey(fileName.ToUpperInvariant())) {
+                this._nauticalInformations.Add(fileName.ToUpperInvariant(), nauticalInformation);
 
                 // Create informationtype
-                this._nauticalBindings.Add(fileName, CreateInformationType(_destination!, nauticalInformation));
+                this._nauticalBindings.Add(fileName.ToUpperInvariant(), CreateInformationType(_destination!, nauticalInformation));
             }
 
-            return this._nauticalBindings[fileName];
+            return this._nauticalBindings[fileName.ToUpperInvariant()];
         }
 
         internal static informationBinding<AdditionalInformation> CreateInformationType(Geodatabase target, NauticalInformation nauticalInformation) {
