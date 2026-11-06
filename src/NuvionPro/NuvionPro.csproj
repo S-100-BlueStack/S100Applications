@@ -30,6 +30,7 @@
     <Page Remove="Artifacts\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Commands\SpecificUsageFilter.cs" />
     <Compile Remove="S100PropertyGridViewModel.cs" />
     <Compile Remove="Views\S100AttributeEditorView.xaml.cs" />
     <Compile Remove="Views\S100PropertyGridView.xaml.cs" />
