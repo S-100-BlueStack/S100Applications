@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using ImporterNIS.Common;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationAssociation;
@@ -11,9 +12,11 @@ namespace S100Framework.Applications
 {
     internal static partial class ImporterNIS
     {
-        private static void S57_Depths(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Action<RowBuffer, Geometry> setShape, informationBinding<SpatialAssociation>[] spatialQuality) {
+        private static void S57_Depths(string tableName, Func<string, FeatureClass> source, QueryFilter filter, Func<FeatureClass> target, Func<Table> attributeBindings, Action<RowBuffer, Geometry> setShape, informationBinding<SpatialAssociation>[] spatialQuality) {
             using var dataset = source(tableName);
             Subtypes.Instance.RegisterSubtypes(dataset);
+
+            using var attributeBindingsTable = attributeBindings();
 
             using var featureClass = target();
 
@@ -43,6 +46,8 @@ namespace S100Framework.Applications
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "depthsa::1": {     // DEPARE // SKIN OF EARTH
                             var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature);
+
+                            var uuid = AttributeBindings.AddOrGet(instance, attributeBindingsTable);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;

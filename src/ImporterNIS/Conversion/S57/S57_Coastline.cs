@@ -14,7 +14,7 @@ namespace S100Framework.Applications
             using var dataset = source(tableName);
             Subtypes.Instance.RegisterSubtypes(dataset);
 
-            using var featureClass = target();
+            using var featureClass = target();            
 
             using var buffer = featureClass.CreateRowBuffer();
 
