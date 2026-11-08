@@ -1,22 +1,15 @@
 using ArcGIS.Core.Data;
-using S100FC;
-using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.Singletons;
-using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
-    using ArcGIS.Core.Geometry;
-    using S100FC.S101.InformationTypes;
-    using S100FC.S101.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
 
     internal static partial class ImporterNIS
     {
 
-        private static Lake LAKARE(Feature current, RowBuffer buffer) {
+        private static Lake LAKARE(Feature current) {
             /*  S-57 allows for LAKARE to be covered by the Group 1 objects LNDARE or UNSARE, however in
                 S-101 all Lake features must be covered by the Skin of the Earth feature Land Area. During the
                 automated conversion process, the converter may have the capability to convert UNSARE covering
@@ -55,15 +48,6 @@ namespace S100Framework.Applications
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-            buffer["ps"] = ps101;
-            buffer["code"] = instance.GetType().Name;
-            buffer["attributebindings"] = instance.Flatten();
-            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetShape(buffer, current.SHAPE());
-            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }

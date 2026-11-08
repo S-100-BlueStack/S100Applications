@@ -20,7 +20,7 @@ namespace S100Framework.Applications
             var tableName = "CulturalFeaturesA";
 
             using var culturalFeaturesA = source.OpenDataset<FeatureClass>(source.GetName(tableName));
-            Subtypes.Instance.RegisterSubtypes(culturalFeaturesA);            
+            Subtypes.Instance.RegisterSubtypes(culturalFeaturesA);
 
             Polygon[] features = [];
             using (var PortsAndServicesA = source.OpenDataset<FeatureClass>(source.GetName("PortsAndServicesA"))) {
@@ -34,7 +34,7 @@ namespace S100Framework.Applications
                     }
                 }
             }
-            
+
             Geometry? pontoons = features.Any() ? GeometryEngine.Instance.Union(features) : null;
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("surface"));
@@ -161,7 +161,6 @@ namespace S100Framework.Applications
 
                             bool openingBridge = false;
                             List<bridgeFunction> bridgeFunctionValue = [];
-                            int? scaleMinimum = default;
                             //List<colour> colours = new();
                             //colourPattern? colourPatterns = default;
                             //condition? conditionValue = default;

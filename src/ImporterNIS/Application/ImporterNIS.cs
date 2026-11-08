@@ -6,27 +6,19 @@ using ArcGIS.Core.Geometry;
 
 using ImporterNIS.Singletons;
 using S100FC;
-using S100FC.Catalogues;
 using S100FC.S101;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationAssociation;
-using S100FC.S101.InformationTypes;
-using S100FC.S101.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using System.Data;
-using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using VortexLoader;
 using VortexLoader.Singletons;
-
-using IO = System.IO;
 
 [assembly: InternalsVisibleTo("TestNisImporter")]
 namespace S100Framework.Applications
@@ -636,7 +628,7 @@ namespace S100Framework.Applications
                         relatedEquipment = new RelatedEquipment(source, destination);
 
                         if (skinOfEarthOnly) {
-                            Logger.Current.Information($"Skin of the earth");                            
+                            Logger.Current.Information($"Skin of the earth");
 
                             var whereClause = QueryFilter.WhereClause.Clone();
                             QueryFilter.WhereClause = $"({whereClause}) and fcsubtype in (1,5,15)";

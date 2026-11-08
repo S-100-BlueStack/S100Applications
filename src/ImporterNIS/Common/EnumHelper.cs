@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using WinRT;
 
 namespace S100Framework.Applications
 {

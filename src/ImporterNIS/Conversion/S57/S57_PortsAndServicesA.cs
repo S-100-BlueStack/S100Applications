@@ -85,7 +85,16 @@ namespace S100Framework.Applications
 
                 switch (fcSubtype) {
                     case 1: { // BERTHS_Berth
-                            var instance = (Berth)ImporterNIS.Build("BERTHS", feature, buffer);
+                            var instance = (Berth)ImporterNIS.Build("BERTHS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, feature.SHAPE());
+                            SetCompilationScale(buffer, feature.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -895,7 +904,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 50: { // GRIDRN_Gridiron
-                            var instance = (Gridiron)ImporterNIS.Build("GRIDRN", feature, buffer);
+                            var instance = (Gridiron)ImporterNIS.Build("GRIDRN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, feature.SHAPE());
+                            SetCompilationScale(buffer, feature.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -908,7 +926,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case 55: { // HRBFAC_HarbourFacility
-                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", feature, buffer);
+                            var instance = (HarbourFacility)ImporterNIS.Build("HRBFAC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, feature.SHAPE());
+                            SetCompilationScale(buffer, feature.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

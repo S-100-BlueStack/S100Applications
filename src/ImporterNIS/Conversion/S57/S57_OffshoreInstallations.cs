@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
@@ -39,7 +40,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "offshoreinstallationsp::1": { // OFSPLF_OffshorePlatform
-                            var instance = (OffshorePlatform)ImporterNIS.Build("OFSPLF", current, buffer);
+                            var instance = (OffshorePlatform)ImporterNIS.Build("OFSPLF", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -54,7 +64,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsl::1": { // CBLSUB_CableSubmarine
-                            var instance = (CableSubmarine)ImporterNIS.Build("CBLSUB", feature, buffer);
+                            var instance = (CableSubmarine)ImporterNIS.Build("CBLSUB", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -69,7 +88,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsa::1": { // CBLARE_CableArea
-                            var instance = (CableArea)ImporterNIS.Build("CBLARE", feature, buffer);
+                            var instance = (CableArea)ImporterNIS.Build("CBLARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -84,7 +112,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsp::5": { // PIPARE_PipelineArea
-                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", feature, buffer);
+                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -99,7 +136,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsl::5": { // PIPSOL_PipelineSubmarineOnLand
-                            var instance = (PipelineSubmarineOnLand)ImporterNIS.PIPSOL(feature, buffer, filter);
+                            var instance = (PipelineSubmarineOnLand)ImporterNIS.PIPSOL(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -114,7 +151,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsa::5": { // OFSPLF_OffshorePlatform
-                            var instance = (OffshorePlatform)ImporterNIS.Build("OFSPLF", feature, buffer);
+                            var instance = (OffshorePlatform)ImporterNIS.Build("OFSPLF", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -129,7 +175,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsp::10": { // PIPSOL_PipelineSubmarineOnLand
-                            var instance = (Obstruction)ImporterNIS.PIPSOL(current, buffer,filter);
+                            var instance = (Obstruction)ImporterNIS.PIPSOL(current, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -144,7 +190,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsa::10": { // OSPARE_OffshoreProductionArea
-                            var instance = (OffshoreProductionArea)ImporterNIS.Build("OSPARE", feature, buffer);
+                            var instance = (OffshoreProductionArea)ImporterNIS.Build("OSPARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -159,7 +214,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "offshoreinstallationsa::15": { // PIPARE_SubmarinePipelineArea
-                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", feature, buffer);
+                            var instance = (SubmarinePipelineArea)ImporterNIS.Build("PIPARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

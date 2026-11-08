@@ -1,13 +1,10 @@
 using ArcGIS.Core.Data;
-using S100Framework.ImporterNIS.Core;
-using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications;
 
 internal static class ImportPreflight
 {
-    internal static void ValidateConnections(ImportOptions options)
-    {
+    internal static void ValidateConnections(ImportOptions options) {
         // Open every workspace before the legacy conversion engine can delete any rows.
         using var source = GeodatabaseFactory.Create(options.Source!)();
         using var metadata = source.OpenDataset<FeatureClass>(source.GetName("MetaDataA")
@@ -23,8 +20,7 @@ internal static class ImportPreflight
         }
     }
 
-    private static void ValidateTarget(Geodatabase database)
-    {
+    private static void ValidateTarget(Geodatabase database) {
         foreach (string name in new[] { "point", "pointset", "curve", "surface" }) {
             using var featureClass = database.OpenDataset<FeatureClass>(database.GetName(name)
                 ?? throw new InvalidOperationException($"Target feature class is missing: {name}"));

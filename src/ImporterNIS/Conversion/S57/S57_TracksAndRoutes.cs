@@ -40,7 +40,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "tracksandroutesp::1": { // PRCARE_PrecautionaryArea
-                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature, buffer);
+                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -56,7 +65,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No DWRTCL_DeepWaterRouteCenterline in DK or GL. {tableName}");
                         }
                     case "tracksandroutesa::1": { // DWRTPT_DeepWaterRoutePart
-                            var instance = (DeepWaterRoutePart)ImporterNIS.Build("DWRTPT", feature, buffer);
+                            var instance = (DeepWaterRoutePart)ImporterNIS.Build("DWRTPT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -69,7 +87,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesp::5": { // RCTLPT_RecommendedTrafficLanePart
-                            var instance = (RecommendedTrafficLanePart)ImporterNIS.Build("RCTLPT", feature, buffer);
+                            var instance = (RecommendedTrafficLanePart)ImporterNIS.Build("RCTLPT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -82,7 +109,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::5": { // FERYRT_FerryRoute
-                            var instance = (FerryRoute)ImporterNIS.Build("FERYRT", feature, buffer);
+                            var instance = (FerryRoute)ImporterNIS.Build("FERYRT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -95,7 +131,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::5": { // FAIRWY_Fairway
-                            var instance = (Fairway)ImporterNIS.Build("FAIRWY", feature, buffer);
+                            var instance = (Fairway)ImporterNIS.Build("FAIRWY", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -108,7 +153,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesp::10": { // RDOCAL_RadioCallingInPoint
-                            var instance = (RadioCallingInPoint)ImporterNIS.Build("RDOCAL", feature, buffer);
+                            var instance = (RadioCallingInPoint)ImporterNIS.Build("RDOCAL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -121,7 +175,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::10": { // NAVLNE_NavigationLine
-                            var instance = (NavigationLine)ImporterNIS.Build("NAVLNE", feature, buffer);
+                            var instance = (NavigationLine)ImporterNIS.Build("NAVLNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -134,7 +197,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::10": { // FERYRT_FerryRoute
-                            var instance = (FerryRoute)ImporterNIS.Build("FERYRT", feature, buffer);
+                            var instance = (FerryRoute)ImporterNIS.Build("FERYRT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -150,7 +222,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No RADLNE_RadarLine in DK or GL. {tableName}");
                         }
                     case "tracksandroutesa::15": { // ISTZNE_InshoreTrafficZone
-                            var instance = (InshoreTrafficZone)ImporterNIS.Build("ISTZNE", feature, buffer);
+                            var instance = (InshoreTrafficZone)ImporterNIS.Build("ISTZNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -163,7 +244,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::20": { // RCRTCL_RecommendedRouteCenterline
-                            var instance = (RecommendedRouteCentreline)ImporterNIS.Build("RCRTCL", feature, buffer);
+                            var instance = (RecommendedRouteCentreline)ImporterNIS.Build("RCRTCL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -176,7 +266,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::20": { // PRCARE_PrecautionaryArea
-                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature, buffer);
+                            var instance = (PrecautionaryArea)ImporterNIS.Build("PRCARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -189,7 +288,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::25": { // RDOCAL_RadioCallingInPoint
-                            var instance = (RadioCallingInPoint)ImporterNIS.Build("RDOCAL", feature, buffer);
+                            var instance = (RadioCallingInPoint)ImporterNIS.Build("RDOCAL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -202,7 +310,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::25": { // RADRNG_RadarRange
-                            var instance = (RadarRange)ImporterNIS.Build("RADRNG", feature, buffer);
+                            var instance = (RadarRange)ImporterNIS.Build("RADRNG", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -216,7 +333,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::30": { // RECTRC_RecommendedTrack
-                            var instance = (RecommendedTrack)ImporterNIS.Build("RECTRC", feature, buffer);
+                            var instance = (RecommendedTrack)ImporterNIS.Build("RECTRC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -229,7 +355,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::30": { // RCTLPT_RecommendedTrafficLanePart
-                            var instance = (RecommendedTrafficLanePart)ImporterNIS.Build("RCTLPT", feature, buffer);
+                            var instance = (RecommendedTrafficLanePart)ImporterNIS.Build("RCTLPT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -242,7 +377,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::40": { // TSELNE_TrafficSeparationLine
-                            var instance = (SeparationZoneOrLine)ImporterNIS.Build("TSELNE", feature, buffer);
+                            var instance = (SeparationZoneOrLine)ImporterNIS.Build("TSELNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -255,7 +399,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::40": { // RECTRC_RecommendedTrack
-                            var instance = (RecommendedTrack)ImporterNIS.Build("RECTRC", feature, buffer);
+                            var instance = (RecommendedTrack)ImporterNIS.Build("RECTRC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -268,7 +421,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesl::45": { // TSSBND_TrafficSeparationSchemeBoundary
-                            var instance = (TrafficSeparationSchemeBoundary)ImporterNIS.Build("TSSBND", feature, buffer);
+                            var instance = (TrafficSeparationSchemeBoundary)ImporterNIS.Build("TSSBND", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -281,7 +443,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::45": { // SUBTLN_SubmarineTransitLane
-                            var instance = (SubmarineTransitLane)ImporterNIS.Build("SUBTLN", feature, buffer);
+                            var instance = (SubmarineTransitLane)ImporterNIS.Build("SUBTLN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -295,7 +466,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::50": { // TSEZNE_TrafficSeparationZone
-                            var instance = (SeparationZoneOrLine)ImporterNIS.Build("TSEZNE", feature, buffer);
+                            var instance = (SeparationZoneOrLine)ImporterNIS.Build("TSEZNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -313,7 +493,16 @@ namespace S100Framework.Applications
                         }
 
                     case "tracksandroutesa::60": { // TSSLPT_TrafficSeparationSchemeLanePart
-                            var instance = (TrafficSeparationSchemeLanePart)ImporterNIS.Build("TSSLPT", feature, buffer);
+                            var instance = (TrafficSeparationSchemeLanePart)ImporterNIS.Build("TSSLPT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -326,7 +515,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::65": { // TSSRON_TrafficSeparationSchemeRoundabout
-                            var instance = (TrafficSeparationSchemeRoundabout)ImporterNIS.Build("TSSRON", feature, buffer);
+                            var instance = (TrafficSeparationSchemeRoundabout)ImporterNIS.Build("TSSRON", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -339,7 +537,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tracksandroutesa::70": { // TWRTPT_TwoWayRoutePart
-                            var instance = (TwoWayRoutePart)ImporterNIS.Build("TWRTPT", feature, buffer);
+                            var instance = (TwoWayRoutePart)ImporterNIS.Build("TWRTPT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

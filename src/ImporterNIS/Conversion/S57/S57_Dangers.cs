@@ -40,7 +40,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "dangersp::1": { // CTNARE_CautionArea
-                            var instance = (CautionArea)ImporterNIS.Build("CTNARE", feature, buffer);
+                            var instance = (CautionArea)ImporterNIS.Build("CTNARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -53,7 +62,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::1": { // FSHFAC_FishingFacility
-                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature, buffer);
+                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -66,7 +84,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::1": { // CTNARE_CautionArea
-                            var instance = (CautionArea)ImporterNIS.Build("CTNARE", feature, buffer);
+                            var instance = (CautionArea)ImporterNIS.Build("CTNARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -80,7 +107,7 @@ namespace S100Framework.Applications
                         break;
                     case "dangersl::5": { // OBSTRN_Obstruction
                             //if (objectid == 5) System.Diagnostics.Debugger.Break();
-                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
+                            var instance = ImporterNIS.OBSTRN(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -98,7 +125,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::10": { // FSHFAC Fishing facilities
-                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature, buffer);
+                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -111,7 +147,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::10": { // OILBAR_OilBarrier
-                            var instance = (OilBarrier)ImporterNIS.Build("OILBAR", feature, buffer);
+                            var instance = (OilBarrier)ImporterNIS.Build("OILBAR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -124,7 +169,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::10": { // FSHFAC_FishingFacility
-                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature, buffer);
+                            var instance = (FishingFacility)ImporterNIS.Build("FSHFAC", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -137,7 +191,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersl::15": { // WATTUR_WaterTurbulence
-                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature, buffer);
+                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -150,7 +213,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::15": { // OBSTRN_Obstruction                            
-                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
+                            var instance = ImporterNIS.OBSTRN(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -168,7 +231,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::20": { // OBSTRN_Obstruction
-                            var instance = ImporterNIS.OBSTRN(feature, buffer, filter);
+                            var instance = ImporterNIS.OBSTRN(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -186,7 +249,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::20": { // WATTUR_WaterTurbulence
-                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature, buffer);
+                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -199,7 +271,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersa::25": { // WRECKS_Wreck
-                            var instance = ImporterNIS.WRECKS(feature, buffer, filter);
+                            var instance = ImporterNIS.WRECKS(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -212,7 +284,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::35": { // UWTROC_UnderwaterAwashRock
-                            var instance = (UnderwaterAwashRock)ImporterNIS.UWTROC(feature, buffer, filter);
+                            var instance = ImporterNIS.UWTROC(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -226,7 +298,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::40": { // WATTUR_WaterTurbulence
-                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature, buffer);
+                            var instance = (WaterTurbulence)ImporterNIS.Build("WATTUR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -239,7 +320,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "dangersp::45": { // WRECKS_Wreck
-                            var instance = ImporterNIS.WRECKS(feature, buffer, filter);
+                            var instance = ImporterNIS.WRECKS(feature, filter);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

@@ -6,7 +6,6 @@ using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
-using Windows.Storage.Streams;
 
 namespace S100Framework.Applications
 {
@@ -16,9 +15,9 @@ namespace S100Framework.Applications
             using var dataset = source(tableName);
             Subtypes.Instance.RegisterSubtypes(dataset);
 
-            using var featureClassTopo = target();
+            using var featureClass = target();
 
-            using var bufferTopo = featureClassTopo.CreateRowBuffer();
+            using var buffer = featureClass.CreateRowBuffer();
 
             using var cursor = dataset.Search(filter, true);
             int recordCount = 0;
@@ -43,9 +42,18 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "depthsa::1": {     // DEPARE // SKIN OF EARTH
-                            var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature, bufferTopo);
+                            var instance = (DepthArea)ImporterNIS.Build("DEPARE", feature);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -56,7 +64,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "depthsl::5": { // DEPCNT_DepthContour
-                            var instance = (DepthContour)ImporterNIS.Build("DEPCNT", feature, bufferTopo);
+                            var instance = (DepthContour)ImporterNIS.Build("DEPCNT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             /*
                                QUAPOS = 1 (surveyed) -> will not be converted
@@ -88,7 +105,7 @@ namespace S100Framework.Applications
 
                                     if (difference is Polyline polyline) {
                                         geometry = [.. geometry, ((Polyline)polyline.Clone(), () => {
-                                                bufferTopo["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
                                             })];
                                     }
                                     else
@@ -106,13 +123,13 @@ namespace S100Framework.Applications
                             }
 
                             foreach (var p in geometry) {
-                                bufferTopo["informationbindings"] = "[]";
+                                buffer["informationbindings"] = "[]";
 
-                                SetShape(bufferTopo, p.geometry);
+                                SetShape(buffer, p.geometry);
 
                                 p.callback?.Invoke();
 
-                                using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -125,9 +142,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "depthsa::5": {     // DRGARE // SKIN OF EARTH
-                            var instance = ImporterNIS.Build("DRGARE", feature, bufferTopo);
+                            var instance = ImporterNIS.Build("DRGARE", feature);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -138,9 +164,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "depthsa::10": {    // SWPARE_SweptArea
-                            var instance = (SweptArea)ImporterNIS.Build("SWPARE", feature, bufferTopo);
+                            var instance = (SweptArea)ImporterNIS.Build("SWPARE", feature);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -152,9 +187,18 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "depthsa::15": {    // UNSARE  // SKIN OF EARTH
-                            var instance = (UnsurveyedArea)ImporterNIS.Build("UNSARE", feature, bufferTopo);
+                            var instance = (UnsurveyedArea)ImporterNIS.Build("UNSARE", feature);
 
-                            using var featureN = featureClassTopo.CreateRow(bufferTopo);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {

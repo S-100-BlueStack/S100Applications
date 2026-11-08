@@ -235,7 +235,7 @@ namespace S100Framework.Applications
                         break;
 
                     case 15: { // BUISGL_BuildingSingle
-                            var instance = new Building();                           
+                            var instance = new Building();
 
                             if (current.BUISHP != null) {
                                 instance.buildingShape = EnumHelper.GetEnumValue(current.BUISHP);
@@ -356,7 +356,16 @@ namespace S100Framework.Applications
 
                     case 20: { // CTRPNT_ControlPoint
                             if (current.CATCTR.HasValue && (current.CATCTR == 1 || current.CATCTR == 5)) {
-                                var instance = (Landmark)ImporterNIS.Build("CTRPNT", feature, buffer);
+                                var instance = (Landmark)ImporterNIS.Build("CTRPNT", feature);
+
+                                buffer["ps"] = ps101;
+                                buffer["code"] = instance.GetType().Name;
+                                buffer["attributebindings"] = instance.Flatten();
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                SetShape(buffer, feature.SHAPE());
+                                SetCompilationScale(buffer, feature.PLTS_COMP_SCALE()!.Value);
 
                                 using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();

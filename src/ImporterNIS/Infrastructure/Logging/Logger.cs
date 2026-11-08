@@ -47,43 +47,40 @@ public sealed class DynamicFileSink : ILogEventSink, IDisposable
     private bool _disposed;
     private const int MaximumOpenWriters = 64;
 
-    public DynamicFileSink(string logDirectory)
-    {
-        _logDirectory = logDirectory;
+    public DynamicFileSink(string logDirectory) {
+        this._logDirectory = logDirectory;
         Directory.CreateDirectory(logDirectory);
     }
 
-    public void Emit(LogEvent logEvent)
-    {
+    public void Emit(LogEvent logEvent) {
         var table = logEvent.Properties.TryGetValue("TableName", out var value) &&
             value is ScalarValue { Value: string name } ? name : "Unknown";
         // Hash arbitrary names so database metadata cannot escape the report directory.
         string safeName = table.Length is > 0 and <= 80 && table.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-')
             ? table
             : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(table)));
-        string path = Path.Combine(_logDirectory, $"ImporterNIS_DataObject_{safeName}.log");
-        lock (_gate) {
-            ObjectDisposedException.ThrowIf(_disposed, this);
-            if (!_writers.TryGetValue(path, out var writer)) {
+        string path = Path.Combine(this._logDirectory, $"ImporterNIS_DataObject_{safeName}.log");
+        lock (this._gate) {
+            ObjectDisposedException.ThrowIf(this._disposed, this);
+            if (!this._writers.TryGetValue(path, out var writer)) {
                 // Bound handles even when a source has many distinct table names.
-                if (_writers.Count >= MaximumOpenWriters) {
-                    var oldest = _writers.First();
+                if (this._writers.Count >= MaximumOpenWriters) {
+                    var oldest = this._writers.First();
                     oldest.Value.Dispose();
-                    _writers.Remove(oldest.Key);
+                    this._writers.Remove(oldest.Key);
                 }
                 writer = new StreamWriter(path, append: true, new UTF8Encoding(false)) { AutoFlush = true };
-                _writers.Add(path, writer);
+                this._writers.Add(path, writer);
             }
             writer.WriteLine(logEvent.RenderMessage(CultureInfo.InvariantCulture));
         }
     }
-    public void Dispose()
-    {
-        lock (_gate) {
-            if (_disposed) return;
-            foreach (var writer in _writers.Values) writer.Dispose();
-            _writers.Clear();
-            _disposed = true;
+    public void Dispose() {
+        lock (this._gate) {
+            if (this._disposed) return;
+            foreach (var writer in this._writers.Values) writer.Dispose();
+            this._writers.Clear();
+            this._disposed = true;
         }
     }
 
@@ -95,8 +92,7 @@ internal static class Logger
     internal static ILogger Current => _logger ?? throw new InvalidOperationException("Logging has not been configured.");
     internal static string LogDir { get; private set; } = string.Empty;
 
-    internal static void Configure(bool verbose, string? logDirectory = null)
-    {
+    internal static void Configure(bool verbose, string? logDirectory = null) {
         if (_logger is not null) throw new InvalidOperationException("Logging is already configured.");
         LogDir = logDirectory ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "S-100 BlueStack", "ImporterNIS", $"{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}");
@@ -122,8 +118,7 @@ internal static class Logger
     }
 
     internal static void TryLogFatal(Exception exception) => _logger?.Fatal(exception, "Import failed");
-    internal static void Close()
-    {
+    internal static void Close() {
         _logger?.Dispose();
         _logger = null;
     }
