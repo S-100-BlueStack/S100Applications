@@ -114,7 +114,7 @@ namespace S100Framework.Applications
                             if (current.PICREP != default) {
                                 instance.pictorialRepresentation = FixFilename(current.PICREP);
                             }
-
+                            
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
