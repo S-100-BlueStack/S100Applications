@@ -1,5 +1,6 @@
 ﻿using JsonFlatten;
 using Newtonsoft.Json.Linq;
+using S100FC;
 using S100FC.S101.FeatureTypes;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,36 @@ namespace TestNisImporter
 
             System.Diagnostics.Debugger.Break();
 
+        }
+
+        [Fact]
+        public void Test_FlattenBindings() {
+            var informations = new informationBinding[] {
+                new informationBinding {
+                    association = new association {
+                        S100FC_code = "QualityOfBathymetricDataComposition",
+                    },
+                    roleType = "association",
+                    role = "theQualityInformation",
+                    informationType="SpatialQuality",
+                    informationId="{C7C08676-21A0-486C-9054-733727D12C75}",
+                },
+                new informationBinding {
+                    association = new association {
+                        S100FC_code = "QualityOfBathymetricDataComposition",
+                    },
+                    roleType = "association",
+                    role = "theQualityInformation",
+                    informationType="SpatialQuality",
+                    informationId="{4ED71F0C-8A01-4566-B9F1-06ADF7186FAC}",
+                },
+            };
+
+            var flatten = informations.Flatten();
+
+            var instance = AttributeFlattenExtensions.Unflatten<informationBinding[]>(flatten, typeof(informationBinding[]));
+
+            System.Diagnostics.Debugger.Break();
         }
     }
 }
