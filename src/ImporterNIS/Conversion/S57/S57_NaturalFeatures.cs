@@ -40,7 +40,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "naturalfeaturesp::1": { // LNDARE_LandArea
-                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature, buffer);
+                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -55,7 +64,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesl::1": { // LNDARE_LandArea
-                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature, buffer);
+                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -70,7 +88,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesa::1": { //  LAKARE_Lake
-                            var instance = (Lake)ImporterNIS.Build("LAKARE", feature, buffer);
+                            var instance = (Lake)ImporterNIS.Build("LAKARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -83,7 +110,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesp::5": { // LNDELV_LandElevation
-                            var instance = (LandElevation)ImporterNIS.Build("LNDELV", feature, buffer);
+                            var instance = (LandElevation)ImporterNIS.Build("LNDELV", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -96,7 +132,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesl::5": { // LNDELV_LandElevation
-                            var instance = (LandElevation)ImporterNIS.Build("LNDELV", feature, buffer);
+                            var instance = (LandElevation)ImporterNIS.Build("LNDELV", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -109,7 +154,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesa::5": { //  LNDARE // SKIN OF EARTH
-                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature, buffer);
+                            var instance = (LandArea)ImporterNIS.Build("LNDARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -124,7 +178,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesp::10": { // LNDRGN_LandRegion
-                            var instance = (LandRegion)ImporterNIS.Build("LNDRGN", feature, buffer);
+                            var instance = (LandRegion)ImporterNIS.Build("LNDRGN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -137,7 +200,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesa::10": {    // LNDRGN_LandRegion
-                            var instance = (LandRegion)ImporterNIS.Build("LNDRGN", feature, buffer);
+                            var instance = (LandRegion)ImporterNIS.Build("LNDRGN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -156,7 +228,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No RAPIDS in DK or GL. {tableName}");
                         }
                     case "naturalfeaturesl::15": {    // RIVERS_River
-                            var instance = (River)ImporterNIS.Build("RIVERS", feature, buffer);
+                            var instance = (River)ImporterNIS.Build("RIVERS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -173,7 +254,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No RAPIDS in DK or GL. {tableName}");
                         }
                     case "naturalfeaturesp::20": { // SEAARE_SeaAreaNamedWaterArea
-                            var instance = (SeaAreaNamedWaterArea)ImporterNIS.Build("SEAARE", feature, buffer);
+                            var instance = (SeaAreaNamedWaterArea)ImporterNIS.Build("SEAARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -186,7 +276,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesl::20": { // SLOTOP_SlopeTopline
-                            var instance = (SlopeTopline)ImporterNIS.Build("SLOTOP", feature, buffer);
+                            var instance = (SlopeTopline)ImporterNIS.Build("SLOTOP", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -199,7 +298,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesa::20": {    // RIVERS_River
-                            var instance = (River)ImporterNIS.Build("RIVERS", feature, buffer);
+                            var instance = (River)ImporterNIS.Build("RIVERS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -212,7 +320,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesp::25": { // SLOGRD_SlopingGround
-                            var instance = (SlopingGround)ImporterNIS.Build("SLOGRD", feature, buffer);
+                            var instance = (SlopingGround)ImporterNIS.Build("SLOGRD", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -228,7 +345,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No RAPIDS in DK or GL. {tableName}");
                         }
                     case "naturalfeaturesa::25": {    // SEAARE_SeaAreaNamedWaterArea
-                            var instance = (SeaAreaNamedWaterArea)ImporterNIS.Build("SEAARE", feature, buffer);
+                            var instance = (SeaAreaNamedWaterArea)ImporterNIS.Build("SEAARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -241,7 +367,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "naturalfeaturesp::30": { // VEGATN_Vegetation
-                            var instance = (Vegetation)ImporterNIS.Build("VEGATN", feature, buffer);
+                            var instance = (Vegetation)ImporterNIS.Build("VEGATN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -257,7 +392,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No RAPIDS in DK or GL. {tableName}");
                         }
                     case "naturalfeaturesa::30": {    // SLOGRD_SlopingGround
-                            var instance = (SlopingGround)ImporterNIS.Build("SLOGRD", feature, buffer);
+                            var instance = (SlopingGround)ImporterNIS.Build("SLOGRD", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -273,7 +417,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No WATFAL in DK or GL. {tableName}");
                         }
                     case "naturalfeaturesa::35": {    // VEGATN_Vegetation
-                            var instance = (Vegetation)ImporterNIS.Build("VEGATN", feature, buffer);
+                            var instance = (Vegetation)ImporterNIS.Build("VEGATN", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

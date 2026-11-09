@@ -4,8 +4,7 @@ public enum WorkspaceKind { File, Mobile, Enterprise, Service }
 
 public sealed record WorkspaceAddress(WorkspaceKind Kind, string Value)
 {
-    public static WorkspaceAddress Parse(string value)
-    {
+    public static WorkspaceAddress Parse(string value) {
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
         if (Uri.TryCreate(value, UriKind.Absolute, out var uri) && !uri.IsFile) {
             if (uri.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(uri.UserInfo) ||
@@ -25,13 +24,12 @@ public sealed record WorkspaceAddress(WorkspaceKind Kind, string Value)
     }
 
     public bool HasSameAddress(WorkspaceAddress other) =>
-        Kind == other.Kind && string.Equals(Value, other.Value,
-            Kind == WorkspaceKind.Service ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
+        this.Kind == other.Kind && string.Equals(this.Value, other.Value,
+            this.Kind == WorkspaceKind.Service ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
 
-    public void RequireExisting()
-    {
-        if (Kind == WorkspaceKind.Service) return;
-        if (Kind == WorkspaceKind.File ? !Directory.Exists(Value) : !System.IO.File.Exists(Value))
-            throw new FileNotFoundException("Workspace does not exist.", Value);
+    public void RequireExisting() {
+        if (this.Kind == WorkspaceKind.Service) return;
+        if (this.Kind == WorkspaceKind.File ? !Directory.Exists(this.Value) : !System.IO.File.Exists(this.Value))
+            throw new FileNotFoundException("Workspace does not exist.", this.Value);
     }
 }

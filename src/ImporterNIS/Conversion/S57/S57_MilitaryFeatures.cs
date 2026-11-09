@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
@@ -40,7 +41,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "militaryfeaturesp::30": { // MIPARE_MilitaryPracticeArea
-                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature, buffer);
+                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -54,7 +64,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "militaryfeaturesa::60": { // MIPARE_MilitaryPracticeArea
-                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature, buffer);
+                            var instance = (MilitaryPracticeArea)ImporterNIS.Build("MIPARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

@@ -3,18 +3,13 @@ using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100FC.S128.ComplexAttributes;
-using S100Framework.Applications.Singletons;
 using System.Text.Json;
 using VortexLoader.Singletons;
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
-    using NetTopologySuite.Utilities;
-    using S100FC.S101.SimpleAttributes;
     using S100FC.S128;
     using S100FC.S128.FeatureTypes;
-    using S100FC.S128.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
     using System.Text.RegularExpressions;
 
@@ -78,7 +73,7 @@ namespace S100Framework.Applications
                 using var productDefinitionsTable = source.OpenDataset<Table>(source.GetName("ProductDefinitions"));
                 using var productCoverageFeatureClass = source.OpenDataset<FeatureClass>(source.GetName("ProductCoverage"));
 
-                var whereclause = $"({filter.WhereClause.Replace("PLTS_COMP_SCALE", "CSCL")})".Replace(" AND (Shape IS NOT NULL))",string.Empty).Substring(1);
+                var whereclause = $"({filter.WhereClause.Replace("PLTS_COMP_SCALE", "CSCL")})".Replace(" AND (Shape IS NOT NULL))", string.Empty).Substring(1);
 
                 using var productDefinitions = productDefinitionsTable.Search(new QueryFilter {
                     WhereClause = $"({whereclause}) AND (EXPORTTYPE IS NULL OR EXPORTTYPE <> 'Cancel')",
@@ -257,7 +252,7 @@ namespace S100Framework.Applications
                     var dataCoverage = new DataCoverage {
                         minimumDisplayScale = product.s101.minimumDisplayScale,
                         optimumDisplayScale = product.s101.optimumDisplayScale,
-                        maximumDisplayScale = product.s101.maximumDisplayScale,                        
+                        maximumDisplayScale = product.s101.maximumDisplayScale,
                     };
 
                     coverages = [.. coverages, new S101ProductCoverage(
@@ -277,7 +272,7 @@ namespace S100Framework.Applications
                 using var buffer = featureClass.CreateRowBuffer();
                 buffer["ps"] = ps128;
 
-                foreach(var product in products) {
+                foreach (var product in products) {
                     SetShape(buffer, product.fullCoverage);
 
                     buffer["code"] = product.s57.S100FC_code;

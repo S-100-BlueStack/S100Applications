@@ -41,7 +41,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "coastlinep::1": { // SLCONS_ShorelineConstruction
-                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature, buffer);
+                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -56,7 +65,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "coastlinel::1": { // COALNE_Coastline
-                            var instance = (Coastline)ImporterNIS.Build("COALNE", feature, buffer);
+                            var instance = (Coastline)ImporterNIS.Build("COALNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE()!, default)];
 
@@ -111,7 +129,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "coastlinea::1": { // SLCONS_ShorelineConstruction
-                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature, buffer);
+                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -125,7 +152,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "coastlinel::5": { // SLCONS_ShorelineConstruction
-                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature, buffer);
+                            var instance = (ShorelineConstruction)ImporterNIS.Build("SLCONS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE()!, default)];
 

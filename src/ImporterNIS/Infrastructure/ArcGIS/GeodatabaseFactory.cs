@@ -6,8 +6,7 @@ namespace S100Framework.Applications;
 internal static class GeodatabaseFactory
 {
     // The caller owns each connection and must dispose it on the ArcGIS thread.
-    internal static Func<Geodatabase> Create(string value)
-    {
+    internal static Func<Geodatabase> Create(string value) {
         var address = WorkspaceAddress.Parse(value);
         return address.Kind switch {
             WorkspaceKind.File => () => new Geodatabase(new FileGeodatabaseConnectionPath(new Uri(address.Value))),

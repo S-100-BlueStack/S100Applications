@@ -137,11 +137,11 @@ namespace S100Framework.Applications
         //}
 
         internal void CreateRelatedLineEquipment(S57Object s57master, FeatureType s101master, Feature s101MasterFeature) {
-            CreateRelatedLineEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature);
+            this.CreateRelatedLineEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature);
         }
 
         internal void CreateRelatedLineEquipment(Feature s57master, FeatureType s101master, Feature s101MasterFeature) {
-            CreateRelatedLineEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature);
+            this.CreateRelatedLineEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature);
         }
 
         internal void CreateRelatedLineEquipment(Guid globalid, int PLTS_COMP_SCALE, FeatureType s101master, Feature s101MasterFeature) {
@@ -150,11 +150,11 @@ namespace S100Framework.Applications
 
 
         internal void CreateRelatedAreaEquipment(S57Object s57master, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {
-            CreateRelatedAreaEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature, scaleMinimum);
+            this.CreateRelatedAreaEquipment(s57master.GlobalId, s57master.PLTS_COMP_SCALE!.Value, s101master, s101MasterFeature, scaleMinimum);
         }
 
         internal void CreateRelatedAreaEquipment(Feature s57master, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {
-            CreateRelatedAreaEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature, scaleMinimum);
+            this.CreateRelatedAreaEquipment(s57master.GLOBALID(), s57master.PLTS_COMP_SCALE()!.Value, s101master, s101MasterFeature, scaleMinimum);
         }
 
         internal void CreateRelatedAreaEquipment(Guid globalid, int PLTS_COMP_SCALE, FeatureType s101master, Feature s101MasterFeature, int? scaleMinimum) {

@@ -3,9 +3,6 @@ using ArcGIS.Core.Geometry;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
-using S100FC.S101.InformationTypes;
-using S100FC.S101.SimpleAttributes;
-using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 
@@ -47,7 +44,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "metadataa::1": { // M_ACCY_AccuracyOfData
-                            var instance = (QualityOfNonBathymetricData)ImporterNIS.Build("M_ACCY", feature, buffer);
+                            var instance = (QualityOfNonBathymetricData)ImporterNIS.Build("M_ACCY", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -66,7 +72,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No M_HOPA_HorizontalDatumShiftParameters in DK or GL. {tableName}");
                         }
                     case "metadatap::1": { // M_NPUB_NauticalPublicationInformation
-                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
+                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -79,7 +94,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "metadataa::30": { // M_NPUB_NauticalPublicationInformation                            
-                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature, buffer);
+                            var instance = (InformationArea)ImporterNIS.Build("M_NPUB", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             informationAreas = [.. informationAreas, (
                                 feature.GetObjectID(),
@@ -112,7 +136,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "metadataa::35": { // M_NSYS_NavigationalSystemOfMarks // Navigational System of Marks - region A and B globally
-                            var instance = ImporterNIS.Build("M_NSYS", feature, buffer);
+                            var instance = ImporterNIS.Build("M_NSYS", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -128,7 +161,7 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "metadataa::40": { // M_QUAL_QualityOfData // SKIN OF EARTH
-                            var instance = ImporterNIS.M_QUAL(feature, buffer, filter, geodatabase);
+                            var instance = ImporterNIS.M_QUAL(feature, filter, geodatabase);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -145,7 +178,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "metadataa::50": { // M_SREL_SurveyReliability
-                            var instance = (QualityOfSurvey)ImporterNIS.Build("M_SREL", feature, buffer);
+                            var instance = (QualityOfSurvey)ImporterNIS.Build("M_SREL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -159,24 +201,6 @@ namespace S100Framework.Applications
                         break;
                     case "metadataa::55": { // M_VDAT_VerticalDatumOfData
                             // Handled by S101_VerticalDatumOfData
-
-                            //var instance = (VerticalDatumOfData)ImporterNIS.Build("M_VDAT", feature, buffer);
-
-                            //using var featureN = featureClass.CreateRow(buffer);
-                            //var name = featureN.UID();
-
-                            //if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                            //    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            //}
-                            //ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
-                            //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            //if (instance.verticalDatum is not null) {
-                            //    VerticalDatums.Instance.Add(current.SHAPE()!.Clone(), instance.verticalDatum);
-                            //}
-                            //else {
-                            //    Logger.Current.DataError(current.GetObjectID(), current.TableName(), current.LNAM()!, $"M_VDAT_VerticalDatumOfData has no VERDAT");
-                            //}
                         }
                         break;
                     default:
@@ -210,7 +234,7 @@ namespace S100Framework.Applications
                 }
 
                 if (informations.Any())
-                    instance.information = informations;                
+                    instance.information = informations;
                 instance.SetInformationBindings(informationBindings);
 
 
@@ -225,7 +249,7 @@ namespace S100Framework.Applications
                 using var featureN = featureClass.CreateRow(buffer);
                 var name = featureN.UID();
 
-                foreach(var i in e) {
+                foreach (var i in e) {
                     i.callback(instance, name);
                 }
 

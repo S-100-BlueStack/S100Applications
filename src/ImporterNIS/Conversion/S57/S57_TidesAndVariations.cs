@@ -40,7 +40,16 @@ namespace S100Framework.Applications
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "tidesandvariationsp::1": { // CURENT_CurrentNonGravitational
-                            var instance = (CurrentNonGravitational)ImporterNIS.Build("CURENT", feature, buffer);
+                            var instance = (CurrentNonGravitational)ImporterNIS.Build("CURENT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -53,7 +62,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tidesandvariationsp::5": { // LOCMAG_LocalMagneticAnomaly
-                            var instance = (LocalMagneticAnomaly)ImporterNIS.Build("LOCMAG", feature, buffer);
+                            var instance = (LocalMagneticAnomaly)ImporterNIS.Build("LOCMAG", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -69,7 +87,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException("No MAGVAR_MagneticVariation in DK | GL NIS");
                         }
                     case "tidesandvariationsa::5": { // LOCMAG_LocalMagneticAnomaly
-                            var instance = (LocalMagneticAnomaly)ImporterNIS.Build("LOCMAG", feature, buffer);
+                            var instance = (LocalMagneticAnomaly)ImporterNIS.Build("LOCMAG", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -82,7 +109,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tidesandvariationsp::10": { // MAGVAR_MagneticVariation
-                            var instance = (MagneticVariation)ImporterNIS.Build("MAGVAR", feature, buffer);
+                            var instance = (MagneticVariation)ImporterNIS.Build("MAGVAR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -98,7 +134,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException("No MAGVAR_MagneticVariation in DK | GL NIS");
                         }
                     case "tidesandvariationsa::10": { // MAGVAR_MagneticVariation
-                            var instance = (MagneticVariation)ImporterNIS.Build("MAGVAR", feature, buffer);
+                            var instance = (MagneticVariation)ImporterNIS.Build("MAGVAR", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -114,7 +159,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException("No T_HMON_TideHarmonicPrediction in DK | GL NIS");
                         }
                     case "tidesandvariationsl::15": { // TIDEWY_Tideway
-                            var instance = (Tideway)ImporterNIS.Build("TIDEWY", feature, buffer);
+                            var instance = (Tideway)ImporterNIS.Build("TIDEWY", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -142,7 +196,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException("No T_TIMS_TideTimeSeries in DK | GL NIS");
                         }
                     case "tidesandvariationsp::30": { // TS_FEB_TidalStreamFloodEbb
-                            var instance = (TidalStreamFloodEbb)ImporterNIS.Build("TS_FEB", feature, buffer);
+                            var instance = (TidalStreamFloodEbb)ImporterNIS.Build("TS_FEB", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -155,7 +218,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tidesandvariationsa::30": { // TIDEWY_Tideway
-                            var instance = (Tideway)ImporterNIS.Build("TIDEWY", feature, buffer);
+                            var instance = (Tideway)ImporterNIS.Build("TIDEWY", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -168,7 +240,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tidesandvariationsp::35": { // TS_PAD_TidalStreamPanelData
-                            var instance = (TidalStreamPanelData)ImporterNIS.Build("TS_PAD", feature, buffer);
+                            var instance = (TidalStreamPanelData)ImporterNIS.Build("TS_PAD", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -181,7 +262,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "tidesandvariationsa::35": { // TS_FEB_TidalStreamFloodEbb
-                            var instance = (TidalStreamFloodEbb)ImporterNIS.Build("TS_FEB", feature, buffer);
+                            var instance = (TidalStreamFloodEbb)ImporterNIS.Build("TS_FEB", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

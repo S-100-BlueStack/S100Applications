@@ -1,22 +1,15 @@
 using ArcGIS.Core.Data;
-using S100FC;
-using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.Singletons;
-using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
-    using ArcGIS.Core.Geometry;
-    using S100FC.S101.InformationTypes;
-    using S100FC.S101.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
 
     internal static partial class ImporterNIS
     {
 
-        private static UnderwaterAwashRock UWTROC(Feature current, RowBuffer buffer, QueryFilter filter) {
+        private static UnderwaterAwashRock UWTROC(Feature current, QueryFilter filter) {
             var instance = new UnderwaterAwashRock();
 
             if (current.EXPSOU_HasValue()) {
@@ -68,10 +61,6 @@ namespace S100Framework.Applications
                 if (EnumHelper.GetEnumValue(current.WATLEV(), out int? waterLevelEffect, instance.attributeBindingDefinition("waterLevelEffect")!.permitedValues!))
                     instance.waterLevelEffect = waterLevelEffect;
             }
-
-
-            bool coveredByUnsurveyedArea = false;
-            bool coveredByDredgedArea = false;
             decimal? leastDepth = null;
 
             var surroundingDepths = ImporterNIS.GetSurrounding_DepthArea(current.Shape()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause).ToList();
@@ -80,10 +69,8 @@ namespace S100Framework.Applications
 
                 leastDepth = surroundingDepth.DRVAL1.HasValue ? surroundingDepth.DRVAL1.Value : null;
                 if (surroundingDepth.FcSubtype == 15) {  // UNSARE
-                    coveredByUnsurveyedArea = true;
                 }
                 if (surroundingDepth.FcSubtype == 5) {  // DRGARE
-                    coveredByDredgedArea = true;
                     instance.surroundingDepth = leastDepth != -32767m ? leastDepth : null;
                 }
                 if (surroundingDepth.FcSubtype == 1) {  // DEPARE
@@ -204,15 +191,6 @@ namespace S100Framework.Applications
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
             instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-            buffer["ps"] = ps101;
-            buffer["code"] = instance.GetType().Name;
-            buffer["attributebindings"] = instance.Flatten();
-            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetShape(buffer, current.SHAPE());
-            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }

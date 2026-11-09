@@ -1,5 +1,6 @@
 ﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Geometry;
+using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
@@ -40,7 +41,16 @@ namespace S100Framework.Applications
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
 
                     case "seabedl::10": { // SBDARE_SeabedArea
-                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current, buffer);
+                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -54,7 +64,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "seabedp::15": { // SBDARE_SeabedArea                            
-                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current, buffer);
+                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -67,7 +86,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "seabeda::15": { // SBDARE_SeabedArea                            
-                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current, buffer);
+                            var instance = (SeabedArea)ImporterNIS.Build("SBDARE", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -81,7 +109,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "seabedl::15": { // SNDWAV_SandWaves
-                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current, buffer);
+                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -95,7 +132,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "seabedp::25": { // SNDWAV_SandWaves
-                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current, buffer);
+                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -108,7 +154,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "seabeda::30": { // SNDWAV_SandWaves
-                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current, buffer);
+                            var instance = (Sandwave)ImporterNIS.Build("SNDWAV", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -122,7 +177,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "seabedp::30": { // SPRING_Spring
-                            var instance = (Spring)ImporterNIS.Build("SPRING", current, buffer);
+                            var instance = (Spring)ImporterNIS.Build("SPRING", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -136,7 +200,16 @@ namespace S100Framework.Applications
                         break;
 
                     case "seabedp::35": { // WEDKLP_WeedKelp
-                            var instance = ImporterNIS.Build("WEDKLP", current, buffer);
+                            var instance = ImporterNIS.Build("WEDKLP", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -152,7 +225,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "seabeda::40": { // WEDKLP_WeedKelp
-                            var instance = ImporterNIS.Build("WEDKLP", current, buffer);
+                            var instance = ImporterNIS.Build("WEDKLP", current);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

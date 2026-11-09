@@ -6,8 +6,7 @@ namespace S100Framework.Applications;
 
 internal static class ImportOptionsValidator
 {
-    internal static void ValidateOptions(ImportOptions options)
-    {
+    internal static void ValidateOptions(ImportOptions options) {
         if (options.Dataset is not null)
             throw new ArgumentException("--dataset is not implemented for NIS imports. Use --filter to select products.");
         var source = WorkspaceAddress.Parse(options.Source!);
@@ -19,7 +18,7 @@ internal static class ImportOptionsValidator
             if (target.Kind != WorkspaceKind.Mobile)
                 throw new ArgumentException("--initialize-target supports new .geodatabase files only.");
 
-            if (File.Exists(target.Value)){
+            if (File.Exists(target.Value)) {
                 var name = IO.Path.GetFileNameWithoutExtension(target.Value);
                 foreach (var f in IO.Directory.GetFiles(IO.Path.GetDirectoryName(target.Value)!, $"*{name}*.geodatabase*")) {
                     IO.File.Delete(IO.Path.GetFullPath(f));

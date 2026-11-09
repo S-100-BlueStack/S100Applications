@@ -7,8 +7,7 @@ namespace S100Framework.Applications;
 internal static class Program
 {
     [STAThread]
-    private static int Main(string[] args)
-    {
+    private static int Main(string[] args) {
         using var parser = new Parser(settings => settings.HelpWriter = Console.Error);
         var parsed = parser.ParseArguments<ImportOptions>(args);
         if (parsed is NotParsed<ImportOptions> failure)

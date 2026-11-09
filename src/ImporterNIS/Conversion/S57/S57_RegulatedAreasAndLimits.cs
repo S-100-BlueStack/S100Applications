@@ -38,9 +38,18 @@ namespace S100Framework.Applications
 
                 var longname = current.LNAM() ?? string.Empty;
 
-                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {                    
+                switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
                     case "regulatedareasandlimitsp::1": {   // ACHARE_AnchorageArea
-                            var instance = ImporterNIS.Build("ACHARE", feature, buffer);
+                            var instance = ImporterNIS.Build("ACHARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -56,7 +65,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::1": {   // ACHARE_AnchorageArea
-                            var instance = ImporterNIS.Build("ACHARE", feature, buffer);
+                            var instance = ImporterNIS.Build("ACHARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -75,7 +93,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No ASLXIS_ArchipelagicSeaLaneAxis in DK or GL. {tableName}");
                         }
                     case "regulatedareasandlimitsp::5": { // ACHBRT_AnchorBerth
-                            var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature, buffer);
+                            var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -88,7 +115,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::5": { // ACHBRT_AnchorBerth
-                            var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature, buffer);
+                            var instance = (AnchorBerth)ImporterNIS.Build("ACHBRT", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -101,7 +137,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsp::10": { // CTSARE_CargoTranshipmentArea
-                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature, buffer);
+                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -112,9 +157,18 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
-                        break;                    
+                        break;
                     case "regulatedareasandlimitsa::10": { // ADMARE_AdministrationAreaNamed                            
-                            var instance = ImporterNIS.Build("ADMARE", feature, buffer);
+                            var instance = ImporterNIS.Build("ADMARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -134,7 +188,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsp::15": { // DMPGRD_DumpingGround
-                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature, buffer);
+                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -150,7 +213,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No ARCSLN_ArchipelagicSeaLane in DK or GL. {tableName}");
                         }
                     case "regulatedareasandlimitsa::20": { // CONZNE_ContiguousZone
-                            var instance = (ContiguousZone)ImporterNIS.Build("CONZNE", feature, buffer);
+                            var instance = (ContiguousZone)ImporterNIS.Build("CONZNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -167,7 +239,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsl::25": {  //  MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -180,7 +261,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::25": { // COSARE_ContinentalShelfArea
-                            var instance = (ContinentalShelfArea)ImporterNIS.Build("COSARE", feature, buffer);
+                            var instance = (ContinentalShelfArea)ImporterNIS.Build("COSARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -196,7 +286,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No LOGPON_LogPond in DK or GL. {tableName}");
                         }
                     case "regulatedareasandlimitsl::30": { // STSLNE_StraightTerritorialSeaBaseline
-                            var instance = (StraightTerritorialSeaBaseline)ImporterNIS.Build("STSLNE", feature, buffer);
+                            var instance = (StraightTerritorialSeaBaseline)ImporterNIS.Build("STSLNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -209,7 +308,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::30": { // CTSARE_CargoTranshipmentArea
-                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature, buffer);
+                            var instance = (CargoTranshipmentArea)ImporterNIS.Build("CTSARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -222,7 +330,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsp::35": { // MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -235,7 +352,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsl::35": { // MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -251,7 +377,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No CUSZNE_CustomZone in DK or GL. {tableName}");
                         }
                     case "regulatedareasandlimitsp::40": { // SPLARE_SeaPlaneLandingArea
-                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature, buffer);
+                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -264,7 +399,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::40": { // DMPGRD_DumpingGround
-                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature, buffer);
+                            var instance = (DumpingGround)ImporterNIS.Build("DMPGRD", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -277,7 +421,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::50": { // EXEZNE_ExclusiveEconomicZone
-                            var instance = (ExclusiveEconomicZone)ImporterNIS.Build("EXEZNE", feature, buffer);
+                            var instance = (ExclusiveEconomicZone)ImporterNIS.Build("EXEZNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -296,7 +449,16 @@ namespace S100Framework.Applications
                             throw new NotImplementedException($"No FSHGRD_FishingGround in DK or GL. {tableName}");
                         }
                     case "regulatedareasandlimitsa::65": { // FSHZNE_FisheryZone
-                            var instance = (FisheryZone)ImporterNIS.Build("FSHZNE", feature, buffer);
+                            var instance = (FisheryZone)ImporterNIS.Build("FSHZNE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -309,7 +471,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::70": { // HRBARE_HarbourAreaAdministrative
-                            var instance = (HarbourAreaAdministrative)ImporterNIS.Build("HRBARE", feature, buffer);
+                            var instance = (HarbourAreaAdministrative)ImporterNIS.Build("HRBARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -326,7 +497,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::85": { // LOGPON_LogPond
-                            var instance = (LogPond)ImporterNIS.Build("LOGPON", feature, buffer);
+                            var instance = (LogPond)ImporterNIS.Build("LOGPON", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -339,7 +519,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::95": { // MARCUL_MarineFarmCulture
-                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature, buffer);
+                            var instance = (MarineFarmCulture)ImporterNIS.Build("MARCUL", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -352,7 +541,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::105": { // RESARE_RestrictedArea
-                            var instance = (RestrictedArea)ImporterNIS.Build("RESARE", feature, buffer);
+                            var instance = (RestrictedArea)ImporterNIS.Build("RESARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -365,7 +563,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::110": { // SPLARE_SeaplaneLandingArea
-                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature, buffer);
+                            var instance = (SeaplaneLandingArea)ImporterNIS.Build("SPLARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
@@ -378,7 +585,16 @@ namespace S100Framework.Applications
                         }
                         break;
                     case "regulatedareasandlimitsa::115": { // TESARE_TerritorialSeaArea
-                            var instance = (TerritorialSeaArea)ImporterNIS.Build("TESARE", feature, buffer);
+                            var instance = (TerritorialSeaArea)ImporterNIS.Build("TESARE", feature);
+
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();

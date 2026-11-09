@@ -3,20 +3,16 @@ using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.Singletons;
-using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications
 {
-    using ArcGIS.Core.Data.UtilityNetwork.Trace;
-    using ArcGIS.Core.Geometry;
     using S100FC.S101.InformationTypes;
-    using S100FC.S101.SimpleAttributes;
     using S100Framework.Applications.S57.esri;
 
     internal static partial class ImporterNIS
     {
 
-        private static QualityOfBathymetricData M_QUAL(Feature current, RowBuffer buffer, QueryFilter filter, Geodatabase target) {
+        private static QualityOfBathymetricData M_QUAL(Feature current, QueryFilter filter, Geodatabase target) {
             var instance = new QualityOfBathymetricData();
 
             /*
@@ -232,12 +228,9 @@ namespace S100Framework.Applications
             }
 
             if (ImporterNIS.ContainsBarthyFeatures_UnsurveyedArea(current.SHAPE()!, (Geodatabase)current.GetTable().GetDatastore(), filter.WhereClause)) {
-                var isCoveredByUNSARE_UnsurveyedArea = false;
-
                 if (ImporterNIS.IsCoveredByUNSARE_UnsurveyedArea(current.SHAPE()!)) {
                     instance.categoryOfTemporalVariation = 6;   //  Unassessed
                     instance.zoneOfConfidence[0]!.categoryOfZoneOfConfidenceInData = 5;  //categoryOfZoneOfConfidenceInData.ZoneOfConfidenceD,                                        
-                    isCoveredByUNSARE_UnsurveyedArea = true;
                 }
             }
 
@@ -254,15 +247,6 @@ namespace S100Framework.Applications
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
             instance.SetInformationBindings([.. result.InformationBindings, .. informationBindings]);
-
-            buffer["ps"] = ps101;
-            buffer["code"] = instance.GetType().Name;
-            buffer["attributebindings"] = instance.Flatten();
-            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
-
-            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-            SetShape(buffer, current.SHAPE());
-            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
             return instance;
         }

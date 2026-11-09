@@ -3,8 +3,6 @@ using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.InformationAssociation;
 using S100FC.S101.InformationTypes;
-using S100FC.S128.SimpleAttributes;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace S100Framework.Applications.Singletons

@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Data;
+using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
@@ -40,12 +41,21 @@ namespace S100Framework.Applications
 
                         switch (current.FCSubtype()) {
                             case 1: {
-                                    var instance = ImporterNIS.Build("SOUNDG", current, buffer);
+                                    var instance = ImporterNIS.Build("SOUNDG", current);
 
-                                    if(instance is Sounding sounding) {
+                                    buffer["ps"] = ps101;
+                                    buffer["code"] = instance.GetType().Name;
+                                    buffer["attributebindings"] = instance.Flatten();
+                                    buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                                    buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                                    SetShape(buffer, current.SHAPE());
+                                    SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                                    if (instance is Sounding sounding) {
                                         var oid = insertCursor.Insert(buffer);
                                     }
-                                    else if(instance is DepthNoBottomFound depthNoBottomFound) {
+                                    else if (instance is DepthNoBottomFound depthNoBottomFound) {
                                         var oid = insertCursor.Insert(buffer);
                                     }
                                     recordCount++;
@@ -62,7 +72,7 @@ namespace S100Framework.Applications
                         if (recordCount % 1500 == 0)
                             insertCursor.Flush();
                     }
-                    
+
                     insertCursor.Flush();
                     Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
                 }

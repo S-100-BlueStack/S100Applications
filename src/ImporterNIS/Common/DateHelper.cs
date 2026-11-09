@@ -11,8 +11,7 @@ public static class DateHelper
     public static bool TryConvertToDateOnly(string? dateString, out DateOnly dateOnly) =>
         S57DateParser.TryParseDate(dateString, out dateOnly);
 
-    internal static bool TryGetPeriodicDateRange(string? start, string? end, out periodicDateRange[]? value)
-    {
+    internal static bool TryGetPeriodicDateRange(string? start, string? end, out periodicDateRange[]? value) {
         value = null;
         if (!S57DateParser.TryParsePeriodicDate(start, out var parsedStart) ||
             !S57DateParser.TryParsePeriodicDate(end, out var parsedEnd)) return false;
@@ -20,8 +19,7 @@ public static class DateHelper
         return true;
     }
 
-    internal static bool TryGetSurveyDateRange(string? start, string? end, out surveyDateRange? value)
-    {
+    internal static bool TryGetSurveyDateRange(string? start, string? end, out surveyDateRange? value) {
         value = null;
         if (!S57DateParser.TryParseCalendarDate(start, out var parsedStart)) return false;
         value = new surveyDateRange { dateStart = parsedStart! };
@@ -30,8 +28,7 @@ public static class DateHelper
         return true;
     }
 
-    internal static bool TryGetFixedDateRange(string? start, string? end, out fixedDateRange? value)
-    {
+    internal static bool TryGetFixedDateRange(string? start, string? end, out fixedDateRange? value) {
         value = null;
         if (!S57DateParser.TryParseCalendarDate(start, out var parsedStart) ||
             !S57DateParser.TryParseCalendarDate(end, out var parsedEnd)) return false;
