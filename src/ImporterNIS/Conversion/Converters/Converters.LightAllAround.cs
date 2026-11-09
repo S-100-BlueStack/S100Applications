@@ -45,7 +45,11 @@ namespace S100Framework.Applications
             // TODO: interoperabilityidentifier
 
             if (current.LITVIS != null) {
-                instance.lightVisibility = EnumHelper.GetEnumValue(current.LITVIS);
+                var litvis = EnumHelper.GetEnumValue(current.LITVIS);
+                int[] permitedValues = instance.attributeBindingsCatalogue.Single(e => e.attribute.Equals("lightVisibility")).permitedValues!;
+                
+                if(!litvis.HasValue || permitedValues.Contains(litvis.Value))   //  UNKNOWN or permitted value
+                    instance.lightVisibility = litvis;                
             }
 
             /*

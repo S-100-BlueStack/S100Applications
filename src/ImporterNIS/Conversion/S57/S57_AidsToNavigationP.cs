@@ -44,7 +44,7 @@ namespace S100Framework.Applications
 
                 //if (Guid.Parse("{C4BCB5C8-B88E-479C-9696-5345A5A92AC9}").Equals(globalid)) System.Diagnostics.Debugger.Break();
                 //if (Guid.Parse("{0842BD9F-FA35-405A-BD2E-8EA4F1C3B932}").Equals(globalid)) System.Diagnostics.Debugger.Break();
-                
+
                 if (ConversionAnalytics.Instance.IsConverted(globalid)) {
                     continue;
                 }
@@ -1392,7 +1392,7 @@ namespace S100Framework.Applications
                                             relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
                                         }
                                         continue;
-                                    }                                    
+                                    }
                                 }
                             }
                             {
@@ -2175,9 +2175,14 @@ namespace S100Framework.Applications
                         }
 
                         //if (light.SECTR1 != null && light.SECTR2 != null) { 
-                        var lightSector = new lightSector() {
-                            lightVisibility = visibility,
-                        };
+                        var lightSector = new lightSector();
+
+                        int[] permitedValues = lightSector.attributeBindingsCatalogue.Single(e => e.attribute.Equals("lightVisibility")).permitedValues!;
+
+                        visibility = [.. visibility.Where(e => e.HasValue && permitedValues.Contains(e.Value))];
+                        if (visibility.Any())
+                            lightSector.lightVisibility = visibility;
+
                         if (light.VALNMR.HasValue)
                             lightSector.valueOfNominalRange = light.VALNMR == -32767m ? null : light.VALNMR;
 

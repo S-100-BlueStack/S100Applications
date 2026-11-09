@@ -38,9 +38,18 @@ namespace S100Framework.Applications
             }
 
             if (current.LITVIS != null) {
-                var lightVisibility = EnumHelper.GetEnumValues(current.LITVIS);
-                if (lightVisibility != null && lightVisibility.Any())
-                    instance.lightVisibility = lightVisibility;
+                var litvis = EnumHelper.GetEnumValues(current.LITVIS);
+                int[] permitedValues = instance.attributeBindingsCatalogue.Single(e => e.attribute.Equals("lightVisibility")).permitedValues!;
+
+                if (litvis != null) {
+                    litvis = [.. litvis.Where(e => e.HasValue && permitedValues.Contains(e.Value))];
+                    if(litvis.Any())
+                        instance.lightVisibility = litvis;
+                }
+
+                //var lightVisibility = EnumHelper.GetEnumValues(current.LITVIS);
+                //if (lightVisibility != null && lightVisibility.Any())
+                //    instance.lightVisibility = lightVisibility;
             }
 
             if (current.MLTYLT.HasValue) {
