@@ -13,7 +13,9 @@ public static class S57DateParser
         if (string.IsNullOrEmpty(value))
             return false;
 
-        if (value?.Length < 8)
+        if (value?.Length == 4)
+            result = value;
+        else if (value?.Length < 8)
             value = $"--{value!}";
 
         result = value!;
@@ -50,7 +52,9 @@ public static class S57DateParser
         if (string.IsNullOrEmpty(value))
             return false;
 
-        if (value?.Length < 8)
+        if (value?.Length == 4)
+            result = value;
+        else if (value?.Length < 8)
             value = $"--{value!}";
 
         result = value!;
