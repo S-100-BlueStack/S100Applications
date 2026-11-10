@@ -282,7 +282,7 @@ namespace S100Framework.Applications
                     //buffer["specificusage"] = product.s57.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s57.sourceIdentifier;
                     buffer["compilationscale"] = product.s57.optimumDisplayScale;
-                    var s57 = featureClass.CreateRow(buffer);
+                    var s57 = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var s57UID = s57.UID();
 
                     buffer["code"] = product.s101.S100FC_code;
@@ -292,7 +292,7 @@ namespace S100Framework.Applications
                     //buffer["specificusage"] = product.s101.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s101.sourceIdentifier;
                     buffer["compilationscale"] = product.s101.optimumDisplayScale;
-                    var s101 = featureClass.CreateRow(buffer);
+                    var s101 = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var s101UID = s101.UID();
 
                     //var productMappingS57theReference = new featureBinding<S100FC.S128.FeatureAssociation.ProductMapping> {

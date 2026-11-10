@@ -51,7 +51,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -73,7 +73,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -95,7 +95,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -109,7 +109,16 @@ namespace S100Framework.Applications
                             //if (objectid == 5) System.Diagnostics.Debugger.Break();
                             var instance = ImporterNIS.OBSTRN(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -136,7 +145,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -158,7 +167,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -180,7 +189,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -202,7 +211,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -215,7 +224,16 @@ namespace S100Framework.Applications
                     case "dangersa::15": { // OBSTRN_Obstruction                            
                             var instance = ImporterNIS.OBSTRN(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -233,7 +251,16 @@ namespace S100Framework.Applications
                     case "dangersp::20": { // OBSTRN_Obstruction
                             var instance = ImporterNIS.OBSTRN(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -260,7 +287,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -273,7 +300,16 @@ namespace S100Framework.Applications
                     case "dangersa::25": { // WRECKS_Wreck
                             var instance = ImporterNIS.WRECKS(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -286,7 +322,16 @@ namespace S100Framework.Applications
                     case "dangersp::35": { // UWTROC_UnderwaterAwashRock
                             var instance = ImporterNIS.UWTROC(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -309,7 +354,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -322,7 +367,16 @@ namespace S100Framework.Applications
                     case "dangersp::45": { // WRECKS_Wreck
                             var instance = ImporterNIS.WRECKS(feature, filter);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {

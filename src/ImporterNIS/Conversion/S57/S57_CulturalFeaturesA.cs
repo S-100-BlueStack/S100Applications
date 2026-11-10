@@ -133,7 +133,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -301,11 +301,10 @@ namespace S100Framework.Applications
                                 buffer["attributebindings"] = instance.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
-
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var name = featureN.UID();
 
                                 BridgeParts.Instance.Add(name, current);
@@ -402,7 +401,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var featureN = featureClass.CreateRow(buffer);
+                                var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var name = featureN.UID();
 
                                 BridgeParts.Instance.Add(name, current);
@@ -516,7 +515,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
@@ -636,7 +635,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -774,7 +773,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -877,7 +876,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -978,7 +977,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -998,15 +997,13 @@ namespace S100Framework.Applications
                                 buffer["ps"] = ps101;
                                 buffer["code"] = windturbine.GetType().Name;
                                 buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
-
-                                System.Text.Json.JsonSerializer.Serialize(windturbine, jsonSerializerOptions);
                                 buffer["attributebindings"] = windturbine.Flatten();
                                 buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(windturbine.GetInformationBindings(), jsonSerializerOptions);
 
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var windturbineFeature = featureClass.CreateRow(buffer);
+                                var windturbineFeature = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
 
                                 if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
                                     relatedEquipment?.CreateRelatedAreaEquipment(current, windturbine, windturbineFeature, windturbine.scaleMinimum);
@@ -1129,7 +1126,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1235,7 +1232,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1364,7 +1361,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             //if (createBridgesAndRelations) {
@@ -1450,7 +1447,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1521,7 +1518,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1643,7 +1640,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
@@ -1737,7 +1734,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            var featureN = featureClass.CreateRow(buffer);
+                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {

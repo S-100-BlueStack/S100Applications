@@ -194,7 +194,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, shape);
                     ImporterNIS.SetCompilationScale(buffer, PLTS_COMP_SCALE);
 
-                    using var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var equipmentName = featureN.UID();
 
                     if (equipmentName == null || string.IsNullOrEmpty(equipmentName)) {
@@ -241,7 +241,7 @@ namespace S100Framework.Applications
                         ImporterNIS.SetShape(buffer, shape);
                         ImporterNIS.SetCompilationScale(buffer, relatedObject.S57Object!.PLTS_COMP_SCALE!.Value);
 
-                        using var featureN = featureClass.CreateRow(buffer);
+                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                         var equipmentName = featureN.UID();
                         if (equipmentName == null) {
                             throw new NotSupportedException("empty equipment name");
@@ -312,7 +312,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, s57master.Shape);
                     ImporterNIS.SetCompilationScale(buffer, s57master!.PLTS_COMP_SCALE!.Value);
 
-                    using var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var equipmentName = featureN.UID();
                     if (equipmentName == null) {
                         throw new NotSupportedException("empty equipment name");
@@ -366,7 +366,7 @@ namespace S100Framework.Applications
                     ImporterNIS.SetShape(buffer, relatedObject.S57Object.Shape);
                     ImporterNIS.SetCompilationScale(buffer, relatedObject.S57Object.PLTS_COMP_SCALE!.Value);
 
-                    using var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var equipmentName = featureN.UID();
                     if (equipmentName == null) {
                         throw new NotSupportedException("empty equipment name");
@@ -430,7 +430,7 @@ namespace S100Framework.Applications
             //        //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //        SetShape(buffer, s57master.SHAPE);
 
-            //        using var featureN = featureClass.CreateRow(buffer);
+            //        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //        var equipmentName = featureN.Crc32();
 
             //        if (equipmentName == null) {
@@ -470,7 +470,7 @@ namespace S100Framework.Applications
             //            //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //            SetShape(buffer, light.SHAPE);
 
-            //            using var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //            var equipmentName = featureN.Crc32();
             //            if (equipmentName == null) {
             //                throw new NotSupportedException("empty equipment name");
@@ -532,7 +532,7 @@ namespace S100Framework.Applications
             //        //buffer["__json__"] = System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions);
             //        SetShape(buffer, s57master.SHAPE);
 
-            //        using var featureN = featureClass.CreateRow(buffer);
+            //        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //        var equipmentName = featureN.Crc32();
             //        if (equipmentName == null) {
             //            throw new NotSupportedException("empty equipment name");
@@ -567,7 +567,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            using var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -605,7 +605,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            using var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -642,7 +642,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            using var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {
@@ -678,7 +678,7 @@ namespace S100Framework.Applications
 
             //            culturalFeaturesPConverted = true;
 
-            //            using var featureN = featureClass.CreateRow(buffer);
+            //            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
             //            var equipmentName = featureN.Crc32();
 
             //            if (equipmentName == null) {

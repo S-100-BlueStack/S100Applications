@@ -74,7 +74,7 @@ namespace TestNisImporter
 
             var flatten = informations.Flatten();
 
-            var instance = AttributeFlattenExtensions.Unflatten<informationBinding[]>(flatten, typeof(informationBinding[]));
+            var instance = AttributeFlattenExtensions.Unflatten<informationBinding[]>(flatten);
 
             System.Diagnostics.Debugger.Break();
         }
@@ -102,7 +102,7 @@ namespace TestNisImporter
 
             var flatten = features.Flatten();
 
-            var instance = AttributeFlattenExtensions.Unflatten<featureBinding[]>(flatten, typeof(featureBinding[]));
+            var instance = AttributeFlattenExtensions.Unflatten<featureBinding[]>(flatten);
 
             System.Diagnostics.Debugger.Break();
         }

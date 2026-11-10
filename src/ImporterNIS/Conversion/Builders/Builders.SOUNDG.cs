@@ -12,7 +12,7 @@ namespace S100Framework.Applications
     {
 
         private static FeatureType SOUNDG(Feature current) {
-            var shape = (MapPoint)current.SHAPE()!;
+            //var shape = (MapPoint)current.SHAPE()!;
 
             //SetShape(buffer, MultipointBuilderEx.CreateMultipoint(mappoint));
 
@@ -21,7 +21,7 @@ namespace S100Framework.Applications
             var quapos = current.P_QUAPOS() ?? default;
             var tecsou = current.TECSOU() ?? default;
 
-            var mappoint = MapPointBuilderEx.CreateMapPoint(shape.X, shape.Y, Convert.ToDouble(depth), shape.SpatialReference);
+            //var mappoint = MapPointBuilderEx.CreateMapPoint(shape.X, shape.Y, Convert.ToDouble(depth), shape.SpatialReference);
 
             if (quasou == default || string.IsNullOrEmpty(quasou) || !string.Equals(quasou, "5", StringComparison.OrdinalIgnoreCase)) {
                 var instance = new Sounding();

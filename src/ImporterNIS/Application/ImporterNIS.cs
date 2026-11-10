@@ -214,7 +214,7 @@ namespace S100Framework.Applications
 
                                     foreach (var p in c.Coverage.Split()) {
                                         SetShape(buffer, p);
-                                        using var featureN = featureClass.CreateRow(buffer);
+                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
                                     }
                                 }
@@ -271,7 +271,7 @@ namespace S100Framework.Applications
                                         buffer["sourceIdentifier"] = s.VerticalDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
-                                        using var featureN = featureClass.CreateRow(buffer);
+                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         VerticalDatums.Instance.Add(s.Shape, s.VerticalDatum.verticalDatum);
@@ -331,7 +331,7 @@ namespace S100Framework.Applications
                                         buffer["sourceIdentifier"] = s.SoundingDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
-                                        using var featureN = featureClass.CreateRow(buffer);
+                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         SoundingDatums.Instance.Add(s.Shape, s.SoundingDatum.verticalDatum);
@@ -1150,7 +1150,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             deepWaterRoute.featureName = [];
@@ -1254,7 +1254,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             rangeSystem.featureName = [];
@@ -1327,7 +1327,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!, typeof(SeaAreaNamedWaterArea));
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             trafficSeparationScheme.featureName = [];
@@ -1671,10 +1671,10 @@ namespace S100Framework.Applications
                         var f = (Feature)cursor.Current;
 
                         S100FC.FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
-                            "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"]), typeof(SpanFixed)),
-                            "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"]), typeof(SpanOpening)),
-                            "pontoon" => AttributeFlattenExtensions.Unflatten<Pontoon>(Convert.ToString(f["attributeBindings"]), typeof(Pontoon)),
-                            "pylonbridgesupport" => AttributeFlattenExtensions.Unflatten<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"]), typeof(PylonBridgeSupport)),
+                            "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"])),
+                            "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"])),
+                            "pontoon" => AttributeFlattenExtensions.Unflatten<Pontoon>(Convert.ToString(f["attributeBindings"])),
+                            "pylonbridgesupport" => AttributeFlattenExtensions.Unflatten<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"])),
                             _ => throw new NotImplementedException(),
                         };
                         hashFeatureType.Add(f.UID(), featureType);
@@ -1963,7 +1963,7 @@ namespace S100Framework.Applications
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
-                                var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json, typeof(NavigationalSystemOfMarks));
+                                var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json);
 
                                 navigationalSystemOfMarks = [.. navigationalSystemOfMarks, (uid, navigationalSystemOfMark.marksNavigationalSystemOf, (Polygon)current.GetShape().Clone())];
                             }
@@ -1979,7 +1979,7 @@ namespace S100Framework.Applications
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
-                                var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json, typeof(LocalDirectionOfBuoyage));
+                                var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json);
 
                                 foreach (var e in navigationalSystemOfMarks) {
 

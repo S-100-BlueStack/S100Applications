@@ -179,7 +179,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -304,7 +304,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -443,7 +443,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -578,7 +578,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -716,7 +716,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -830,7 +830,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -941,7 +941,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1049,7 +1049,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1163,7 +1163,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1273,7 +1273,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1378,7 +1378,7 @@ namespace S100Framework.Applications
                                         SetShape(buffer, current.SHAPE);
                                         SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                        using var featureN = featureClass.CreateRow(buffer);
+                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         if (_ != null)
@@ -1502,7 +1502,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var name = featureN.UID();
 
                                 if (_ != null)
@@ -1535,7 +1535,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1567,7 +1567,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1599,7 +1599,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
                                 if (structureName == null) {
                                     throw new NotSupportedException("empty structure name");
@@ -1621,7 +1621,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1639,7 +1639,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1657,7 +1657,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer);
+                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1765,7 +1765,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1872,7 +1872,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1935,7 +1935,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1961,7 +1961,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1985,7 +1985,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -2010,7 +2010,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
@@ -2034,7 +2034,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer);
+                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);

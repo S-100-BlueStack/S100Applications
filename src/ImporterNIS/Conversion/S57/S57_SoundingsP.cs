@@ -1,4 +1,6 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
+using NetTopologySuite.GeometriesGraph;
 using S100FC;
 using S100FC.S101.FeatureTypes;
 using S100Framework.Applications.S57.esri;
@@ -39,9 +41,14 @@ namespace S100Framework.Applications
                             throw new Exception("Ups. Not supported");
                         }
 
+                        var shape = (MapPoint)current.SHAPE()!;
+
                         switch (current.FCSubtype()) {
                             case 1: {
                                     var instance = ImporterNIS.Build("SOUNDG", current);
+                                    
+                                    var depth = current.DEPTH()!.Value;
+                                    var mappoint = MapPointBuilderEx.CreateMapPoint(shape.X, shape.Y, Convert.ToDouble(depth), shape.SpatialReference);
 
                                     buffer["ps"] = ps101;
                                     buffer["code"] = instance.GetType().Name;
@@ -49,7 +56,7 @@ namespace S100Framework.Applications
                                     buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
 
                                     buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                    SetShape(buffer, current.SHAPE());
+                                    SetShape(buffer, mappoint);
                                     SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                                     if (instance is Sounding sounding) {

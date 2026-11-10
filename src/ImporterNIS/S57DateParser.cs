@@ -14,7 +14,7 @@ public static class S57DateParser
             return false;
 
         if (value?.Length == 4)
-            result = value;
+            value = $"{value!}----";
         else if (value?.Length < 8)
             value = $"--{value!}";
 
@@ -53,7 +53,7 @@ public static class S57DateParser
             return false;
 
         if (value?.Length == 4)
-            result = value;
+            value = $"{value!}----";
         else if (value?.Length < 8)
             value = $"--{value!}";
 

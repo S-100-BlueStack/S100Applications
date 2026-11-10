@@ -109,7 +109,7 @@ namespace S100Framework.Applications
                 buffer["attributebindings"] = e.SoundingDatum.Flatten();
                 SetShape(buffer, e.Coverage);
                 SetCompilationScale(buffer, e.PLTS_COMP_SCALE); buffer["sourceIdentifier"] = e.SoundingDatum.sourceIdentifier;
-                using var featureN = featureClass.CreateRow(buffer);
+                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                 var name = featureN.UID();
             }
         }
@@ -221,7 +221,7 @@ namespace S100Framework.Applications
                     SetShape(buffer, item);
                     SetUsageBand(buffer, uniqueComscalesMQuals[0]);
                     dissolved_M_QUAL_Count++;
-                    using var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var name = featureN.UID();
                 }
 
@@ -244,7 +244,7 @@ namespace S100Framework.Applications
                     SetShape(buffer, item.Geometry);
                     SetUsageBand(buffer, uniqueComscalesMSdats[0]);
 
-                    using var featureN = featureClass.CreateRow(buffer);
+                    using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                     var name = featureN.UID();
                     M_SDAT_Count++;
                 }

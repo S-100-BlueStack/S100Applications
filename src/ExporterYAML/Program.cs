@@ -208,7 +208,7 @@ namespace S100Framework.Applications
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
                             try {
-                                var electricProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                                var electricProduct = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
                                 datasetNames = [.. datasetNames, electricProduct.datasetName!];
                             }
                             catch (System.Exception ex) {
@@ -261,7 +261,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electronicProduct = (S100FC.S128.FeatureTypes.ElectronicProduct)S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(Convert.ToString(current["attributebindings"])!, typeof(S100FC.S128.FeatureTypes.ElectronicProduct));
+                            var electronicProduct = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
 
                             long compilationscale = electronicProduct.optimumDisplayScale!.Value;
 
@@ -1242,7 +1242,7 @@ namespace ArcGIS.Core.Data
             var json = Convert.ToString(cursor.Current["json"]);
             var blob = cursor.Current["data"] as MemoryStream;
 
-            var instance = AttributeFlattenExtensions.Unflatten<S100BlueStack.Settings.SupportFile>(json, typeof(S100BlueStack.Settings.SupportFile));
+            var instance = AttributeFlattenExtensions.Unflatten<S100BlueStack.Settings.SupportFile>(json);
 
             return (instance!, blob!);
         }

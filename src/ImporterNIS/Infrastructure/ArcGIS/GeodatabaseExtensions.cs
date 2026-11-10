@@ -52,32 +52,32 @@ namespace S100Framework.Applications
     }
 }
 
-namespace ArcGIS.Core.Data
-{
-    public static class DataExtensions
-    {
-        public static string Prefix(string tableName) => tableName.ToLower().Split('.')[^1] switch {
-            "featuretype" => "F100",
-            "curve" => "F101",
-            "point" => "F102",
-            "pointset" => "F103",
-            "surface" => "F104",
-            "topo_curve" => "F105",
-            "topo_point" => "F106",
-            "topo_pointset" => "F107",
-            "topo_surface" => "F108",
+//namespace ArcGIS.Core.Data
+//{
+//    public static class DataExtensions
+//    {
+//        public static string Prefix(string tableName) => tableName.ToLower().Split('.')[^1] switch {
+//            "featuretype" => "F100",
+//            "curve" => "F101",
+//            "point" => "F102",
+//            "pointset" => "F103",
+//            "surface" => "F104",
+//            "topo_curve" => "F105",
+//            "topo_point" => "F106",
+//            "topo_pointset" => "F107",
+//            "topo_surface" => "F108",
 
-            "informationtype" => "I109",
-            "attachment" => "I110",
-            _ => throw new NotImplementedException(),
-        };
+//            "informationtype" => "I109",
+//            "attachment" => "I110",
+//            _ => throw new NotImplementedException(),
+//        };
 
-        //public static string Crc32(this Feature feature) => $"{System.IO.Hashing.Crc32.HashToUInt32(feature.GetGlobalID().ToByteArray())}";
-        //public static string UID(this Feature feature) => $"{Prefix(feature.GetTable().GetName())}::{feature.GetGlobalID():N}";   // Convert.ToString(feature["UID"])!;
-        public static string UID(this Feature feature) => $"{feature.GetGlobalID():B}";   // Convert.ToString(feature["UID"])!;
+//        //public static string Crc32(this Feature feature) => $"{System.IO.Hashing.Crc32.HashToUInt32(feature.GetGlobalID().ToByteArray())}";
+//        //public static string UID(this Feature feature) => $"{Prefix(feature.GetTable().GetName())}::{feature.GetGlobalID():N}";   // Convert.ToString(feature["UID"])!;
+//        public static string UID(this Feature feature) => $"{feature.GetGlobalID():B}";   // Convert.ToString(feature["UID"])!;
 
-        //public static string Crc32(this Row row) => $"{System.IO.Hashing.Crc32.HashToUInt32(row.GetGlobalID().ToByteArray())}";
-        //public static string UID(this Row row) => $"{Prefix(row.GetTable().GetName())}::{row.GetGlobalID():N}";   // Convert.ToString(row["UID"])!;
-        public static string UID(this Row row) => $"{row.GetGlobalID():B}";   // Convert.ToString(row["UID"])!;
-    }
-}
+//        //public static string Crc32(this Row row) => $"{System.IO.Hashing.Crc32.HashToUInt32(row.GetGlobalID().ToByteArray())}";
+//        //public static string UID(this Row row) => $"{Prefix(row.GetTable().GetName())}::{row.GetGlobalID():N}";   // Convert.ToString(row["UID"])!;
+//        public static string UID(this Row row) => $"{row.GetGlobalID():B}";   // Convert.ToString(row["UID"])!;
+//    }
+//}
