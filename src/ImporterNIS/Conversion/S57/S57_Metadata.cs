@@ -163,6 +163,15 @@ namespace S100Framework.Applications
                     case "metadataa::40": { // M_QUAL_QualityOfData // SKIN OF EARTH
                             var instance = ImporterNIS.M_QUAL(feature, filter, geodatabase);
 
+                            buffer["ps"] = ps101;
+                            buffer["code"] = instance.GetType().Name;
+                            buffer["attributebindings"] = instance.Flatten();
+                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+
+                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                            SetShape(buffer, current.SHAPE());
+                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
+
                             using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
