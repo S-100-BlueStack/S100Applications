@@ -869,7 +869,7 @@ namespace TestNisImporter
             //    new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed17-110\s57\GL\GL5")];
 
 
-            //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed16_balticsea\s57")];
+            roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\s100ed18_unittest\s57")];
             //roots = [new IO.DirectoryInfo(@"l:\B061450\ArcGIS\S-101_NOAA\s57")];
 
             var python = new StringBuilder();

@@ -269,8 +269,6 @@ namespace S100Framework.Applications
                     instance.height = null;
                 }
 
-
-
                 if (leastDepth.HasValue) {
                     //if ((!catobs.HasValue && !expsou.HasValue && !height.HasValue) && (watlev.HasValue && watlev.Value == 7)) { //  GST
                     //    instance.height = null;

@@ -51,7 +51,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -73,7 +73,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -95,7 +95,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -118,7 +118,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -145,7 +145,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -167,7 +167,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -189,7 +189,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -211,7 +211,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -233,7 +233,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -260,7 +260,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -287,7 +287,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -309,7 +309,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -331,7 +331,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -354,7 +354,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -376,7 +376,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {

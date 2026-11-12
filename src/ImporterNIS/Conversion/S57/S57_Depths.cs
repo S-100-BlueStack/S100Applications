@@ -53,7 +53,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -90,6 +90,8 @@ namespace S100Framework.Applications
                             */
 
 
+                            var informationBindings = instance.GetInformationBindings();
+
                             (Polyline geometry, Action? callback)[] geometry = [((Polyline)current.SHAPE()!, default)];
 
                             var spatialQualityHits = SpatialAssociations.Instance.GetSpatialAttributeL(feature.GetShape());
@@ -105,7 +107,9 @@ namespace S100Framework.Applications
 
                                     if (difference is Polyline polyline) {
                                         geometry = [.. geometry, ((Polyline)polyline.Clone(), () => {
-                                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(spatialQuality, ImporterNIS.jsonSerializerOptions);
+                                                // Add segment-specific spatial quality without discarding the feature's existing associations.
+                                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(
+                                                    informationBindings.Concat(spatialQuality).ToArray(), jsonSerializerOptions);
                                             })];
                                     }
                                     else
@@ -123,13 +127,14 @@ namespace S100Framework.Applications
                             }
 
                             foreach (var p in geometry) {
-                                buffer["informationbindings"] = "[]";
+                                // Reset to the feature's bindings so a previous segment's spatial quality cannot leak into this one.
+                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(informationBindings, jsonSerializerOptions);
 
                                 SetShape(buffer, p.geometry);
 
                                 p.callback?.Invoke();
 
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                using var featureN = featureClass.CreateRow(buffer);
                                 var name = featureN.UID();
 
                                 if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -153,7 +158,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -175,7 +180,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
@@ -198,7 +203,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE());
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
                             if (FeatureRelations.Instance.HasSlaves(globalid)) {
