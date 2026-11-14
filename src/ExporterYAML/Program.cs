@@ -277,11 +277,11 @@ namespace S100Framework.Applications
 
                             using var surface101 = source.OpenDataset<FeatureClass>(definitionFeatures.Single(e => syntax.ParseTableName(e.GetName()).Item3.Equals("surface")).GetName());
 
-                            using var datacoverageSearch = surface101.Search(new SpatialQueryFilter {
-                                WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND compilationscale = {compilationscale}",
-                                FilterGeometry = shape,
-                                SpatialRelationship = SpatialRelationship.Contains,
-                            }, true);
+                            //using var datacoverageSearch = surface101.Search(new SpatialQueryFilter {
+                            //    WhereClause = $"upper(ps) = 'S-101' AND code = 'DataCoverage' AND compilationscale = {compilationscale}",
+                            //    FilterGeometry = shape,
+                            //    SpatialRelationship = SpatialRelationship.Contains,
+                            //}, true);
 
                             if (!spatialQueryFilters.Any()) System.Diagnostics.Debugger.Break();
 
@@ -331,7 +331,7 @@ namespace S100Framework.Applications
                         var geometries = new List<(ArcGIS.Core.Geometry.Geometry geometry, string name)>();
 
                         // Build Topology
-                        logger.LogInformation("Building topology..");
+                        logger.LogInformation("Building topology...");
                         int index = 0;
 
                         var definitions = source.GetDefinitions<FeatureClassDefinition>();
