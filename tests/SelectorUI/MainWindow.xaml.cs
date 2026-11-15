@@ -33,7 +33,9 @@ namespace SelectorUI
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            //var featureTypeTestFeature = new TestFeature {
+
+
+           //var featureTypeTestFeature = new TestFeature {
             //    featuresDetectedNested = new featuresDetectedNested {
             //        featureName = [new featureName {
             //            name ="Nested",
@@ -142,65 +144,20 @@ namespace SelectorUI
 
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
-            //selectedObjectFC += new informationBinding<QualityOfBathymetricDataComposition> {
-            //    roleType = "association",
-            //    role = "theQualityInformation",
-            //    informationType = "SpatialQuality",
-            //    informationId = RandomString(5),
-            //};
-
-            //selectedObjectFC += new featureBinding<UpdatedInformation> {
-            //    roleType = "association",
-            //    role = "theUpdate",
-            //    featureType = "UpdateInformation",
-            //    featureId = RandomString(5),
-            //};
-
-            //System.Diagnostics.Debugger.Break();
 
 
-            //var selectedObject = new S100AttributeEditorViewModel(featureTypeTestFeature, "123456") {
-            //    RequestInformation = async (s, e) => {
-            //        var random = new Random(DateTime.Now.Millisecond);
-            //        string[] result = [];
-            //        for (int i = 0; i < random.Next(1, 8); i++) {
-            //            var text = RandomString(5).ToUpperInvariant();
-            //            result = [.. result, text];
-            //        }
-            //        return result;
-            //    },
-            //    RequestFeatures = async (s, e) => {
-            //        var random = new Random(DateTime.Now.Millisecond);
-            //        string[] result = [];
-            //        for (int i = 0; i < random.Next(1, 8); i++) {
-            //            var text = RandomString(5).ToUpperInvariant();
-            //            result = [.. result, text];
-            //        }
-            //        return result;
-            //    },
-            //};
 
-            //selectedObject += new informationBinding<QualityOfBathymetricDataComposition> {
-            //    roleType = "association",
-            //    role = "theQualityInformation",
-            //    informationType = "SpatialQuality",
-            //    informationId = RandomString(5),
-            //};
-
-            //selectedObject += new featureBinding<UpdatedInformation> {
-            //    roleType = "association",
-            //    role = "theUpdate",
-            //    featureType = "UpdateInformation",
-            //    featureId = RandomString(5),
-            //};
+            XElement[] constraints = [];
+            
+            var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
 
 
-            //var bindings = (featureBinding[])selectedObject;
+            var uid = $"{1234}";
 
-            //var json2 = System.Text.Json.JsonSerializer.Serialize(bindings, jsonSerializerOptions);
+            viewModel.Initialize("VerticalDatumOfData", uid);
 
 
-            //selectedObject.PropertyChanged += this.PropertyGrid_PropertyChanged;
+
 
             this.PropertyGrid.SelectedObject = selectedObjectFC;
 

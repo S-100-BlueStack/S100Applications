@@ -78,8 +78,17 @@ namespace NuvionPro
                         foreach (var s in scopes)
                             namespaceManager.AddNamespace(s.Key, s.Value);
 
+                        var xElement = ps.XPathSelectElement($"//S100FC:*[S100FC:code='{this.Code}']", namespaceManager);
 
-                        var sourceidentifier = ps.XPathSelectElement($"//S100FC:*[S100FC:code='{this.Code}']", namespaceManager).GetSourceIdentifier();
+                        var sourceidentifier = xElement.GetSourceIdentifier();
+
+                        var constraints = this.PS.Constraints;
+
+                        var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));                        
+
+                        viewModel.Initialize(this.Code, "UNKNOWN");
+
+                        var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
 
                         if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
                             if (inspector.SubtypeAttribute is null)
@@ -97,7 +106,7 @@ namespace NuvionPro
                         }
                         inspector["ps"] = this.PS.ID;
                         inspector["code"] = this.Code;
-                        inspector["attributebindings"] = "{}";
+                        inspector["attributebindings"] = flatten;
                         if (inspector.HasAttribute("informationbindings"))
                             inspector["informationbindings"] = "[]";
                         if (inspector.HasAttribute("featurebindings"))
@@ -518,7 +527,7 @@ namespace NuvionPro
 
         public string[] Codes {
             get => this._codes;
-            set => this.SetProperty(ref this._codes, value);
+            set => this.SetProperty(ref this._codes, [..value.Order()]);
         }
 
         public string? Code {

@@ -1,4 +1,5 @@
-﻿using S100FC;
+﻿using Newtonsoft.Json.Linq;
+using S100FC;
 using System.Collections;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
@@ -261,7 +262,6 @@ namespace S100Framework.WPF.ViewModel
 
             var complexAttributes = this._featureCatalogue.Descendants(XName.Get("S100_FC_ComplexAttribute", scope)).ToDictionary(e => e.Element(XName.Get("code", scope))!.Value, e => e);
 
-
             var element = this._featureCatalogue.XPathSelectElement($"//S100FC:*[S100FC:code='{code}']", this._namespaceManager);
             if (element is null) throw new KeyNotFoundException($"Code not found ({code})!");
             if (element.Attribute("isAbstract") != default && bool.Parse(element.Attribute("isAbstract")!.Value)) throw new InvalidOperationException($"Abstract types are not supported ({code})!");
@@ -276,6 +276,27 @@ namespace S100Framework.WPF.ViewModel
 
             this._isInitialized = true;
 
+            var attributeBindingsCatalogue = this.attributeBindingsCatalogue.Where(e => e.lower > 0);
+
+            foreach (var attributeBinding in attributeBindingsCatalogue) {
+                for (int i = 0; i < attributeBinding.lower; i++) {
+                    var instance = attributeBinding.CreateInstance();
+
+                    if (instance is DateAttribute dateAttribute)
+                        this.attributeBindings.Add(new DateAttributeViewModel(ref dateAttribute, attributeBinding));
+                    else if (instance is DateTimeAttribute dateTimeAttribute)
+                        this.attributeBindings.Add(new DateTimeAttributeViewModel(ref dateTimeAttribute, attributeBinding));
+                    else if (instance is SimpleAttribute simpleAttribute)
+                        this.attributeBindings.Add(new SimpleAttributeViewModel(ref simpleAttribute, attributeBinding));
+                    else if (instance is ComplexAttribute complexAttribute) {
+                        var rules = this._constraints.SelectMany(e => e).Where(e => e.Attribute("attribute") is null || e.Attribute("code")!.Value.Equals(attributeBinding.attribute));
+                        this.attributeBindings.Add(new ComplexAttributeViewModel(ref complexAttribute, rules));
+                    }
+                    else
+                        throw new NotImplementedException();
+                }
+            }
+
             return this;
         }
 
@@ -286,6 +307,8 @@ namespace S100Framework.WPF.ViewModel
             var structuredObject = JsonUnflattener.Unflatten(json)!;
 
             if (structuredObject is null) return this;
+
+            this.attributeBindings.Clear();
 
             var properties = JsonUnflattener.GetAllProperties(structuredObject).ToArray();
 
@@ -692,7 +715,7 @@ namespace S100Framework.WPF.ViewModel
                 }
 
                 return attributeBindingDefinitions;
-            }            
+            }
 
             public static informationBindingDefinition[] InformationBindings(XDocument featureCatalogue, string code) {
                 var navigator = featureCatalogue.CreateNavigator();
