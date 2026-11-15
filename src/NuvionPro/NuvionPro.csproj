@@ -61,8 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.1.2" />
-    <PackageReference Include="NLog" Version="6.2.1" />
-    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.30" />
+    <PackageReference Include="NLog" Version="6.2.2" />
+    <PackageReference Include="S100Framework.ArcGIS.Core" Version="3.7.1901.31" />
     <PackageReference Include="S100Framework.Catalogues" Version="4.1.1" />
   </ItemGroup>
   <ItemGroup>
