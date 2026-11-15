@@ -216,11 +216,14 @@ namespace NuvionPro
         }
 
         public override async Task LoadFromFeaturesAsync() {
+            Logger.Current.Debug(nameof(LoadFromFeaturesAsync));
+
             var inspector = base.Inspector;
 
             var model = base.Model;
 
             if (!inspector.HasAttributes) {
+                Logger.Current.Debug("!inspector.HasAttributes");
                 this.SelectedProperty = null;
                 this.Code = null;
                 this.PS = null;
@@ -228,6 +231,7 @@ namespace NuvionPro
             }
 
             if (inspector.MapMember is null) {
+                Logger.Current.Debug("inspector.MapMember is null");
                 this.SelectedProperty = null;
                 this.Code = null;
                 this.PS = null;
@@ -286,12 +290,12 @@ namespace NuvionPro
 
                 });
 
-                var ps = this.Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);
+                var ps = this.Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);                
 
                 if (ps is null)
                     this.PS = default;
                 else {
-                    var _ = this.FeatureCatalogues.SingleOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
+                    var _ = this.FeatureCatalogues.FirstOrDefault(e => e.ID.Equals(ps, StringComparison.InvariantCultureIgnoreCase));
                     if (_ is not null) {
                         this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
                     }
@@ -305,7 +309,7 @@ namespace NuvionPro
                 if (!string.IsNullOrEmpty(code)) {
                     this.Code = code;
                 }
-
+                
                 if (this.PS is not null && this.Code is not null) {
                     this.SelectedProperty = await QueuedTask.Run(() => {
                         try {
@@ -441,12 +445,14 @@ namespace NuvionPro
                         }
                         catch (Exception ex) {
                             Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                            DiagnosticHelper.Error(ex);
                             return null;
                         }
                     }, TaskCreationOptions.None);
                 }
             }
             catch (System.Exception ex) {
+                Logger.Current.Fatal(ex, nameof(LoadFromFeaturesAsync));
                 DiagnosticHelper.Error(ex);
                 if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
             }
@@ -516,7 +522,7 @@ namespace NuvionPro
 
         public Module.FeatureCatalogue PS {
             get => this._ps;
-            set {
+            set {                
                 this.SetProperty(ref this._ps, value);
                 this.NotifyPropertyChanged(() => this.PS_SelectorIsEnabled);
                 this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
