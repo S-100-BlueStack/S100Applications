@@ -145,6 +145,8 @@ namespace SelectorUI
             selectedObjectFC.PropertyChanged += this.PropertyGrid_PropertyChanged;
 
 
+            var jsonFeatureBindings = "[{\"association\":{\"code\":\"ProductMapping\",\"attributes\":[{\"code\":\"categoryOfProductMapping\",\"value\":2}]},\"roleType\":\"association\",\"role\":\"theReference\",\"featureType\":\"ElectronicProduct\",\"featureId\":\"{12eb50d8-7027-47e8-a46f-118729157ad4}\",\"Primitive\":\"surface\"}]";
+            var structuredObject = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(jsonFeatureBindings);
 
 
             XElement[] constraints = [];

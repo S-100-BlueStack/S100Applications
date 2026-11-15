@@ -4,6 +4,8 @@ using S100FC;
 using S100FC.S101.FeatureAssociation;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.InformationAssociation;
+using S100FC.S128.FeatureAssociation;
+using S100FC.S128.FeatureTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +18,7 @@ namespace TestNisImporter
 
         public TestFlattern(ITestOutputHelper output) {
             this._output = output;
-            ArcGIS.Core.Hosting.Host.Initialize();
+            //ArcGIS.Core.Hosting.Host.Initialize();
         }
 
         [Fact]
@@ -107,5 +109,43 @@ namespace TestNisImporter
             System.Diagnostics.Debugger.Break();
         }
 
+        [Fact]
+        public void Test_Json() {
+            var jsonFeatureBindings = "[{\"association\":{\"code\":\"ProductMapping\",\"attributes\":[{\"code\":\"categoryOfProductMapping\",\"value\":2}]},\"roleType\":\"association\",\"role\":\"theReference\",\"featureType\":\"ElectronicProduct\",\"featureId\":\"{12eb50d8-7027-47e8-a46f-118729157ad4}\",\"Primitive\":\"surface\"}]";
+
+            var structuredObject = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(jsonFeatureBindings);
+
+        }
+
+        [Fact]
+        public void Test_FlattenElectronicProduct() {
+            var electronicProduct = new ElectronicProduct();
+            electronicProduct.classification = "My Classification";
+            
+            var flatten1 = electronicProduct.Flatten();
+            var instance1 = AttributeFlattenExtensions.Unflatten<ElectronicProduct>(flatten1);
+
+
+
+            var productMapping = new ProductMapping();
+            productMapping.categoryOfProductMapping = 1;
+
+            var features = new featureBinding[] {
+                new featureBinding {
+                    association = productMapping,
+                    roleType = "association",
+                    role = "theReference",
+                    featureType="ElectronicProduct",
+                    featureId="{C7C08676-21A0-486C-9054-733727D12C75}",
+                    Primitive = Primitives.surface,
+                }
+            };
+
+            var flatten2 = features.Flatten();
+            var instance2 = AttributeFlattenExtensions.Unflatten<featureBinding[]>(flatten2);
+
+            System.Diagnostics.Debugger.Break();
+
+        }
     }
 }
