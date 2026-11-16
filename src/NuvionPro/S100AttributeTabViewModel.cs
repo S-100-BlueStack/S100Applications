@@ -62,59 +62,74 @@ namespace NuvionPro
 
             this.FeatureCatalogues = this._module.GetFeatureCatalogues();
 
+            Logger.Current.Debug("S-100 attribute tab initialized with {CatalogueCount} feature catalogues; editing enabled: {IsEditingEnabled}.",
+                this.FeatureCatalogues.Length, this.IsEditingEnabled);
+
             this.CreateInstance = new ArcGIS.Desktop.Framework.RelayCommand(async () => {
                 var inspector = base.Inspector;
 
-                if (inspector != default) {
-                    await QueuedTask.Run(() => {
-                        var ps = XDocument.Load(this.PS.FullPath);
+                try {
+                    if (inspector != default) {
+                        Logger.Current.Debug("Creating S-100 instance for catalogue {CatalogueId}, code {FeatureCode}.", this.PS?.ID, this.Code);
+                        await QueuedTask.Run(() => {
+                            var ps = XDocument.Load(this.PS.FullPath);
 
-                        var navigator = ps.CreateNavigator();
-                        navigator.MoveToFollowing(XPathNodeType.Element);
+                            var navigator = ps.CreateNavigator();
+                            navigator.MoveToFollowing(XPathNodeType.Element);
 
-                        var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
+                            var scopes = navigator.GetNamespacesInScope(XmlNamespaceScope.All);
 
-                        var namespaceManager = new XmlNamespaceManager(new NameTable());
-                        foreach (var s in scopes)
-                            namespaceManager.AddNamespace(s.Key, s.Value);
+                            var namespaceManager = new XmlNamespaceManager(new NameTable());
+                            foreach (var s in scopes)
+                                namespaceManager.AddNamespace(s.Key, s.Value);
 
-                        var xElement = ps.XPathSelectElement($"//S100FC:*[S100FC:code='{this.Code}']", namespaceManager);
+                            var xElement = ps.XPathSelectElement($"//S100FC:*[S100FC:code='{this.Code}']", namespaceManager);
 
-                        var sourceidentifier = xElement.GetSourceIdentifier();
+                            var sourceidentifier = xElement.GetSourceIdentifier();
 
-                        var constraints = this.PS.Constraints;
+                            var constraints = this.PS.Constraints;
 
-                        var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));                        
+                            var viewModel = new S100AttributeEditorViewModel(ps, constraints.ToLookup(e => e.Attribute("code").Value));
 
-                        viewModel.Initialize(this.Code, "UNKNOWN");
+                            viewModel.Initialize(this.Code, "UNKNOWN");
 
-                        var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
+                            var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
 
-                        if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
-                            if (inspector.SubtypeAttribute is null)
-                                inspector["sourceidentifier"] = sourceidentifier.Value;
-                            else {
-                                var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                            if (sourceidentifier.HasValue && inspector.IsNull("sourceidentifier")) {
+                                if (inspector.SubtypeAttribute is null)
+                                    inspector["sourceidentifier"] = sourceidentifier.Value;
+                                else {
+                                    var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                                }
                             }
-                        }
-                        else if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
-                            if (inspector.SubtypeAttribute is null)
-                                inspector["sourceidentifier"] = sourceidentifier.Value;
-                            else {
-                                var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                            else if (sourceidentifier.HasValue && sourceidentifier.Value != Convert.ToInt32(inspector["sourceidentifier"])) {
+                                if (inspector.SubtypeAttribute is null)
+                                    inspector["sourceidentifier"] = sourceidentifier.Value;
+                                else {
+                                    var changed = inspector.ChangeSubtype(sourceidentifier.Value, true);
+                                }
                             }
-                        }
-                        inspector["ps"] = this.PS.ID;
-                        inspector["code"] = this.Code;
-                        inspector["attributebindings"] = flatten;
-                        if (inspector.HasAttribute("informationbindings"))
-                            inspector["informationbindings"] = "[]";
-                        if (inspector.HasAttribute("featurebindings"))
-                            inspector["featurebindings"] = "[]";
+                            inspector["ps"] = this.PS.ID;
+                            inspector["code"] = this.Code;
+                            inspector["attributebindings"] = flatten;
+                            if (inspector.HasAttribute("informationbindings"))
+                                inspector["informationbindings"] = "[]";
+                            if (inspector.HasAttribute("featurebindings"))
+                                inspector["featurebindings"] = "[]";
 
-                        inspector.Apply();
+                            inspector.Apply();
+                            Logger.Current.Info("Applied S-100 instance for catalogue {CatalogueId}, code {FeatureCode}, source identifier {SourceIdentifier}.",
+                                this.PS.ID, this.Code, sourceidentifier);
 
-                    }, TaskCreationOptions.None);
+                        }, TaskCreationOptions.None);
+                    }
+                    else {
+                        Logger.Current.Debug("S-100 instance creation skipped because no inspector is available.");
+                    }
+                }
+                catch (Exception ex) {
+                    Logger.Current.Error(ex, "Failed to create S-100 instance for catalogue {CatalogueId}, code {FeatureCode}.", this.PS?.ID, this.Code);
+                    throw;
                 }
             });
         }
@@ -122,6 +137,7 @@ namespace NuvionPro
         private void Current_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "IsEditingEnabled") {
                 this.IsEditingEnabled = Project.Current.IsEditingEnabled;
+                Logger.Current.Debug("Project editing enabled changed to {IsEditingEnabled}.", this.IsEditingEnabled);
             }
         }
 
@@ -135,6 +151,7 @@ namespace NuvionPro
             switch (name) {
                 case nameof(this.PS): {
                         if (this.PS is not null) {
+                            Logger.Current.Debug("Loading available S-100 types from catalogue {CatalogueId} at {CataloguePath}.", this.PS.ID, this.PS.FullPath);
                             var ps = XDocument.Load(this.PS.FullPath);
 
                             var navigator = ps.CreateNavigator();
@@ -183,6 +200,9 @@ namespace NuvionPro
                             }
                         }
 
+                        if (this.PS is not null && inspector is not null) {
+                            Logger.Current.Debug("S-100 catalogue selection processed: {CatalogueId}; available type count: {TypeCount}.", this.PS.ID, this.Codes.Length);
+                        }
                         this.NotifyPropertyChanged(() => this.CREATE_ButtonIsEnabled);
                     }
                     break;
@@ -209,21 +229,30 @@ namespace NuvionPro
         public override bool IsDefault => true;
 
         public override async Task CancelAsync() {
-            base.Inspector.Cancel();
+            Logger.Current.Debug("Cancelling S-100 attribute edits for catalogue {CatalogueId}, code {FeatureCode}.", this.PS?.ID, this.Code);
+            try {
+                base.Inspector.Cancel();
 
-            await this.LoadFromFeaturesAsync();
-            await base.CancelAsync();
+                await this.LoadFromFeaturesAsync();
+                await base.CancelAsync();
+                Logger.Current.Debug("S-100 attribute edit cancellation completed.");
+            }
+            catch (Exception ex) {
+                Logger.Current.Error(ex, "Failed to cancel S-100 attribute edits.");
+                throw;
+            }
         }
 
         public override async Task LoadFromFeaturesAsync() {
-            Logger.Current.Debug(nameof(LoadFromFeaturesAsync));
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            Logger.Current.Debug("Loading S-100 attributes from the current inspector.");
 
             var inspector = base.Inspector;
 
             var model = base.Model;
 
             if (!inspector.HasAttributes) {
-                Logger.Current.Debug("!inspector.HasAttributes");
+                Logger.Current.Debug("S-100 attribute loading skipped because the inspector has no attributes.");
                 this.SelectedProperty = null;
                 this.Code = null;
                 this.PS = null;
@@ -231,7 +260,7 @@ namespace NuvionPro
             }
 
             if (inspector.MapMember is null) {
-                Logger.Current.Debug("inspector.MapMember is null");
+                Logger.Current.Debug("S-100 attribute loading skipped because no map member is available.");
                 this.SelectedProperty = null;
                 this.Code = null;
                 this.PS = null;
@@ -268,6 +297,9 @@ namespace NuvionPro
                     using var cursor = configuration.Search(null, true);
                     while (cursor.MoveNext()) {
                         var settings = JsonSerializer.Deserialize<S100BlueStack.Settings.Editor>(Convert.ToString(cursor.Current["json"]));
+                        if (!settings.ExcludeInEditor && !System.IO.File.Exists(settings.FullPath)) {
+                            Logger.Current.Warn("Configured S-100 feature catalogue is unavailable at {CataloguePath}.", settings.FullPath);
+                        }
                         if (!settings.ExcludeInEditor && System.IO.File.Exists(settings.FullPath)) {
                             var featureCatalogue = new Module.FeatureCatalogue(Convert.ToString(cursor.Current["ps"]).Split('.').First().Substring(2), settings.FullPath);
                             var constraints = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(settings.FullPath), $"{System.IO.Path.GetFileNameWithoutExtension(settings.FullPath)}.constraints.xml");
@@ -278,8 +310,11 @@ namespace NuvionPro
                             featureCatalogues = [.. featureCatalogues, featureCatalogue];
                         }
                     }
-                    if (!featureCatalogues.Any())
+                    if (!featureCatalogues.Any()) {
+                        Logger.Current.Debug("No usable S-100 catalogues found in geodatabase configuration; using module defaults.");
                         featureCatalogues = this._module.GetFeatureCatalogues();  //  DEFAULT
+                    }
+                    Logger.Current.Debug("Resolved {CatalogueCount} S-100 feature catalogues.", featureCatalogues.Length);
 
                     return featureCatalogues;
 
@@ -290,7 +325,7 @@ namespace NuvionPro
 
                 });
 
-                var ps = this.Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);                
+                var ps = this.Inspector.IsNull("ps") ? null : Convert.ToString(inspector["ps"]);
 
                 if (ps is null)
                     this.PS = default;
@@ -300,6 +335,8 @@ namespace NuvionPro
                         this.PS = this.FeatureCatalogues[Array.IndexOf(this.FeatureCatalogues, _)];
                     }
                     else {
+                        Logger.Current.Warn("Cannot load S-100 attributes: catalogue {CatalogueId} is not available among {CatalogueCount} configured catalogues.",
+                            ps, this.FeatureCatalogues.Length);
                         this.SelectedProperty = null;
                         return;
                     }
@@ -309,7 +346,7 @@ namespace NuvionPro
                 if (!string.IsNullOrEmpty(code)) {
                     this.Code = code;
                 }
-                
+
                 if (this.PS is not null && this.Code is not null) {
                     this.SelectedProperty = await QueuedTask.Run(() => {
                         try {
@@ -342,8 +379,10 @@ namespace NuvionPro
                             }
 
                             viewModel.RequestInformation = async (s, e) => {
-                                if (MapView.Active is null)
+                                if (MapView.Active is null) {
+                                    Logger.Current.Debug("Information binding lookup skipped because no map view is active.");
                                     return [];
+                                }
                                 return await QueuedTask.Run(() => {
                                     string[] result = [];
 
@@ -359,6 +398,8 @@ namespace NuvionPro
                                             result = [.. result, $"{cursor.Current.GetGlobalID():B}"];
                                         }
                                     }
+                                    Logger.Current.Debug("Information binding lookup for type {InformationType} returned {MatchCount} selected records.",
+                                        e.InformationType, result.Length);
                                     return result;
                                 });
                             };
@@ -384,8 +425,10 @@ namespace NuvionPro
                             }
 
                             viewModel.RequestFeatures = async (s, e) => {
-                                if (MapView.Active is null)
+                                if (MapView.Active is null) {
+                                    Logger.Current.Debug("Feature binding lookup skipped because no map view is active.");
                                     return [];
+                                }
                                 return await QueuedTask.Run(() => {
                                     string[] result = [];
 
@@ -415,6 +458,8 @@ namespace NuvionPro
                                             result = [.. result, $"{cursor.Current.GetGlobalID():B}"];
                                         }
                                     }
+                                    Logger.Current.Debug("Feature binding lookup for type {FeatureType} returned {MatchCount} selected records.",
+                                        e.FeatureType, result.Length);
                                     return result;
                                 }, TaskCreationOptions.None);
                             };
@@ -444,66 +489,85 @@ namespace NuvionPro
                             return viewModel;
                         }
                         catch (Exception ex) {
-                            Logger.Current.Fatal(ex, "Caught exception creating S100AttributeEditorViewModel!");
+                            Logger.Current.Error(ex, "Failed to initialize the S-100 attribute editor for catalogue {CatalogueId}, code {FeatureCode}.",
+                                this.PS?.ID, this.Code);
                             DiagnosticHelper.Error(ex);
                             return null;
                         }
                     }, TaskCreationOptions.None);
+                    if (this.SelectedProperty is not null) {
+                        Logger.Current.Debug("Loaded S-100 attribute editor for catalogue {CatalogueId}, code {FeatureCode} in {ElapsedMilliseconds} ms.",
+                            this.PS.ID, this.Code, stopwatch.ElapsedMilliseconds);
+                    }
+                }
+                else {
+                    Logger.Current.Debug("S-100 attribute editor initialization skipped: catalogue {CatalogueId}, code {FeatureCode}.", this.PS?.ID, this.Code);
                 }
             }
             catch (System.Exception ex) {
-                Logger.Current.Fatal(ex, nameof(LoadFromFeaturesAsync));
+                Logger.Current.Error(ex, "Failed to load S-100 attributes for catalogue {CatalogueId}, code {FeatureCode}.", this.PS?.ID, this.Code);
                 DiagnosticHelper.Error(ex);
                 if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
             }
         }
 
         private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e) {
-            await QueuedTask.Run(() => {
-                var updated = false;
+            try {
+                await QueuedTask.Run(() => {
+                    var updated = false;
 
-                if (sender is S100AttributeEditorViewModel viewModel) {
-                    if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.attributeBindings))) {
-                        var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
-                        if (this.Inspector.IsNull("attributebindings")) {
-                            this.Inspector["attributebindings"] = flatten;
-                            updated |= true;
+                    if (sender is S100AttributeEditorViewModel viewModel) {
+                        if (e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.attributeBindings))) {
+                            var flatten = JsonFlattener.Flatten([.. viewModel.attributeBindings.Select(e => e.attribute)], viewModel.attributeBindingsCatalogue);
+                            if (this.Inspector.IsNull("attributebindings")) {
+                                this.Inspector["attributebindings"] = flatten;
+                                updated |= true;
+                            }
+                            else if (string.Compare(flatten, Convert.ToString(this.Inspector["attributebindings"]), true) != 0) {
+                                this.Inspector["attributebindings"] = flatten;
+                                updated |= true;
+                            }
                         }
-                        else if (string.Compare(flatten, Convert.ToString(this.Inspector["attributebindings"]), true) != 0) {
-                            this.Inspector["attributebindings"] = flatten;
-                            updated |= true;
+                        if (this.Inspector.HasAttribute("informationbindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
+                            var informationBindings = (informationBinding[])viewModel;
+
+                            var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, this._jsonOptions);
+
+                            if (this.Inspector.IsNull("informationbindings")) {
+                                this.Inspector["informationbindings"] = json;
+                                updated |= true;
+                            }
+                            else if (string.Compare(json, Convert.ToString(this.Inspector["informationbindings"]), true) != 0) {
+                                this.Inspector["informationbindings"] = json;
+                                updated |= true;
+                            }
+                        }
+                        if (this.Inspector.HasAttribute("featurebindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.featureBindings))) {
+                            var featureBindings = (featureBinding[])viewModel;
+
+                            var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, this._jsonOptions);
+
+                            if (this.Inspector.IsNull("featurebindings")) {
+                                this.Inspector["featurebindings"] = json;
+                                updated |= true;
+                            }
+                            else if (string.Compare(json, Convert.ToString(this.Inspector["featurebindings"]), true) != 0) {
+                                this.Inspector["featurebindings"] = json;
+                                updated |= true;
+                            }
                         }
                     }
-                    if (this.Inspector.HasAttribute("informationbindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.informationBindings))) {
-                        var informationBindings = (informationBinding[])viewModel;
-
-                        var json = System.Text.Json.JsonSerializer.Serialize(informationBindings, this._jsonOptions);
-
-                        if (this.Inspector.IsNull("informationbindings")) {
-                            this.Inspector["informationbindings"] = json;
-                            updated |= true;
-                        }
-                        else if (string.Compare(json, Convert.ToString(this.Inspector["informationbindings"]), true) != 0) {
-                            this.Inspector["informationbindings"] = json;
-                            updated |= true;
-                        }
+                    if (updated) {
+                        Logger.Current.Debug("Updated inspector binding field for property {PropertyName}, catalogue {CatalogueId}, code {FeatureCode}.",
+                            e.PropertyName, this.PS?.ID, this.Code);
                     }
-                    if (this.Inspector.HasAttribute("featurebindings") && e.PropertyName.Equals(nameof(S100AttributeEditorViewModel.featureBindings))) {
-                        var featureBindings = (featureBinding[])viewModel;
-
-                        var json = System.Text.Json.JsonSerializer.Serialize(featureBindings, this._jsonOptions);
-
-                        if (this.Inspector.IsNull("featurebindings")) {
-                            this.Inspector["featurebindings"] = json;
-                            updated |= true;
-                        }
-                        else if (string.Compare(json, Convert.ToString(this.Inspector["featurebindings"]), true) != 0) {
-                            this.Inspector["featurebindings"] = json;
-                            updated |= true;
-                        }
-                    }
-                }
-            }, TaskCreationOptions.None);
+                }, TaskCreationOptions.None);
+            }
+            catch (Exception ex) {
+                Logger.Current.Error(ex, "Failed to update inspector bindings for property {PropertyName}, catalogue {CatalogueId}, code {FeatureCode}.",
+                    e.PropertyName, this.PS?.ID, this.Code);
+                throw;
+            }
         }
 
         public ICommand CreateInstance { get; set; }
@@ -522,7 +586,7 @@ namespace NuvionPro
 
         public Module.FeatureCatalogue PS {
             get => this._ps;
-            set {                
+            set {
                 this.SetProperty(ref this._ps, value);
                 this.NotifyPropertyChanged(() => this.PS_SelectorIsEnabled);
                 this.NotifyPropertyChanged(() => this.CODE_SelectorIsEnabled);
@@ -533,7 +597,7 @@ namespace NuvionPro
 
         public string[] Codes {
             get => this._codes;
-            set => this.SetProperty(ref this._codes, [..value.Order()]);
+            set => this.SetProperty(ref this._codes, [.. value.Order()]);
         }
 
         public string? Code {
