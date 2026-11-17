@@ -31,7 +31,11 @@ namespace S100Framework.Applications
 
         static readonly PrecisionModel precisionModel = new PrecisionModel(10000000);    //ENC
 
-        static readonly GeometryFactory factory = new GeometryFactory(precisionModel, srid: 4326); // Or PrecisionModels.Floating        
+        //static readonly PrecisionModel precisionModel = new PrecisionModel(10000000000);
+
+        //static readonly PrecisionModel precisionModel = new PrecisionModel(PrecisionModels.Floating);
+
+        //static readonly GeometryFactory factory = new GeometryFactory(precisionModel, srid: 4326); // Or PrecisionModels.Floating        
 
 
 
@@ -510,9 +514,11 @@ namespace S100Framework.Applications
 
                         S100FC.Topology.Matrix.ParallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 1 };
 
-                        S100FC.Topology.Matrix.Factory = S100FC.Topology.Reloaded.Factory = factory;
+                        //S100FC.Topology.Matrix.Factory = S100FC.Topology.Reloaded.Factory = factory;
 
                         //var result = source.BuildTopology(filter, interceptor: (code, arg, append) => {
+
+                        var filenameTopology = $"{DateTime.Now.ToFileTime()}_topology.geodatabase";
 
                         var result = source.BuildTopology(e.Filters, interceptor: (code, arg, append) => {
                             if (!System.Diagnostics.Debugger.IsAttached) return;
@@ -533,24 +539,16 @@ namespace S100Framework.Applications
 
                             if (!persist) return;
 
-                            //  L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde
-
                             Func<Geodatabase> debugInstanceCreator = () => {
-                                if (!append) {
-                                    foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
-                                        if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
-                                        System.IO.File.Delete(System.IO.Path.GetFullPath(f));
-                                    }
-                                }
-
-                                return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath("topology.geodatabase"))));
+                                if (!append || !IO.File.Exists(IO.Path.GetFullPath(filenameTopology))) {
+                                    //foreach (var f in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, $"*topology*.geodatabase*")) {
+                                    //    if (IO.Path.GetFileName(f).Equals("topology.geodatabase")) continue;
+                                    //    System.IO.File.Delete(System.IO.Path.GetFullPath(f));
+                                    //}
+                                    IO.File.Copy(IO.Path.GetFullPath("topology.geodatabase"), IO.Path.GetFullPath(filenameTopology));
+                                }                                                                
+                                return new Geodatabase(new MobileGeodatabaseConnectionPath(new Uri(IO.Path.GetFullPath(filenameTopology))));
                             };
-
-                            if (IO.File.Exists(@"L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde")) {
-                                debugInstanceCreator = () => {
-                                    return new Geodatabase(new DatabaseConnectionFile(new Uri(IO.Path.GetFullPath(@"L:\B061450\ArcGIS\s100ed14_carolina\SQLServer-ncps-sql101041-topology(sde).sde"))));
-                                };
-                            }
 
                             {
                                 index += 1;

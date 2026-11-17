@@ -17,16 +17,19 @@ internal static class Program
         try {
             ImportOptionsValidator.ValidateOptions(options);
             Logger.Configure(options.Verbose);
+
             ArcGIS.Core.Hosting.Host.Initialize();
+
+            if (options.InitializeTarget)
+                File.Copy(Path.Combine(AppContext.BaseDirectory, "s100ed18.geodatabase"),
+                    WorkspaceAddress.Parse(options.Target!).Value, overwrite: false);
+
             ImportPreflight.ValidateConnections(options);
 
             // Conversion caches still have process lifetime; keep one import on this STA thread.
             var scamin = Path.Combine(AppContext.BaseDirectory, "scamin.gdb");
             if (!Directory.Exists(scamin))
                 new FastZip().ExtractZip(Path.Combine(AppContext.BaseDirectory, "scamin.gdb.zip"), scamin, null);
-            if (options.InitializeTarget)
-                File.Copy(Path.Combine(AppContext.BaseDirectory, "s100ed18.geodatabase"),
-                    WorkspaceAddress.Parse(options.Target!).Value, overwrite: false);
 
             return ImporterNIS.Load(GeodatabaseFactory.Create(options.Target!), options) ? 0 : 1;
         }
