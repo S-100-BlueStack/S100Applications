@@ -128,7 +128,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -299,7 +299,7 @@ namespace S100Framework.Applications
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -395,7 +395,7 @@ namespace S100Framework.Applications
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
 
                                 SetShape(buffer, current.SHAPE);
@@ -510,7 +510,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -630,7 +630,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -768,7 +768,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -871,7 +871,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -972,7 +972,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -998,7 +998,7 @@ namespace S100Framework.Applications
                                 buffer["code"] = windturbine.GetType().Name;
                                 buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
                                 buffer["attributebindings"] = windturbine.Flatten();
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(windturbine.GetInformationBindings(), jsonSerializerOptions);
+                                buffer["informationbindings"] = windturbine.GetInformationBindings().Flatten();
 
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1121,7 +1121,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1227,7 +1227,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1356,7 +1356,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1442,7 +1442,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1513,7 +1513,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1635,7 +1635,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
@@ -1729,7 +1729,7 @@ namespace S100Framework.Applications
                             buffer["code"] = instance.GetType().Name;
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);

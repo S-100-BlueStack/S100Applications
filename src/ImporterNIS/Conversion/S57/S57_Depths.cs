@@ -47,7 +47,7 @@ namespace S100Framework.Applications
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             SetShape(buffer, current.SHAPE());
@@ -69,7 +69,7 @@ namespace S100Framework.Applications
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             SetShape(buffer, current.SHAPE());
@@ -108,8 +108,7 @@ namespace S100Framework.Applications
                                     if (difference is Polyline polyline) {
                                         geometry = [.. geometry, ((Polyline)polyline.Clone(), () => {
                                                 // Add segment-specific spatial quality without discarding the feature's existing associations.
-                                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(
-                                                    informationBindings.Concat(spatialQuality).ToArray(), jsonSerializerOptions);
+                                                buffer["informationbindings"] = informationBindings?.Concat(spatialQuality).ToArray().Flatten();
                                             })];
                                     }
                                     else
@@ -128,7 +127,7 @@ namespace S100Framework.Applications
 
                             foreach (var p in geometry) {
                                 // Reset to the feature's bindings so a previous segment's spatial quality cannot leak into this one.
-                                buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(informationBindings, jsonSerializerOptions);
+                                buffer["informationbindings"] = informationBindings.Flatten();
 
                                 SetShape(buffer, p.geometry);
 
@@ -152,7 +151,7 @@ namespace S100Framework.Applications
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             SetShape(buffer, current.SHAPE());
@@ -174,7 +173,7 @@ namespace S100Framework.Applications
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             SetShape(buffer, current.SHAPE());
@@ -197,7 +196,7 @@ namespace S100Framework.Applications
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
                             buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(instance.GetInformationBindings(), jsonSerializerOptions);
+                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
                             SetShape(buffer, current.SHAPE());

@@ -216,7 +216,7 @@ namespace S100Framework.Applications
                     buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = instance.Flatten();
-                    //buffer["informationbindings"] = "[]";
+                    //buffer["informationbindings"] = "{}";
 
                     SetShape(buffer, item);
                     SetUsageBand(buffer, uniqueComscalesMQuals[0]);
@@ -239,7 +239,7 @@ namespace S100Framework.Applications
                     buffer["code"] = instance.GetType().Name;
 
                     buffer["attributebindings"] = instance.Flatten();
-                    //buffer["informationbindings"] = "[]";
+                    //buffer["informationbindings"] = "{}";
 
                     SetShape(buffer, item.Geometry);
                     SetUsageBand(buffer, uniqueComscalesMSdats[0]);

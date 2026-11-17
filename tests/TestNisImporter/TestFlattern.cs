@@ -76,7 +76,7 @@ namespace TestNisImporter
 
             var flatten = informations.Flatten();
 
-            var instance = AttributeFlattenExtensions.Unflatten<informationBinding[]>(flatten);
+            var instance = AttributeFlattenExtensions.UnflattenInformationBindings(flatten);
 
             System.Diagnostics.Debugger.Break();
         }
@@ -104,7 +104,7 @@ namespace TestNisImporter
 
             var flatten = features.Flatten();
 
-            var instance = AttributeFlattenExtensions.Unflatten<featureBinding[]>(flatten);
+            var instance = AttributeFlattenExtensions.UnflattenFeatureBindings(flatten);
 
             System.Diagnostics.Debugger.Break();
         }
@@ -123,7 +123,7 @@ namespace TestNisImporter
             electronicProduct.classification = "My Classification";
             
             var flatten1 = electronicProduct.Flatten();
-            var instance1 = AttributeFlattenExtensions.Unflatten<ElectronicProduct>(flatten1);
+            var instance1 = AttributeFlattenExtensions.UnflattenFeatureType<ElectronicProduct>(flatten1);
 
 
 
@@ -142,10 +142,26 @@ namespace TestNisImporter
             };
 
             var flatten2 = features.Flatten();
-            var instance2 = AttributeFlattenExtensions.Unflatten<featureBinding[]>(flatten2);
+            var instance2 = AttributeFlattenExtensions.UnflattenFeatureBindings(flatten2);
 
             System.Diagnostics.Debugger.Break();
+        }
 
+        [Fact]
+        public void Test_MandatoryEnumerations() {
+            var cardinalBeacon = new CardinalBeacon();
+
+            var flatten = cardinalBeacon.Flatten();
+            
+            var instance1 = AttributeFlattenExtensions.UnflattenFeatureType<CardinalBeacon>(flatten);
+
+            var instance2 = AttributeFlattenExtensions.UnflattenFeatureType(flatten, typeof(CardinalBeacon));
+
+            var structuredObject = JsonUnflattener.Unflatten(flatten)!;
+
+            var properties = JsonUnflattener.GetAllProperties(structuredObject).ToArray();
+
+            System.Diagnostics.Debugger.Break();
         }
     }
 }

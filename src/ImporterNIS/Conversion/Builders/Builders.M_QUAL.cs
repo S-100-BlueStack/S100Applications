@@ -246,7 +246,7 @@ namespace S100Framework.Applications
             }
             var result = ImporterNIS.AddInformation(current.GetObjectID(), current.TableName(), current.NTXTDS(), current.TXTDSC(), current.INFORM(), current.NINFOM());
             instance.information = [.. result.information];
-            instance.SetInformationBindings([.. result.InformationBindings, .. informationBindings]);
+            instance.SetInformationBindings([.. informationBindings]);  //  informationBindings doesn't exist in QualityOfBathymetricData
 
             return instance;
         }

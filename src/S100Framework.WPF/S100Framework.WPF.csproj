@@ -36,7 +36,6 @@
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.161" />
-    <PackageReference Include="S100Framework.Catalogues" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +45,10 @@
   <ItemGroup>
     <Folder Include="Controls\" />
     <Folder Include="Themes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\S100Framework\src\S100Framework.Catalogues\S100Framework.Catalogues.csproj" />
   </ItemGroup>
 
 </Project>

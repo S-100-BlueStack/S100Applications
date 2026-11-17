@@ -208,7 +208,7 @@ namespace S100Framework.Applications
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
                             try {
-                                var electricProduct = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
+                                var electricProduct = S100FC.AttributeFlattenExtensions.UnflattenFeatureType<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
                                 datasetNames = [.. datasetNames, electricProduct.datasetName!];
                             }
                             catch (System.Exception ex) {
@@ -261,7 +261,7 @@ namespace S100Framework.Applications
                         while (cursor.MoveNext()) {
                             var current = (ArcGIS.Core.Data.Feature)cursor.Current;
 
-                            var electronicProduct = S100FC.AttributeFlattenExtensions.Unflatten<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
+                            var electronicProduct = S100FC.AttributeFlattenExtensions.UnflattenFeatureType<S100FC.S128.FeatureTypes.ElectronicProduct>(Convert.ToString(current["attributebindings"])!);
 
                             long compilationscale = electronicProduct.optimumDisplayScale!.Value;
 
@@ -714,9 +714,7 @@ namespace S100Framework.Applications
                                 var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "InformationTypes")}.{code}", true)!;
 
                                 var json = Convert.ToString(current["attributebindings"]);
-                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<InformationType>(json, type);
-
-                                //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.UnflattenInformationType(json, type);                                
 
                                 var information = new S100FC.YAML.Information {
                                     Name = code,
@@ -754,8 +752,7 @@ namespace S100Framework.Applications
 
                                 var type = featureCatalogue.Assembly!.GetType($"{S100FC.Catalogues.FeatureCatalogue.Namespace("S101", "FeatureTypes")}.{code}", true)!;
 
-                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
-                                //var instance = DBNull.Value.Equals(current["json"]) ? null : System.Text.Json.JsonSerializer.Deserialize(Convert.ToString(current["json"])!, type, jsonSerializerOptionsS101) as S100FC.FeatureType;// jsonSerializerOptionsS101
+                                var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.UnflattenFeatureType(json, type);
 
                                 var foid = $"110:{name}:1";       // Point: 110 
 
@@ -871,7 +868,7 @@ namespace S100Framework.Applications
 
                                             var json = Convert.ToString(current["attributebindings"])!;
 
-                                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.Unflatten<S100FC.FeatureType>(json, type);
+                                            var instance = string.IsNullOrEmpty(json) ? null : S100FC.AttributeFlattenExtensions.UnflattenFeatureType(json, type);
 
                                             var filenames = S100FC.YAML.Extensions.GetFileNames(json);
 
@@ -900,7 +897,8 @@ namespace S100Framework.Applications
 
                                             // Information Associations
                                             if (!current.IsNull("informationbindings")) {
-                                                var informationBindings = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(Convert.ToString(current["informationbindings"])!, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                                var informationBindingsJson = Convert.ToString(current["informationbindings"])!;
+                                                var informationBindings = AttributeFlattenExtensions.UnflattenInformationBindings(informationBindingsJson);
 
                                                 if (informationBindings != default && informationBindings.Any()) {
                                                     foreach (var binding in informationBindings) {
@@ -942,7 +940,7 @@ namespace S100Framework.Applications
                                             // Feature Associations
                                             if (!current.IsNull("featurebindings")) {
                                                 var featureBindingsJson = Convert.ToString(current["featurebindings"])!;
-                                                var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(featureBindingsJson, jsonSerializerOptionsS101); // jsonSerializerOptionsS101
+                                                var featureBindings = AttributeFlattenExtensions.UnflattenFeatureBindings(featureBindingsJson);
 
                                                 if (featureBindings != default && featureBindings.Any()) {
                                                     foreach (var binding in featureBindings) {
@@ -1242,12 +1240,9 @@ namespace ArcGIS.Core.Data
             var json = Convert.ToString(cursor.Current["json"]);
             var blob = cursor.Current["data"] as MemoryStream;
 
-            var instance = AttributeFlattenExtensions.Unflatten<S100BlueStack.Settings.SupportFile>(json);
+            var instance = AttributeFlattenExtensions.UnflattenRaw<S100BlueStack.Settings.SupportFile>(json);
 
             return (instance!, blob!);
         }
-
-
     }
-
 }

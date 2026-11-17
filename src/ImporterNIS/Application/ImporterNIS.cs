@@ -206,8 +206,8 @@ namespace S100Framework.Applications
                                 foreach (var c in products) {
                                     buffer["code"] = c.DataCoverage.GetType().Name;
                                     buffer["attributebindings"] = c.DataCoverage.Flatten();
-                                    buffer["informationbindings"] = "[]";
-                                    buffer["featurebindings"] = "[]";
+                                    buffer["informationbindings"] = "{}";
+                                    buffer["featurebindings"] = "{}";
                                     //buffer["specificusage"] = c.specificUsage;
                                     buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                     buffer["sourceIdentifier"] = c.DataCoverage.sourceIdentifier;
@@ -265,8 +265,8 @@ namespace S100Framework.Applications
                                     foreach (var s in verticalDatums) {
                                         buffer["code"] = s.VerticalDatum.GetType().Name;
                                         buffer["attributebindings"] = s.VerticalDatum.Flatten();
-                                        buffer["informationbindings"] = "[]";
-                                        buffer["featurebindings"] = "[]";
+                                        buffer["informationbindings"] = "{}";
+                                        buffer["featurebindings"] = "{}";
                                         buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                         buffer["sourceIdentifier"] = s.VerticalDatum.sourceIdentifier;
 
@@ -325,8 +325,8 @@ namespace S100Framework.Applications
                                     foreach (var s in soundingDatums) {
                                         buffer["code"] = s.SoundingDatum.GetType().Name;
                                         buffer["attributebindings"] = s.SoundingDatum.Flatten();
-                                        buffer["informationbindings"] = "[]";
-                                        buffer["featurebindings"] = "[]";
+                                        buffer["informationbindings"] = "{}";
+                                        buffer["featurebindings"] = "{}";
                                         buffer["compilationscale"] = optimumDisplayScaleConverter(c.PLTS_COMP_SCALE);
                                         buffer["sourceIdentifier"] = s.SoundingDatum.sourceIdentifier;
 
@@ -1150,7 +1150,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.UnflattenFeatureType<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             deepWaterRoute.featureName = [];
@@ -1254,7 +1254,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.UnflattenFeatureType<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             rangeSystem.featureName = [];
@@ -1327,7 +1327,7 @@ namespace S100Framework.Applications
                                     var code = Convert.ToString(current["code"]);
 
                                     if ("SeaAreaNamedWaterArea".Equals(code)) {
-                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.Unflatten<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
+                                        var seaAreaNamedWaterArea = AttributeFlattenExtensions.UnflattenFeatureType<SeaAreaNamedWaterArea>(Convert.ToString(current["attributebindings"])!);
 
                                         if (seaAreaNamedWaterArea.featureName.Any()) {
                                             trafficSeparationScheme.featureName = [];
@@ -1503,8 +1503,8 @@ namespace S100Framework.Applications
 
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
-                                buffer["informationbindings"] = "[]";
+                                buffer["featureBindings"] = featureBindings.Flatten();
+                                buffer["informationbindings"] = "{}";
                                 buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shapeSeaAreaNamedWaterArea);
@@ -1523,8 +1523,8 @@ namespace S100Framework.Applications
 
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
-                                buffer["informationbindings"] = "[]";
+                                buffer["featureBindings"] = featureBindings.Flatten();
+                                buffer["informationbindings"] = "{}";
                                 buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shape);
@@ -1543,8 +1543,8 @@ namespace S100Framework.Applications
 
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
-                                buffer["informationbindings"] = "[]";
+                                buffer["featureBindings"] = featureBindings.Flatten();
+                                buffer["informationbindings"] = "{}";
                                 buffer["compilationscale"] = optimumDisplayScaleConverter(compilationscale.Value) ?? 10000000;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
                                 SetShape(buffer, shape);
@@ -1561,8 +1561,8 @@ namespace S100Framework.Applications
 
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["attributebindings"] = instance.Flatten();
-                                buffer["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
-                                buffer["informationbindings"] = "[]";
+                                buffer["featureBindings"] = featureBindings.Flatten();
+                                buffer["informationbindings"] = "{}";
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
 
                                 var featureN = featuretype.CreateRow(buffer);
@@ -1577,14 +1577,14 @@ namespace S100Framework.Applications
                                 while (search.MoveNext()) {
                                     var code = Convert.ToString(search.Current["code"]);
 
-                                    var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
-                                    var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                    var json = search.Current.IsNull("featureBindings") ? "{}" : Convert.ToString(search.Current["featureBindings"])!;
+                                    var _ = AttributeFlattenExtensions.UnflattenFeatureBindings(json);
                                     if (_ is null)
                                         _ = [];
 
                                     _ = callbackUpdate(featureId, search.Current, _);
 
-                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
+                                    search.Current["featureBindings"] = _.Flatten();
                                     search.Update(search.Current);
                                 }
                             }
@@ -1595,14 +1595,14 @@ namespace S100Framework.Applications
                                 while (search.MoveNext()) {
                                     var code = Convert.ToString(search.Current["code"]);
 
-                                    var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
-                                    var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                    var json = search.Current.IsNull("featureBindings") ? "{}" : Convert.ToString(search.Current["featureBindings"])!;
+                                    var _ = AttributeFlattenExtensions.UnflattenFeatureBindings(json);
                                     if (_ is null)
                                         _ = [];
 
                                     _ = callbackUpdate(featureId, search.Current, _);
 
-                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
+                                    search.Current["featureBindings"] = _.Flatten();
                                     search.Update(search.Current);
                                 }
                             }
@@ -1613,14 +1613,14 @@ namespace S100Framework.Applications
                                 while (search.MoveNext()) {
                                     var code = Convert.ToString(search.Current["code"]);
 
-                                    var json = search.Current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(search.Current["featureBindings"])!;
-                                    var _ = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                    var json = search.Current.IsNull("featureBindings") ? "{}" : Convert.ToString(search.Current["featureBindings"])!;
+                                    var _ = AttributeFlattenExtensions.UnflattenFeatureBindings(json);
                                     if (_ is null)
                                         _ = [];
 
                                     _ = callbackUpdate(featureId, search.Current, _);
 
-                                    search.Current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(_);
+                                    search.Current["featureBindings"] = _.Flatten();
                                     search.Update(search.Current);
                                 }
                             }
@@ -1671,10 +1671,10 @@ namespace S100Framework.Applications
                         var f = (Feature)cursor.Current;
 
                         S100FC.FeatureType featureType = Convert.ToString(f["code"])?.ToLowerInvariant() switch {
-                            "spanfixed" => AttributeFlattenExtensions.Unflatten<SpanFixed>(Convert.ToString(f["attributeBindings"])),
-                            "spanopening" => AttributeFlattenExtensions.Unflatten<SpanOpening>(Convert.ToString(f["attributeBindings"])),
-                            "pontoon" => AttributeFlattenExtensions.Unflatten<Pontoon>(Convert.ToString(f["attributeBindings"])),
-                            "pylonbridgesupport" => AttributeFlattenExtensions.Unflatten<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"])),
+                            "spanfixed" => AttributeFlattenExtensions.UnflattenFeatureType<SpanFixed>(Convert.ToString(f["attributeBindings"])),
+                            "spanopening" => AttributeFlattenExtensions.UnflattenFeatureType<SpanOpening>(Convert.ToString(f["attributeBindings"])),
+                            "pontoon" => AttributeFlattenExtensions.UnflattenFeatureType<Pontoon>(Convert.ToString(f["attributeBindings"])),
+                            "pylonbridgesupport" => AttributeFlattenExtensions.UnflattenFeatureType<PylonBridgeSupport>(Convert.ToString(f["attributeBindings"])),
                             _ => throw new NotImplementedException(),
                         };
                         hashFeatureType.Add(f.UID(), featureType);
@@ -1878,8 +1878,8 @@ namespace S100Framework.Applications
 
                             bufferBridge["code"] = instance.GetType().Name;
                             bufferBridge["attributebindings"] = instance.Flatten();
-                            bufferBridge["featureBindings"] = "[]";
-                            bufferBridge["informationbindings"] = "[]";
+                            bufferBridge["featurebindings"] = "{}";
+                            bufferBridge["informationbindings"] = "{}";
                             //bufferBridge["specificusage"] = usage;
                             bufferBridge["compilationscale"] = optimumDisplayScaleConverter(scale.First()) ?? 10000000;
                             bufferBridge["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1902,8 +1902,8 @@ namespace S100Framework.Applications
 
                                 if (!aggregation.Contains(Convert.ToString(current["code"]))) continue;
 
-                                var json = current.IsNull("featureBindings") ? "[{}]" : Convert.ToString(current["featureBindings"])!;
-                                var featureBindings = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+                                var json = current.IsNull("featureBindings") ? "{}" : Convert.ToString(current["featureBindings"])!;
+                                var featureBindings = AttributeFlattenExtensions.UnflattenFeatureBindings(json);
                                 if (featureBindings is null)
                                     featureBindings = [];
 
@@ -1918,7 +1918,7 @@ namespace S100Framework.Applications
                                      Primitive = Primitives.surface,
                                 }];
 
-                                current["featureBindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindings);
+                                current["featureBindings"] = featureBindings.Flatten();
                                 current.Store();
                             }
                         }
@@ -1963,7 +1963,7 @@ namespace S100Framework.Applications
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
-                                var navigationalSystemOfMark = AttributeFlattenExtensions.Unflatten<NavigationalSystemOfMarks>(json);
+                                var navigationalSystemOfMark = AttributeFlattenExtensions.UnflattenFeatureType<NavigationalSystemOfMarks>(json);
 
                                 navigationalSystemOfMarks = [.. navigationalSystemOfMarks, (uid, navigationalSystemOfMark.marksNavigationalSystemOf, (Polygon)current.GetShape().Clone())];
                             }
@@ -1979,7 +1979,7 @@ namespace S100Framework.Applications
                                 var json = Convert.ToString(current["attributeBindings"]);
                                 if (string.IsNullOrEmpty(json)) json = "{}";
 
-                                var localDirectionOfBuoyage = AttributeFlattenExtensions.Unflatten<LocalDirectionOfBuoyage>(json);
+                                var localDirectionOfBuoyage = AttributeFlattenExtensions.UnflattenFeatureType<LocalDirectionOfBuoyage>(json);
 
                                 foreach (var e in navigationalSystemOfMarks) {
 

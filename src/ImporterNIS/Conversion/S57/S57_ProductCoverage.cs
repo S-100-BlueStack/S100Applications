@@ -277,8 +277,8 @@ namespace S100Framework.Applications
 
                     buffer["code"] = product.s57.S100FC_code;
                     buffer["attributebindings"] = product.s57.Flatten();
-                    buffer["informationbindings"] = "[]";
-                    buffer["featurebindings"] = "[]";
+                    buffer["informationbindings"] = "{}";
+                    buffer["featurebindings"] = "{}";
                     //buffer["specificusage"] = product.s57.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s57.sourceIdentifier;
                     buffer["compilationscale"] = product.s57.optimumDisplayScale;
@@ -287,8 +287,8 @@ namespace S100Framework.Applications
 
                     buffer["code"] = product.s101.S100FC_code;
                     buffer["attributebindings"] = product.s101.Flatten();
-                    buffer["informationbindings"] = "[]";
-                    buffer["featurebindings"] = "[]";
+                    buffer["informationbindings"] = "{}";
+                    buffer["featurebindings"] = "{}";
                     //buffer["specificusage"] = product.s101.specificUsage!.Value;
                     buffer["sourceIdentifier"] = product.s101.sourceIdentifier;
                     buffer["compilationscale"] = product.s101.optimumDisplayScale;
@@ -318,7 +318,7 @@ namespace S100Framework.Applications
                     ((S100FC.S128.FeatureAssociation.ProductMapping)productMappingS101theReference.association!).categoryOfProductMapping = 2;  //  Lower Priority Alternative
 
                     featureBinding[] featureBindingsS101 = [productMappingS101theReference];
-                    s101["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(featureBindingsS101, jsonSerializerOptions128);
+                    s101["featurebindings"] = featureBindingsS101.Flatten();
                     s101.Store();
                 }
             }

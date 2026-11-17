@@ -189,7 +189,7 @@ namespace S100Framework.Applications
                     buffer["code"] = lightSectored.GetType().Name;
                     buffer["sourceIdentifier"] = lightSectored.sourceIdentifier;
                     buffer["attributebindings"] = lightSectored.Flatten();
-                    buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);  //System.Text.Json.JsonSerializer.Serialize(lightSectored.GetInformationBindings(), jsonSerializerOptions);
+                    buffer["informationbindings"] = lightSectored.GetInformationBindings().Flatten();
 
                     ImporterNIS.SetShape(buffer, shape);
                     ImporterNIS.SetCompilationScale(buffer, PLTS_COMP_SCALE);
@@ -232,7 +232,7 @@ namespace S100Framework.Applications
                         buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
                         buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                         if (instance is FeatureType) {
-                            buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                            buffer["informationbindings"] = (instance as FeatureType)!.GetInformationBindings().Flatten();
                         }
                         else {
                             ;
@@ -302,10 +302,9 @@ namespace S100Framework.Applications
                     buffer["sourceIdentifier"] = ((FeatureType)instance).sourceIdentifier;
                     buffer["attributebindings"] = ((FeatureType)instance).Flatten();
                     if (instance is FeatureType) {
-                        buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                        buffer["informationbindings"] = (instance as FeatureType)!.GetInformationBindings().Flatten();
                     }
                     else {
-                        ;
                     }
 
 
@@ -357,7 +356,7 @@ namespace S100Framework.Applications
                     buffer["attributebindings"] = ((FeatureType)instance).Flatten();
 
                     if (instance is FeatureType) {
-                        buffer["informationbindings"] = System.Text.Json.JsonSerializer.Serialize((instance as FeatureType)!.GetInformationBindings(), ImporterNIS.jsonSerializerOptions);
+                        buffer["informationbindings"] = (instance as FeatureType)!.GetInformationBindings().Flatten();
                     }
                     else {
                         ;

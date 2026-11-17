@@ -410,7 +410,7 @@ namespace S100Framework.WPF.ViewModel
             if (string.IsNullOrEmpty(json)) return this;
             if (!this._isInitialized) throw new InvalidOperationException();
 
-            var structuredObject = System.Text.Json.JsonSerializer.Deserialize<informationBinding[]>(json);
+            var structuredObject = AttributeFlattenExtensions.UnflattenInformationBindings(json);
 
             if (structuredObject is null) return this;
 
@@ -442,7 +442,7 @@ namespace S100Framework.WPF.ViewModel
             if (string.IsNullOrEmpty(json)) return this;
             if (!this._isInitialized) throw new InvalidOperationException();
 
-            var structuredObject = System.Text.Json.JsonSerializer.Deserialize<featureBinding[]>(json);
+            var structuredObject = AttributeFlattenExtensions.UnflattenFeatureBindings(json);
 
             if (structuredObject is null) return this;
 
