@@ -183,7 +183,11 @@ namespace S100Framework.Applications
                             buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
 
                             buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            SetShape(buffer, current.SHAPE());
+                            var navline = (Polyline)current.SHAPE()!;
+
+                            var straightline = PolylineBuilderEx.CreatePolyline([navline.Points[0], navline.Points[^1]]);
+
+                            SetShape(buffer, straightline);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE()!.Value);
 
                             using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
