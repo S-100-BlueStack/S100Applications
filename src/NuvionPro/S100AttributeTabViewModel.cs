@@ -113,9 +113,9 @@ namespace NuvionPro
                             inspector["code"] = this.Code;
                             inspector["attributebindings"] = flatten;
                             if (inspector.HasAttribute("informationbindings"))
-                                inspector["informationbindings"] = "[]";
+                                inspector["informationbindings"] = "{}";
                             if (inspector.HasAttribute("featurebindings"))
-                                inspector["featurebindings"] = "[]";
+                                inspector["featurebindings"] = "{}";
 
                             inspector.Apply();
                             Logger.Current.Info("Applied S-100 instance for catalogue {CatalogueId}, code {FeatureCode}, source identifier {SourceIdentifier}.",
@@ -276,7 +276,7 @@ namespace NuvionPro
             };
 
             try {
-                var catalogues = await QueuedTask.Run(() => {
+                var catalogues = inspector.MapMember is null ? this._module.GetFeatureCatalogues() : await QueuedTask.Run(() => {
                     var fc = inspector.MapMember switch {
                         FeatureLayer l => l.GetFeatureClass(),
                         StandaloneTable t => t.GetTable(),
@@ -651,8 +651,8 @@ namespace NuvionPro
                     return false;
 
                 if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
-                    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
-                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
+                    "{}".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                    "{}".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
                     return true;
 
                 return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
@@ -684,8 +684,8 @@ namespace NuvionPro
                 return false;
 
                 if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
-                    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
-                    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
+                    "{}".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                    "{}".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
                     return true;
 
                 return false; // "{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim());
@@ -707,8 +707,8 @@ namespace NuvionPro
 
                 if (this.PS is not null && !(string.IsNullOrEmpty(this.Code))) {
                     if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
-                        "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
-                        "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) {
+                        "{}".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                        "{}".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim())) {
                         if (this.SelectedProperty is null || !("UNKNOWN".Equals(this.SelectedProperty.UID))) {
                             return false;
                         }
@@ -723,8 +723,8 @@ namespace NuvionPro
 
 
                 //if ("{}".Equals(Convert.ToString(this.Inspector["attributebindings"]).Trim()) &&
-                //    "[]".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
-                //    "[]".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
+                //    "{}".Equals(Convert.ToString(this.Inspector["informationbindings"]).Trim()) &&
+                //    "{}".Equals(Convert.ToString(this.Inspector["featurebindings"]).Trim()))
                 //    return false;
 
                 //if (this.Inspector.IsNull("attributebindings") && this.Inspector.IsNull("informationbindings") && this.Inspector.IsNull("featurebindings"))
