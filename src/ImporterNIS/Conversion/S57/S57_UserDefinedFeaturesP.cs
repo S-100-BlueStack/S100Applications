@@ -43,12 +43,6 @@ namespace S100Framework.Applications
                 var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
                 var longname = current.LNAM ?? Strings.UNKNOWN;
 
-                if (FeatureRelations.Instance.IsSlave(globalid)) {
-                    Subtypes.Instance.TryGetSubtype(tableName, current.FCSUBTYPE!.Value, out var subtype);
-                    _slaves.Add(globalid, $"{tableName}::{globalid}::{subtype}");
-                    continue;
-                }
-
                 var inform = Convert.ToString(feature["INFORM"])?.Split(',');
 
                 if (inform is not null && inform.Any()) {
@@ -151,10 +145,6 @@ namespace S100Framework.Applications
                                 Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                                 #endregion aidstonavigation
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
                             }
                             break;
 

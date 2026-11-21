@@ -10,11 +10,16 @@
     <ArcGISProInstallDir Condition="'$(ArcGISProInstallDir)' == ''">$(ProgramW6432)\ArcGIS\Pro</ArcGISProInstallDir>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Conversion\Converters\**" />
     <Compile Remove="Maps\**" />
+    <EmbeddedResource Remove="Conversion\Converters\**" />
     <EmbeddedResource Remove="Maps\**" />
+    <None Remove="Conversion\Converters\**" />
     <None Remove="Maps\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Application\State\FeatureRelations.cs" />
+    <Compile Remove="Application\State\LandAreas.cs" />
     <Compile Remove="Conversion/S57/S57_CoastlineA.cs" />
     <Compile Remove="Conversion/S57/S57_CoastlineL.cs" />
     <Compile Remove="Conversion/S57/S57_CoastlineP.cs" />
@@ -46,6 +51,7 @@
     <Compile Remove="Conversion/S57/S57_TracksAndRoutesL.cs" />
     <Compile Remove="Conversion/S57/S57_TracksAndRoutesP.cs" />
     <Compile Remove="Application/State/Bridges.cs" />
+    <Compile Remove="Conversion\Support\RelatedEquipment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="s100ed12.gdb.zip" />

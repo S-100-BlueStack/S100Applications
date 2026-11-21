@@ -15,6 +15,7 @@ namespace S100Framework.Applications
             var tableName = "AidsToNavigationP";
 
             using var aidstonavigationp = source.OpenDataset<FeatureClass>(source.GetName(tableName));
+            using var plts_frel = source.OpenDataset<Table>(source.GetName("PLTS_FREL"));
 
             using var featureClass = target.OpenDataset<FeatureClass>(target.GetName("point"));
 
@@ -42,6 +43,15 @@ namespace S100Framework.Applications
                 var globalid = current.GLOBALID;
                 var fcSubtype = current.FCSUBTYPE ?? default;
 
+                //if (objectid == 2286) System.Diagnostics.Debugger.Break();
+                //if (objectid == 2653) System.Diagnostics.Debugger.Break();
+
+                //if (objectid == 5) System.Diagnostics.Debugger.Break();
+                //if (objectid == 340) System.Diagnostics.Debugger.Break();
+
+
+                //if (Guid.Parse("{dc6358fa-ce00-44f1-9630-3b04700117b0}").Equals(globalid)) System.Diagnostics.Debugger.Break();
+
                 //if (Guid.Parse("{C4BCB5C8-B88E-479C-9696-5345A5A92AC9}").Equals(globalid)) System.Diagnostics.Debugger.Break();
                 //if (Guid.Parse("{0842BD9F-FA35-405A-BD2E-8EA4F1C3B932}").Equals(globalid)) System.Diagnostics.Debugger.Break();
 
@@ -50,15 +60,7 @@ namespace S100Framework.Applications
                 }
 
                 var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
-                var longname = current.LNAM ?? Strings.UNKNOWN;
-
-                if (FeatureRelations.Instance.IsSlave(globalid)) {
-                    Subtypes.Instance.TryGetSubtype(tableName, current.FCSUBTYPE!.Value, out var subtype);
-                    _slaves.Add(globalid, $"{tableName}::{globalid}::{subtype}");
-                    continue;
-                }
-
-                //if (objectid == 1572) System.Diagnostics.Debugger.Break();
+                var longname = current.LNAM ?? Strings.UNKNOWN;           
 
                 switch (fcSubtype) {
                     case 1: { // BCNCAR_BeaconCardinal
@@ -137,7 +139,7 @@ namespace S100Framework.Applications
                                     instance.status = status;
                             }
 
-                            var _ = ImporterNIS.relatedEquipment?.GetTopMark<CardinalBeacon>(current);
+                            var _ = source.GetTopMark<CardinalBeacon>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -184,10 +186,6 @@ namespace S100Framework.Applications
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -265,7 +263,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<IsolatedDangerBeacon>(current);
+                            var _ = source.GetTopMark<IsolatedDangerBeacon>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -314,10 +312,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -402,7 +396,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<LateralBeacon>(current);
+                            var _ = source.GetTopMark<LateralBeacon>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -452,10 +446,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -536,7 +526,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<SafeWaterBeacon>(current);
+                            var _ = source.GetTopMark<SafeWaterBeacon>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -587,10 +577,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -674,7 +660,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<SpecialPurposeGeneralBeacon>(current);
+                            var _ = source.GetTopMark<SpecialPurposeGeneralBeacon>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -725,10 +711,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -791,7 +773,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<CardinalBuoy>(current);
+                            var _ = source.GetTopMark<CardinalBuoy>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -839,10 +821,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -948,10 +926,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1010,7 +984,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<IsolatedDangerBuoy>(current);
+                            var _ = source.GetTopMark<IsolatedDangerBuoy>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -1059,9 +1033,6 @@ namespace S100Framework.Applications
 
                             #endregion aidstonavigation
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1124,7 +1095,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<LateralBuoy>(current);
+                            var _ = source.GetTopMark<LateralBuoy>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -1172,10 +1143,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1234,7 +1201,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<SafeWaterBuoy>(current);
+                            var _ = source.GetTopMark<SafeWaterBuoy>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -1282,10 +1249,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (relatedEquipment != null) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1342,7 +1305,7 @@ namespace S100Framework.Applications
                                             instance.radarConspicuous = current.CONRAD.Value == 2 ? false : true;
                                         }
 
-                                        var _ = relatedEquipment?.GetTopMark<SpecialPurposeGeneralBuoy>(current);
+                                        var _ = source.GetTopMark<SpecialPurposeGeneralBuoy>(current);
                                         if (_ != null) {
                                             instance.topmark = _.Value.topmark;
                                         }
@@ -1387,10 +1350,6 @@ namespace S100Framework.Applications
                                         Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                                         #endregion aidstonavigation
-
-                                        if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                            relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                                        }
                                         continue;
                                     }
                                 }
@@ -1469,7 +1428,7 @@ namespace S100Framework.Applications
                                     instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
                                 }
 
-                                var _ = relatedEquipment?.GetTopMark<SpecialPurposeGeneralBuoy>(current);
+                                var _ = source.GetTopMark<SpecialPurposeGeneralBuoy>(current);
                                 if (_ != null) {
                                     instance.topmark = _.Value.topmark;
                                 }
@@ -1511,20 +1470,12 @@ namespace S100Framework.Applications
                                 Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                                 #endregion aidstonavigation
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
                             }
                         }
                         break;
 
                     case 55: { // DAYMAR_Daymark // SLAVE RIND: 2
-                            var instance = ImporterNIS._converterRegistry.Convert<Daymark>(current);
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
+                            var instance = (Daymark)ImporterNIS.Build("DAYMAR", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -1541,10 +1492,6 @@ namespace S100Framework.Applications
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
 
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1552,11 +1499,7 @@ namespace S100Framework.Applications
                             //https://geodatastyrelsen.atlassian.net/wiki/spaces/SOEKORT/pages/4404478463/S-65+Annex+B+Appendix+A+-+Impact+analysis
                             //We have one TOPMAR at the same location as a FOGSIG(in three scale bands).We need to add topmark shape in fog signal INFORM.
                             //We do not have in the database information regarding “Radio Activated” nor “Call Activated”. We do have one instance of “On request”. What does this refer to??
-                            var instance = _converterRegistry.Convert<FogSignal>(current);
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
+                            var instance = ImporterNIS.Build("FOGSIG", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -1572,14 +1515,28 @@ namespace S100Framework.Applications
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
                     case 65: { // LIGHTS_Light // SLAVE RIND: 2
+
+                            AidsToNavigationP[] lights = [];                            
+
+                            var uuid = $"{globalid:B}".ToUpperInvariant();
+                            using(var seach = plts_frel.Search(new QueryFilter {
+                                WhereClause = $"DEST_SUB = 'LIGHTS_Light' And SRC_UID = '{uuid}'"
+                            }, true)) {
+                                while (seach.MoveNext()) {
+                                    var _ = new AidsToNavigationP((Feature)seach.Current);
+                                    lights = [.. lights, _];
+                                }
+                            }
+                            if (lights.Any()) System.Diagnostics.Debugger.Break();
+                            
+                            lights = [new AidsToNavigationP(feature)];
+
+                            var instance = ImporterNIS.LIGHTS(feature,lights);
+
                             // Only free floating lights!
                             // lights without frels
                             //var light = CreateLight(current, insert, buffer, feature, tableName, convertedCount, featureClass);
@@ -1587,9 +1544,7 @@ namespace S100Framework.Applications
                             //var related = featureRelations.GetRelated(current.GLOBALID);
 
                             var lnam = current.LNAM;
-                            if (FeatureRelations.Instance.GetS101CatlitTypeFrom(current) == typeof(LightSectored)) {
-                                var instance = ImporterNIS._converterRegistry.Convert<LightSectored>(current); // No related sectors - only the one on the feature.
-
+                            if (instance is LightSectored lightSectored) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1606,12 +1561,9 @@ namespace S100Framework.Applications
                                 }
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName);
-
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-                            else if (FeatureRelations.Instance.GetS101CatlitTypeFrom(current) == typeof(LightAirObstruction)) {
-                                var instance = ImporterNIS._converterRegistry.Convert<LightAirObstruction>(current); //CreateLightAirObstruction(current);
-
+                            else if (instance is LightAirObstruction lightAirObstruction) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1627,9 +1579,7 @@ namespace S100Framework.Applications
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-                            else if (FeatureRelations.Instance.GetS101CatlitTypeFrom(current) == typeof(LightFogDetector)) {
-                                var instance = ImporterNIS._converterRegistry.Convert<LightFogDetector>(current); // new List<AidsToNavigationP>() { current }); // var instance = CreateLightFogDetector(current);
-
+                            else if (instance is LightFogDetector lightFogDetector) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1645,9 +1595,7 @@ namespace S100Framework.Applications
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-                            else if (FeatureRelations.Instance.GetS101CatlitTypeFrom(current) == typeof(LightAllAround)) {
-                                var instance = ImporterNIS._converterRegistry.Convert<LightAllAround>(current);
-
+                            else if (instance is LightAllAround lightAllAround) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1723,7 +1671,7 @@ namespace S100Framework.Applications
                                 instance.status = GetStatus(current.STATUS);
                             }
 
-                            var _ = relatedEquipment?.GetTopMark<LightFloat>(current);
+                            var _ = source.GetTopMark<LightFloat>(current);
                             if (_ != null) {
                                 instance.topmark = _.Value.topmark;
                             }
@@ -1774,10 +1722,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1879,10 +1823,6 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
@@ -1942,15 +1882,11 @@ namespace S100Framework.Applications
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             #endregion aidstonavigation
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
                     case 90: { // RADSTA_RadarStation  // SLAVE RIND: 2
-                            var instance = _converterRegistry.Convert<RadarStation>(current);
+                            var instance = (RadarStation)ImporterNIS.Build("RADSTA", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -1966,15 +1902,11 @@ namespace S100Framework.Applications
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
                     case 95: { // RDOSTA_RadioStation // SLAVE RIND: 2
-                            var instance = _converterRegistry.Convert<RadioStation>(current);
+                            var instance = (RadioStation)ImporterNIS.Build("RDOSTA", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -1990,16 +1922,12 @@ namespace S100Framework.Applications
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
 
                         }
                         break;
 
                     case 100: { // RETRFL_RetroReflector // SLAVE RIND: 2
-                            var instance = _converterRegistry.Convert<Retroreflector>(current);
+                            var instance = (Retroreflector)ImporterNIS.Build("RETRFL", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -2015,15 +1943,11 @@ namespace S100Framework.Applications
 
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject((int)featureN.GetObjectID(), tableName, name, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 
                     case 105: { // RTPBCN_RadarTransponderBeacon // SLAVE RIND: 2
-                            var instance = _converterRegistry.Convert<RadarTransponderBeacon>(current);
+                            var instance = (RadarTransponderBeacon)ImporterNIS.Build("RTPBCN", feature);
 
                             buffer["ps"] = ps101;
                             buffer["code"] = instance.GetType().Name;
@@ -2043,10 +1967,6 @@ namespace S100Framework.Applications
                             var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
                             instance.information = result.information.ToArray();
                             instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment?.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                         }
                         break;
 

@@ -32,14 +32,6 @@ namespace S100Framework.Applications
                 var objectid = current.GetObjectID();
                 var globalid = current.GLOBALID();
 
-                if (FeatureRelations.Instance.IsSlave(globalid)) {
-                    continue;
-                }
-
-                if (ConversionAnalytics.Instance.IsConverted(globalid)) {
-                    throw new Exception("Ups. Not supported");
-                }
-
                 var longname = current.LNAM()!;
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
@@ -58,9 +50,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -86,9 +75,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new MetaDataP(current), instance, featureN, null);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -128,9 +114,6 @@ namespace S100Framework.Applications
                             //using var featureN = featureClass.CreateRow(buffer);
                             //var name = featureN.UID();
 
-                            //if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                            //    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            //}
                             //ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             //Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -150,12 +133,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                if (instance is LocalDirectionOfBuoyage localDirectionOfBuoyage)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, localDirectionOfBuoyage, featureN, null);
-                                if (instance is NavigationalSystemOfMarks navigationalSystemOfMarks)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, navigationalSystemOfMarks, featureN, null);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -174,9 +151,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -200,9 +174,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -260,10 +231,6 @@ namespace S100Framework.Applications
                 foreach (var i in e) {
                     i.callback(instance, name);
                 }
-
-                //if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                //    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, null);
-                //}
             }
 
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));

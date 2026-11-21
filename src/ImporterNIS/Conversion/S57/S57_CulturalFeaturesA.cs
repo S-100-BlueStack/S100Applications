@@ -57,16 +57,6 @@ namespace S100Framework.Applications
                 var objectid = current.OBJECTID ?? default;
                 var globalid = current.GLOBALID;
 
-                if (FeatureRelations.Instance.IsSlave(globalid)) {
-                    continue;
-                }
-
-                if (ConversionAnalytics.Instance.IsConverted(globalid)) {
-                    throw new Exception("Ups. Not supported");
-                }
-
-
-
                 var fcSubtype = current.FCSUBTYPE ?? default;
                 var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
                 var longname = current.LNAM ?? Strings.UNKNOWN;
@@ -136,12 +126,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -149,23 +134,10 @@ namespace S100Framework.Applications
                     case 5: { // BRIDGE_Bridge  // SPANS
                               //var instance = new Bridge();
 
-                            //BridgeElement relatedBridge = null!;
-
-                            //if (createBridgesAndRelations) {
-                            //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                            //    if (relatedBridges.Count() != 1) {
-                            //        throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
-                            //    }
-                            //    relatedBridge = relatedBridges[0];
-                            //}
 
                             bool openingBridge = false;
                             List<bridgeFunction> bridgeFunctionValue = [];
-                            //List<colour> colours = new();
-                            //colourPattern? colourPatterns = default;
-                            //condition? conditionValue = default;
-                            //List<status> statusValue = new();
-                            //List<natureOfConstruction> natureOfConstructionValues = new();
+
                             var horclr = current.HORCLR ?? default;
                             var horacc = current.HORACC ?? default;
 
@@ -173,9 +145,6 @@ namespace S100Framework.Applications
                                 Logger.Current.DataError(current.OBJECTID ?? -1, current.TableName, current.LNAM, "Bridge with multiple categories not supported. To be implemented.");
                                 continue;
                             }
-
-
-
 
                             if (current.CATBRG != default && current.CATBRG == "1") {
                                 openingBridge = false;
@@ -309,39 +278,11 @@ namespace S100Framework.Applications
 
                                 BridgeParts.Instance.Add(name, current);
 
-                                //if (createBridgesAndRelations) {
-                                //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanOpening), current.OBJNAM, current.NOBJNM);
-
-                                //    // Create link to bridge - SpanOpening
-                                //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                                //        role = "theCollection",
-                                //        roleType = "aggregation",
-                                //        featureId = relatedBridge.Name,
-                                //        featureType = nameof(Bridge),
-                                //    }];
-
-                                //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                                //    featureN.Store();
-                                //}
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
-
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
 
                             if (!openingBridge) {
-                                //if (createBridgesAndRelations) {
-                                //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                                //    if (relatedBridges.Count() != 1) {
-                                //        throw new NotSupportedException("Unsupported number bridge relations. Must be 1");
-                                //    }
-                                //    relatedBridge = relatedBridges[0];
-                                //}
-
                                 SpanFixed instance = null!;
 
                                 if (current.VERACC.HasValue) {
@@ -406,28 +347,7 @@ namespace S100Framework.Applications
 
                                 BridgeParts.Instance.Add(name, current);
 
-                                //if (createBridgesAndRelations) {
-                                //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(SpanFixed), current.OBJNAM, current.NOBJNM);
-
-                                //    // Create link to bridge - Spanfixed
-                                //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                                //        role = "theCollection",
-                                //        roleType = "aggregation",
-                                //        featureId = relatedBridge.Name,
-                                //        featureType = nameof(Bridge),
-                                //    }];
-
-                                //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                                //    featureN.Store();
-                                //}
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                                }
-
-
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
                             }
@@ -519,11 +439,6 @@ namespace S100Framework.Applications
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -638,12 +553,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -776,12 +686,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -879,12 +784,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -980,20 +880,15 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, jsonSerializerOptions));
                         }
                         break;
 
                     case 35: { // LNDMRK_Landmark
-                            if (current.CATLMK == "19") {
-                                var windturbine = ImporterNIS._converterRegistry.Convert<WindTurbine>(current);
+                            var instance = ImporterNIS.Build("LNDMRK", feature);
 
+                            if(instance is WindTurbine windturbine) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = windturbine.GetType().Name;
                                 buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
@@ -1003,139 +898,30 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE); buffer["sourceIdentifier"] = windturbine.sourceIdentifier;
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                var windturbineFeature = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
-
-                                if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                    relatedEquipment?.CreateRelatedAreaEquipment(current, windturbine, windturbineFeature, windturbine.scaleMinimum);
-                                }
+                                var windturbineFeature = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, windturbineFeature.UID() ?? "Unknown structure name");
                                 Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(windturbine, jsonSerializerOptions));
-                                continue;
                             }
+                            if(instance is Landmark landmark) {
+                                landmark.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
+                                //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
 
-                            var instance = new Landmark {
-                            };
+                                buffer["ps"] = ps101;
+                                buffer["code"] = landmark.GetType().Name;
+                                buffer["sourceIdentifier"] = landmark.sourceIdentifier;
+                                buffer["attributebindings"] = landmark.Flatten();
+                                buffer["informationbindings"] = landmark.GetInformationBindings()?.Flatten();
 
-                            if (current.CATLMK != default) {
-                                var categoryOfLandmark = EnumHelper.GetEnumValues(current.CATLMK);
-                                if (categoryOfLandmark is not null)
-                                    instance.categoryOfLandmark = categoryOfLandmark;
+                                SetShape(buffer, current.SHAPE);
+                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
+
+                                var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                var name = featureN.UID();
+
+                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
+                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                             }
-
-                            // TODO: CATSPM
-
-                            if (current.COLOUR != default) {
-                                var colour = GetColours(current.COLOUR);
-                                if (colour is not null && colour.Any())
-                                    instance.colour = colour;
-                            }
-
-                            if (current.COLPAT != default) {
-                                if (instance.colour is not null && instance.colour.Length > 1)
-                                    instance.colourPattern = GetColourPattern(current.COLPAT)!.value;
-                            }
-
-                            if (current.CONDTN.HasValue) {
-                                instance.condition = GetCondition(current.CONDTN.Value)?.value;
-                            }
-
-                            if (current.ELEVAT.HasValue) {
-                                instance.elevation = current.ELEVAT.Value == -32767m ? null : current.ELEVAT.Value;
-                            }
-
-                            var featureName = GetFeatureName(current.OBJNAM, current.NOBJNM);
-                            if (featureName is not null)
-                                instance.featureName = featureName;
-
-                            if (current.FUNCTN != null) {
-                                var function = EnumHelper.GetEnumValues(current.FUNCTN);
-                                if (function is not null && function.Any())
-                                    instance.function = function;
-                            }
-
-                            if (current.HEIGHT.HasValue) {
-                                instance.height = current.HEIGHT.Value != -32767m ? current.HEIGHT.Value : null;
-                            }
-                            else {
-
-                            }
-
-                            // TODO: interoperabilityIdentifier
-
-                            // TODO: multiplicityOfFeatures
-
-                            if (current.NATCON != default) {
-                                var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON);
-                                if (natureOfConstruction is not null && natureOfConstruction.Any())
-                                    instance.natureOfConstruction = natureOfConstruction;
-                            }
-
-                            if (current.CONRAD.HasValue) {
-                                instance.radarConspicuous = current.CONRAD.Value == 2 ? false : true;
-                            }
-                            if (!string.IsNullOrEmpty(current.SORDAT)) {
-                                if (DateHelper.TryConvertSordat(current.SORDAT, out var reportedDate)) {
-                                    instance.reportedDate = reportedDate;
-                                }
-                                else {
-                                    Logger.Current.DataError(current.OBJECTID ?? -1, current.GetType().Name, current.LNAM ?? "Unknown LNAM", $"Cannot convert date {current.SORDAT}");
-                                }
-                            }
-
-                            if (current.STATUS != default) {
-                                instance.status = GetStatus(current.STATUS);
-                            }
-
-                            if (current.VERLEN.HasValue) {
-                                instance.verticalLength = current.VERLEN.Value != -32767m ? current.VERLEN.Value : null;
-                            }
-
-                            if (current.CONVIS.HasValue) {
-                                instance.visualProminence = EnumHelper.GetEnumValue(current.CONVIS.Value);
-                            }
-
-                            if (current.PLTS_COMP_SCALE.HasValue && current.SHAPE != null) {
-                                string subtype = "";
-
-                                if (current.TableName != default && current.FCSUBTYPE.HasValue && !Subtypes.Instance.TryGetSubtype(current.TableName, current.FCSUBTYPE.Value, out subtype))
-                                    throw new NotSupportedException($"Unknown subtype for {current.TableName}, {current.FCSUBTYPE.Value}");
-
-                                var scamin = Scamin.Instance.GetMinimumScale(current, subtype, current.PLTS_COMP_SCALE!.Value, isRelatedToStructure: false);
-                                if (scamin.HasValue)
-                                    instance.scaleMinimum = scamin.Value;
-                            }
-
-                            var result = ImporterNIS.AddInformation(current.OBJECTID!.Value, current.TableName!, current.NTXTDS, current.TXTDSC, current.INFORM, current.NINFOM);
-                            instance.information = result.information.ToArray();
-                            instance.SetInformationBindings(result.InformationBindings.ToArray());
-
-                            if (current.PICREP != default) {
-                                instance.pictorialRepresentation = FixFilename(current.PICREP);
-                            }
-
-                            instance.inTheWater = pontoons is not null ? GeometryEngine.Instance.Within(current!.SHAPE!, pontoons) : false;
-                            //instance.inTheWater = !LandAreas.Instance.Touch(current!.SHAPE!).Any();
-
-                            buffer["ps"] = ps101;
-                            buffer["code"] = instance.GetType().Name;
-                            buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                            buffer["attributebindings"] = instance.Flatten();
-                            buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
-
-                            SetShape(buffer, current.SHAPE);
-                            SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                            var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
-                            var name = featureN.UID();
-
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
-                            ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
-                            Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
 
@@ -1235,27 +1021,12 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
 
                     case 45: { // PYLONS_PylonBridgeSupport
-
-                            //BridgeElement? relatedBridge = default;
-
-                            //if (createBridgesAndRelations) {
-                            //    var relatedBridges = Bridges.Instance.GetBridgeElementsContainingOID(current.TableName!, current.OBJECTID!.Value);
-                            //    if (relatedBridges.Count() != 1)
-                            //        throw new NotSupportedException("Multiple bridges share elements");
-
-                            //    relatedBridge = relatedBridges[0];
-                            //}
                             var instance = new PylonBridgeSupport {
                             };
 
@@ -1364,28 +1135,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            //if (createBridgesAndRelations) {
-                            //    Bridges.Instance.AddRelation(relatedBridge!.Name, name, typeof(PylonBridgeSupport), current.OBJNAM, current.NOBJNM);
-
-                            //    // Create link to bridge - PylonBridgeSupport
-                            //    featureBinding[] bindings = [new featureBinding<BridgeAggregation> {
-                            //            role = "theCollection",
-                            //            roleType = "aggregation",
-                            //            featureId = relatedBridge.Name,
-                            //            featureType = nameof(Bridge),
-                            //        }];
-
-                            //    featureN["featurebindings"] = System.Text.Json.JsonSerializer.Serialize(bindings, ImporterNIS.jsonSerializerOptions);
-                            //    featureN.Store();
-                            //}
-
-                            //FeatureRelations.Instance.AddRelation(new(typeof(Bridge), relatedBridge, new(instance.GetType(), name), featureN, s101MasterFeature, _featureAssociation);
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -1450,12 +1200,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -1521,12 +1266,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -1643,12 +1383,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -1737,12 +1472,7 @@ namespace S100Framework.Applications
                             var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(current.GLOBALID)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
-
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, name);
-
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
                         break;
@@ -1753,11 +1483,6 @@ namespace S100Framework.Applications
                         break;
                 }
             }
-
-            //if (createBridgesAndRelations) {
-            //    Bridges.Instance.CreateRelations();
-            //}
-
             Logger.Current.DataTotalCount(tableName, recordCount, ConversionAnalytics.Instance.GetConvertedCount(tableName));
         }
     }

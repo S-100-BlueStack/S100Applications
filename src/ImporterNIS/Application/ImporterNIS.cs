@@ -41,14 +41,7 @@ namespace S100Framework.Applications
         internal static string s101version = S100FC.S101.Summary.Version.ToString();
         internal static Geodatabase? _geodatabase;
 
-        internal static RelatedEquipment? relatedEquipment;
-
-        internal static ConverterRegistry _converterRegistry = new ConverterRegistry();
-
         public static QueryFilter QueryFilter { get; internal set; } = new();
-
-        //public static IDictionary<int, int> VerticalDatumConverter = new Dictionary<int, int>();
-
 
         public static bool Load(Func<Geodatabase> createTargetGeodatabase, ImportOptions options) {
             Logger.Current.Information("Starting");
@@ -101,7 +94,7 @@ namespace S100Framework.Applications
             //    }
             //}
 
-            RegisterConverters();
+            //RegisterConverters();
 
             //goto __skip_truncate;
 
@@ -214,7 +207,7 @@ namespace S100Framework.Applications
 
                                     foreach (var p in c.Coverage.Split()) {
                                         SetShape(buffer, p);
-                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                        using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
                                     }
                                 }
@@ -271,7 +264,7 @@ namespace S100Framework.Applications
                                         buffer["sourceIdentifier"] = s.VerticalDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
-                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                        using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         VerticalDatums.Instance.Add(s.Shape, s.VerticalDatum.verticalDatum);
@@ -331,7 +324,7 @@ namespace S100Framework.Applications
                                         buffer["sourceIdentifier"] = s.SoundingDatum.sourceIdentifier;
 
                                         SetShape(buffer, s.Shape);
-                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                        using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         SoundingDatums.Instance.Add(s.Shape, s.SoundingDatum.verticalDatum);
@@ -613,9 +606,6 @@ namespace S100Framework.Applications
                         Logger.Current.Debug($"Loading subtypes codes to subtype name");
                         Subtypes.Initialize(source);
 
-                        Logger.Current.Debug($"Loading featurerelations");
-                        FeatureRelations.Initialize(source);
-
                         Logger.Current.Information($"Initializing SpatialRelationResolver");
                         SpatialRelationResolver.Initialize(source);
 
@@ -624,8 +614,6 @@ namespace S100Framework.Applications
 
                         Logger.Current.Information($"Initializing NauticalInformations");
                         NauticalInformations.Initialize(destination);
-
-                        relatedEquipment = new RelatedEquipment(source, destination);
 
                         if (skinOfEarthOnly) {
                             Logger.Current.Information($"Skin of the earth");
@@ -949,6 +937,152 @@ namespace S100Framework.Applications
 
                 using var surface = destination.OpenDataset<FeatureClass>(destination.GetName("surface"));
 
+            }
+
+            //  Associations
+            using (var destination = createTargetGeodatabase()) {
+                Logger.Current.Information($"Building associations...");
+
+                Dictionary<(Guid SRC_UID, string SRC_FC), (Guid DEST_UID, string DEST_FC, string DEST_SUB)[]> dictionary = [];
+
+                string[] exclusing = ["TOPMAR_TOPMARK"];
+
+                using (Geodatabase source = createGeodatabase()) {
+                    using var plts_frel = source.OpenDataset<Table>(source.GetName("PLTS_FREL"));
+                    using (var search = plts_frel.Search(new QueryFilter {
+                        WhereClause = "1=1",
+                    })) {
+                        while (search.MoveNext()) {
+                            var rind = Convert.ToInt32(search.Current["RIND"]);
+
+                            var src_uid = Guid.Parse(Convert.ToString(search.Current["SRC_UID"])!);
+                            var src_fc = Convert.ToString(search.Current["SRC_FC"])!;
+
+                            var dest_uid = Guid.Parse(Convert.ToString(search.Current["DEST_UID"])!);
+                            var dest_fc = Convert.ToString(search.Current["DEST_FC"])!;
+                            var dest_sub = Convert.ToString(search.Current["DEST_SUB"])!;
+
+                            if (exclusing.Contains(dest_sub.ToUpperInvariant())) continue;
+
+                            if (rind == 2) {    //  Slave                                
+                                if (!dictionary.ContainsKey(new(src_uid, src_fc)))
+                                    dictionary.Add(new(src_uid, src_fc), []);
+                                dictionary[new(src_uid, src_fc)] = [.. dictionary[new(src_uid, src_fc)], (dest_uid, dest_fc, dest_sub)];
+                            }
+                        }
+                    }
+                }
+
+                //System.Diagnostics.Debugger.Break();                
+
+                foreach (var e in dictionary) {
+                    var src_uid = e.Key.SRC_UID;
+                    var src_fc = e.Key.SRC_FC;
+
+                    var src_type = src_fc[^1] switch {
+                        'P' => "point",
+                        'L' => "curve",
+                        'A' => "surface",
+                        _ => throw new InvalidCastException(),
+                    };
+
+                    var src_oids = ConversionAnalytics.Instance.GetOIDs(src_fc, src_uid);
+                    if (src_oids.Length > 1) System.Diagnostics.Debugger.Break();
+
+                    //GlobalID = '{31798F82-F193-4BC9-971B-89277D870BA5}'
+
+                    using var fc = destination.OpenDataset<FeatureClass>(destination.GetName(src_type));
+
+                    using (var src_update = fc.CreateUpdateCursor(new QueryFilter {
+                        WhereClause = $"GlobalID = '{src_oids[0].ToUpperInvariant()}'",
+                    }, true)) {
+                        src_update.MoveNext();
+
+                        var src_code = Convert.ToString(src_update.Current["code"]);
+                        var src_featureType = AttributeFlattenExtensions.UnflattenFeatureType(Convert.ToString(src_update.Current["attributebindings"]), S100FC.S101.Summary.definitionReferenceFeatureTypes.Single(e => e.code.Equals(src_code)).type);
+
+                        var src_featureBindings = AttributeFlattenExtensions.UnflattenFeatureBindings(Convert.ToString(src_update.Current["featurebindings"]));
+                        if (src_featureBindings.Any()) System.Diagnostics.Debugger.Break();
+
+                        var src_definitions = src_featureType.GetFeatureBindingsDefinitions();
+
+                        foreach (var i in e.Value) {
+                            var dest_type = i.DEST_FC[^1] switch {
+                                'P' => "point",
+                                'L' => "curve",
+                                'A' => "surface",
+                                _ => throw new InvalidCastException(),
+                            };
+                            var dest_fc = fc;
+                            if (src_type != dest_type) {
+                                dest_fc = destination.OpenDataset<FeatureClass>(destination.GetName(dest_type));
+                            }
+
+                            var dest_oids = ConversionAnalytics.Instance.GetOIDs(i.DEST_FC, i.DEST_UID);
+                            if (dest_oids.Length > 1) System.Diagnostics.Debugger.Break();
+
+                            using (var dest_update = dest_fc.CreateUpdateCursor(new QueryFilter {
+                                WhereClause = $"GlobalID = '{dest_oids[0].ToUpperInvariant()}'",
+                            }, true)) {
+                                dest_update.MoveNext();                                
+
+                                var dest_code = Convert.ToString(dest_update.Current["code"]);
+                                var dest_featureType = AttributeFlattenExtensions.UnflattenFeatureType(Convert.ToString(dest_update.Current["attributebindings"]), S100FC.S101.Summary.definitionReferenceFeatureTypes.Single(e => e.code.Equals(dest_code)).type);
+
+                                var dest_featureBindings = AttributeFlattenExtensions.UnflattenFeatureBindings(Convert.ToString(dest_update.Current["featurebindings"]));
+                                if (dest_featureBindings.Any()) System.Diagnostics.Debugger.Break();
+
+                                var dest_definitions = dest_featureType.GetFeatureBindingsDefinitions();
+
+                                //  DEST
+                                var dest_def = dest_definitions.SingleOrDefault(e => e.featureTypes.Contains(src_code));
+                                if (dest_def is not null) {
+                                    var dest_binding = dest_def.CreateInstance()!;
+                                    dest_binding.featureType = src_code;
+                                    dest_binding.featureId = src_oids[0];
+                                    dest_binding.Primitive = src_type switch {
+                                        "point" => Primitives.point,
+                                        "curve" => Primitives.curve,
+                                        "surface" => Primitives.surface,
+                                        _ => throw new InvalidCastException(),
+                                    };
+                                    dest_featureBindings = [.. dest_featureBindings, dest_binding];
+                                }
+                                else {
+                                    Logger.Current.Warning("Association not found: {src_code}|{src_uid} => {dest_code}|{dest_uid}", src_code, src_uid, dest_code, dest_oids[0]);
+                                }
+
+                                //  SRC
+                                var src_def = src_definitions.SingleOrDefault(e => e.featureTypes.Contains(dest_code));
+                                if (src_def is not null) {
+                                    var src_binding = src_def.CreateInstance()!;
+                                    src_binding.featureType = dest_code;
+                                    src_binding.featureId = dest_oids[0];
+                                    src_binding.Primitive = dest_type switch {
+                                        "point" => Primitives.point,
+                                        "curve" => Primitives.curve,
+                                        "surface" => Primitives.surface,
+                                        _ => throw new InvalidCastException(),
+                                    };
+                                    src_featureBindings = [.. src_featureBindings, src_binding];
+                                }
+                                else {
+                                    Logger.Current.Warning("Association not found: {src_code}|{src_uid} => {dest_code}|{dest_uid}", src_code, src_uid, dest_code, dest_oids[0]);
+                                }
+
+                                dest_update.Current["featurebindings"] = dest_featureBindings.Flatten();
+                                dest_update.Current.Store();
+                            }
+
+                            if (src_type != dest_type) {
+                                dest_fc.Dispose();
+                            }
+                        }
+
+                        src_update.Current["featurebindings"] = src_featureBindings.Flatten();
+                        src_update.Current.Store();
+                    }
+                }
             }
 
             //  Aggregations

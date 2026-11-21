@@ -28,14 +28,6 @@ namespace S100Framework.Applications
                 var objectid = current.GetObjectID();
                 var globalid = current.GLOBALID();
 
-                if (FeatureRelations.Instance.IsSlave(globalid)) {
-                    continue;
-                }
-
-                if (ConversionAnalytics.Instance.IsConverted(globalid)) {
-                    throw new Exception("Ups. Not supported");
-                }
-
                 var longname = current.LNAM() ?? string.Empty;
 
                 switch ($"{tableName}::{feature.FCSubtype()}".ToLowerInvariant()) {
@@ -54,9 +46,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -76,9 +65,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedLineEquipment(current, instance, featureN);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -98,9 +84,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -121,14 +104,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                if (instance is Dam dam)
-                                    relatedEquipment!.CreateRelatedLineEquipment(current, dam, featureN);
-                                if (instance is FoulGround foulGround)
-                                    relatedEquipment!.CreateRelatedLineEquipment(current, foulGround, featureN);
-                                if (instance is Obstruction obstruction)
-                                    relatedEquipment!.CreateRelatedLineEquipment(current, obstruction, featureN);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -148,9 +123,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -170,9 +142,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedLineEquipment(current, instance, featureN);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -192,9 +161,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -214,9 +180,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedLineEquipment(current, instance, featureN);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -236,14 +199,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                if (instance is Dam dam)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, dam, featureN, dam.scaleMinimum);
-                                if (instance is FoulGround foulGround)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, foulGround, featureN, foulGround.scaleMinimum);
-                                if (instance is Obstruction obstruction)
-                                    relatedEquipment!.CreateRelatedAreaEquipment(current, obstruction, featureN, obstruction.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -263,14 +218,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                if (instance is Dam dam)
-                                    relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), dam, featureN, dam.scaleMinimum);
-                                if (instance is FoulGround foulGround)
-                                    relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), foulGround, featureN, foulGround.scaleMinimum);
-                                if (instance is Obstruction obstruction)
-                                    relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), obstruction, featureN, obstruction.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -290,9 +237,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -312,9 +256,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedAreaEquipment(current, instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -334,9 +275,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
 
@@ -357,9 +295,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }
@@ -379,9 +314,6 @@ namespace S100Framework.Applications
                             using var featureN = featureClass.CreateRow(buffer);
                             var name = featureN.UID();
 
-                            if (FeatureRelations.Instance.HasSlaves(globalid)) {
-                                relatedEquipment!.CreateRelatedPointEquipment(new DangersP(current), instance, featureN, instance.scaleMinimum);
-                            }
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
                             Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
                         }

@@ -33,14 +33,6 @@ namespace S100Framework.Applications
 
                         var globalid = current.GLOBALID();
 
-                        if (FeatureRelations.Instance.IsSlave(globalid)) {
-                            continue;
-                        }
-
-                        if (ConversionAnalytics.Instance.IsConverted(globalid)) {
-                            throw new Exception("Ups. Not supported");
-                        }
-
                         var shape = (MapPoint)current.SHAPE()!;
 
                         switch (current.FCSubtype()) {

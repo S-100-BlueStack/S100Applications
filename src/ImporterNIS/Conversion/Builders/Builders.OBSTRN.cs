@@ -31,7 +31,7 @@ namespace S100Framework.Applications
                 }
 
                 if (current.NATCON_HasValue()) {
-                    var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON);
+                    var natureOfConstruction = EnumHelper.GetEnumValues(current.NATCON());
                     if (natureOfConstruction is not null && natureOfConstruction.Any())
                         instance.natureOfConstruction = natureOfConstruction;
                 }

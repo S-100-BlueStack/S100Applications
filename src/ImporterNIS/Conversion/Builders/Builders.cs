@@ -7,6 +7,17 @@ namespace S100Framework.Applications
     internal static partial class ImporterNIS
     {
         private static readonly Dictionary<string, Func<Feature, FeatureType>> _builders = new Dictionary<string, Func<Feature, FeatureType>> {
+            { "RADSTA", (current) => { return RADSTA(current); } },
+            { "DAYMAR", (current) => { return DAYMAR(current); } },
+            { "FOGSIG", (current) => { return FOGSIG(current); } },
+            { "RDOSTA", (current) => { return RDOSTA(current); } },
+            { "RETRFL", (current) => { return RETRFL(current); } },
+            { "RTPBCN", (current) => { return RTPBCN(current); } },
+            { "LNDMRK", (current) => { return LNDMRK(current); } },
+            { "SISTAT", (current) => { return SISTAT(current); } },
+            { "SISTAW", (current) => { return SISTAW(current); } },
+            //{ "LIGHTS", (current) => { return LIGHTS(current); } },           
+
             { "DISMAR", (current) => { return DISMAR(current); } },
             { "BERTHS", (current) => { return BERTHS(current); } },
             { "NAVLNE", (current) => { return NAVLNE(current); } },

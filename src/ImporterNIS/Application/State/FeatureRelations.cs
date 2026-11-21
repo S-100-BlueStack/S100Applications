@@ -108,7 +108,7 @@ namespace S100Framework.Applications.Singletons
                         this.S101Type = typeof(FogSignal);
                     }
                     else if (aton != null && aton.FCSUBTYPE == 65) {
-                        this.S101Type = FeatureRelations.Instance.GetS101CatlitTypeFrom(aton);
+                        this.S101Type = aton.GetS101CatlitTypeFrom();
                     }
                     else if (aton != null && aton.FCSUBTYPE == 90) {
                         this.S101Type = typeof(RadarStation);
@@ -427,37 +427,6 @@ namespace S100Framework.Applications.Singletons
             }
         }
 
-        internal Type GetS101CatlitTypeFrom(AidsToNavigationP aton) {
-            if (aton.FCSUBTYPE != 65) {
-                throw new NotImplementedException($"Only light types are supported.");
-            }
-
-            List<int> catlits = [];
-
-            if (aton.CATLIT != default) {
-                catlits = aton.CATLIT.Split(',')
-                                   .Select(int.Parse)
-                                   .ToList();
-            }
-
-            if ((aton.SECTR1 == default || aton.SECTR2 == default) && !(catlits.Contains(1) || catlits.Contains(6) || catlits.Contains(7) || catlits.Contains(16))) {
-                return typeof(LightAllAround);
-            }
-            else if (aton.SECTR1 != default && aton.SECTR2 != default || catlits.Contains(1) || catlits.Contains(16)) {
-                return typeof(LightSectored);
-            }
-            else if (catlits.Contains(6)) {
-                return typeof(LightAirObstruction);
-            }
-            else if (catlits.Contains(7)) {
-                return typeof(LightFogDetector);
-            }
-            else {
-                throw new NotSupportedException($"LIGHT catlit: {aton.CATLIT} : {aton.LNAM}");
-            }
-        }
-
-
         internal int GetRelatedCount(Guid uid) {
             if (!_isInitialized)
                 throw new ArgumentException("Not initalized. Call intialize.");
@@ -660,7 +629,7 @@ namespace S100Framework.Applications.Singletons
             var loadedRelatedObjectsCount = 0;
 
             foreach (var destFc in destinationFcToFrels.Keys) {
-                var destinationFeatureClassName = source?.GetName(destFc);
+                var destinationFeatureClassName = source.GetName(destFc);
 
                 if (destinationFeatureClassName == null) {
                     throw new NotSupportedException("empty featureclass name");
