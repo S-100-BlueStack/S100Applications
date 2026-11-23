@@ -1,4 +1,6 @@
 ﻿using ArcGIS.Core.Data;
+using ArcGIS.Core.Geometry;
+using NetTopologySuite.Geometries;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
@@ -8,6 +10,10 @@ namespace S100Framework.Applications
 {
     public static class AidsToNavigationExtension
     {
+        static readonly PrecisionModel precisionModel = new PrecisionModel(10000000);    //ENC
+
+        static readonly GeometryFactory factory = new GeometryFactory(precisionModel, srid: 4326); // Or PrecisionModels.Floating        
+
         internal static Type GetS101CatlitTypeFrom(this AidsToNavigationP aton) {
             if (aton.FCSUBTYPE != 65) {
                 throw new NotImplementedException($"Only light types are supported.");
@@ -118,6 +124,12 @@ namespace S100Framework.Applications
                 return (topmark, relatedTopmark.GLOBALID);
             }
             return null;
+        }
+
+        internal static (int?, string?, string?, string?, string?, decimal?, int?, int?, string?, string?, string?, int?, double, double) ToToken(this AidsToNavigationP e) {
+            var shape = (MapPoint)e.Shape!;
+            var p = factory.CreatePoint(new NetTopologySuite.Geometries.Coordinate(shape.X, shape.Y));
+            return (e.EXCLIT, e.OBJNAM, e.NOBJNM, e.DATSTA, e.DATEND, e.HEIGHT, e.MARSYS, e.MLTYLT, e.PERSTA, e.PEREND, e.STATUS, e.SIGGEN, p.X, p.Y);
         }
     }
 }

@@ -1030,23 +1030,26 @@ namespace S100Framework.Applications
                                 var dest_featureType = AttributeFlattenExtensions.UnflattenFeatureType(Convert.ToString(dest_update.Current["attributebindings"]), S100FC.S101.Summary.definitionReferenceFeatureTypes.Single(e => e.code.Equals(dest_code)).type);
 
                                 var dest_featureBindings = AttributeFlattenExtensions.UnflattenFeatureBindings(Convert.ToString(dest_update.Current["featurebindings"]));
-                                if (dest_featureBindings.Any()) System.Diagnostics.Debugger.Break();
+                                //if (dest_featureBindings.Any()) System.Diagnostics.Debugger.Break();
 
                                 var dest_definitions = dest_featureType.GetFeatureBindingsDefinitions();
 
                                 //  DEST
                                 var dest_def = dest_definitions.SingleOrDefault(e => e.featureTypes.Contains(src_code));
-                                if (dest_def is not null) {
+                                if (dest_def is not null) {                                    
                                     var dest_binding = dest_def.CreateInstance()!;
-                                    dest_binding.featureType = src_code;
-                                    dest_binding.featureId = src_oids[0];
-                                    dest_binding.Primitive = src_type switch {
-                                        "point" => Primitives.point,
-                                        "curve" => Primitives.curve,
-                                        "surface" => Primitives.surface,
-                                        _ => throw new InvalidCastException(),
-                                    };
-                                    dest_featureBindings = [.. dest_featureBindings, dest_binding];
+
+                                    if (!dest_featureBindings.Any(e => e.featureId == src_oids[0] && e.association?.S100FC_code == dest_binding.association?.S100FC_code)) {
+                                        dest_binding.featureType = src_code;
+                                        dest_binding.featureId = src_oids[0];
+                                        dest_binding.Primitive = src_type switch {
+                                            "point" => Primitives.point,
+                                            "curve" => Primitives.curve,
+                                            "surface" => Primitives.surface,
+                                            _ => throw new InvalidCastException(),
+                                        };
+                                        dest_featureBindings = [.. dest_featureBindings, dest_binding];
+                                    }
                                 }
                                 else {
                                     Logger.Current.Warning("Association not found: {src_code}|{src_uid} => {dest_code}|{dest_uid}", src_code, src_uid, dest_code, dest_oids[0]);

@@ -1,8 +1,10 @@
 ﻿using ArcGIS.Core.Data;
+using NetTopologySuite.Utilities;
 using S100FC;
 using S100FC.S101.ComplexAttributes;
 using S100FC.S101.FeatureTypes;
 using S100FC.S101.SimpleAttributes;
+using S100FC.S128.SimpleAttributes;
 using S100Framework.Applications.S57.esri;
 using S100Framework.Applications.Singletons;
 using System.Globalization;
@@ -34,6 +36,8 @@ namespace S100Framework.Applications
             int recordCount = 0;
             var _slaves = new Dictionary<Guid, string>();
 
+            Guid[] lightSectored = [];
+
             while (cursor.MoveNext()) {
                 recordCount += 1;
                 var feature = (Feature)cursor.Current;
@@ -60,7 +64,7 @@ namespace S100Framework.Applications
                 }
 
                 var plts_comp_scale = current.PLTS_COMP_SCALE ?? default;
-                var longname = current.LNAM ?? Strings.UNKNOWN;           
+                var longname = current.LNAM ?? Strings.UNKNOWN;
 
                 switch (fcSubtype) {
                     case 1: { // BCNCAR_BeaconCardinal
@@ -181,7 +185,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -302,7 +306,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -437,7 +441,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -568,7 +572,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -702,7 +706,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -812,7 +816,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -919,7 +923,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1023,7 +1027,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1134,7 +1138,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1240,7 +1244,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1341,7 +1345,7 @@ namespace S100Framework.Applications
                                         SetShape(buffer, current.SHAPE);
                                         SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                        using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                        using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                         var name = featureN.UID();
 
                                         if (_ != null)
@@ -1461,7 +1465,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var name = featureN.UID();
 
                                 if (_ != null)
@@ -1486,7 +1490,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1510,7 +1514,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1519,23 +1523,12 @@ namespace S100Framework.Applications
                         break;
 
                     case 65: { // LIGHTS_Light // SLAVE RIND: 2
-
-                            AidsToNavigationP[] lights = [];                            
-
-                            var uuid = $"{globalid:B}".ToUpperInvariant();
-                            using(var seach = plts_frel.Search(new QueryFilter {
-                                WhereClause = $"DEST_SUB = 'LIGHTS_Light' And SRC_UID = '{uuid}'"
-                            }, true)) {
-                                while (seach.MoveNext()) {
-                                    var _ = new AidsToNavigationP((Feature)seach.Current);
-                                    lights = [.. lights, _];
-                                }
+                            if (current.GetS101CatlitTypeFrom() == typeof(LightSectored)) {
+                                lightSectored = [.. lightSectored, feature.GetGlobalID()];
+                                continue;
                             }
-                            if (lights.Any()) System.Diagnostics.Debugger.Break();
-                            
-                            lights = [new AidsToNavigationP(feature)];
 
-                            var instance = ImporterNIS.LIGHTS(feature,lights);
+                            var instance = ImporterNIS.LIGHTS(feature, []);
 
                             // Only free floating lights!
                             // lights without frels
@@ -1544,7 +1537,8 @@ namespace S100Framework.Applications
                             //var related = featureRelations.GetRelated(current.GLOBALID);
 
                             var lnam = current.LNAM;
-                            if (instance is LightSectored lightSectored) {
+
+                            if (instance is LightAirObstruction lightAirObstruction) {
                                 buffer["ps"] = ps101;
                                 buffer["code"] = instance.GetType().Name;
                                 buffer["sourceIdentifier"] = instance.sourceIdentifier;
@@ -1554,26 +1548,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
-                                var structureName = featureN.UID();
-                                if (structureName == null) {
-                                    throw new NotSupportedException("empty structure name");
-                                }
-
-                                ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName);
-                                Logger.Current.DataObject(objectid, tableName, longname, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
-                            }
-                            else if (instance is LightAirObstruction lightAirObstruction) {
-                                buffer["ps"] = ps101;
-                                buffer["code"] = instance.GetType().Name;
-                                buffer["sourceIdentifier"] = instance.sourceIdentifier;
-                                buffer["attributebindings"] = instance.Flatten();
-                                buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
-
-                                SetShape(buffer, current.SHAPE);
-                                SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
-
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1589,7 +1564,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1605,7 +1580,7 @@ namespace S100Framework.Applications
                                 SetShape(buffer, current.SHAPE);
                                 SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                                using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                                using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                                 var structureName = featureN.UID();
 
                                 ConversionAnalytics.Instance.AddConverted(tableName, current.GLOBALID, structureName ?? "Unknown structure name");
@@ -1713,7 +1688,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             if (_ != null)
@@ -1816,7 +1791,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1875,7 +1850,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1897,7 +1872,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1917,7 +1892,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1938,7 +1913,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, globalid, name);
@@ -1958,7 +1933,7 @@ namespace S100Framework.Applications
                             SetShape(buffer, current.SHAPE);
                             SetCompilationScale(buffer, current.PLTS_COMP_SCALE!.Value);
 
-                            using var featureN = featureClass.CreateRow(buffer); if(buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                            using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
                             var name = featureN.UID();
 
                             ConversionAnalytics.Instance.AddConverted(tableName, current.GlobalId, name);
@@ -1988,6 +1963,113 @@ namespace S100Framework.Applications
                     default:
                         // code block
                         throw new Exception($"Missing subtype in S57_AidsToNavigation: {fcSubtype}");
+                }
+            }
+
+            Guid[] created = [];
+            foreach (var globalid in lightSectored) {
+                if (created.Contains(globalid)) continue;
+
+                created = [.. created, globalid];
+
+                var uuid = $"{globalid:B}".ToUpperInvariant();
+
+                Guid? master = null;
+                using (var search = plts_frel.Search(new QueryFilter {
+                    WhereClause = $"DEST_SUB = 'LIGHTS_Light' And DEST_UID = '{uuid}'"
+                }, true)) {
+                    if (search.MoveNext()) {
+                        master = Guid.Parse(Convert.ToString(search.Current["SRC_UID"])!);
+                    }
+                    if (search.MoveNext()) System.Diagnostics.Debugger.Break();
+                }
+
+                AidsToNavigationP[] lights = [];
+
+                Guid[] query = [];
+
+                if (master is not null) {
+                    var _ = $"{master.Value:B}".ToUpperInvariant();
+                    using (var search = plts_frel.Search(new QueryFilter {
+                        WhereClause = $"DEST_SUB = 'LIGHTS_Light' And SRC_UID = '{_}'"
+                    }, true)) {
+                        while (search.MoveNext()) {
+                            query = [.. query, Guid.Parse(Convert.ToString(search.Current["DEST_UID"])!)];
+                        }
+                    }
+                }
+                else
+                    ;
+
+                foreach (var _ in query) {
+                    var whereclause = $"{_:B}".ToUpperInvariant();
+                    using (var search = aidstonavigationp.Search(new QueryFilter {
+                        WhereClause = $"GlobalID = '{whereclause}'",
+                    }, true)) {
+                        search.MoveNext();
+
+                        var light = new AidsToNavigationP((Feature)search.Current);
+                        if (light.GetS101CatlitTypeFrom() == typeof(LightSectored)) {
+                            lights = [.. lights, light];
+
+                            created = [.. created, search.Current.GetGlobalID()];
+                        }
+                    }
+                }
+
+                if (!lights.Any()) System.Diagnostics.Debugger.Break();
+
+                (AidsToNavigationP root, AidsToNavigationP[] lights)[] process = [];
+
+                if (lights.Count() == 1) {
+                    process = [(lights[0], lights)];
+                }
+                if (lights.Count() > 1) {
+                    foreach(var e in lights.GroupBy(e=> e.ToToken())) {
+                        process = [.. process, (e.First(), [.. e])];
+                    }
+                }
+
+                //if (process.Count() > 1)
+                //    System.Diagnostics.Debugger.Break();
+
+                foreach (var p in process) {
+                    var _ = $"{p.root.GlobalId:B}".ToUpperInvariant();
+
+                    using (var search = aidstonavigationp.Search(new QueryFilter {
+                        WhereClause = $"GlobalID = '{_}'",
+                    }, true)) {
+                        search.MoveNext();
+
+                        var f = (Feature)search.Current;
+
+                        //if (p.lights.Count() > 1) System.Diagnostics.Debugger.Break();
+
+                        var instance = (LightSectored)ImporterNIS.LIGHTS(f, p.lights.OrderBy(e=>e.SECTR1).ThenBy(e=>e.SECTR2).ToArray());
+
+                        buffer["ps"] = ps101;
+                        buffer["code"] = instance.GetType().Name;
+                        buffer["sourceIdentifier"] = instance.sourceIdentifier;
+                        buffer["attributebindings"] = instance.Flatten();
+                        buffer["informationbindings"] = instance.GetInformationBindings()?.Flatten();
+
+                        SetShape(buffer, f.GetShape());
+                        SetCompilationScale(buffer, f.PLTS_COMP_SCALE()!.Value);
+
+                        using var featureN = featureClass.CreateRow(buffer); if (buffer["ps"] is null) System.Diagnostics.Debugger.Break();
+                        var structureName = featureN.UID();
+                        if (structureName == null) {
+                            throw new NotSupportedException("empty structure name");
+                        }
+
+                        if (lights.Count() > 1)
+                            Logger.Current.Debug("LightSectored: {uuid}, #{lights}", structureName, lights.Count());
+
+                        foreach (var e in p.lights) {
+                            ConversionAnalytics.Instance.AddConverted(tableName, e.GLOBALID, structureName);
+                        }
+                        Logger.Current.DataObject(f.GetObjectID(), tableName, f.LNAM() ?? Strings.UNKNOWN, System.Text.Json.JsonSerializer.Serialize(instance, ImporterNIS.jsonSerializerOptions));
+                    }
                 }
             }
 
