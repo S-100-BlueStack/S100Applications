@@ -60,7 +60,7 @@ namespace S100Framework.Applications
             if (lookup.Any()) {
                 using var AidsToNavigationP = geodatabase.OpenDataset<FeatureClass>(geodatabase.GetName("AidsToNavigationP"));
                 using (var search = AidsToNavigationP.Search(new QueryFilter {
-                    WhereClause = $"GlobalID IN ({string.Join(',', lookup.Select(e => $"'{e:B}'".ToUpperInvariant()))}"
+                    WhereClause = $"GlobalID IN ({string.Join(',', lookup.Select(e => $"'{e:B}'".ToUpperInvariant()))})"
                 }, true)) {
                     while (search.MoveNext()) {
                         var topmark = new AidsToNavigationP((Feature)search.Current);

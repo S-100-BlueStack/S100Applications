@@ -23,6 +23,12 @@
             return [.. this._tableNameToConvertedS57Objects[tableName.ToLower()][uuid]];
         }
 
+        public bool ExistOIDs(string tableName, Guid uuid) {
+            if (!this._tableNameToConvertedS57Objects.ContainsKey(tableName.ToLowerInvariant())) return false;
+            if (!this._tableNameToConvertedS57Objects[tableName.ToLowerInvariant()].ContainsKey(uuid)) return false;
+            return true;
+        }
+
         /// <summary>
         /// 
         /// </summary>

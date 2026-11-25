@@ -986,8 +986,11 @@ namespace S100Framework.Applications
                         _ => throw new InvalidCastException(),
                     };
 
-                    var src_oids = ConversionAnalytics.Instance.GetOIDs(src_fc, src_uid);
-                    if (src_oids.Length > 1) System.Diagnostics.Debugger.Break();
+                    if(!ConversionAnalytics.Instance.ExistOIDs(src_fc, src_uid)) {
+                        Logger.Current.Error("GlobalId ({uuid}) not found in {tablename}", src_uid, src_fc);
+                        continue;
+                    }
+                    string[] src_oids = ConversionAnalytics.Instance.GetOIDs(src_fc, src_uid);
 
                     //GlobalID = '{31798F82-F193-4BC9-971B-89277D870BA5}'
 
@@ -1018,7 +1021,12 @@ namespace S100Framework.Applications
                                 dest_fc = destination.OpenDataset<FeatureClass>(destination.GetName(dest_type));
                             }
 
-                            var dest_oids = ConversionAnalytics.Instance.GetOIDs(i.DEST_FC, i.DEST_UID);
+                            if (!ConversionAnalytics.Instance.ExistOIDs(i.DEST_FC, i.DEST_UID)) {
+                                Logger.Current.Error("GlobalId ({uuid}) not found in {tablename}", i.DEST_UID, i.DEST_FC);
+                                continue;
+                            }
+
+                            var dest_oids = ConversionAnalytics.Instance.GetOIDs(i.DEST_FC, i.DEST_UID).Distinct().ToArray();
                             if (dest_oids.Length > 1) System.Diagnostics.Debugger.Break();
 
                             using (var dest_update = dest_fc.CreateUpdateCursor(new QueryFilter {

@@ -1980,8 +1980,9 @@ namespace S100Framework.Applications
                 }, true)) {
                     if (search.MoveNext()) {
                         master = Guid.Parse(Convert.ToString(search.Current["SRC_UID"])!);
-                    }
-                    if (search.MoveNext()) System.Diagnostics.Debugger.Break();
+                        if (search.MoveNext())
+                            Logger.Current.Warning("FREL, multiple entries: {whereclause}", $"DEST_SUB = 'LIGHTS_Light' And DEST_UID = '{uuid}'");
+                    }                    
                 }
 
                 AidsToNavigationP[] lights = [];
@@ -1999,7 +2000,7 @@ namespace S100Framework.Applications
                     }
                 }
                 else
-                    ;
+                    query = [globalid];
 
                 foreach (var _ in query) {
                     var whereclause = $"{_:B}".ToUpperInvariant();
@@ -2063,7 +2064,7 @@ namespace S100Framework.Applications
                         }
 
                         if (lights.Count() > 1)
-                            Logger.Current.Debug("LightSectored: {uuid}, #{lights}", structureName, lights.Count());
+                            Logger.Current.Debug("LightSectored: s101:{uuid}|s57:{globalid}, #{lights}", structureName, _, lights.Count());
 
                         foreach (var e in p.lights) {
                             ConversionAnalytics.Instance.AddConverted(tableName, e.GLOBALID, structureName);
